@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function() {
      
 
       const now = DateTime.utc();
-      const wednesday = DateTime.utc().set({weekday: 3, hour: 0, minute: 0, second: 0, millisecond: 0});
+      let wednesday = DateTime.utc().set({weekday: 3, hour: 0, minute: 0, second: 0, millisecond: 0});
       if (now >= wednesday) {
         wednesday = wednesday.plus({ weeks: 1 });
       }

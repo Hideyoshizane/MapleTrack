@@ -4,9 +4,11 @@ const bodyParser = require('koa-bodyparser');
 const Router = require('koa-router');
 const views = require('koa-views');
 const serve = require('koa-static');
+const session = require('koa-session');
 const  mongoose = require('mongoose');
 const path = require('path');
 const {User, validate} = require('./models/user');
+const bcrypt = require('bcrypt');
 
 
 const app = new koa();
@@ -26,20 +28,48 @@ db.once("open", () => {
     console.log("Database connected");
 });
 
+app.keys = ['newest secret key', 'older secret key'];
 
 
 const root = path.join(__dirname);
 app.use(require('koa-static')(root));
 app.use(bodyParser());
+app.use(session(app));
 
 app.use(views(path.join(__dirname, 'views'), { extension: 'ejs' }));
 app.use(serve(path.join(__dirname, 'public')));
-
 
 router
       .get('/login', async (ctx, next) => {
         await ctx.render('login');
       })
+      .post('/login', async (ctx,next) => {
+        try{
+          const { username, password } = ctx.request.body;
+          const user = await User.findOne({ username });
+          if (!user) {
+            ctx.status = 401;
+            ctx.body = "Username not found";
+            return;
+          }
+          const passwordCheck = await bcrypt.compare(password, user.password);
+          if (!passwordCheck) {
+            ctx.status = 400;
+            ctx.body = 'Wrong password';
+          }
+          else{
+            ctx.session.user = {
+              _id: user._id,
+              username: user.username,
+              email: user.email,
+              role: user
+            };
+            ctx.redirect('/home');
+          }
+        }catch(err){
+          ctx.status = 500;
+          ctx.body = err.message;
+        }})  
       .get('/signup', async (ctx, next) => {
         await ctx.render('signup');
       })
@@ -47,6 +77,8 @@ router
         try{
           const { username, email, password } = ctx.request.body;
           const { validationError } = validate({email, username, password});
+          const salt = await bcrypt.genSalt(10);
+          const hashedPassword = await bcrypt.hash(password, salt);
           if (validationError) {
             ctx.status = 400;
             ctx.body = "Validation Error" + validationError;
@@ -58,7 +90,7 @@ router
             ctx.body = 'That user already exists!';
             return;
           }
-          user = new User({ username, email, password });
+          user = new User({ username, email, password: hashedPassword });
           await user.save();
       
           ctx.status = 200;
@@ -68,9 +100,14 @@ router
           ctx.body = err.message;
         }
       })
+      .get('/home', async (ctx) => {
+        const username = ctx.session.user.username;
+        await ctx.render('home', { username });
+      });
 
 app.use(router.routes());
 app.use(router.allowedMethods());
+
 
 
 app.listen(8080, () =>{

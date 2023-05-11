@@ -1,6 +1,6 @@
 {
   "name": "maplestory-tracker",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -11,11 +11,14 @@
   "license": "ISC",
   "dependencies": {
     "assert": "^2.0.0",
+    "bcrypt": "^5.1.0",
     "joi": "^17.9.2",
     "koa": "^2.14.2",
     "koa-bodyparser": "^4.4.0",
+    "koa-cookie": "^1.0.0",
     "koa-passport": "^6.0.0",
     "koa-router": "^12.0.0",
+    "koa-session": "^6.4.0",
     "koa-static": "^5.0.0",
     "koa-view": "^2.1.4",
     "koa-views": "^8.0.0",
