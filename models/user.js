@@ -1,6 +1,7 @@
 const Joi = require('joi');
 const mongoose = require('mongoose');
 const { Character, defaultCharacters } = require('./character');
+const {servers} = require('./servers');
 
 
 const User = mongoose.model('User', new mongoose.Schema({
@@ -25,7 +26,11 @@ const User = mongoose.model('User', new mongoose.Schema({
         minlength: 8,
         maxlength: 61
     },
-    characters: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Character' }]
+    servers: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Server'
+    }]
+   
 }));
 
 

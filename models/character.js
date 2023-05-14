@@ -5,7 +5,6 @@ const { LegionSystem } = require('./legion');
 
 
 const Character = mongoose.model('Character', new mongoose.Schema({
-
     name: {
         type: String,
         required: true
@@ -85,7 +84,7 @@ async function createDefaultCharacters() {
   const linkSkillId = await initialize('Invincible Belief');
   const legionId = await legionFind('STR+');
 
-  defaultCharacters.push({
+  const defaultCharacters = [{
     name: 'Arale',
     level: 0,
     targetLevel: 10,
@@ -117,9 +116,13 @@ async function createDefaultCharacters() {
         ],
       },
     ],
-  });
+  }];
+
+  const characterInstances = defaultCharacters.map(char => new Character(char));
+  console.log('characterInstances:', characterInstances);
+  const savedCharacters = await Promise.all(characterInstances.map(char => char.save()));
+  return savedCharacters;
 }
 
-createDefaultCharacters();
         
-module.exports = { Character, defaultCharacters };
+module.exports = { Character, defaultCharacters, createDefaultCharacters };
