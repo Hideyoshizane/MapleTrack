@@ -1,5 +1,7 @@
 const Joi = require('joi');
 const mongoose = require('mongoose');
+const { Character, defaultCharacters } = require('./character');
+
 
 const User = mongoose.model('User', new mongoose.Schema({
 
@@ -22,14 +24,16 @@ const User = mongoose.model('User', new mongoose.Schema({
         required: true,
         minlength: 8,
         maxlength: 61
-    }
-})); 
+    },
+    characters: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Character' }]
+}));
+
 
 function validateUser(user) {
     const schema = Joi.object({
         username: Joi.string().min(5).max(50).required(),
         email: Joi.string().min(7).max(25).required(),
-        password: Joi.string().min(8).max(61).required()
+        password: Joi.string().min(8).max(61).required(),
     });
     return schema.validate(user);
 }

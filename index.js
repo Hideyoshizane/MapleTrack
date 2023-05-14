@@ -8,8 +8,11 @@ const session = require('koa-session');
 const  mongoose = require('mongoose');
 const path = require('path');
 const {User, validate} = require('./models/user');
+const Boss = require('./models/boss');
+const { Character, defaultCharacters } = require('./models/character');
+const LinkSkill = require('./models/linkSkill');
+const LegionSystem = require('./models/legion');
 const bcrypt = require('bcrypt');
-
 
 const app = new koa();
 const router = new Router();
@@ -40,6 +43,9 @@ app.use(views(path.join(__dirname, 'views'), { extension: 'ejs' }));
 app.use(serve(path.join(__dirname, 'public')));
 
 router
+      .get('/', async (ctx, next) => {
+        await ctx.render('login');
+      })
       .get('/login', async (ctx, next) => {
         await ctx.render('login');
       })
@@ -90,9 +96,11 @@ router
             ctx.body = 'That user already exists!';
             return;
           }
-          user = new User({ username, email, password: hashedPassword });
+          const characterInstances = defaultCharacters.map(char => new Character(char));
+          const savedCharacters = await Promise.all(characterInstances.map(char => char.save()));
+          user = new User({ username, email, password: hashedPassword, characters: savedCharacters.map(char => char._id) });
+          //
           await user.save();
-      
           ctx.status = 200;
           ctx.redirect('/login');
         } catch(err){
@@ -102,6 +110,16 @@ router
       })
       .get('/home', async (ctx) => {
         const username = ctx.session.user.username;
+        const user = await User.findOne({ _id: ctx.session.user }).populate({
+          path: 'characters',
+          populate: [
+            { path: 'linkSkill', model: 'LinkSkill' },
+            { path: 'legion', model: 'LegionSystem' },
+          ]
+        });
+        
+        console.log(user.characters[0].legion);
+        console.log(user.characters[0].linkSkill);
         await ctx.render('home', { username });
       });
 

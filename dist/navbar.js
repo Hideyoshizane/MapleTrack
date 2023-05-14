@@ -10,13 +10,13 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./public/javascript/time.js":
-/*!***********************************!*\
-  !*** ./public/javascript/time.js ***!
-  \***********************************/
+/***/ "./public/javascript/navbar.js":
+/*!*************************************!*\
+  !*** ./public/javascript/navbar.js ***!
+  \*************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var luxon__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! luxon */ \"./node_modules/luxon/src/luxon.js\");\n\r\n\r\ndocument.addEventListener(\"DOMContentLoaded\", function() {\r\n  const dailyOutput = document.getElementById(\"daily\");\r\n  const weeklyOutput =  document.getElementById(\"weekly\");\r\n  dailyOutput.style.textAlign = \"center\";\r\n  weeklyOutput.style.textAlign = \"center\";\r\n    function updateCountdown() {\r\n     \r\n\r\n      const now = luxon__WEBPACK_IMPORTED_MODULE_0__.DateTime.utc();\r\n      let wednesday = luxon__WEBPACK_IMPORTED_MODULE_0__.DateTime.utc().set({weekday: 3, hour: 0, minute: 0, second: 0, millisecond: 0});\r\n      if (now >= wednesday) {\r\n        wednesday = wednesday.plus({ weeks: 1 });\r\n      }\r\n      const diff = wednesday.diff(now);\r\n\r\n      let daily = luxon__WEBPACK_IMPORTED_MODULE_0__.DateTime.utc().set({hour: 0, minute: 0, second: 0, millisecond: 0});\r\n      daily = daily.plus({days: 1});\r\n      daily = daily.diff(now);\r\n\r\n      daily = daily.toFormat(\"hh:mm:ss\");\r\n      const weekly = diff.toFormat(\"dd:hh:mm:ss\");\r\n      \r\n      weeklyOutput.innerHTML = `Until Week Reset<br> ${weekly}`;\r\n      dailyOutput.innerHTML = `Until Daily Reset<br> ${daily}`;\r\n    }\r\n    setInterval(updateCountdown, 1000);\r\n\r\n  });\r\n\r\n\n\n//# sourceURL=webpack://maplestory-tracker/./public/javascript/time.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var luxon__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! luxon */ \"./node_modules/luxon/src/luxon.js\");\n\r\n\r\ndocument.addEventListener(\"DOMContentLoaded\", function() {\r\n  const dailyOutput = document.getElementById(\"daily\");\r\n  const weeklyOutput =  document.getElementById(\"weekly\");\r\n  dailyOutput.style.textAlign = \"center\";\r\n  weeklyOutput.style.textAlign = \"center\";\r\n    function updateCountdown() {\r\n     \r\n\r\n      const now = luxon__WEBPACK_IMPORTED_MODULE_0__.DateTime.utc();\r\n      let wednesday = luxon__WEBPACK_IMPORTED_MODULE_0__.DateTime.utc().set({weekday: 3, hour: 0, minute: 0, second: 0, millisecond: 0});\r\n      if (now >= wednesday) {\r\n        wednesday = wednesday.plus({ weeks: 1 });\r\n      }\r\n      const diff = wednesday.diff(now);\r\n\r\n      let daily = luxon__WEBPACK_IMPORTED_MODULE_0__.DateTime.utc().set({hour: 0, minute: 0, second: 0, millisecond: 0});\r\n      daily = daily.plus({days: 1});\r\n      daily = daily.diff(now);\r\n\r\n      daily = daily.toFormat(\"hh:mm:ss\");\r\n      const weekly = diff.toFormat(\"dd:hh:mm:ss\");\r\n      \r\n      weeklyOutput.innerHTML = `Until Week Reset<br> ${weekly}`;\r\n      dailyOutput.innerHTML = `Until Daily Reset<br> ${daily}`;\r\n    }\r\n    setInterval(updateCountdown, 1000);\r\n\r\n  });\r\n\r\n\n\n//# sourceURL=webpack://maplestory-tracker/./public/javascript/navbar.js?");
 
 /***/ }),
 
@@ -320,7 +320,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module can't be inlined because the eval devtool is used.
-/******/ 	var __webpack_exports__ = __webpack_require__("./public/javascript/time.js");
+/******/ 	var __webpack_exports__ = __webpack_require__("./public/javascript/navbar.js");
 /******/ 	
 /******/ })()
 ;
