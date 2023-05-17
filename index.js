@@ -8,10 +8,10 @@ const session = require('koa-session');
 const  mongoose = require('mongoose');
 const path = require('path');
 const {User, validate} = require('./models/user');
-const Boss = require('./models/boss');
+const { Boss, createDefaultBosses } = require('./models/boss');
 const { Character, defaultCharacters } = require('./models/character');
 const LinkSkill = require('./models/linkSkill');
-const LegionSystem = require('./models/legion');
+const {LegionSystem, createDefaultLegionSystem} = require('./models/legion');
 const {servers, createDefaultServers }= require('./models/servers');
 const bcrypt = require('bcrypt');
 

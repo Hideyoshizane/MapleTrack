@@ -8,14 +8,73 @@ const Boss = mongoose.model('Boss', new mongoose.Schema({
         required: true,
         editable: false
     },
+    img:{
+      type: String,
+      required: true,
+      editable: false
+    },
     difficulties: [{
-        name:     {type: String, required: true, editable: false},
-        value:    {type: Number, required: true, editable: false},
-        reset:    {type: String, required: true, editable: false},
-        minLevel: {type: Number, required: true, editable: false}
+        name:     {type: String, required: true},
+        value:    {type: Number, required: true},
+        reset:    {type: String, required: true},
+        minLevel: {type: Number, required: true}
     }],
 })); 
 
+async function createBoss(nametag, imgSource) {
+  return await new Boss({name: nametag, img: imgSource});
+}
+
+async function insertDifficult(boss, difficultname, resettype, value, minLevel){
+  for (var i = 0; i < difficultname.length; i++) {
+    var difficultName = difficultname[i];
+    var resetType = resettype[i];
+    var currentValue = value[i];
+    var minimumLevel = minLevel[i];
+
+    const defaultDifficulties = {
+      name : difficultName,
+      value : currentValue,
+      reset : resetType,
+      minLevel : minimumLevel,
+    };
+    boss.difficulties.push(defaultDifficulties);
+  }
+}
+
+const defaultBosses = [];
+
+async function createDefaultBosses() {
+  var bossName =        "Zakum";
+  var imagesource =     "../assets/boss/zakum.webp";
+  var difficulties =    ["Easy", "Normal", "Chaos"];
+  var values =          [200000, 612500, 16200000];
+  var resetType =       ["Daily", "Daily", "Weekly"];
+  var minimumLevel =    [50, 90, 90];
+
+  var boss = await createBoss(bossName, imagesource);
+  await insertDifficult(boss, difficulties, resetType, values, minimumLevel);
+
+  defaultBosses.push(boss);
+  Boss.once('index', (err) => {
+    if (err) console.error(err);
+    Boss.countDocuments((err, count) => {
+      if (err) console.error(err);
+      if (count === 0) {
+        Boss.insertMany(defaultBosses, (err, docs) => {
+          if (err) console.error(err);
+          console.log('Default Bosses created:', docs);
+        });
+      }
+    });
+  });
+}
+
+createDefaultBosses();
+
+module.exports = {Boss, createDefaultBosses};
+
+/*
 Boss.on('index', (err) => {
     if (err) console.error(err);
     Boss.countDocuments((err, count) => {
@@ -237,4 +296,4 @@ Boss.on('index', (err) => {
   
  
 
-exports = Boss;
+exports = Boss;*/
