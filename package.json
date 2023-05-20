@@ -1,6 +1,6 @@
 {
   "name": "maplestory-tracker",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -22,6 +22,7 @@
     "koa-static": "^5.0.0",
     "koa-view": "^2.1.4",
     "koa-views": "^8.0.0",
+    "lodash": "^4.17.21",
     "luxon": "^3.3.0",
     "mongoose": "^5.10.4",
     "node": "^20.1.0",

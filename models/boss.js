@@ -1,5 +1,7 @@
 const Joi = require('joi');
 const mongoose = require('mongoose');
+const { isEqual } = require('lodash');
+
 
 const Boss = mongoose.model('Boss', new mongoose.Schema({
 
@@ -20,6 +22,9 @@ const Boss = mongoose.model('Boss', new mongoose.Schema({
         minLevel: {type: Number, required: true}
     }],
 })); 
+
+const defaultBosses = [];
+
 
 async function createBoss(nametag, imgSource) {
   return await new Boss({name: nametag, img: imgSource});
@@ -42,258 +47,356 @@ async function insertDifficult(boss, difficultname, resettype, value, minLevel){
   }
 }
 
-const defaultBosses = [];
 
 async function createDefaultBosses() {
   var bossName =        "Zakum";
-  var imagesource =     "../assets/boss/zakum.webp";
+  var imagesource =     "../../assets/boss/zakum.webp";
   var difficulties =    ["Easy", "Normal", "Chaos"];
   var values =          [200000, 612500, 16200000];
   var resetType =       ["Daily", "Daily", "Weekly"];
   var minimumLevel =    [50, 90, 90];
-
   var boss = await createBoss(bossName, imagesource);
   await insertDifficult(boss, difficulties, resetType, values, minimumLevel);
+  defaultBosses.push(boss); 
 
+
+  bossName =        "Magnus";
+  imagesource =     "../../assets/boss/magnus.webp";
+  difficulties =    ["Easy", "Normal", "Hard"];
+  values =          [722000, 2592000, 19012500];
+  resetType =       ["Daily", "Daily", "Weekly"];
+  minimumLevel =    [115, 155, 175];
+  boss = await createBoss(bossName, imagesource);
+  await insertDifficult(boss, difficulties, resetType, values, minimumLevel);
+  defaultBosses.push(boss); 
+
+
+  bossName =        "Hilla";
+  imagesource =     "../../assets/boss/hilla.webp";
+  difficulties =    ["Normal", "Hard"];
+  values =          [800000, 11250000];
+  resetType =       ["Daily", "Weekly"];
+  minimumLevel =    [120, 170];
+  boss = await createBoss(bossName, imagesource);
+  await insertDifficult(boss, difficulties, resetType, values, minimumLevel);
+  defaultBosses.push(boss); 
+
+
+  bossName =        "OMNI-CLN";
+  imagesource =     "../../assets/boss/omni_cln.webp";
+  difficulties =    ["Normal"];
+  values =          [1250000];
+  resetType =       ["Daily"];
+  minimumLevel =    [180];
+  boss = await createBoss(bossName, imagesource);
+  await insertDifficult(boss, difficulties, resetType, values, minimumLevel);
+  defaultBosses.push(boss); 
+
+
+  bossName =        "Papulatus";
+  imagesource =     "../../assets/boss/papulatus.webp";
+  difficulties =    ["Easy", "Normal", "Chaos"];
+  values =          [684500, 2664500, 26450000];
+  resetType =       ["Daily", "Daily", "Weekly"];
+  minimumLevel =    [115, 155, 190];
+  boss = await createBoss(bossName, imagesource);
+  await insertDifficult(boss, difficulties, resetType, values, minimumLevel);
+  defaultBosses.push(boss); 
+
+
+  bossName =        "Pierre";
+  imagesource =     "../../assets/boss/pierre.webp";
+  difficulties =    ["Normal", "Chaos"];
+  values =          [968000, 16200000];
+  resetType =       ["Daily", "Weekly"];
+  minimumLevel =    [125, 180];
+  boss = await createBoss(bossName, imagesource);
+  await insertDifficult(boss, difficulties, resetType, values, minimumLevel);
   defaultBosses.push(boss);
-  Boss.once('index', (err) => {
-    if (err) console.error(err);
-    Boss.countDocuments((err, count) => {
-      if (err) console.error(err);
-      if (count === 0) {
-        Boss.insertMany(defaultBosses, (err, docs) => {
-          if (err) console.error(err);
-          console.log('Default Bosses created:', docs);
-        });
-      }
-    });
-  });
-}
-
-createDefaultBosses();
-
-module.exports = {Boss, createDefaultBosses};
-
-/*
-Boss.on('index', (err) => {
-    if (err) console.error(err);
-    Boss.countDocuments((err, count) => {
-      if (err) console.error(err);
-      if (count === 0) {
-        // Create default bosses
-        const defaultBosses = [
-          {
-            name: 'Zakum',
-            difficulties: [
-              { name: 'Easy',   value:    200000 , reset:'Daily' , minLevel:  50},
-              { name: 'Normal', value:    612500 , reset:'Daily' , minLevel:  90},
-              { name: 'Chaos',  value:  16200000 , reset:'Weekly', minLevel:  90},
-            ],
-          },
-          {
-            name: 'Magnus',
-            difficulties: [
-              { name: 'Easy',   value:    722000 , reset:'Daily' , minLevel: 115},
-              { name: 'Normal', value:   2592000 , reset:'Daily' , minLevel: 155},
-              { name: 'Hard',   value:  19012500 , reset:'Weekly', minLevel: 175},
-            ],
-          },
-          {
-            name: 'Hilla',
-            difficulties: [
-              { name: 'Normal', value:    800000 , reset:'Daily' , minLevel: 120},
-              { name: 'Hard',   value:  11250000 , reset:'Weekly', minLevel: 170},
-            ],
-          },
-          {
-            name: 'OMNI-CLN',
-            difficulties: [
-              { name: 'Normal', value:   1250000 , reset:'Daily' , minLevel: 180},
-            ],
-          },
-          {
-            name: 'Papulatus',
-            difficulties: [
-              { name: 'Easy',   value:    684500 , reset:'Daily' , minLevel: 115},
-              { name: 'Normal', value:   2664500 , reset:'Daily' , minLevel: 155},
-              { name: 'Chaos',  value:  26450000 , reset:'Weekly', minLevel: 190},
-            ],
-          },
-          {
-            name: 'Pierre',
-            difficulties: [
-              { name: 'Normal', value:    968000 , reset:'Daily' , minLevel: 125},
-              { name: 'Chaos',  value:  16200000 , reset:'Weekly', minLevel: 180},
-            ],
-          },
-          {
-            name: 'Von Bon',
-            difficulties: [
-              { name: 'Normal', value:    968000 , reset:'Daily' , minLevel: 125},
-              { name: 'Chaos',  value:  16200000 , reset:'Weekly', minLevel: 180},
-            ],
-          },
-          {
-          name: 'Crimsom Queen',
-            difficulties: [
-              { name: 'Normal', value:    968000 , reset:'Daily' , minLevel: 125},
-              { name: 'Chaos',  value:  16200000 , reset:'Weekly', minLevel: 180},
-            ],
-          },
-          {
-          name: 'Vellum',
-            difficulties: [
-              { name: 'Normal', value:    968000 , reset:'Daily' , minLevel: 125},
-              { name: 'Chaos',  value:  21012500 , reset:'Weekly', minLevel: 180},
-            ],
-          },
-          {
-            name: 'Von Leon',
-              difficulties: [
-                { name: 'Easy',   value:   1058000 , reset:'Daily' , minLevel: 125},
-                { name: 'Normal', value:   1458000 , reset:'Daily' , minLevel: 125},
-                { name: 'Hard',   value:   2450000 , reset:'Daily' , minLevel: 120},
-              ],
-          },
-          {
-            name: 'Horntail',
-              difficulties: [
-                { name: 'Easy',   value:    882000 , reset:'Daily' , minLevel: 130},
-                { name: 'Normal', value:   1012500 , reset:'Daily' , minLevel: 130},
-                { name: 'Chaos',  value:   1352000 , reset:'Daily' , minLevel: 135},
-              ],
-          },
-          {
-            name: 'Arkarium',
-              difficulties: [
-                { name: 'Normal', value:   1152000 , reset:'Daily' , minLevel: 140},
-                { name: 'Hard',   value:   2520500 , reset:'Daily' , minLevel: 140},
-              ],
-          },
-          {
-            name: 'Pink Beam',
-              difficulties: [
-                { name: 'Normal', value:    1404500 , reset:'Daily' , minLevel: 160},
-                { name: 'Chaos',  value:   12800000 , reset:'Weekly', minLevel: 170},
-              ],
-          },
-          {
-            name: 'Ranmaru',
-              difficulties: [
-                { name: 'Normal', value:    840500 , reset:'Daily' , minLevel: 120},
-                { name: 'Hard',   value:   2664500 , reset:'Daily' , minLevel: 180},
-              ],
-          },
-          {  
-            name: 'Cygnus',
-              difficulties: [
-                { name: 'Easy',     value:    9112500 , reset:'Weekly' , minLevel: 165},
-                { name: 'Normal',   value:   14450000 , reset:'Weekly' , minLevel: 165},
-              ],
-          },
-          {  
-            name: 'Lotus',
-              difficulties: [
-                { name: 'Normal', value:    32512500 , reset:'Weekly' , minLevel: 190},
-                { name: 'Hard',   value:    74112500 , reset:'Weekly' , minLevel: 190},
-              ],
-          },
-          {  
-            name: 'Damien',
-              difficulties: [
-                { name: 'Normal', value:    33800000 , reset:'Weekly' , minLevel: 190},
-                { name: 'Hard',   value:    70312500 , reset:'Weekly' , minLevel: 190},
-              ],
-          },
-          {  
-            name: 'Guardian Angel Slime',
-              difficulties: [
-                { name: 'Normal', value:    34322000 , reset:'Weekly' , minLevel: 210},
-                { name: 'Chaos',  value:    90312500 , reset:'Weekly' , minLevel: 210},
-              ],
-          },
-          {
-            name: 'Lucid',
-              difficulties: [
-                { name: 'Easy',   value:   35112500 , reset:'Weekly' , minLevel: 220},
-                { name: 'Normal', value:   40612500 , reset:'Weekly' , minLevel: 220},
-                { name: 'Hard',   value:   80000000 , reset:'Weekly' , minLevel: 220},
-              ],
-          },
-          {
-            name: 'Will',
-              difficulties: [
-                { name: 'Easy',   value:   38255000 , reset:'Weekly' , minLevel: 235},
-                { name: 'Normal', value:   46512500 , reset:'Weekly' , minLevel: 235},
-                { name: 'Hard',   value:   88200000 , reset:'Weekly' , minLevel: 235},
-              ],
-          },
-          {
-            name: 'Gloom',
-              difficulties: [
-                { name: 'Normal',  value:   49612500 , reset:'Weekly' , minLevel: 245},
-                { name: 'Chaos',   value:   92450000 , reset:'Weekly' , minLevel: 245},
-              ],
-          },
-          {
-            name: 'Verus Hilla',
-              difficulties: [
-                { name: 'Normal',  value:    89520000 , reset:'Weekly' , minLevel: 250},
-                { name: 'Hard',    value:   110450000 , reset:'Weekly' , minLevel: 250},
-              ],
-          },
-          {
-            name: 'Darknell',
-              difficulties: [
-                { name: 'Normal',  value:    52812500 , reset:'Weekly' , minLevel: 255},
-                { name: 'Hard',    value:    96800000 , reset:'Weekly' , minLevel: 255},
-              ],
-          },
-          {
-            name: 'Black Mage',
-              difficulties: [
-                { name: 'Hard',    value:     500000000 , reset:'Monthly' , minLevel: 255},
-                { name: 'Extreme', value:    2000000000 , reset:'Monthly' , minLevel: 255},
-              ],
-          },
-          {
-            name: 'Seren',
-              difficulties: [
-                { name: 'Normal',  value:     133687500 , reset:'Weekly' , minLevel: 265},
-                { name: 'Hard',    value:     151250000 , reset:'Weekly' , minLevel: 265},
-                { name: 'Extreme', value:     605000000 , reset:'Weekly' , minLevel: 265},
-              ],
-          },
-          {
-            name: 'Kalos',
-              difficulties: [
-                { name: 'Chaos',  value:     200000000 , reset:'Weekly' , minLevel: 270},
-              ],
-          },
-          {
-            name: 'Princess No',
-              difficulties: [
-                { name: 'Normal',  value:     16200000 , reset:'Weekly' , minLevel: 140},
-              ],
-          },
-          {
-            name: 'Akechi',
-              difficulties: [
-                { name: 'Normal',  value:     28800000 , reset:'Weekly' , minLevel: 200},
-              ],
-          },
-          
-          
-
-        ];
-        Boss.insertMany(defaultBosses, (err, docs) => {
-          if (err) console.error(err);
-          console.log('Default bosses created:', docs);
-        });
-      }
-    });
-  });
   
- 
+  
+  bossName =        "Von Bon";
+  imagesource =     "../../assets/boss/von_bon.webp";
+  difficulties =    ["Normal", "Chaos"];
+  values =          [968000, 16200000];
+  resetType =       ["Daily", "Weekly"];
+  minimumLevel =    [125, 180];
+  boss = await createBoss(bossName, imagesource);
+  await insertDifficult(boss, difficulties, resetType, values, minimumLevel);
+  defaultBosses.push(boss); 
 
-exports = Boss;*/
+
+  bossName =        "Crimsom Queen";
+  imagesource =     "../../assets/boss/crimson_queen.webp";
+  difficulties =    ["Normal", "Chaos"];
+  values =          [968000, 16200000];
+  resetType =       ["Daily", "Weekly"];
+  minimumLevel =    [125, 180];
+  boss = await createBoss(bossName, imagesource);
+  await insertDifficult(boss, difficulties, resetType, values, minimumLevel);
+  defaultBosses.push(boss); 
+
+
+  bossName =        "Vellum";
+  imagesource =     "../../assets/boss/vellum.webp";
+  difficulties =    ["Normal", "Chaos"];
+  values =          [968000, 21012500];
+  resetType =       ["Daily", "Weekly"];
+  minimumLevel =    [125, 180];
+  boss = await createBoss(bossName, imagesource);
+  await insertDifficult(boss, difficulties, resetType, values, minimumLevel);
+  defaultBosses.push(boss);
+
+
+  bossName =        "Von Leon";
+  imagesource =     "../../assets/boss/von_leon.webp";
+  difficulties =    ["Easy", "Normal", "Hard"];
+  values =          [1058000, 1458000, 2450000];
+  resetType =       ["Daily", "Daily", "Daily"];
+  minimumLevel =    [125, 125, 125];
+  boss = await createBoss(bossName, imagesource);
+  await insertDifficult(boss, difficulties, resetType, values, minimumLevel);
+  defaultBosses.push(boss); 
+
+
+  bossName =        "Horntail";
+  imagesource =     "../../assets/boss/horntail.webp";
+  difficulties =    ["Easy", "Normal", "Chaos"];
+  values =          [882000, 1012500, 1352000];
+  resetType =       ["Daily", "Daily", "Daily"];
+  minimumLevel =    [130, 130, 135];
+  boss = await createBoss(bossName, imagesource);
+  await insertDifficult(boss, difficulties, resetType, values, minimumLevel);
+  defaultBosses.push(boss); 
+
+
+  bossName =        "Arkarium";
+  imagesource =     "../../assets/boss/arkarium.webp";
+  difficulties =    ["Normal", "Hard"];
+  values =          [1152000, 2520500];
+  resetType =       ["Daily", "Daily"];
+  minimumLevel =    [140, 140];
+  boss = await createBoss(bossName, imagesource);
+  await insertDifficult(boss, difficulties, resetType, values, minimumLevel);
+  defaultBosses.push(boss); 
+
+
+  bossName =        "Pink Beam";
+  imagesource =     "../../assets/boss/pink_bean.webp";
+  difficulties =    ["Normal", "Chaos"];
+  values =          [1404500, 12800000];
+  resetType =       ["Daily", "Weekly"];
+  minimumLevel =    [160, 170];
+  boss = await createBoss(bossName, imagesource);
+  await insertDifficult(boss, difficulties, resetType, values, minimumLevel);
+  defaultBosses.push(boss); 
+
+  bossName =        "Ranmaru";
+  imagesource =     "../../assets/boss/ranmaru.webp";
+  difficulties =    ["Normal", "Hard"];
+  values =          [840500, 2664500];
+  resetType =       ["Daily", "Daily"];
+  minimumLevel =    [120, 180];
+  boss = await createBoss(bossName, imagesource);
+  await insertDifficult(boss, difficulties, resetType, values, minimumLevel);
+  defaultBosses.push(boss); 
+
+
+  bossName =        "Cygnus";
+  imagesource =     "../../assets/boss/cygnus.webp";
+  difficulties =    ["Easy", "Normal"];
+  values =          [9112500, 14450000];
+  resetType =       ["Weekly", "Weekly"];
+  minimumLevel =    [165, 165];
+  boss = await createBoss(bossName, imagesource);
+  await insertDifficult(boss, difficulties, resetType, values, minimumLevel);
+  defaultBosses.push(boss); 
+
+
+  bossName =        "Lotus";
+  imagesource =     "../../assets/boss/lotus.webp";
+  difficulties =    ["Normal", "Hard"];
+  values =          [32512500, 74112500];
+  resetType =       ["Weekly", "Weekly"];
+  minimumLevel =    [190, 190];
+  boss = await createBoss(bossName, imagesource);
+  await insertDifficult(boss, difficulties, resetType, values, minimumLevel);
+  defaultBosses.push(boss); 
+
+
+  bossName =        "Damien";
+  imagesource =     "../../assets/boss/damien.webp";
+  difficulties =    ["Normal", "Hard"];
+  values =          [33800000, 70312500];
+  resetType =       ["Weekly", "Weekly"];
+  minimumLevel =    [190, 190];
+  boss = await createBoss(bossName, imagesource);
+  await insertDifficult(boss, difficulties, resetType, values, minimumLevel);
+  defaultBosses.push(boss); 
+
+
+  bossName =        "Guardian Angel Slime";
+  imagesource =     "../../assets/boss/angel_smile.webp";
+  difficulties =    ["Normal", "Chaos"];
+  values =          [34322000, 90312500];
+  resetType =       ["Weekly", "Weekly"];
+  minimumLevel =    [210, 210];
+  boss = await createBoss(bossName, imagesource);
+  await insertDifficult(boss, difficulties, resetType, values, minimumLevel);
+  defaultBosses.push(boss); 
+
+
+  bossName =        "Lucid";
+  imagesource =     "../../assets/boss/lucid.webp";
+  difficulties =    ["Easy", "Normal", "Hard"];
+  values =          [35112500, 40612500, 80000000];
+  resetType =       ["Weekly", "Weekly", "Weekly"];
+  minimumLevel =    [220, 220, 220];
+  boss = await createBoss(bossName, imagesource);
+  await insertDifficult(boss, difficulties, resetType, values, minimumLevel);
+  defaultBosses.push(boss);
+  
+  
+  bossName =        "Will";
+  imagesource =     "../../assets/boss/will.webp";
+  difficulties =    ["Easy", "Normal", "Hard"];
+  values =          [38255000, 46512500, 88200000];
+  resetType =       ["Weekly", "Weekly", "Weekly"];
+  minimumLevel =    [235, 235, 235];
+  boss = await createBoss(bossName, imagesource);
+  await insertDifficult(boss, difficulties, resetType, values, minimumLevel);
+  defaultBosses.push(boss); 
+
+
+  bossName =        "Gloom";
+  imagesource =     "../../assets/boss/gloom.webp";
+  difficulties =    ["Normal", "Chaos"];
+  values =          [49612500, 92450000];
+  resetType =       ["Weekly", "Weekly"];
+  minimumLevel =    [245, 245];
+  boss = await createBoss(bossName, imagesource);
+  await insertDifficult(boss, difficulties, resetType, values, minimumLevel);
+  defaultBosses.push(boss); 
+
+
+  bossName =        "Verus Hilla";
+  imagesource =     "../../assets/boss/verus_hilla.webp";
+  difficulties =    ["Normal", "Hard"];
+  values =          [89520000, 110450000];
+  resetType =       ["Weekly", "Weekly"];
+  minimumLevel =    [250, 250];
+  boss = await createBoss(bossName, imagesource);
+  await insertDifficult(boss, difficulties, resetType, values, minimumLevel);
+  defaultBosses.push(boss);
+
+
+  bossName =        "Darknell";
+  imagesource =     "../../assets/boss/darknell.webp";
+  difficulties =    ["Normal", "Hard"];
+  values =          [52812500, 96800000];
+  resetType =       ["Weekly", "Weekly"];
+  minimumLevel =    [255, 255];
+  boss = await createBoss(bossName, imagesource);
+  await insertDifficult(boss, difficulties, resetType, values, minimumLevel);
+  defaultBosses.push(boss);
+
+
+  bossName =        "Black Mage";
+  imagesource =     "../../assets/boss/black_mage.webp";
+  difficulties =    ["Hard", "Extreme"];
+  values =          [500000000, 2000000000];
+  resetType =       ["Monthly", "Monthly"];
+  minimumLevel =    [255, 255];
+  boss = await createBoss(bossName, imagesource);
+  await insertDifficult(boss, difficulties, resetType, values, minimumLevel);
+  defaultBosses.push(boss);
+
+
+  bossName =        "Seren";
+  imagesource =     "../../assets/boss/seren.webp";
+  difficulties =    ["Normal", "Hard", "Extreme"];
+  values =          [133687500, 151250000, 605000000];
+  resetType =       ["Weekly", "Weekly", "Weekly"];
+  minimumLevel =    [265, 265, 265];
+  boss = await createBoss(bossName, imagesource);
+  await insertDifficult(boss, difficulties, resetType, values, minimumLevel);
+  defaultBosses.push(boss);
+
+
+  bossName =        "Kalos";
+  imagesource =     "../../assets/boss/kalos.webp";
+  difficulties =    ["Chaos"];
+  values =          [200000000];
+  resetType =       ["Weekly"];
+  minimumLevel =    [270];
+  boss = await createBoss(bossName, imagesource);
+  await insertDifficult(boss, difficulties, resetType, values, minimumLevel);
+  defaultBosses.push(boss);
+
+
+  bossName =        "Princess No";
+  imagesource =     "../../assets/boss/princess_no.webp";
+  difficulties =    ["Normal"];
+  values =          [16200000];
+  resetType =       ["Weekly"];
+  minimumLevel =    [140];
+  boss = await createBoss(bossName, imagesource);
+  await insertDifficult(boss, difficulties, resetType, values, minimumLevel);
+  defaultBosses.push(boss);
+
+  bossName =        "Akechi";
+  imagesource =     "../../assets/boss/akechi.webp";
+  difficulties =    ["Normal"];
+  values =          [28800000];
+  resetType =       ["Weekly"];
+  minimumLevel =    [200];
+  boss = await createBoss(bossName, imagesource);
+  await insertDifficult(boss, difficulties, resetType, values, minimumLevel);
+  defaultBosses.push(boss);
+
+  try {
+    // Retrieve the existing default link skills from the database
+    const existingDefaultBosses = await Boss.find().lean();
+
+    // Compare the existing and updated default link skills
+    const isDifferent = !isEqual(
+      existingDefaultBosses.map(boss => ({
+        name: boss.name,
+        img: boss.img,
+        difficulties: boss.difficulties.map(difficulty => ({
+          name: difficulty.name,
+          value: difficulty.value,
+          reset: difficulty.reset,
+          minLevel: difficulty.minLevel
+        }))
+      })),
+      defaultBosses.map(boss => ({
+        name: boss.name,
+        img: boss.img,
+        difficulties: boss.difficulties.map(difficulty => ({
+          name: difficulty.name,
+          value: difficulty.value,
+          reset: difficulty.reset,
+          minLevel: difficulty.minLevel
+        }))
+      }))
+    );
+
+    if (isDifferent) {
+      // Remove the existing default link skills from the database
+      await Boss.deleteMany();
+
+      // Insert the updated default link skills
+      await Boss.insertMany(defaultBosses);
+      console.log('Default Bosses updated');
+    } 
+    else {
+      console.log('Default Bosses is up to date');
+    }
+  }
+  catch (error) {
+    console.error(error);
+  }
+}
+createDefaultBosses();
+module.exports = {Boss, createDefaultBosses};

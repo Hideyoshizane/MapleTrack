@@ -1,7 +1,7 @@
-const { readlinkSync } = require('fs');
 const Joi = require('joi');
 const mongoose = require('mongoose');
 const path = require('path');
+const { isEqual } = require('lodash');
 
 
 const LegionSystem = mongoose.model('LegionSystem', new mongoose.Schema({
@@ -29,13 +29,11 @@ const LegionSystem = mongoose.model('LegionSystem', new mongoose.Schema({
 const defaultLegion = [];
 
 async function createDefaultLegion(nametag, classtag) {
-  let legion = await new LegionSystem({name: nametag,class: classtag});
-  return legion;
+  return await new LegionSystem({name: nametag,class: classtag});
 }
 
 async function insertRanking(legion, description, value){
   const placeholder = /Z/;
-  var i = 0;
   var ranking =  ["B", "A", "S", "SS", "SSS"];
   for (var i = 0; i < ranking.length; i++) {
     var ranks = ranking[i];
@@ -215,19 +213,46 @@ async function createDefaultLegionSystem() {
   await insertRanking(legion, description, values);
   defaultLegion.push(legion);
 
-  LegionSystem.on('index', (err) => {
-    if (err) console.error(err);
-    LegionSystem.countDocuments((err, count) => {
-      if (err) console.error(err);
-      if (count === 0) {
-        LegionSystem.insertMany(defaultLegion, (err, docs) => {
-          if (err) console.error(err);
-          console.log('Default Legion System created:', docs);
-        });
-      }
-    });
-  });
-}
 
+  try {
+    // Retrieve the existing default link skills from the database
+    const existingDefaultLegion = await LegionSystem.find().lean();
+
+    // Compare the existing and updated default link skills
+    const isDifferent = !isEqual(
+      existingDefaultLegion.map(system => ({
+        name: system.name,
+        class: system.class,
+        ranking: system.ranking.map(rank => ({
+          rank: rank.rank,
+          description: rank.description
+        }))
+      })),
+      defaultLegion.map(system => ({
+        name: system.name,
+        class: system.class,
+        ranking: system.ranking.map(rank => ({
+          rank: rank.rank,
+          description: rank.description
+        }))
+      }))
+    );
+
+    if (isDifferent) {
+      // Remove the existing default link skills from the database
+      await LegionSystem.deleteMany();
+
+      // Insert the updated default link skills
+      await LegionSystem.insertMany(defaultLegion);
+      console.log('Default Legion System updated');
+    } 
+    else {
+      console.log('Default Legion System is up to date');
+    }
+  }
+  catch (error) {
+    console.error(error);
+  }
+}
 createDefaultLegionSystem();
 module.exports = {LegionSystem, createDefaultLegionSystem};

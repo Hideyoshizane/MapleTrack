@@ -10,7 +10,7 @@ const path = require('path');
 const {User, validate} = require('./models/user');
 const { Boss, createDefaultBosses } = require('./models/boss');
 const { Character, defaultCharacters } = require('./models/character');
-const LinkSkill = require('./models/linkSkill');
+const {LinkSkill, createDefaultLinkSkill} = require('./models/linkSkill');
 const {LegionSystem, createDefaultLegionSystem} = require('./models/legion');
 const {servers, createDefaultServers }= require('./models/servers');
 const bcrypt = require('bcrypt');
@@ -35,8 +35,7 @@ db.once("open", () => {
 app.keys = ['newest secret key', 'older secret key'];
 
 
-const root = path.join(__dirname);
-app.use(require('koa-static')(root));
+app.use(require('koa-static')(path.join(__dirname)));
 app.use(bodyParser());
 app.use(session(app));
 
