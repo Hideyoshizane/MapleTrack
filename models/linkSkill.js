@@ -337,38 +337,20 @@ async function createDefaultLinkSkill() {
 
 
   try {
-
+    // Retrieve the existing default link skills from the database
     const existingDefaultLinkSkills = await LinkSkill.find().lean();
-
-    const isDifferent = !isEqual(
-      existingDefaultLinkSkills.map(skill => ({
-        name: skill.name,
-        image: skill.image,
-        levels: skill.levels.map(level => ({
-          level: level.level,
-          description: level.description
-        }))
-      })),
-      defaultLinkSkill.map(skill => ({
-        name: skill.name,
-        image: skill.image,
-        levels: skill.levels.map(level => ({
-          level: level.level,
-          description: level.description
-        }))
-      }))
-    );
-
-   if (isDifferent) {
-      await LinkSkill.deleteMany();
-      await LinkSkill.insertMany(defaultLinkSkill);
-      console.log('Default Link Skill updated');
-    } 
-    else {
-      console.log('Default Link Skill is up to date');
+    const existingLinkSkills = existingDefaultLinkSkills.map(linkSkill => linkSkill.name);
+    const newLinkSkills = defaultLinkSkill.filter(linkSkill => !existingLinkSkills.includes(linkSkill.name));
+  
+    if (newLinkSkills.length > 0) {
+      // Insert the new link skills into the database
+      await LinkSkill.insertMany(newLinkSkills);
+      console.log("Default Link Skills created/updated successfully.");
+    } else {
+      console.log("No changes required. Default Link Skills are already up to date.");
     }
   } catch (error) {
-    console.error(error);
+    console.error("Error creating default Link Skills:", error);
   }
 }
 

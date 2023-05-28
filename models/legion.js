@@ -215,43 +215,20 @@ async function createDefaultLegionSystem() {
 
 
   try {
-    // Retrieve the existing default link skills from the database
-    const existingDefaultLegion = await LegionSystem.find().lean();
-
-    // Compare the existing and updated default link skills
-    const isDifferent = !isEqual(
-      existingDefaultLegion.map(system => ({
-        name: system.name,
-        class: system.class,
-        ranking: system.ranking.map(rank => ({
-          rank: rank.rank,
-          description: rank.description
-        }))
-      })),
-      defaultLegion.map(system => ({
-        name: system.name,
-        class: system.class,
-        ranking: system.ranking.map(rank => ({
-          rank: rank.rank,
-          description: rank.description
-        }))
-      }))
-    );
-
-    if (isDifferent) {
-      // Remove the existing default link skills from the database
-      await LegionSystem.deleteMany();
-
-      // Insert the updated default link skills
-      await LegionSystem.insertMany(defaultLegion);
-      console.log('Default Legion System updated');
-    } 
-    else {
-      console.log('Default Legion System is up to date');
+    // Retrieve the existing default legions from the database
+    const existingDefaultLegions = await LegionSystem.find().lean();
+    const existingLegionNames = existingDefaultLegions.map(legion => legion.name);
+    const newLegions = defaultLegion.filter(legion => !existingLegionNames.includes(legion.name));
+  
+    if (newLegions.length > 0) {
+      // Insert the new legions into the database
+      await LegionSystem.insertMany(newLegions);
+      console.log("Default Legions created/updated successfully.");
+    } else {
+      console.log("No changes required. Default Legions are already up to date.");
     }
-  }
-  catch (error) {
-    console.error(error);
+  } catch (error) {
+    console.error("Error creating default Legions:", error);
   }
 }
 createDefaultLegionSystem();

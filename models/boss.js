@@ -357,45 +357,19 @@ async function createDefaultBosses() {
   try {
     // Retrieve the existing default link skills from the database
     const existingDefaultBosses = await Boss.find().lean();
-
-    // Compare the existing and updated default link skills
-    const isDifferent = !isEqual(
-      existingDefaultBosses.map(boss => ({
-        name: boss.name,
-        img: boss.img,
-        difficulties: boss.difficulties.map(difficulty => ({
-          name: difficulty.name,
-          value: difficulty.value,
-          reset: difficulty.reset,
-          minLevel: difficulty.minLevel
-        }))
-      })),
-      defaultBosses.map(boss => ({
-        name: boss.name,
-        img: boss.img,
-        difficulties: boss.difficulties.map(difficulty => ({
-          name: difficulty.name,
-          value: difficulty.value,
-          reset: difficulty.reset,
-          minLevel: difficulty.minLevel
-        }))
-      }))
-    );
-
-    if (isDifferent) {
-      // Remove the existing default link skills from the database
-      await Boss.deleteMany();
-
-      // Insert the updated default link skills
-      await Boss.insertMany(defaultBosses);
-      console.log('Default Bosses updated');
+    const existingBossNames = existingDefaultBosses.map(boss => boss.name);
+    const newBosses = defaultBosses.filter(boss => !existingBossNames.includes(boss.name));
+    if (newBosses.length > 0) {
+      // Insert the new bosses into the database
+      await Boss.insertMany(newBosses);
+      console.log("Default bosses created/updated successfully.");
     } 
     else {
-      console.log('Default Bosses is up to date');
+        console.log("No changes required. Default bosses are already up to date.");
     }
   }
   catch (error) {
-    console.error(error);
+    console.error("Error creating default bosses:", error);
   }
 }
 createDefaultBosses();

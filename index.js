@@ -9,10 +9,10 @@ const  mongoose = require('mongoose');
 const path = require('path');
 const {User, validate} = require('./models/user');
 const { Boss, createDefaultBosses } = require('./models/boss');
-const { Character, defaultCharacters } = require('./models/character');
+const { Character} = require('./models/character');
 const {LinkSkill, createDefaultLinkSkill} = require('./models/linkSkill');
 const {LegionSystem, createDefaultLegionSystem} = require('./models/legion');
-const {servers, createDefaultServers }= require('./models/servers');
+const {Server, serverSchema , createDefaultServers, createMissingCharacters }= require('./models/servers');
 const bcrypt = require('bcrypt');
 
 const app = new koa();
@@ -70,6 +70,8 @@ router
               email: user.email,
               role: user
             };
+            const ServerModel = mongoose.model('Server', serverSchema);
+            await ServerModel.createMissingCharacters();
             ctx.redirect('/home');
           }
         }catch(err){
@@ -96,8 +98,6 @@ router
             ctx.body = 'That user already exists!';
             return;
           }
-          const characterInstances = defaultCharacters.map(char => new Character(char));
-          const savedCharacters = await Promise.all(characterInstances.map(char => char.save()));
           user = new User({ username, email, password: hashedPassword, servers: await createDefaultServers()});
           //
           await user.save();
