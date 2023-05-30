@@ -263,29 +263,395 @@ async function createFromTemplate(templateCharacter, linkSkillId, legionId, clas
 }
 
 async function createDefaultCharacters(serverName) {
-  var linkSkillId = await initialize('Invincible Belief');
-  var legionId = await legionFind('STR+');
-  classParameter = "Adele";
-  codeParameter = "adele";
+  var linkSkillId = await initialize('Spirit of Freedom');
+  var legionId = await legionFind('INT+');
+  classParameter = "Battle Mage";
+  codeParameter = "battle_mage";
   var placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
   defaultCharacters.push(placeholderCharacter);
 
-  linkSkillId = await initialize('Invincible Belief');
+
+  linkSkillId = await initialize('Focus Spirit');
+  legionId = await legionFind('IEDM');
+  classParameter = "Beast Tamer";
+  codeParameter = "beast_tamer";
+  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
+  defaultCharacters.push(placeholderCharacter);
+
+
+  linkSkillId = await initialize('Cygnus Blessing');
+  legionId = await legionFind('INT+');
+  classParameter = "Blaze Wizard";
+  codeParameter = "blaze_wizard";
+  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
+  defaultCharacters.push(placeholderCharacter);
+
+
+  linkSkillId = await initialize('Cygnus Blessing');
+  legionId = await legionFind('INT+');
+  classParameter = "Blaze Wizard";
+  codeParameter = "blaze_wizard";
+  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
+  defaultCharacters.push(placeholderCharacter);
+
+
+  linkSkillId = await initialize('Rune Persistence');
+  legionId = await legionFind('RECVRMP');
+  classParameter = "Evan";
+  codeParameter = "evan";
+  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
+  defaultCharacters.push(placeholderCharacter);
+
+
+  linkSkillId = await initialize('Tide of Battle');
+  legionId = await legionFind('INT+');
+  classParameter = "Illium";
+  codeParameter = "illium";
+  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
+  defaultCharacters.push(placeholderCharacter);
+
+  
+  linkSkillId = await initialize('Elementalism');
+  legionId = await legionFind('BOSSDMGM');
+  classParameter = "Kanna";
+  codeParameter = "kanna";
+  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
+  defaultCharacters.push(placeholderCharacter);
+
+
+  linkSkillId = await initialize('Judgment');
+  legionId = await legionFind('INT+');
+  classParameter = "Kinesis";
+  codeParameter = "kinesis";
+  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
+  defaultCharacters.push(placeholderCharacter);
+
+  
+  linkSkillId = await initialize("Nature's Friend");
+  legionId = await legionFind('INT+');
+  classParameter = "Lara";
+  codeParameter = "lara";
+  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
+  defaultCharacters.push(placeholderCharacter);
+
+  
+  linkSkillId = await initialize("Light Wash");
+  legionId = await legionFind('INT+');
+  classParameter = "Luminous";
+  codeParameter = "luminous";
+  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
+  defaultCharacters.push(placeholderCharacter);
+
+
+  linkSkillId = await initialize("Empirical Knowledge");
+  legionId = await legionFind('MAXMP%');
+  classParameter = "Fire & Poison";
+  codeParameter = "fire_poison";
+  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
+  defaultCharacters.push(placeholderCharacter);
+
+
+  linkSkillId = await initialize("Empirical Knowledge");
+  legionId = await legionFind('INT+');
+  classParameter = "Ice & Lightning";
+  codeParameter = "ice_lightning";
+  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
+  defaultCharacters.push(placeholderCharacter);
+
+  
+  linkSkillId = await initialize("Empirical Knowledge");
+  legionId = await legionFind('INT+');
+  classParameter = "Bishop";
+  codeParameter = "bishop";
+  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
+  defaultCharacters.push(placeholderCharacter);
+
+
+  linkSkillId = await initialize("Thief's Cunning");
+  legionId = await legionFind('LUK+');
+  classParameter = "Dual Blade";
+  codeParameter = "dual_blade";
+  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
+  defaultCharacters.push(placeholderCharacter);
+
+
+  linkSkillId = await initialize("Cygnus Blessing");
+  legionId = await legionFind('LUK+');
+  classParameter = "Night Walker";
+  codeParameter = "night_walker";
+  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
+  defaultCharacters.push(placeholderCharacter);
+
+  
+  linkSkillId = await initialize("Phantom Instinct");
+  legionId = await legionFind('MESO%');
+  classParameter = "Phantom";
+  codeParameter = "phantom";
+  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
+  defaultCharacters.push(placeholderCharacter);
+
+
+  linkSkillId = await initialize("Thief's Cunning");
+  legionId = await legionFind('CRITRTT');
+  classParameter = "Night Lord";
+  codeParameter = "night_lord";
+  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
+  defaultCharacters.push(placeholderCharacter);
+
+
+  linkSkillId = await initialize("Thief's Cunning");
+  legionId = await legionFind('LUK+');
+  classParameter = "Shadower";
+  codeParameter = "shadower";
+  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
+  defaultCharacters.push(placeholderCharacter);
+
+
+  linkSkillId = await initialize("Hybrid Logic");
+  legionId = await legionFind('STDELU');
+  classParameter = "Xenon";
+  codeParameter = "xenon";
+  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
+  defaultCharacters.push(placeholderCharacter);
+
+
+  linkSkillId = await initialize("Unfair Advantage");
+  legionId = await legionFind('LUK+');
+  classParameter = "Cadena";
+  codeParameter = "cadena";
+  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
+  defaultCharacters.push(placeholderCharacter);
+
+  linkSkillId = await initialize("Bravado");
+  legionId = await legionFind('LUK+');
+  classParameter = "Hoyoung";
+  codeParameter = "hoyoung";
+  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
+  defaultCharacters.push(placeholderCharacter);
+
+
+  linkSkillId = await initialize("Combo Kill Blessing");
+  legionId = await legionFind('RECVRHP+');
+  classParameter = "Aran";
+  codeParameter = "aran";
+  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
+  defaultCharacters.push(placeholderCharacter);
+
+
+  linkSkillId = await initialize("Noble Fire");
   legionId = await legionFind('STR+');
+  classParameter = "Adele";
+  codeParameter = "adele";
+  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
+  defaultCharacters.push(placeholderCharacter);
+
+
+  linkSkillId = await initialize("Spirit of Freedom");
+  legionId = await legionFind('IED+');
   classParameter = "Blaster";
   codeParameter = "blaster";
   placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
   defaultCharacters.push(placeholderCharacter);
 
 
+  linkSkillId = await initialize("Cygnus Blessing");
+  legionId = await legionFind('MAXHP+');
+  classParameter = "Dawn Warrior";
+  codeParameter = "dawn_warrior";
+  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
+  defaultCharacters.push(placeholderCharacter);
 
 
+  linkSkillId = await initialize("Wild Rage");
+  legionId = await legionFind('BOSSDMG+');
+  classParameter = "Demon Avenger";
+  codeParameter = "demon_avenger";
+  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
+  defaultCharacters.push(placeholderCharacter);
 
 
+  linkSkillId = await initialize("Fury Unleashed");
+  legionId = await legionFind('STATRES+');
+  classParameter = "Demon Slayer";
+  codeParameter = "demon_slayer";
+  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
+  defaultCharacters.push(placeholderCharacter);
 
 
+  linkSkillId = await initialize("Keen Edge");
+  legionId = await legionFind('CRIT');
+  classParameter = "Hayato";
+  codeParameter = "hayato";
+  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
+  defaultCharacters.push(placeholderCharacter);
 
 
+  linkSkillId = await initialize("Phantom Instinct");
+  legionId = await legionFind('STR+');
+  classParameter = "Kaiser";
+  codeParameter = "kaiser";
+  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
+  defaultCharacters.push(placeholderCharacter);
+
+
+  linkSkillId = await initialize("Knight's Watch");
+  legionId = await legionFind('MAXHP+');
+  classParameter = "Mihile";
+  codeParameter = "mihile";
+  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
+  defaultCharacters.push(placeholderCharacter);
+
+
+  linkSkillId = await initialize("Invincible Belief");
+  legionId = await legionFind('STR+');
+  classParameter = "Hero";
+  codeParameter = "hero";
+  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
+  defaultCharacters.push(placeholderCharacter);
+
+
+  linkSkillId = await initialize("Invincible Belief");
+  legionId = await legionFind('STR+');
+  classParameter = "Paladin";
+  codeParameter = "paladin";
+  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
+  defaultCharacters.push(placeholderCharacter);
+
+
+  linkSkillId = await initialize("Invincible Belief");
+  legionId = await legionFind('MAXHP%');
+  classParameter = "Dark Knight";
+  codeParameter = "dark_knight";
+  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
+  defaultCharacters.push(placeholderCharacter);
+
+
+  linkSkillId = await initialize("Rhinne's Blessing");
+  legionId = await legionFind('EXP');
+  classParameter = "Zero";
+  codeParameter = "zero";
+  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
+  defaultCharacters.push(placeholderCharacter);
+
+  
+  linkSkillId = await initialize("Adventurer's Curiosity");
+  legionId = await legionFind('DEX+');
+  classParameter = "Bowmaster";
+  codeParameter = "bowmaster";
+  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
+  defaultCharacters.push(placeholderCharacter);
+
+
+  linkSkillId = await initialize("Adventurer's Curiosity");
+  legionId = await legionFind('CRITRT');
+  classParameter = "Marksman";
+  codeParameter = "marksman";
+  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
+  defaultCharacters.push(placeholderCharacter);
+
+
+  linkSkillId = await initialize("Time to Prepare");
+  legionId = await legionFind('DEX+');
+  classParameter = "Kain";
+  codeParameter = "kain";
+  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
+  defaultCharacters.push(placeholderCharacter);
+
+
+  linkSkillId = await initialize("Elven Blessing");
+  legionId = await legionFind('SKILLCD');
+  classParameter = "Mercedes";
+  codeParameter = "mercedes";
+  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
+  defaultCharacters.push(placeholderCharacter);
+
+
+  linkSkillId = await initialize("Adventurer's Curiosity");
+  legionId = await legionFind('DEX+');
+  classParameter = "Pathfinder";
+  codeParameter = "pathfinder";
+  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
+  defaultCharacters.push(placeholderCharacter);
+
+
+  linkSkillId = await initialize("Spirit of Freedom");
+  legionId = await legionFind('%DMGUP');
+  classParameter = "Wild Hunter";
+  codeParameter = "wild_hunter";
+  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
+  defaultCharacters.push(placeholderCharacter);
+
+
+  linkSkillId = await initialize("Cygnus Blessing");
+  legionId = await legionFind('DEX+');
+  classParameter = "Wind Archer";
+  codeParameter = "wind_archer";
+  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
+  defaultCharacters.push(placeholderCharacter);
+
+
+  linkSkillId = await initialize("Terms and Conditions");
+  legionId = await legionFind('DEX+P');
+  classParameter = "Angelic Buster";
+  codeParameter = "angelic_buster";
+  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
+  defaultCharacters.push(placeholderCharacter);
+
+
+  linkSkillId = await initialize("Pirate Blessing");
+  legionId = await legionFind('STR+P');
+  classParameter = "Cannoneer";
+  codeParameter = "cannoneer";
+  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
+  defaultCharacters.push(placeholderCharacter);
+
+
+  linkSkillId = await initialize("Spirit of Freedom");
+  legionId = await legionFind('BUFFDUR');
+  classParameter = "Mechanic";
+  codeParameter = "mechanic";
+  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
+  defaultCharacters.push(placeholderCharacter);
+
+
+  linkSkillId = await initialize("Pirate Blessing");
+  legionId = await legionFind('STR+P');
+  classParameter = "Buccaneer";
+  codeParameter = "buccaneer";
+  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
+  defaultCharacters.push(placeholderCharacter);
+
+
+  linkSkillId = await initialize("Pirate Blessing");
+  legionId = await legionFind('SUMMND');
+  classParameter = "Corsair";
+  codeParameter = "corsair";
+  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
+  defaultCharacters.push(placeholderCharacter);
+
+
+  linkSkillId = await initialize("Close Call");
+  legionId = await legionFind('CRTDMG+');
+  classParameter = "Shade";
+  codeParameter = "shade";
+  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
+  defaultCharacters.push(placeholderCharacter);
+
+
+  linkSkillId = await initialize("Cygnus Blessing");
+  legionId = await legionFind('STR+P');
+  classParameter = "Thuder Breaker";
+  codeParameter = "thuder_breaker";
+  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
+  defaultCharacters.push(placeholderCharacter);
+
+
+  linkSkillId = await initialize("Solus");
+  legionId = await legionFind('STR+P');
+  classParameter = "Ark";
+  codeParameter = "ark";
+  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
+  defaultCharacters.push(placeholderCharacter);
 
 
   const characters = [...defaultCharacters];
