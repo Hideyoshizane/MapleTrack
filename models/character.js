@@ -287,14 +287,6 @@ async function createDefaultCharacters(serverName) {
   defaultCharacters.push(placeholderCharacter);
 
 
-  linkSkillId = await initialize('Cygnus Blessing');
-  legionId = await legionFind('INT+');
-  classParameter = "Blaze Wizard";
-  codeParameter = "blaze_wizard";
-  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
-  defaultCharacters.push(placeholderCharacter);
-
-
   linkSkillId = await initialize('Rune Persistence');
   legionId = await legionFind('RECVRMP');
   classParameter = "Evan";
@@ -658,7 +650,115 @@ async function createDefaultCharacters(serverName) {
   defaultCharacters.length = 0;
   return characters;
 }
+async function updateCharacters(defaultCharacters) {
+  const characters = await Character.find();
 
+  for (const character of characters) {
+    let isUpdated = false;
+
+    // Check for any new variables in the schema
+    const schemaKeys = Object.keys(Character.schema.paths);
+    const characterKeys = Object.keys(character.toObject());
+
+    const newKeys = schemaKeys.filter((key) => !characterKeys.includes(key));
+    if (newKeys.length > 0) {
+      newKeys.forEach((key) => {
+        character[key] = undefined;
+        isUpdated = true;
+      });
+    }
+
+    // Check for any new objects or properties in the defaultCharacters' ArcaneForce and SacredForce
+    for (const forceType of ['ArcaneForce', 'SacredForce']) {
+      const templateForceArray = defaultCharacters[forceType];
+      if (templateForceArray && Array.isArray(templateForceArray)) {
+        for (const templateForce of templateForceArray) {
+          const characterForce = character[forceType].find(
+            (force) => force.name === templateForce.name
+          );
+
+          if (!characterForce) {
+            character[forceType].push(templateForce);
+            isUpdated = true;
+          } else {
+            const templateContentArray = templateForce.content;
+            if (templateContentArray && Array.isArray(templateContentArray)) {
+              for (const templateContent of templateContentArray) {
+                const characterContent = characterForce.content.find(
+                  (content) => content.contentType === templateContent.contentType
+                );
+
+                if (!characterContent) {
+                  characterForce.content.push(templateContent);
+                  isUpdated = true;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    // Save the updated character if any changes were made
+    if (isUpdated) {
+      await character.save();
+    }
+  }
+}async function updateCharacters(defaultCharacters) {
+  const characters = await Character.find();
+
+  for (const character of characters) {
+    let isUpdated = false;
+
+    // Check for any new variables in the schema
+    const schemaKeys = Object.keys(Character.schema.paths);
+    const characterKeys = Object.keys(character.toObject());
+
+    const newKeys = schemaKeys.filter((key) => !characterKeys.includes(key));
+    if (newKeys.length > 0) {
+      newKeys.forEach((key) => {
+        character[key] = undefined;
+        isUpdated = true;
+      });
+    }
+
+    // Check for any new objects or properties in the defaultCharacters' ArcaneForce and SacredForce
+    for (const forceType of ['ArcaneForce', 'SacredForce']) {
+      const templateForceArray = defaultCharacters[forceType];
+      if (templateForceArray && Array.isArray(templateForceArray)) {
+        for (const templateForce of templateForceArray) {
+          const characterForce = character[forceType].find(
+            (force) => force.name === templateForce.name
+          );
+
+          if (!characterForce) {
+            character[forceType].push(templateForce);
+            isUpdated = true;
+          } else {
+            const templateContentArray = templateForce.content;
+            if (templateContentArray && Array.isArray(templateContentArray)) {
+              for (const templateContent of templateContentArray) {
+                const characterContent = characterForce.content.find(
+                  (content) => content.contentType === templateContent.contentType
+                );
+
+                if (!characterContent) {
+                  characterForce.content.push(templateContent);
+                  isUpdated = true;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    // Save the updated character if any changes were made
+    if (isUpdated) {
+      await character.save();
+    }
+  }
+}
 
         
-module.exports = { Character, defaultCharacters, createDefaultCharacters };
+module.exports = { Character, defaultCharacters, createDefaultCharacters, updateCharacters };

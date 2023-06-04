@@ -1,24 +1,32 @@
 const Joi = require('joi');
 const mongoose = require('mongoose');
-const { Character, createDefaultCharacters, defaultCharacters  } = require('./character');
+const { Character, createDefaultCharacters, defaultCharacters, updateCharacters } = require('./character');
+const { User } = require('./user');
+
+
 
 const serverSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true
   },
+  img:{
+    type: String,
+    required: true
+  },
   characters: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Character' }]
 });
 
+const defaultServers = [
+  { name: 'Scania' ,img:  '../../assets/icons/servers/scania'  },
+  { name: 'Bera'   ,img:  '../../assets/icons/servers/bera'    },
+  { name: 'Aurora' ,img:  '../../assets/icons/servers/aurora'  },
+  { name: 'Elysium',img:  '../../assets/icons/servers/elysium' },
+  { name: 'Reboot' ,img:  '../../assets/icons/servers/reboot'  },
+];
+
 async function createDefaultServers() {
-    const defaultServers = [
-      { name: 'Scania' },
-      { name: 'Bera' },
-      { name: 'Aurora' },
-      { name: 'Elysium' },
-      { name: 'Reboot' },
-    ];
-  
+   
     const savedServers = await Server.insertMany(defaultServers);
     const savedCharacters = [];
 
@@ -35,6 +43,8 @@ async function createDefaultServers() {
   
     return savedServers;
   } 
+
+
 
     const changeIds = async (characterData, serverName) => {
       const updatedID = new Character();
@@ -62,76 +72,68 @@ async function createDefaultServers() {
       return updatedID;
     };
 
-
-  serverSchema.statics.createMissingCharacters = async function() {
-    const servers = await this.find().populate({
-      path: 'characters',
-      model: 'Character',
-    });
-    const updatedDefaultCharacters = await createDefaultCharacters();
-
-    for (const server of servers) {
-      const characterCodes = server.characters.map(character => character.code);
-  
-      for (const character of updatedDefaultCharacters) {
-        if (!characterCodes.includes(character.code)) {
+    serverSchema.statics.createMissingCharacters = async function(userData) {
+      const user = await User.findById(userData._id).populate({
+        path: 'servers',
+        populate: {
+          path: 'characters',
+          model: 'Character'
+        }
+      });
+    
+      for (const server of user.servers) {
+        const characterCodes = server.characters.map(character => character.code);
+        const characters = await createDefaultCharacters(server.name);
+        const missingCharacters = characters.filter(character => !characterCodes.includes(character.code));
+    
+        for (const character of missingCharacters) {
           const modifiedCharacterData = await changeIds(character, server.name);
-          await modifiedCharacterData.save();
-  
-          await this.findOneAndUpdate(
-            { _id: server._id },
-            { $addToSet: { characters: modifiedCharacterData._id } }
-          );
-  
-          characterCodes.push(character.code); // Update the characterCodes array
-          console.log(server.name);
+          const newCharacter = new Character(modifiedCharacterData);
+          await newCharacter.save();
+    
+          server.characters.push(newCharacter); // Add the new character object directly
+          characterCodes.push(character.code);
+    
+          console.log(`Added character '${character.code}' to server '${server.name}'.`);
+        }
+    
+        await server.save();
+      }
+    
+      console.log("Default Characters created/updated successfully");
+    
+      await updateCharacters(defaultCharacters);
+    
+      console.log("Character updates checked successfully");
+    
+      await user.save();
+    
+      return user;
+    };
+       
+    serverSchema.statics.updateServers = async function (userData) {
+      const user = await User.findById(userData._id).populate('servers');
+      const defaultServerNames = defaultServers.map(server => server.name);
+    
+      for (const defaultServer of defaultServers) {
+        const server = user.servers.find(server => server.name === defaultServer.name);
+    
+        if (!server) {
+          const newServer = new Server(defaultServer);
+          await newServer.save();
+    
+          user.servers.push(newServer._id);
+          console.log(`Added server '${newServer.name}'.`);
         }
       }
-    }
-  };
-  
-  
-  
+    
+      await user.save();
+    
+      return user;
+    };
+
+
+
 const Server = mongoose.model('Server', serverSchema);
+module.exports = {Server, serverSchema , createDefaultServers, createMissingCharacters: Server.createMissingCharacters, updateServers: Server.updateServers};
 
-  
-
-module.exports = {Server, serverSchema , createDefaultServers, createMissingCharacters: Server.createMissingCharacters };
-
-
-
-  
-      /*const existingCharacterCount = serverCharacterCodes.length;
-      const missingCharacterCount = Math.max(0, characterCount - existingCharacterCount);
-  
-      const uniqueMissingCharacters = missingCharacters.filter(character => !serverCharacterCodes.includes(character.code));
-  
-      const charactersToAdd = uniqueMissingCharacters.slice(0, missingCharacterCount);
-  
-      for (const missingCharacter of charactersToAdd) {
-        console.log(missingCharacter);
-        const newCharacter = new Character({
-          _id: generateUniqueId(),
-          name: missingCharacter.name,
-          level: missingCharacter.level,
-          targetLevel: missingCharacter.targetLevel,
-          class: missingCharacter.class,
-          code: missingCharacter.code,
-          job: missingCharacter.job,
-          legion: missingCharacter.legion,
-          linkSkill: missingCharacter.linkSkill,
-          bossing: missingCharacter.bossing,
-          ArcaneForce: [...missingCharacter.ArcaneForce],
-          SacredForce: [...missingCharacter.SacredForce]
-        });
-  
-        server.characters.push(newCharacter);
-        await newCharacter.save();
-      }
-  
-      if (missingCharacterCount > 0) {
-        await server.save();
-        console.log('Server saved successfully.');
-      } else {
-        console.log('No missing characters. Server not saved.');
-      }*/
