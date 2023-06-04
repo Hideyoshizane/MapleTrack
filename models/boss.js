@@ -355,48 +355,21 @@ async function createDefaultBosses() {
   defaultBosses.push(boss);
 
   try {
-    // Retrieve the existing default bosses from the database
+    // Retrieve the existing default link skills from the database
     const existingDefaultBosses = await Boss.find().lean();
-    const existingBossesMap = new Map(existingDefaultBosses.map(boss => [boss.name, boss]));
-  
-    for (const boss of defaultBosses) {
-      const existingBoss = existingBossesMap.get(boss.name);
-  
-      if (existingBoss) {
-        // Boss already exists, check for value changes
-        const existingDifficulties = existingBoss.difficulties.map(difficulty => ({
-          name: difficulty.name,
-          value: difficulty.value,
-          reset: difficulty.reset,
-          minLevel: difficulty.minLevel,
-        }));
-  
-        const newDifficulties = boss.difficulties.map(difficulty => ({
-          name: difficulty.name,
-          value: difficulty.value,
-          reset: difficulty.reset,
-          minLevel: difficulty.minLevel,
-        }));
-  
-        if (JSON.stringify(existingDifficulties) !== JSON.stringify(newDifficulties)) {
-          // Difficulties have changed, update the boss
-          existingBoss.img = boss.img;
-          existingBoss.difficulties = boss.difficulties;
-          await Boss.findByIdAndUpdate(existingBoss._id, existingBoss);
-          console.log(`Boss ${existingBoss.name} updated successfully.`);
-        } 
-      } 
-      else {
-        // Boss doesn't exist, insert it into the database
-        await Boss.create(boss);
-        console.log(`Boss ${boss.name} created successfully.`);
-      }
+    const existingBossNames = existingDefaultBosses.map(boss => boss.name);
+    const newBosses = defaultBosses.filter(boss => !existingBossNames.includes(boss.name));
+    if (newBosses.length > 0) {
+      // Insert the new bosses into the database
+      await Boss.insertMany(newBosses);
+      console.log("Default bosses created/updated successfully.");
+    } 
+    else {
+        console.log("No changes required. Default bosses are already up to date.");
     }
-  
-    console.log("Default bosses created/updated successfully.");
-  } 
+  }
   catch (error) {
-    console.error("Error creating/updating default bosses:", error);
+    console.error("Error creating default bosses:", error);
   }
 }
 createDefaultBosses();

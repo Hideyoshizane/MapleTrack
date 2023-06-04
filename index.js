@@ -7,12 +7,12 @@ const serve = require('koa-static');
 const session = require('koa-session');
 const  mongoose = require('mongoose');
 const path = require('path');
-const { User, validate } = require('./models/user');
+const {User, validate} = require('./models/user');
 const { Boss, createDefaultBosses } = require('./models/boss');
 const { Character} = require('./models/character');
 const {LinkSkill, createDefaultLinkSkill} = require('./models/linkSkill');
 const {LegionSystem, createDefaultLegionSystem} = require('./models/legion');
-const {Server, serverSchema , createDefaultServers, createMissingCharacters, updateServers}= require('./models/servers');
+const {Server, serverSchema , createDefaultServers, createMissingCharacters }= require('./models/servers');
 const bcrypt = require('bcrypt');
 
 const app = new koa();
@@ -71,8 +71,7 @@ router
               role: user
             };
             const ServerModel = mongoose.model('Server', serverSchema);
-            await ServerModel.updateServers(ctx.session.user);
-            await ServerModel.createMissingCharacters(ctx.session.user);
+            await ServerModel.createMissingCharacters();
             ctx.redirect('/home');
           }
         }catch(err){
@@ -110,8 +109,8 @@ router
         }
       })
       .get('/home', async (ctx) => {
-        const { username, _id } = ctx.session.user;
-        const user = await User.findOne({ _id: _id }).populate({
+        const username = ctx.session.user.username;
+        const user = await User.findOne({ _id: ctx.session.user }).populate({
           path: 'servers',
           populate: {
             path: 'characters',
@@ -119,29 +118,9 @@ router
               path: 'legion linkSkill'
             }
           }
-        });
-        await ctx.render('home', { username, _id });
-      })
-      .get('/search', async (ctx) => {
-        try {
-          const { query } = ctx.request.query;
-      
-          // Perform the search query using the Character model
-          const characters = await Character.find({
-            $or: [
-              { name: { $regex: query, $options: 'i' } },
-              { class: { $regex: query, $options: 'i' } },
-            ],
-          });
-      
-          ctx.body = characters;
-        } catch (error) {
-          console.error('Error performing search:', error);
-          ctx.status = 500;
-          ctx.body = { error: 'An error occurred during the search' };
-        }
+        })
+        await ctx.render('home', { username });
       });
-
 
 app.use(router.routes());
 app.use(router.allowedMethods());
