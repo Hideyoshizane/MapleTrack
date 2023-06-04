@@ -339,20 +339,35 @@ async function createDefaultLinkSkill() {
   try {
     // Retrieve the existing default link skills from the database
     const existingDefaultLinkSkills = await LinkSkill.find().lean();
-    const existingLinkSkills = existingDefaultLinkSkills.map(linkSkill => linkSkill.name);
-    const newLinkSkills = defaultLinkSkill.filter(linkSkill => !existingLinkSkills.includes(linkSkill.name));
+    const existingLinkSkillsMap = new Map(existingDefaultLinkSkills.map(skill => [skill.name, skill]));
   
-    if (newLinkSkills.length > 0) {
-      // Insert the new link skills into the database
-      await LinkSkill.insertMany(newLinkSkills);
-      console.log("Default Link Skills created/updated successfully.");
-    } else {
-      console.log("No changes required. Default Link Skills are already up to date.");
+    for (const linkSkill of defaultLinkSkill) {
+      const existingLinkSkill = existingLinkSkillsMap.get(linkSkill.name);
+  
+      if (existingLinkSkill) {
+        // Link Skill already exists, check for value changes
+        const existingValues = existingLinkSkill.levels.map(level => level.description);
+        const newValues = linkSkill.levels.map(level => level.description);
+  
+        if (JSON.stringify(existingValues) !== JSON.stringify(newValues)) {
+          // Values have changed, update the Link Skill
+          existingLinkSkill.image = linkSkill.image;
+          existingLinkSkill.levels = linkSkill.levels;
+          await LinkSkill.findByIdAndUpdate(existingLinkSkill._id, existingLinkSkill);
+          console.log(`Link Skill ${existingLinkSkill.name} updated successfully.`);
+        } 
+      } 
+      else {
+        // Link Skill doesn't exist, insert it into the database
+        await LinkSkill.create(linkSkill);
+        console.log(`Link Skill ${linkSkill.name} created successfully.`);
+      }
     }
+    console.log("Default Link Skills created/updated successfully.");
   } catch (error) {
-    console.error("Error creating default Link Skills:", error);
+    console.error("Error creating/updating default Link Skills:", error);
   }
-}
+  }
 
 createDefaultLinkSkill();
 module.exports = {LinkSkill, createDefaultLinkSkill};

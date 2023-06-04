@@ -213,22 +213,45 @@ async function createDefaultLegionSystem() {
   await insertRanking(legion, description, values);
   defaultLegion.push(legion);
 
-
   try {
     // Retrieve the existing default legions from the database
     const existingDefaultLegions = await LegionSystem.find().lean();
-    const existingLegionNames = existingDefaultLegions.map(legion => legion.name);
-    const newLegions = defaultLegion.filter(legion => !existingLegionNames.includes(legion.name));
+    const existingLegionsMap = new Map(existingDefaultLegions.map(legion => [legion.name, legion]));
   
-    if (newLegions.length > 0) {
-      // Insert the new legions into the database
-      await LegionSystem.insertMany(newLegions);
-      console.log("Default Legions created/updated successfully.");
-    } else {
-      console.log("No changes required. Default Legions are already up to date.");
+    for (const legion of defaultLegion) {
+      const existingLegion = existingLegionsMap.get(legion.name);
+  
+      if (existingLegion) {
+        // Legion already exists, check for value changes
+        const existingRanking = existingLegion.ranking.map(rank => ({
+          rank: rank.rank,
+          description: rank.description,
+        }));
+  
+        const newRanking = legion.ranking.map(rank => ({
+          rank: rank.rank,
+          description: rank.description,
+        }));
+  
+        if (JSON.stringify(existingRanking) !== JSON.stringify(newRanking)) {
+          // Ranking has changed, update the legion
+          existingLegion.class = legion.class;
+          existingLegion.ranking = legion.ranking;
+          await LegionSystem.findByIdAndUpdate(existingLegion._id, existingLegion);
+          console.log(`Legion ${existingLegion.name} updated successfully.`);
+        } 
+      } 
+      else {
+        // Legion doesn't exist, insert it into the database
+        await LegionSystem.create(legion);
+        console.log(`Legion ${legion.name} created successfully.`);
+      }
     }
-  } catch (error) {
-    console.error("Error creating default Legions:", error);
+  
+    console.log("Default Legions created/updated successfully.");
+  } 
+  catch (error) {
+    console.error("Error creating/updating default Legions:", error);
   }
 }
 createDefaultLegionSystem();
