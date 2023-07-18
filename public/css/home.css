@@ -37,7 +37,7 @@ body{
     padding-left: 16px;
     padding-right: 8px;
     border-radius: 15px;
-    transition: border-bottom-left-radius 0.0001s ease, border-bottom-right-radius 0.00001s ease;
+    transition: all 0.65s ease;
   }
   
   .searchSection.expanded {
@@ -61,12 +61,21 @@ body{
   }
   
   .result {
+    display: flex;
     min-width: 628px;
     padding: 10px;
-    margin: 0 auto;
+    margin: 0;
+    margin-top: 0px;
     margin-bottom: 10px;
+    align-items: center;
   }
   
+  .result img{
+    width: 32px;
+    height: 32px;
+    margin-left: 8px;
+    vertical-align: center;
+  }
   .result:last-child {
     margin-bottom: 0;
   }

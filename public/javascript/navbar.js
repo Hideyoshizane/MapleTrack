@@ -1,5 +1,7 @@
 import { DateTime } from "luxon";
 
+
+
 document.addEventListener("DOMContentLoaded", function() {
   const dailyOutput = document.getElementById("daily");
   const weeklyOutput =  document.getElementById("weekly");
@@ -27,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
     setInterval(updateCountdown, 1000);
 
-  });
+});
 
   document.addEventListener("DOMContentLoaded", () => {
     // Get the search input and search results div
@@ -76,10 +78,24 @@ document.addEventListener("DOMContentLoaded", function() {
           for (let i = 0; i < Math.min(characters.length, 5); i++) {
             const character = characters[i];
             const resultDiv = document.createElement("div");
+            const img = document.createElement("img");
+            img.src = `../../assets/icons/servers/${character.server}.webp`;
             resultDiv.classList.add("result");
-            resultDiv.textContent = `Server: ${character.server}: ${character.name} - ${character.class} - Level ${character.level}`;
+            resultDiv.appendChild(img);
+            resultDiv.setAttribute("data-server", character.server);
+            resultDiv.setAttribute("data-code", character.code);
+  
+            // Create a <span> element for the character details
+            const detailsSpan = document.createElement("span");
+            detailsSpan.textContent = `\u00A0\u00A0${character.server}: ${character.name} - ${character.class} - Level ${character.level}`;
+  
+            // Append the <span> to the resultDiv
+            resultDiv.appendChild(detailsSpan);
+  
             searchResultsDiv.appendChild(resultDiv);
           }
+          searchSectionDiv.classList.add("expanded");
+        
         }
       } catch (error) {
         console.error("Error performing search:", error);
@@ -99,14 +115,12 @@ document.addEventListener("DOMContentLoaded", function() {
   
     // Event listener for transition end
     searchSectionDiv.addEventListener("transitionend", () => {
-      // Check if the expanded class has been removed
       if (!searchSectionDiv.classList.contains("expanded")) {
-        // Clear search results when transition ends
         searchResultsDiv.innerHTML = "";
       }
     });
   
-    // Event listener for clicking away from the search box
+    //Search bar click away
     document.addEventListener("click", (event) => {
       const target = event.target;
       if (!searchSectionDiv.contains(target) && target !== searchInput) {
@@ -115,3 +129,22 @@ document.addEventListener("DOMContentLoaded", function() {
     });
   });
   
+  //Search bar results redirect
+document.addEventListener('DOMContentLoaded', function() {
+  var searchResults = document.getElementById('searchResults');
+  var usernameDiv = document.getElementById('username_block');
+  var usernameElement = usernameDiv.querySelector('p');
+  
+  searchResults.addEventListener('click', function(event) {
+    var resultElement = event.target.closest('.result');
+    if (resultElement) {
+      var username = usernameElement.textContent.trim();
+      var characterCode = resultElement.getAttribute('data-code');
+      var server = resultElement.getAttribute('data-server');
+
+      var url = `/${username}/${server}/${characterCode}`;
+    if(server !== null)
+          window.location.href = url; 
+    }
+  });
+});

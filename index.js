@@ -5,7 +5,7 @@ const Router = require('koa-router');
 const views = require('koa-views');
 const serve = require('koa-static');
 const session = require('koa-session');
-const  mongoose = require('mongoose');
+const mongoose = require('mongoose');
 const path = require('path');
 const { User, validate } = require('./models/user');
 const { Boss, createDefaultBosses } = require('./models/boss');
@@ -140,6 +140,14 @@ router
           ctx.status = 500;
           ctx.body = { error: 'An error occurred during the search' };
         }
+      })
+      router.get('/:username/:server/:characterClass', async (ctx) => {
+        const { username, server, characterClass } = ctx.params;
+        await ctx.render('character',{
+          username: username,
+          server: server,
+          characterClass: characterClass
+        });
       });
 
 
