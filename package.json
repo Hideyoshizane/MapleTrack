@@ -24,7 +24,7 @@
     "koa-views": "^8.0.0",
     "lodash": "^4.17.21",
     "luxon": "^3.3.0",
-    "mongoose": "^5.10.4",
+    "mongoose": "^7.4.2",
     "node": "^20.1.0",
     "passport": "^0.6.0",
     "passport-local": "^1.0.0",

@@ -1,10 +1,8 @@
 const Joi = require('joi');
 const mongoose = require('mongoose');
-const { Character, defaultCharacters } = require('./character');
+const passportLocalMongoose = require('passport-local-mongoose');
 
-
-const User = mongoose.model('User', new mongoose.Schema({
-
+const userSchema = new mongoose.Schema({
     username: {
         type: String,
         required: true,
@@ -29,9 +27,13 @@ const User = mongoose.model('User', new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Server'
     }]
-   
-}));
+}, { strictPopulate: false });
 
+userSchema.plugin(passportLocalMongoose);
+
+
+
+const User = mongoose.model('User', userSchema);
 
 function validate(user) {
     const schema = Joi.object({
@@ -43,6 +45,6 @@ function validate(user) {
     return schema.validate(user);
 }
 module.exports = {
-  User,
-  validate,
+    User,
+    validate
 };

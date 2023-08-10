@@ -1,22 +1,18 @@
-const Joi = require('joi');
 const mongoose = require('mongoose');
-const {LinkSkill } = require('./linkSkill');
-const { LegionSystem } = require('./legion');
-
-
+const path = require('path');
+const jsonData = require('../public/data/classes.json');
+const { User } = require('./user');
+const { template } = require('lodash');
 
 const Character = mongoose.model('Character', new mongoose.Schema({
     name: {
         type: String,
-        required: true
     },
     level:{
         type: Number,
-        required: true
     },
     targetLevel:{
       type: Number,
-      required: true
     },
     class: {
       type: String,
@@ -27,11 +23,14 @@ const Character = mongoose.model('Character', new mongoose.Schema({
     job: {
       type: String,
     },
+    jobType:{
+      type: String,
+    },
     legion: {
-      type: mongoose.Schema.Types.ObjectId, ref: 'LegionSystem' 
+      type: String,
     },
     linkSkill: { 
-      type: mongoose.Schema.Types.ObjectId, ref: 'LinkSkill' 
+      type: String 
     },
     bossing: {
       type: Boolean,
@@ -48,7 +47,9 @@ const Character = mongoose.model('Character', new mongoose.Schema({
         content: [{
           contentType: {type: String,required: true, editable: false},
           expGain:     {type: Number},
-          checked:     {type: Boolean}
+          checked:     {type: Boolean},
+          tries:       {type: Number},
+          maxTries:    {type: Number}
         }]
         
     }],
@@ -63,9 +64,8 @@ const Character = mongoose.model('Character', new mongoose.Schema({
         checked:     {type: Boolean}
       }]
   }],
-})); 
+}, { strictPopulate: false })); 
 
-const defaultCharacters = [];
 const templateCharacter = {
   name: 'Character Name',
   level: 0,
@@ -81,17 +81,19 @@ const templateCharacter = {
       content:[
         {
         contentType: "Daily Quest",
-        expGain: 8,
+        expGain: 18,
         checked: false,
         },
         {
           contentType: "Erda Spectrum",
           checked: false,
+          tries: 3,
+          maxTries: 3
         },
         {
           contentType: "Reverse City",
           checked: false,
-        }
+        },
       ]
     },
     {
@@ -102,12 +104,14 @@ const templateCharacter = {
       content:[
         {
         contentType: "Daily Quest",
-        expGain: 4,
+        expGain: 16,
         checked: false,
         },
         {
           contentType: "Hungry Muto",
           checked: false,
+          tries: 3,
+          maxTries: 3
         },
         {
           contentType: "Yum Yum Island",
@@ -123,12 +127,14 @@ const templateCharacter = {
       content:[
         {
         contentType: "Daily Quest",
-        expGain: 8,
+        expGain: 11,
         checked: false,
         },
         {
           contentType: "Dream Defender",
           checked: false,
+          tries: 3,
+          maxTries: 3
         }
       ]
     },
@@ -140,12 +146,14 @@ const templateCharacter = {
       content:[
         {
         contentType: "Daily Quest",
-        expGain: 8,
+        expGain: 9,
         checked: false,
         },
         {
           contentType: "Spirit Savior",
           checked: false,
+          tries: 3,
+          maxTries: 3
         }
       ]
     },
@@ -164,6 +172,8 @@ const templateCharacter = {
           contentType: "Ranheim Defense",
           expGain: 6,
           checked: false,
+          tries: 3,
+          maxTries: 3
         }
       ]
     },
@@ -182,6 +192,8 @@ const templateCharacter = {
           contentType: "Esfera Guardian",
           expGain: 6,
           checked: false,
+          tries: 3,
+          maxTries: 3
         }
       ]
     },
@@ -202,7 +214,7 @@ const templateCharacter = {
           contentType: "Burning Cernium",
           expGain: 5,
           checked: false,
-        },
+        }
       ]
     },
     {
@@ -228,537 +240,164 @@ const templateCharacter = {
             checked: false,
           },
         ]
-    }
+    },
+    
   ]
 }
 
-async function initialize(linkSkillName){
-  var linkSkillSearch = await LinkSkill.findOne({ name: linkSkillName }).populate('linkSkill');
-  var linkSkillId = linkSkillSearch.id;
-  return linkSkillId;
+var defaultCharacters = [];
+
+async function createDefaultCharacters(serverName) {
+  for (const jsonDataIndex of jsonData) {
+    const createdCharacter = await createCharacter(jsonDataIndex, serverName);
+    defaultCharacters.push(createdCharacter);
+  }
+  const exportCharacters = [...defaultCharacters];
+  defaultCharacters.length = 0;
+  return exportCharacters;
 }
 
-async function legionFind(legionCode){
-  var legionSearch = await LegionSystem.findOne({ name: legionCode }).populate('LegionSystem');
-  var legionSearchID = legionSearch.id;
-  return legionSearchID;
+async function createMissingCharacters(userID){
+  const userData = await User.findById(userID)
+  .populate({
+    path: 'servers',
+    populate: {
+      path: 'characters',
+      model: Character,
+      select: 'code'
+    }
+  }).exec();
+  
+  for(server of userData.servers){
+    const serverCharacterCodes = server.characters.map((character) => character.code);
+    const serverMissingCharacters = jsonData.filter(
+      (character) => !serverCharacterCodes.includes(character.code)
+    );
+    for(missingCharacter  of serverMissingCharacters){
+      createdCharacter = await createCharacter(missingCharacter , server.name);
+      server.characters.push(createdCharacter._id);
+      await createdCharacter.save();
+      await server.save();
+      console.log(`${createdCharacter.class} created on ${server.name} server`);
+    }
+  }
 }
 
-async function createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName) {
-  const character = {
-  name:         templateCharacter.name,
-  level:        templateCharacter.level,
-  targetLevel:  templateCharacter.targetLevel,
-  class:        classParameter,
-  code:         codeParameter,
-  job:          templateCharacter.job,
-  legion:       legionId,
-  linkSkill:    linkSkillId,
-  bossing:      templateCharacter.bossing,
-  server:       serverName,
-  ArcaneForce:  [...templateCharacter.ArcaneForce],
-  SacredForce:  [...templateCharacter.SacredForce],
+async function createCharacter(jsonData, serverName){
+  var character = {
+    name: templateCharacter.name,
+    level: templateCharacter.level,
+    targetLevel: templateCharacter.targetLevel,
+    class: jsonData.className,
+    code: jsonData.code,
+    job: templateCharacter.job,
+    jobType: jsonData.jobType,
+    legion: jsonData.legionType  ,
+    linkSkill: jsonData.linkSkill,
+    bossing: templateCharacter.bossing,
+    server: serverName,
+    ArcaneForce: [...templateCharacter.ArcaneForce],
+    SacredForce: [...templateCharacter.SacredForce],
   }
   return new Character(character);
 }
 
-async function createDefaultCharacters(serverName) {
-  var linkSkillId = await initialize('Spirit of Freedom');
-  var legionId = await legionFind('INT+');
-  classParameter = "Battle Mage";
-  codeParameter = "battle_mage";
-  var placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
-  defaultCharacters.push(placeholderCharacter);
+async function updateCharacters(userID) {
+  const userData = await User.findById(userID)
+    .populate({
+      path: 'servers',
+      populate: {
+        path: 'characters',
+        model: Character,
+        populate: [
+          { path: 'ArcaneForce' },
+          { path: 'SacredForce' },
+        ],
+      },
+    })
+    .exec();
+
+  for (const server of userData.servers) {
+    for (const character of server.characters) {
+      await updateForceData(character, 'ArcaneForce', templateCharacter.ArcaneForce);
+      await updateForceData(character, 'SacredForce', templateCharacter.SacredForce);
 
-
-  linkSkillId = await initialize('Focus Spirit');
-  legionId = await legionFind('IEDM');
-  classParameter = "Beast Tamer";
-  codeParameter = "beast_tamer";
-  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
-  defaultCharacters.push(placeholderCharacter);
-
-
-  linkSkillId = await initialize('Cygnus Blessing');
-  legionId = await legionFind('INT+');
-  classParameter = "Blaze Wizard";
-  codeParameter = "blaze_wizard";
-  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
-  defaultCharacters.push(placeholderCharacter);
-
-
-  linkSkillId = await initialize('Rune Persistence');
-  legionId = await legionFind('RECVRMP');
-  classParameter = "Evan";
-  codeParameter = "evan";
-  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
-  defaultCharacters.push(placeholderCharacter);
-
-
-  linkSkillId = await initialize('Tide of Battle');
-  legionId = await legionFind('INT+');
-  classParameter = "Illium";
-  codeParameter = "illium";
-  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
-  defaultCharacters.push(placeholderCharacter);
-
-  
-  linkSkillId = await initialize('Elementalism');
-  legionId = await legionFind('BOSSDMGM');
-  classParameter = "Kanna";
-  codeParameter = "kanna";
-  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
-  defaultCharacters.push(placeholderCharacter);
-
-
-  linkSkillId = await initialize('Judgment');
-  legionId = await legionFind('INT+');
-  classParameter = "Kinesis";
-  codeParameter = "kinesis";
-  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
-  defaultCharacters.push(placeholderCharacter);
-
-  
-  linkSkillId = await initialize("Nature's Friend");
-  legionId = await legionFind('INT+');
-  classParameter = "Lara";
-  codeParameter = "lara";
-  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
-  defaultCharacters.push(placeholderCharacter);
-
-  
-  linkSkillId = await initialize("Light Wash");
-  legionId = await legionFind('INT+');
-  classParameter = "Luminous";
-  codeParameter = "luminous";
-  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
-  defaultCharacters.push(placeholderCharacter);
-
-
-  linkSkillId = await initialize("Empirical Knowledge");
-  legionId = await legionFind('MAXMP%');
-  classParameter = "Fire & Poison";
-  codeParameter = "fire_poison";
-  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
-  defaultCharacters.push(placeholderCharacter);
-
-
-  linkSkillId = await initialize("Empirical Knowledge");
-  legionId = await legionFind('INT+');
-  classParameter = "Ice & Lightning";
-  codeParameter = "ice_lightning";
-  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
-  defaultCharacters.push(placeholderCharacter);
-
-  
-  linkSkillId = await initialize("Empirical Knowledge");
-  legionId = await legionFind('INT+');
-  classParameter = "Bishop";
-  codeParameter = "bishop";
-  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
-  defaultCharacters.push(placeholderCharacter);
-
-
-  linkSkillId = await initialize("Thief's Cunning");
-  legionId = await legionFind('LUK+');
-  classParameter = "Dual Blade";
-  codeParameter = "dual_blade";
-  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
-  defaultCharacters.push(placeholderCharacter);
-
-
-  linkSkillId = await initialize("Cygnus Blessing");
-  legionId = await legionFind('LUK+');
-  classParameter = "Night Walker";
-  codeParameter = "night_walker";
-  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
-  defaultCharacters.push(placeholderCharacter);
-
-  
-  linkSkillId = await initialize("Phantom Instinct");
-  legionId = await legionFind('MESO%');
-  classParameter = "Phantom";
-  codeParameter = "phantom";
-  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
-  defaultCharacters.push(placeholderCharacter);
-
-
-  linkSkillId = await initialize("Thief's Cunning");
-  legionId = await legionFind('CRITRTT');
-  classParameter = "Night Lord";
-  codeParameter = "night_lord";
-  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
-  defaultCharacters.push(placeholderCharacter);
-
-
-  linkSkillId = await initialize("Thief's Cunning");
-  legionId = await legionFind('LUK+');
-  classParameter = "Shadower";
-  codeParameter = "shadower";
-  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
-  defaultCharacters.push(placeholderCharacter);
-
-
-  linkSkillId = await initialize("Hybrid Logic");
-  legionId = await legionFind('STDELU');
-  classParameter = "Xenon";
-  codeParameter = "xenon";
-  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
-  defaultCharacters.push(placeholderCharacter);
-
-
-  linkSkillId = await initialize("Unfair Advantage");
-  legionId = await legionFind('LUK+');
-  classParameter = "Cadena";
-  codeParameter = "cadena";
-  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
-  defaultCharacters.push(placeholderCharacter);
-
-  linkSkillId = await initialize("Bravado");
-  legionId = await legionFind('LUK+');
-  classParameter = "Hoyoung";
-  codeParameter = "hoyoung";
-  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
-  defaultCharacters.push(placeholderCharacter);
-
-
-  linkSkillId = await initialize("Combo Kill Blessing");
-  legionId = await legionFind('RECVRHP+');
-  classParameter = "Aran";
-  codeParameter = "aran";
-  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
-  defaultCharacters.push(placeholderCharacter);
-
-
-  linkSkillId = await initialize("Noble Fire");
-  legionId = await legionFind('STR+');
-  classParameter = "Adele";
-  codeParameter = "adele";
-  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
-  defaultCharacters.push(placeholderCharacter);
-
-
-  linkSkillId = await initialize("Spirit of Freedom");
-  legionId = await legionFind('IED+');
-  classParameter = "Blaster";
-  codeParameter = "blaster";
-  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
-  defaultCharacters.push(placeholderCharacter);
-
-
-  linkSkillId = await initialize("Cygnus Blessing");
-  legionId = await legionFind('MAXHP+');
-  classParameter = "Dawn Warrior";
-  codeParameter = "dawn_warrior";
-  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
-  defaultCharacters.push(placeholderCharacter);
-
-
-  linkSkillId = await initialize("Wild Rage");
-  legionId = await legionFind('BOSSDMG+');
-  classParameter = "Demon Avenger";
-  codeParameter = "demon_avenger";
-  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
-  defaultCharacters.push(placeholderCharacter);
-
-
-  linkSkillId = await initialize("Fury Unleashed");
-  legionId = await legionFind('STATRES+');
-  classParameter = "Demon Slayer";
-  codeParameter = "demon_slayer";
-  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
-  defaultCharacters.push(placeholderCharacter);
-
-
-  linkSkillId = await initialize("Keen Edge");
-  legionId = await legionFind('CRIT');
-  classParameter = "Hayato";
-  codeParameter = "hayato";
-  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
-  defaultCharacters.push(placeholderCharacter);
-
-
-  linkSkillId = await initialize("Phantom Instinct");
-  legionId = await legionFind('STR+');
-  classParameter = "Kaiser";
-  codeParameter = "kaiser";
-  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
-  defaultCharacters.push(placeholderCharacter);
-
-
-  linkSkillId = await initialize("Knight's Watch");
-  legionId = await legionFind('MAXHP+');
-  classParameter = "Mihile";
-  codeParameter = "mihile";
-  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
-  defaultCharacters.push(placeholderCharacter);
-
-
-  linkSkillId = await initialize("Invincible Belief");
-  legionId = await legionFind('STR+');
-  classParameter = "Hero";
-  codeParameter = "hero";
-  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
-  defaultCharacters.push(placeholderCharacter);
-
-
-  linkSkillId = await initialize("Invincible Belief");
-  legionId = await legionFind('STR+');
-  classParameter = "Paladin";
-  codeParameter = "paladin";
-  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
-  defaultCharacters.push(placeholderCharacter);
-
-
-  linkSkillId = await initialize("Invincible Belief");
-  legionId = await legionFind('MAXHP%');
-  classParameter = "Dark Knight";
-  codeParameter = "dark_knight";
-  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
-  defaultCharacters.push(placeholderCharacter);
-
-
-  linkSkillId = await initialize("Rhinne's Blessing");
-  legionId = await legionFind('EXP');
-  classParameter = "Zero";
-  codeParameter = "zero";
-  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
-  defaultCharacters.push(placeholderCharacter);
-
-  
-  linkSkillId = await initialize("Adventurer's Curiosity");
-  legionId = await legionFind('DEX+');
-  classParameter = "Bowmaster";
-  codeParameter = "bowmaster";
-  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
-  defaultCharacters.push(placeholderCharacter);
-
-
-  linkSkillId = await initialize("Adventurer's Curiosity");
-  legionId = await legionFind('CRITRT');
-  classParameter = "Marksman";
-  codeParameter = "marksman";
-  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
-  defaultCharacters.push(placeholderCharacter);
-
-
-  linkSkillId = await initialize("Time to Prepare");
-  legionId = await legionFind('DEX+');
-  classParameter = "Kain";
-  codeParameter = "kain";
-  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
-  defaultCharacters.push(placeholderCharacter);
-
-
-  linkSkillId = await initialize("Elven Blessing");
-  legionId = await legionFind('SKILLCD');
-  classParameter = "Mercedes";
-  codeParameter = "mercedes";
-  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
-  defaultCharacters.push(placeholderCharacter);
-
-
-  linkSkillId = await initialize("Adventurer's Curiosity");
-  legionId = await legionFind('DEX+');
-  classParameter = "Pathfinder";
-  codeParameter = "pathfinder";
-  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
-  defaultCharacters.push(placeholderCharacter);
-
-
-  linkSkillId = await initialize("Spirit of Freedom");
-  legionId = await legionFind('%DMGUP');
-  classParameter = "Wild Hunter";
-  codeParameter = "wild_hunter";
-  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
-  defaultCharacters.push(placeholderCharacter);
-
-
-  linkSkillId = await initialize("Cygnus Blessing");
-  legionId = await legionFind('DEX+');
-  classParameter = "Wind Archer";
-  codeParameter = "wind_archer";
-  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
-  defaultCharacters.push(placeholderCharacter);
-
-
-  linkSkillId = await initialize("Terms and Conditions");
-  legionId = await legionFind('DEX+P');
-  classParameter = "Angelic Buster";
-  codeParameter = "angelic_buster";
-  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
-  defaultCharacters.push(placeholderCharacter);
-
-
-  linkSkillId = await initialize("Pirate Blessing");
-  legionId = await legionFind('STR+P');
-  classParameter = "Cannoneer";
-  codeParameter = "cannoneer";
-  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
-  defaultCharacters.push(placeholderCharacter);
-
-
-  linkSkillId = await initialize("Spirit of Freedom");
-  legionId = await legionFind('BUFFDUR');
-  classParameter = "Mechanic";
-  codeParameter = "mechanic";
-  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
-  defaultCharacters.push(placeholderCharacter);
-
-
-  linkSkillId = await initialize("Pirate Blessing");
-  legionId = await legionFind('STR+P');
-  classParameter = "Buccaneer";
-  codeParameter = "buccaneer";
-  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
-  defaultCharacters.push(placeholderCharacter);
-
-
-  linkSkillId = await initialize("Pirate Blessing");
-  legionId = await legionFind('SUMMND');
-  classParameter = "Corsair";
-  codeParameter = "corsair";
-  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
-  defaultCharacters.push(placeholderCharacter);
-
-
-  linkSkillId = await initialize("Close Call");
-  legionId = await legionFind('CRTDMG+');
-  classParameter = "Shade";
-  codeParameter = "shade";
-  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
-  defaultCharacters.push(placeholderCharacter);
-
-
-  linkSkillId = await initialize("Cygnus Blessing");
-  legionId = await legionFind('STR+P');
-  classParameter = "Thuder Breaker";
-  codeParameter = "thuder_breaker";
-  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
-  defaultCharacters.push(placeholderCharacter);
-
-
-  linkSkillId = await initialize("Solus");
-  legionId = await legionFind('STR+P');
-  classParameter = "Ark";
-  codeParameter = "ark";
-  placeholderCharacter = await createFromTemplate(templateCharacter, linkSkillId, legionId, classParameter, codeParameter,serverName);
-  defaultCharacters.push(placeholderCharacter);
-
-
-  const characters = [...defaultCharacters];
-  defaultCharacters.length = 0;
-  return characters;
-}
-async function updateCharacters(defaultCharacters) {
-  const characters = await Character.find();
-
-  for (const character of characters) {
-    let isUpdated = false;
-
-    // Check for any new variables in the schema
-    const schemaKeys = Object.keys(Character.schema.paths);
-    const characterKeys = Object.keys(character.toObject());
-
-    const newKeys = schemaKeys.filter((key) => !characterKeys.includes(key));
-    if (newKeys.length > 0) {
-      newKeys.forEach((key) => {
-        character[key] = undefined;
-        isUpdated = true;
-      });
-    }
-
-    // Check for any new objects or properties in the defaultCharacters' ArcaneForce and SacredForce
-    for (const forceType of ['ArcaneForce', 'SacredForce']) {
-      const templateForceArray = defaultCharacters[forceType];
-      if (templateForceArray && Array.isArray(templateForceArray)) {
-        for (const templateForce of templateForceArray) {
-          const characterForce = character[forceType].find(
-            (force) => force.name === templateForce.name
-          );
-
-          if (!characterForce) {
-            character[forceType].push(templateForce);
-            isUpdated = true;
-          } else {
-            const templateContentArray = templateForce.content;
-            if (templateContentArray && Array.isArray(templateContentArray)) {
-              for (const templateContent of templateContentArray) {
-                const characterContent = characterForce.content.find(
-                  (content) => content.contentType === templateContent.contentType
-                );
-
-                if (!characterContent) {
-                  characterForce.content.push(templateContent);
-                  isUpdated = true;
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-
-    // Save the updated character if any changes were made
-    if (isUpdated) {
-      await character.save();
-    }
-  }
-}async function updateCharacters(defaultCharacters) {
-  const characters = await Character.find();
-
-  for (const character of characters) {
-    let isUpdated = false;
-
-    // Check for any new variables in the schema
-    const schemaKeys = Object.keys(Character.schema.paths);
-    const characterKeys = Object.keys(character.toObject());
-
-    const newKeys = schemaKeys.filter((key) => !characterKeys.includes(key));
-    if (newKeys.length > 0) {
-      newKeys.forEach((key) => {
-        character[key] = undefined;
-        isUpdated = true;
-      });
-    }
-
-    // Check for any new objects or properties in the defaultCharacters' ArcaneForce and SacredForce
-    for (const forceType of ['ArcaneForce', 'SacredForce']) {
-      const templateForceArray = defaultCharacters[forceType];
-      if (templateForceArray && Array.isArray(templateForceArray)) {
-        for (const templateForce of templateForceArray) {
-          const characterForce = character[forceType].find(
-            (force) => force.name === templateForce.name
-          );
-
-          if (!characterForce) {
-            character[forceType].push(templateForce);
-            isUpdated = true;
-          } else {
-            const templateContentArray = templateForce.content;
-            if (templateContentArray && Array.isArray(templateContentArray)) {
-              for (const templateContent of templateContentArray) {
-                const characterContent = characterForce.content.find(
-                  (content) => content.contentType === templateContent.contentType
-                );
-
-                if (!characterContent) {
-                  characterForce.content.push(templateContent);
-                  isUpdated = true;
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-
-    // Save the updated character if any changes were made
-    if (isUpdated) {
       await character.save();
     }
   }
 }
 
-        
-module.exports = { Character, defaultCharacters, createDefaultCharacters, updateCharacters };
+
+
+async function updateForceData(updatingCharacter, forceType, templateForce) {
+  const templateContentMap = new Map();
+  const usedKeys = new Set();
+
+  for (const templateEntry of templateForce) {
+    for (const content of templateEntry.content) {
+      var key = `${templateEntry.name}-${content.contentType}`;
+      templateContentMap.set(key, content);
+    }
+  }
+
+  var updatedForce = [];
+  const updatingForce = updatingCharacter[forceType] || [];
+
+  //update Existing contentType within Force objects
+  for (const updatingEntry of updatingForce) {
+    const updatedContent = [];
+    for (const content of updatingEntry.content) {
+      var key = `${updatingEntry.name}-${content.contentType}`;
+      usedKeys.add(key);
+      const templateContent = templateContentMap.get(key);
+      if (templateContent) {
+        const updatedContentEntry = { ...templateContent, checked: content.checked };
+        updatedContent.push(updatedContentEntry);
+      }
+    }
+    const updatedEntry = { ...updatingEntry, content: updatedContent };
+    updatedForce.push(updatedEntry);
+  }
+  
+  //Insert missing content of contentType array
+  for (const [key, value] of templateContentMap.entries()) {
+    if (!usedKeys.has(key)) {
+      const [name, contentType] = key.split('-');
+      const missingContent = templateContentMap.get(key);
+      const existingEntryIndex = updatingForce.findIndex((entry) => entry.name === name);
+      if (existingEntryIndex !== -1) { 
+      const updatingEntry = updatingForce[existingEntryIndex];
+      const updatedContent = [...updatingEntry.content, missingContent];
+      updatingEntry.content.push(missingContent);
+      updatedForce[existingEntryIndex] = updatingEntry;
+      }
+    }
+  }
+
+ //Insert missing object from Force array
+  for (const templateEntry of templateForce) {
+    const existingEntry = updatingForce.find((entry) => entry.name === templateEntry.name);
+    if (!existingEntry) {
+      const newEntry = {
+        level: templateEntry.level,
+        exp: templateEntry.exp,
+        minLevel: templateEntry.minLevel,
+        name: templateEntry.name,
+        content: templateEntry.content.map((content) => ({ ...content })),
+      };
+      updatedForce.push(newEntry);
+    }
+  }
+
+  //Remove objects from Force array that are not present in the Template
+  const missingEntries = updatingForce.filter((updatingEntry) =>
+    !templateForce.some((templateEntry) => templateEntry.name === updatingEntry.name)
+  );
+  updatingCharacter[forceType] = updatedForce;
+  const missingNames = missingEntries.map((missingEntry) => missingEntry.name);
+  updatingCharacter[forceType] = updatingCharacter[forceType].filter((updatingEntry) => !missingNames.includes(updatingEntry.name));
+
+}
+
+
+module.exports = { Character, createDefaultCharacters, createMissingCharacters, updateCharacters };

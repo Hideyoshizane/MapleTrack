@@ -21,7 +21,7 @@ module.exports = {
   },
   entry: {
     user: './routes/users.js',
-    navbar: './public/javascript/navbar.js'
+    navbar: './public/javascript/navbar.js',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),

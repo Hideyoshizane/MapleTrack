@@ -1,14 +1,12 @@
 import { DateTime } from "luxon";
 
 
-
 document.addEventListener("DOMContentLoaded", function() {
   const dailyOutput = document.getElementById("daily");
   const weeklyOutput =  document.getElementById("weekly");
   dailyOutput.style.textAlign = "center";
   weeklyOutput.style.textAlign = "center";
     function updateCountdown() {
-     
 
       const now = DateTime.utc();
       let wednesday = DateTime.utc().set({weekday: 4, hour: 0, minute: 0, second: 0, millisecond: 0});
