@@ -128,21 +128,68 @@ document.addEventListener("DOMContentLoaded", function() {
   });
   
   //Search bar results redirect
-document.addEventListener('DOMContentLoaded', function() {
-  var searchResults = document.getElementById('searchResults');
-  var usernameDiv = document.getElementById('username_block');
-  var usernameElement = usernameDiv.querySelector('p');
-  
-  searchResults.addEventListener('click', function(event) {
-    var resultElement = event.target.closest('.result');
-    if (resultElement) {
-      var username = usernameElement.textContent.trim();
-      var characterCode = resultElement.getAttribute('data-code');
-      var server = resultElement.getAttribute('data-server');
+  document.addEventListener('DOMContentLoaded', function() {
+    var searchResults = document.getElementById('searchResults');
+    var usernameDiv = document.getElementById('username_block');
+    var usernameElement = usernameDiv.querySelector('p');
+    
+    searchResults.addEventListener('click', function(event) {
+      var resultElement = event.target.closest('.result');
+      if (resultElement) {
+        var username = usernameElement.textContent.trim();
+        var characterCode = resultElement.getAttribute('data-code');
+        var server = resultElement.getAttribute('data-server');
 
-      var url = `/${username}/${server}/${characterCode}`;
-    if(server !== null)
-          window.location.href = url; 
-    }
+        var url = `/${username}/${server}/${characterCode}`;
+      if(server !== null)
+            window.location.href = url; 
+      }
+    });
   });
+
+  //dropdown menu click event
+  (function() {
+    const usernameBlock = document.getElementById('username_block');
+    const dropdownContent = usernameBlock.querySelector('.dropdown-content');
+    const svgIcon = usernameBlock.querySelector('#icon');
+
+    usernameBlock.addEventListener('click', function() {
+        dropdownContent.classList.toggle('open');
+        svgIcon.classList.toggle('rotate');
+    });
+})();
+
+
+    //Menu buttons event handlers
+    const menuButtons = document.querySelectorAll('.menu-button');
+
+
+    const fetchData = async (url, method) => {
+      try {
+          const response = await fetch(url, {
+              method,
+              // You can set additional headers here if needed
+          });
+  
+          if (response.ok) {
+              return response;
+          } else {
+              throw new Error(`Request failed with status: ${response.status}`);
+          }
+      } catch (error) {
+          console.error('Error during fetch:', error);
+          throw error;
+      }
+  };
+  
+  menuButtons.forEach((button) => {
+    button.addEventListener('click', async (event) => {
+        const redirectUrl = button.getAttribute('data-redirect');      
+        try {
+            const response = await fetchData(redirectUrl, 'GET');
+            window.location.href = redirectUrl;
+        } catch (error) {
+            console.error('Error during button action:', error);
+        }
+    });
 });

@@ -20,7 +20,6 @@ module.exports = {
     
   },
   entry: {
-    user: './routes/users.js',
     navbar: './public/javascript/navbar.js',
   },
   output: {

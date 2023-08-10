@@ -8,7 +8,7 @@ body{
     position: absolute;
     background-color: #424242;
     width: 1920px;
-    height: 128px;
+    height: 112px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -105,15 +105,77 @@ body{
 }
 #username_block{
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
     padding-right: 16px;
     width: 300px;
     font-size: 32px;
-    font-weight: 200;
+    font-weight: 300;
     font-family: Inter;
+    cursor: pointer;
 }
 
 #username_block p{
     padding-left: 24px;
+}
+
+#username_block .icon-wrapper {
+  padding-right: 24px;
+  margin: 0px;
+}
+
+.dropdown-content{
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  z-index: 1;
+}
+
+.dropdown-content.open {
+  display: block;
+  width: 300px;
+
+  animation: growDown 300ms ease-in-out forwards;
+  transform-origin: top center;
+}
+
+
+@keyframes growDown {
+  0% {
+      transform: scaleY(0)
+  }
+  80% {
+      transform: scaleY(1.1)
+  }
+  100% {
+      transform: scaleY(1)
+  }
+}
+
+.dropdown-content button {
+  display: flex;
+  padding: 16px;
+  border: 1px solid #1D1D1D;
+  text-decoration: none;
+  background-color: #424242;
+  border-bottom: none;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 32px;
+  width: 300px;
+  font-weight: 300;
+  font-family: Inter;
+  color: #F6F6F6;
+  z-index: 2;
+  cursor: pointer;
+}
+
+.rotate{
+  transform: rotate(180deg);
+  transition: 0.3s ease-in-out;
+}
+
+#icon {
+  transition: transform 0.3s ease-in-out;
 }

@@ -20,5 +20,3 @@ async function displayData(data) {
         console.log(name);
     }
 }
-
-//fetchJSONData().then(displayData);

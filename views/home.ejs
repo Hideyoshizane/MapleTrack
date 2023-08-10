@@ -3,9 +3,8 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="css/home.css">
+        <link rel="stylesheet" href="css/navbar.css">
         <title>Home</title>
-        <script src="/dist/navbar.js" data-user-id="<%= _id %>"></script>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -26,10 +25,42 @@
              
 
             <p id="weekly"></p>
-            <div id="username_block">
+            <div id="username_block" class="closed">
                 <p><%= username %></p>
-                <svg width="40px" height="40px" viewBox="0 0 1024 1024" class="icon"  version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M917.333333 364.8L851.2 298.666667 512 637.866667 172.8 298.666667 106.666667 364.8 512 768z" fill="#F6F6F6" /></svg>
-            </div>
+                <div class="icon-wrapper">
+                    <svg id="icon" width="40px" height="40px" viewBox="0 0 1024 1024" class="icon" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M917.333333 364.8L851.2 298.666667 512 637.866667 172.8 298.666667 106.666667 364.8 512 768z" fill="#F6F6F6" />
+                    </svg>
+                </div>
+                <div class = "dropdown-content">
+                    <button class = "menu-button" data-redirect ="/home">
+                        <svg width="32" height="32" viewBox="0 0 24 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M0 3.33331L0 16.6666C0 18.1333 1.2 19.3333 2.66667 19.3333H21.3333C22.8 19.3333 24 18.1333 24 16.6666V3.33331C24 1.86665 22.8 0.666647 21.3333 0.666647H2.66667C1.2 0.666647 0 1.86665 0 3.33331ZM21.3333 3.33331V16.6666H2.66667L2.66667 3.33331L21.3333 3.33331Z" fill="#F6F6F6"/>
+                        </svg>                            
+                        Class Tracker
+                    </button>
+                    <button class = "menu-button" data-redirect ="/weekly">
+                        <svg width="32" height="32" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M14 0.666687C6.63996 0.666687 0.666626 6.64002 0.666626 14C0.666626 21.36 6.63996 27.3334 14 27.3334C21.36 27.3334 27.3333 21.36 27.3333 14C27.3333 6.64002 21.36 0.666687 14 0.666687ZM11.3333 20.6667L4.66663 14L6.54663 12.12L11.3333 16.8934L21.4533 6.77335L23.3333 8.66669L11.3333 20.6667Z" fill="#F6F6F6"/>
+                        </svg>                            
+                        Week Tracker
+                    </button>
+                    <button class = "menu-button" data-redirect ="/settings">
+                        <svg width="32" height="32" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M10.6667 10.6667C13.6133 10.6667 16 8.28 16 5.33333C16 2.38667 13.6133 0 10.6667 0C7.72 0 5.33333 2.38667 5.33333 5.33333C5.33333 8.28 7.72 10.6667 10.6667 10.6667ZM10.6667 13.3333C7.10667 13.3333 0 15.12 0 18.6667V21.3333H21.3333V18.6667C21.3333 15.12 14.2267 13.3333 10.6667 13.3333Z" fill="#F6F6F6"/>
+                        </svg>                                                                            
+                        Account
+                    </button>
+                    <button class = "menu-button" data-redirect ="/logout">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9.45333 16.7867L11.3333 18.6667L18 12L11.3333 5.33333L9.45333 7.21333L12.8933 10.6667H0V13.3333H12.8933L9.45333 16.7867ZM21.3333 0H2.66667C1.18667 0 0 1.2 0 2.66667V8H2.66667V2.66667H21.3333V21.3333H2.66667V16H0V21.3333C0 22.8 1.18667 24 2.66667 24H21.3333C22.8 24 24 22.8 24 21.3333V2.66667C24 1.2 22.8 0 21.3333 0Z" fill="#F6F6F6"/>
+                        </svg>
+                        
+                        Sign Out
+                    </button>
+                </div>
+            </div>         
         </div>
+        <script src="/dist/navbar.js" data-user-id="<%= _id %>"></script>
     </body>
     </html>
