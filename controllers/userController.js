@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt');
-const {User} = require('../models/user');
+const {User, validate} = require('../models/user');
 const { searchServersAndCreateMissing } = require('../models/servers');
 
 
@@ -25,7 +25,7 @@ module.exports = {
       }
 
       createdUser = new User({ username, email, password: hashedPassword });
-      searchServersAndCreateMissing(createdUser._id);
+      searchServersAndCreateMissing(createdUser._id, createdUser.username);
 
       await createdUser.save();
       ctx.status = 200;

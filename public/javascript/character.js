@@ -20,3 +20,5 @@ async function displayData(data) {
         console.log(name);
     }
 }
+
+

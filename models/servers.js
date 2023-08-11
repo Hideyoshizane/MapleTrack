@@ -27,7 +27,7 @@ const defaultServers = [
 ];
 
 
-async function searchServersAndCreateMissing(userID){
+async function searchServersAndCreateMissing(userID, username){
   const userData = await User.findById(userID).populate('servers');
   var userStoredServers = []
   if(userData !== null){
@@ -40,12 +40,12 @@ async function searchServersAndCreateMissing(userID){
   }  
 
   for(const server of missingServers){
-    await createMissingServer(userID, server);
+    await createMissingServer(userID, server, username);
   }
 }
 
-async function createMissingServer(userID, missingServersData) {
-  const baseCharacters = await createDefaultCharacters(missingServersData.name);
+async function createMissingServer(userID, missingServersData, username) {
+  const baseCharacters = await createDefaultCharacters(missingServersData.name, username);
   const createdServer = new Server({
     name: missingServersData.name,
     img: missingServersData.img,

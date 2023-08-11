@@ -1,6 +1,5 @@
 import { DateTime } from "luxon";
 
-
 document.addEventListener("DOMContentLoaded", function() {
   const dailyOutput = document.getElementById("daily");
   const weeklyOutput =  document.getElementById("weekly");
@@ -29,13 +28,16 @@ document.addEventListener("DOMContentLoaded", function() {
 
 });
 
-  document.addEventListener("DOMContentLoaded", () => {
+  document.addEventListener("DOMContentLoaded", async () => {
     // Get the search input and search results div
     const searchInput = document.getElementById("search");
     const searchResultsDiv = document.getElementById("searchResults");
     const searchSectionDiv = document.querySelector(".searchSection");
-    const userId = document.querySelector("script[data-user-id]").getAttribute("data-user-id");
-  
+
+    const username = document.querySelector(".username");
+    const usernameValue = username.textContent;
+    const userId = await fetch(`/username?username=${encodeURIComponent(usernameValue)}`);
+    
     // Function to perform the search
     const performSearch = async () => {
       // Get the search query
@@ -168,7 +170,6 @@ document.addEventListener("DOMContentLoaded", function() {
       try {
           const response = await fetch(url, {
               method,
-              // You can set additional headers here if needed
           });
   
           if (response.ok) {
@@ -181,10 +182,10 @@ document.addEventListener("DOMContentLoaded", function() {
           throw error;
       }
   };
-  
+
   menuButtons.forEach((button) => {
     button.addEventListener('click', async (event) => {
-        const redirectUrl = button.getAttribute('data-redirect');      
+        const redirectUrl = button.getAttribute('data-redirect');   
         try {
             const response = await fetchData(redirectUrl, 'GET');
             window.location.href = redirectUrl;

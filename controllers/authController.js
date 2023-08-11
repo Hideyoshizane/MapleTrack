@@ -25,9 +25,9 @@ module.exports = {
             email: user.email,
             role: user.role,
           };
-          await searchServersAndCreateMissing(ctx.session.passport.user);
-          await createMissingCharacters(ctx.session.passport.user);
-          await updateCharacters(ctx.session.passport.user);
+          await searchServersAndCreateMissing(ctx.session.passport.user, ctx.session.passport.user._id);
+          await createMissingCharacters(ctx.session.passport.user._id, ctx.session.passport.user.username);
+          await updateCharacters(ctx.session.passport.user._id);
           ctx.redirect('/home');
         }
       })(ctx, next);

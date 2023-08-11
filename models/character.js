@@ -39,6 +39,9 @@ const Character = mongoose.model('Character', new mongoose.Schema({
     server:{
       type: String,
     },
+    userOrigin:{
+      type: String,
+    },
     ArcaneForce: [{
         name:     {type: String, required: true},
         level:    {type: Number, required: true},
@@ -247,9 +250,10 @@ const templateCharacter = {
 
 var defaultCharacters = [];
 
-async function createDefaultCharacters(serverName) {
+async function createDefaultCharacters(serverName, username) {
   for (const jsonDataIndex of jsonData) {
-    const createdCharacter = await createCharacter(jsonDataIndex, serverName);
+    
+    const createdCharacter = await createCharacter(jsonDataIndex, serverName, username);
     defaultCharacters.push(createdCharacter);
   }
   const exportCharacters = [...defaultCharacters];
@@ -257,7 +261,7 @@ async function createDefaultCharacters(serverName) {
   return exportCharacters;
 }
 
-async function createMissingCharacters(userID){
+async function createMissingCharacters(userID, username){
   const userData = await User.findById(userID)
   .populate({
     path: 'servers',
@@ -274,7 +278,7 @@ async function createMissingCharacters(userID){
       (character) => !serverCharacterCodes.includes(character.code)
     );
     for(missingCharacter  of serverMissingCharacters){
-      createdCharacter = await createCharacter(missingCharacter , server.name);
+      createdCharacter = await createCharacter(missingCharacter , server.name, username);
       server.characters.push(createdCharacter._id);
       await createdCharacter.save();
       await server.save();
@@ -283,7 +287,7 @@ async function createMissingCharacters(userID){
   }
 }
 
-async function createCharacter(jsonData, serverName){
+async function createCharacter(jsonData, serverName, username){
   var character = {
     name: templateCharacter.name,
     level: templateCharacter.level,
@@ -296,6 +300,7 @@ async function createCharacter(jsonData, serverName){
     linkSkill: jsonData.linkSkill,
     bossing: templateCharacter.bossing,
     server: serverName,
+    userOrigin: username,
     ArcaneForce: [...templateCharacter.ArcaneForce],
     SacredForce: [...templateCharacter.SacredForce],
   }

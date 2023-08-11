@@ -28,9 +28,13 @@ router.post('/signup', userController.signup);
 
 router.get('/home', authenticate.ensureAuthenticated, userController.home);
 
-router.get('/search', searchController.search)
+router.get('/search', searchController.search);
 
 router.get('/:username/:server/:characterClass', authenticate.ensureAuthenticated, characterController.showCharacter);
+
+router.get('/character', characterController.characterData);
+
+router.get('/username', searchController.username);
 
 
 module.exports = router;
