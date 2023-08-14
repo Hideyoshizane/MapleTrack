@@ -154,12 +154,21 @@ document.addEventListener("DOMContentLoaded", function() {
     const usernameBlock = document.getElementById('username_block');
     const dropdownContent = usernameBlock.querySelector('.dropdown-content');
     const svgIcon = usernameBlock.querySelector('#icon');
+    let isOpen = false;
 
     usernameBlock.addEventListener('click', function() {
-        dropdownContent.classList.toggle('open');
-        svgIcon.classList.toggle('rotate');
+        if (isOpen) {
+            dropdownContent.classList.remove('open');
+            dropdownContent.classList.add('closed');
+            svgIcon.classList.remove('rotate');
+        } else {
+            dropdownContent.classList.remove('closed');
+            dropdownContent.classList.add('open');
+            svgIcon.classList.add('rotate');
+        }
+        isOpen = !isOpen;
     });
-})();
+  })();
 
 
     //Menu buttons event handlers

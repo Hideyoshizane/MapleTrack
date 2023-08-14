@@ -1,11 +1,6 @@
-body{
-    background-color: #E8E8E8;
-    padding: 0;
-    margin: 0;
-}
 
 .topnav{
-    position: absolute;
+    position: fixed;
     background-color: #424242;
     width: 1920px;
     height: 112px;
@@ -124,7 +119,7 @@ body{
   margin: 0px;
 }
 
-.dropdown-content{
+.dropdown-content {
   display: none;
   position: absolute;
   top: 100%;
@@ -135,23 +130,38 @@ body{
 .dropdown-content.open {
   display: block;
   width: 300px;
-
   animation: growDown 300ms ease-in-out forwards;
   transform-origin: top center;
 }
 
+.dropdown-content.closed {
+  display: block;
+  width: 300px;
+  transform-origin: top center;
+  animation: shrinkUp 300ms ease-in-out forwards;
+}
 
 @keyframes growDown {
   0% {
-      transform: scaleY(0)
+    transform: scaleY(0);
   }
   80% {
-      transform: scaleY(1.1)
+    transform: scaleY(1.1);
   }
   100% {
-      transform: scaleY(1)
+    transform: scaleY(1);
   }
 }
+
+@keyframes shrinkUp {
+  0% {
+    transform: scaleY(1);
+  }
+  100% {
+    transform: scaleY(0);
+  }
+}
+
 
 .dropdown-content button {
   display: flex;
