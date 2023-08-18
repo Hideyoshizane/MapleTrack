@@ -4,19 +4,116 @@ body{
     margin: 0;
 }
 
+.topnav {
+    z-index: 3;
+}
+
+
 .center-container {
     display: flex;
     justify-content: center;
     align-items: center;
     flex: 1;
+    margin-top: 112px;
 }
 
 .mainContent{
     margin: 0px;
     padding: 0px;
     width: 1596px;
-    height: 100vh;
+    height: 87.8vh;
     background-color: #EDEDED;
     box-sizing: border-box;
     box-shadow: 0px 3px 250px 0px rgba(0, 0, 0, 0.25);
+}
+
+.dropdownToggle{
+    float: right;
+    margin-top: 16px;
+    margin-right: 36px;
+    padding: 0px;
+    width: 233px;
+    height: 56px;
+    background-color: #3C6997;
+    border-radius: 25px;
+    font-size: 28px;
+    font-weight: 300;
+    color: #E3E3E3;
+    border: none;
+    overflow: hidden;
+    bottom: auto; 
+    z-index: 0;
+}
+
+.dropdownToggle:hover{
+    cursor: pointer;
+}
+
+.dropdownToggle.open{
+    margin: 0px;
+    margin-top: 16px;
+    margin-right: 36px;
+    display: block;
+    height: 280px;
+    transition: all 0.3s ease-in-out;
+}
+
+.closed{
+    display: block;
+    transition: all 0.3s ease-in-out;
+}
+
+.rotate{
+    transform: rotate(180deg);
+    transition: 0.3s ease-in-out;
+  }  
+
+.serverButton {
+    height: 56px;
+    width: 233px;
+    display: flex;
+    align-items: left;
+    font-size: 28px;
+    color: #E3E3E3;
+    font-weight: 300px;
+    border: none;
+    background-color: #3C6997;
+    padding: 10px;
+    margin: 0px;
+    z-index: 1;
+}
+
+.serverButton:hover{
+    background-color: #345C83;
+}
+
+.SelectedButton{
+    height: 56px;
+    background-color: #3C6997;
+    border: none;
+    font-size: 28px;
+    color: #E3E3E3;
+    display: flex;
+    align-items: left;
+    padding: 10px;
+}
+
+.serverButton img, .SelectedButton img{
+    width: 32px;
+    height: 32px;
+    margin-right: 4px;
+}
+
+
+.serverButton span, .SelectedButton span{
+    padding-left:  16px;
+    padding-right: 24px;
+}
+
+
+.selectedServer{
+    display: flex;
+    width: 233px;
+    align-items: center;
+    
 }

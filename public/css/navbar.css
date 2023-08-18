@@ -1,8 +1,9 @@
 
 .topnav{
     position: fixed;
+    top: 0;
     background-color: #424242;
-    width: 1920px;
+    width: 100vw;
     height: 112px;
     display: flex;
     align-items: center;
@@ -103,7 +104,7 @@
     justify-content: space-between;
     align-items: center;
     padding-right: 16px;
-    width: 300px;
+    width: 292px;
     font-size: 32px;
     font-weight: 300;
     font-family: Inter;
@@ -111,7 +112,7 @@
 }
 
 #username_block p{
-    padding-left: 24px;
+    padding-left: 4px;
 }
 
 #username_block .icon-wrapper {
@@ -129,14 +130,12 @@
 
 .dropdown-content.open {
   display: block;
-  width: 300px;
   animation: growDown 300ms ease-in-out forwards;
   transform-origin: top center;
 }
 
 .dropdown-content.closed {
   display: block;
-  width: 300px;
   transform-origin: top center;
   animation: shrinkUp 300ms ease-in-out forwards;
 }
@@ -166,6 +165,8 @@
 .dropdown-content button {
   display: flex;
   padding: 16px;
+  padding-right: 24px;
+  margin-right: 0px;
   border: 1px solid #1D1D1D;
   text-decoration: none;
   background-color: #424242;
@@ -173,7 +174,7 @@
   align-items: center;
   justify-content: space-between;
   font-size: 32px;
-  width: 300px;
+  width: 308px;
   font-weight: 300;
   font-family: Inter;
   color: #F6F6F6;
