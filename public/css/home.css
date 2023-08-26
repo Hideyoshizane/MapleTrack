@@ -26,9 +26,11 @@ body{
     box-sizing: border-box;
     box-shadow: 0px 3px 250px 0px rgba(0, 0, 0, 0.25);
 }
-
+.dropdown{
+    display: flexbox;
+    height: 72px;
+}
 .dropdownToggle{
-    float: right;
     margin-top: 16px;
     margin-right: 36px;
     padding: 0px;
@@ -42,7 +44,7 @@ body{
     border: none;
     overflow: hidden;
     bottom: auto; 
-    z-index: 0;
+    float: right; 
 }
 
 .dropdownToggle:hover{
@@ -54,9 +56,15 @@ body{
     margin-top: 16px;
     margin-right: 36px;
     display: block;
-    height: 280px;
+    height: 336px;
     transition: all 0.3s ease-in-out;
+    z-index: 0;
 }
+
+.dropdownContent:nth-child(2){
+    border-top: 1px solid #2F5275;
+}
+
 
 .closed{
     display: block;
@@ -88,6 +96,7 @@ body{
 }
 
 .SelectedButton{
+    width: 187px;
     height: 56px;
     background-color: #3C6997;
     border: none;
@@ -107,7 +116,7 @@ body{
 
 .serverButton span, .SelectedButton span{
     padding-left:  16px;
-    padding-right: 24px;
+    padding-right: 16px;
 }
 
 
@@ -116,4 +125,17 @@ body{
     width: 233px;
     align-items: center;
     
+}
+
+.serverButton svg{
+    margin-left: auto;
+    padding-right: 4px;
+}
+
+.serverButton.not-checked svg{
+    opacity: 0%;
+}
+
+.serverButton.checked svg{
+    opacity: 100%;
 }
