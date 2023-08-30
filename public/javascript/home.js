@@ -24,7 +24,12 @@ document.addEventListener('DOMContentLoaded', async () => {
           selectedServer.insertBefore(createdSelectedButton, selectedServer.firstChild);
           createdSelectedButton.classList.toggle('not-checked');
 
-          updateToCookie(selectedServer, savedServerContent);
+          if(savedServerContent){
+            updateToCookie(selectedServer, savedServerContent);
+          }
+          else{
+            createdSelectedButton.classList.toggle('checked');
+          }
           isFirstButton = false;
         }
 
@@ -40,7 +45,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
     }
 
-    const serverButtons = serverSelector.querySelectorAll('.serverButton');
+    const serverButtons = serverSelector.querySelectorAll('.serverButton'); 
+
     let selectedButton = dropdownToggle.querySelector('.SelectedButton');
     
 serverButtons.forEach(serverButton => {
@@ -164,3 +170,42 @@ function updateToCookie(selectedServer, savedServerContent){
 
 }
 
+
+const filterButtons = document.querySelectorAll('.FilterButton');
+const savedFilterValues = getCookie('filterValues');
+const filterCookies = savedFilterValues ? savedFilterValues.split(',') : [];
+
+// Load filter values from cookies
+filterButtons.forEach(button => {
+    const dataValue = button.getAttribute('data-value');
+    if (filterCookies.includes(dataValue))
+        button.classList.add('selected');
+});
+
+// Filter Button logic
+const selectedValues = filterCookies.slice();
+
+filterButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        button.classList.toggle('selected');
+        
+        const dataValue = button.getAttribute('data-value');
+        if (button.classList.contains('selected')) {
+            if (!selectedValues.includes(dataValue)) {
+                selectedValues.push(dataValue);
+            }
+        } else {
+            const dataIndex = selectedValues.indexOf(dataValue);
+            if (dataIndex !== -1) {
+                selectedValues.splice(dataIndex, 1);
+            }
+        }
+        
+        updateSelectedValuesCookie();
+    });
+});
+
+function updateSelectedValuesCookie() {
+    const selectedValuesString = selectedValues.join(',');
+    setCookie('filterValues', selectedValuesString, 7);
+}

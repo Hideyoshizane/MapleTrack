@@ -29,6 +29,7 @@ body{
 .dropdown{
     display: flexbox;
     height: 72px;
+
 }
 .dropdownToggle{
     margin-top: 16px;
@@ -44,11 +45,7 @@ body{
     border: none;
     overflow: hidden;
     bottom: auto; 
-    float: right; 
-}
-
-.dropdownToggle:hover{
-    cursor: pointer;
+    float: right;
 }
 
 .dropdownToggle.open{
@@ -58,7 +55,7 @@ body{
     display: block;
     height: 336px;
     transition: all 0.3s ease-in-out;
-    z-index: 0;
+    cursor: pointer;
 }
 
 .dropdownContent:nth-child(2){
@@ -76,6 +73,8 @@ body{
     transition: 0.3s ease-in-out;
   }  
 
+
+
 .serverButton {
     height: 56px;
     width: 233px;
@@ -89,10 +88,12 @@ body{
     padding: 10px;
     margin: 0px;
     z-index: 1;
+    cursor: pointer;
 }
 
 .serverButton:hover{
     background-color: #345C83;
+    cursor: pointer;
 }
 
 .SelectedButton{
@@ -105,6 +106,7 @@ body{
     display: flex;
     align-items: left;
     padding: 10px;
+    cursor: pointer;
 }
 
 .serverButton img, .SelectedButton img{
@@ -139,3 +141,50 @@ body{
 .serverButton.checked svg{
     opacity: 100%;
 }
+
+.FilterButtons{
+    display: flex;
+    color: #3D3D3D;
+    font-size: 28px;
+    font-weight: 600;
+    font-family: Inter;
+    align-items: center;
+}
+
+.FilterButtons p{
+    padding-left: 26px;
+    padding-right: 16px;
+}
+
+.buttonWrap {
+    border: 1.5px solid #3D3D3D;
+    border-radius: 25px;
+    height: 56px;
+    display: flex;
+    justify-content: space-between;
+    overflow: hidden;
+}
+
+.FilterButton{
+    border: none;
+    color: #3D3D3D;
+    font-size: 28px;
+    font-weight: 600;
+    margin: 0px;
+    padding: 0px;
+    cursor: pointer;
+    width: 176px;
+}
+.FilterButton:hover{
+    background-color: #DFE5F7;
+    transition: 0.3s ease-in-out;
+}
+
+.FilterButton.selected{
+    background-color: #92A7E3;
+}
+
+.vl{
+    border-left: 1.5px solid #3D3D3D;
+}
+
