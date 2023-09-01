@@ -21,7 +21,7 @@ body{
     margin: 0px;
     padding: 0px;
     width: 1596px;
-    height: 87.8vh;
+    height: 100%;
     background-color: #EDEDED;
     box-sizing: border-box;
     box-shadow: 0px 3px 250px 0px rgba(0, 0, 0, 0.25);
@@ -40,7 +40,7 @@ body{
     background-color: #3C6997;
     border-radius: 25px;
     font-size: 28px;
-    font-weight: 300;
+    font-weight: 600;
     color: #E3E3E3;
     border: none;
     overflow: hidden;
@@ -82,7 +82,7 @@ body{
     align-items: left;
     font-size: 28px;
     color: #E3E3E3;
-    font-weight: 300px;
+    font-weight: 500;
     border: none;
     background-color: #3C6997;
     padding: 10px;
@@ -142,7 +142,7 @@ body{
     opacity: 100%;
 }
 
-.FilterButtons{
+.filterButtons{
     display: flex;
     color: #3D3D3D;
     font-size: 28px;
@@ -151,7 +151,7 @@ body{
     align-items: center;
 }
 
-.FilterButtons p{
+.filterButtons p{
     padding-left: 26px;
     padding-right: 16px;
 }
@@ -165,22 +165,22 @@ body{
     overflow: hidden;
 }
 
-.FilterButton{
+.filterButton{
     border: none;
     color: #3D3D3D;
     font-size: 28px;
-    font-weight: 600;
+    font-weight: 500;
     margin: 0px;
     padding: 0px;
     cursor: pointer;
     width: 176px;
 }
-.FilterButton:hover{
+.filterButton:hover{
     background-color: #DFE5F7;
     transition: 0.3s ease-in-out;
 }
 
-.FilterButton.selected{
+.filterButton.selected{
     background-color: #92A7E3;
 }
 
@@ -188,3 +188,19 @@ body{
     border-left: 1.5px solid #3D3D3D;
 }
 
+.characterCards{
+    margin-top: 8px;
+    display: grid;
+    grid-template-columns: repeat(3, 0fr);
+    grid-gap: 16px;
+    justify-content: center;
+    padding-bottom: 16px;
+}
+.cardBody{
+    width: 504px;
+    height: 353px;
+    background-color: #3E3E3E;
+    border-radius: 25px;
+    padding: 0px;
+    margin: 0px;
+}

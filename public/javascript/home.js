@@ -48,6 +48,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const serverButtons = serverSelector.querySelectorAll('.serverButton'); 
 
     let selectedButton = dropdownToggle.querySelector('.SelectedButton');
+    createCharacterCards();
     
 serverButtons.forEach(serverButton => {
   serverButton.addEventListener('click', () => {
@@ -61,6 +62,7 @@ serverButtons.forEach(serverButton => {
     swapContentAndStoreCookie(selectedButton, serverButton);
     serverButton.classList.toggle('not-checked');
     serverButton.classList.toggle('checked');
+    //update characters Cards function goes here
   });
 });
     
@@ -79,7 +81,7 @@ function createServerButton(serverData) {
   const createdButton = document.createElement('button');
   createdButton.classList.add('serverButton');
 
-
+  //Create selected SVG
   const checkSVG = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
   checkSVG.setAttribute('width', '30');
   checkSVG.setAttribute('height', '30');
@@ -93,15 +95,18 @@ function createServerButton(serverData) {
 
   checkSVG.appendChild(path);
 
-
+  //Add server image
   const serverImage = document.createElement('img');
   serverImage.src = `${serverData.img}.webp`;
   serverImage.alt = serverData.name;
   serverImage.classList.add('serverIcon');
   createdButton.appendChild(serverImage);
 
+  //Add server name
   const serverNameSpan = document.createElement('span');
   serverNameSpan.textContent = serverData.name;
+
+  //Create button
   createdButton.appendChild(serverNameSpan);
   createdButton.appendChild(checkSVG);
   createdButton.classList.toggle('not-checked');
@@ -133,6 +138,7 @@ function swapContentAndStoreCookie(selectedButton, serverButton) {
 
   dropdownToggle.addEventListener('click', function() {
     isOpen = !isOpen;
+
     dropdownToggle.classList.toggle('open', isOpen);
     dropdownToggle.classList.toggle('closed', !isOpen);
     svgIcon.classList.toggle('rotate', isOpen);
@@ -171,7 +177,7 @@ function updateToCookie(selectedServer, savedServerContent){
 }
 
 
-const filterButtons = document.querySelectorAll('.FilterButton');
+const filterButtons = document.querySelectorAll('.filterButton');
 const savedFilterValues = getCookie('filterValues');
 const filterCookies = savedFilterValues ? savedFilterValues.split(',') : [];
 
@@ -208,4 +214,23 @@ filterButtons.forEach(button => {
 function updateSelectedValuesCookie() {
     const selectedValuesString = selectedValues.join(',');
     setCookie('filterValues', selectedValuesString, 7);
+}
+
+const userDataScript = document.getElementById('userdata');
+const username = userDataScript.getAttribute('data-username');
+
+async function createCharacterCards(){
+  const parentDiv = document.querySelector('.characterCards');
+  const selectedServer = document.querySelector('.SelectedButton').querySelector('span').innerText;
+  const characters = await fetchData(`/${username}/${selectedServer}`);
+  for (characterData in characters){
+    generateCard(characterData, parentDiv);
+  }
+}
+
+async function generateCard(characterData, parentDiv){
+  const cardBody = document.createElement('div');
+  cardBody.className = 'cardBody';
+
+  parentDiv.appendChild(cardBody);
 }

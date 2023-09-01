@@ -40,5 +40,7 @@ router.get('/userServer', authenticate.ensureAuthenticated, searchController.use
 
 router.get('/serverName/:serverID', authenticate.ensureAuthenticated, searchController.serverName);
 
+router.get('/:username/:server', authenticate.ensureAuthenticated, characterController.fullCharacter);
+
 
 module.exports = router;

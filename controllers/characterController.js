@@ -27,10 +27,26 @@ module.exports = {
         )
         ctx.body = character;
       } catch (error) {
-        console.error('Error rendering character page:', error);
+        console.error('Error retrieving character Data:', error);
         ctx.status = 500;
-        ctx.body = { error: 'An error occurred while rendering character page' };
+        ctx.body = { error: 'An error occurred while getting character data' };
+      }
+    },
+
+    fullCharacter: async (ctx) => {
+      try{
+        const { username, server} = ctx.params;
+        const characters = await Character.find({userOrigin: username, server: server});
+        ctx.body = characters;
+
+      } catch (error) {
+        console.log('Error rtrieving characters Data:', error);
+        ctx.status = 500;
+        ctx.body = { error: 'An error occurred while getting characters data' };
       }
     }
+
+
+
   };
   

@@ -78,6 +78,7 @@
   
   .result:hover {
     background-color: #E0E0E0;
+    cursor: pointer;
   }
 #search {
     color: #585858;
