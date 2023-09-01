@@ -100,7 +100,7 @@ const templateCharacter = {
       ]
     },
     {
-      name: "Chuchu Island",
+      name: "Chu chu Island",
       level: 0,
       exp: 0,
       minLevel: 210,

@@ -223,14 +223,113 @@ async function createCharacterCards(){
   const parentDiv = document.querySelector('.characterCards');
   const selectedServer = document.querySelector('.SelectedButton').querySelector('span').innerText;
   const characters = await fetchData(`/${username}/${selectedServer}`);
-  for (characterData in characters){
+  for (characterData of characters){
     generateCard(characterData, parentDiv);
   }
 }
 
 async function generateCard(characterData, parentDiv){
   const cardBody = document.createElement('div');
-  cardBody.className = 'cardBody';
 
+  const upperPart = document.createElement('div');
+  const forceDiv = document.createElement('div');
+
+  const arcaneForce = document.createElement('div');
+  const sacredForce = document.createElement('div');
+
+  arcaneForce.className = 'arcaneForce';
+  sacredForce.className = 'sacredForce';
+
+  //Arcame Force Block
+  const spanArcaneForce = document.createElement('span');
+  spanArcaneForce.innerText = 'Arcane Force';
+  spanArcaneForce.className = 'Title';
+  arcaneForce.appendChild(spanArcaneForce);
+
+  for (arcaneArea of characterData.ArcaneForce) {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'arcaneWrapper';
+    const areaName = arcaneArea.name;
+    const areaCode = areaName.replace(/\s+/g, '_').toLowerCase();
+    forceImg = document.createElement('img');
+    forceImg.src = `../../public/assets/arcane_force/${areaCode}.webp`;
+    forceImg.alt = areaName;
+    forceImg.className = 'ArcaneImage';
+
+    var level = arcaneArea.level;
+    if(level === 0){
+      forceImg.classList.toggle('off');
+    }
+    if(level === 20){
+      level = 'MAX';
+    }
+    else{
+      level = 'Lv. ' + level;
+    }
+    const forceLevel = document.createElement('span');
+    forceLevel.innerText = level;
+
+    wrapper.appendChild(forceImg);
+    wrapper.appendChild(forceLevel);
+    arcaneForce.appendChild(wrapper);  
+  }
+
+    //Sacred Force Block
+    const spanSacredForce = document.createElement('span');
+    spanSacredForce.innerText = 'Sacred Force';
+    spanSacredForce.className = 'Title';
+    sacredForce.appendChild(spanSacredForce);
+  
+    for (sacredArea of characterData.SacredForce) {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'sacredWrapper';
+      const areaName = sacredArea.name;
+      const areaCode = areaName.replace(/\s+/g, '_').toLowerCase();
+      forceImg = document.createElement('img');
+      forceImg.src = `../../public/assets/sacred_force/${areaCode}.webp`;
+      forceImg.alt = areaName;
+      forceImg.className = 'SacredImage';
+  
+      var level = sacredArea.level;
+      if(level === 0){
+        forceImg.classList.toggle('off');
+      }
+      if(level === 10){
+        level = 'MAX';
+      }
+      else{
+        level = 'Lv. ' + level;
+      }
+      const forceLevel = document.createElement('span');
+      forceLevel.innerText = level;
+  
+      wrapper.appendChild(forceImg);
+      wrapper.appendChild(forceLevel);
+      sacredForce.appendChild(wrapper);  
+    }
+
+  forceDiv.appendChild(arcaneForce);
+  forceDiv.appendChild(sacredForce);
+  forceDiv.className = 'forceDiv';
+
+  const portrait = document.createElement('img');
+  portrait.setAttribute('class', 'cardPortrait');
+  portrait.src = `../../public/assets/cards/${characterData.code}.webp`
+  portrait.alt = characterData.class;
+
+  upperPart.className = 'upperPart';
+  upperPart.appendChild(forceDiv);
+  upperPart.appendChild(portrait);
+
+  const lowerPart = document.createElement('div');
+  lowerPart.className = 'lowerPart';
+
+
+
+  cardBody.className = 'cardBody';
+  cardBody.appendChild(upperPart);
+  cardBody.appendChild(lowerPart);
+  //console.log(characterData);
+  
   parentDiv.appendChild(cardBody);
 }
