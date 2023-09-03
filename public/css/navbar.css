@@ -74,6 +74,7 @@
   }
   .result:last-child {
     margin-bottom: 0;
+    border-radius: inherit;
   }
   
   .result:hover {
