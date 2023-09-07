@@ -223,165 +223,205 @@ const username = userDataScript.getAttribute('data-username');
 async function createCharacterCards(){
   const parentDiv = document.querySelector('.characterCards');
   const selectedServer = document.querySelector('.SelectedButton').querySelector('span').innerText;
+
   const characters = await fetchData(`/${username}/${selectedServer}`);
-  for (characterData of characters){
+  for(characterData of characters){
     await generateCard(characterData, parentDiv);
   }
 }
 
+
 async function generateCard(characterData, parentDiv){
-  const cardBody = document.createElement('div');
-
-  const upperPart = document.createElement('div');
-  const forceDiv = document.createElement('div');
-
-  const arcaneForce = document.createElement('div');
-  const sacredForce = document.createElement('div');
-
-  arcaneForce.className = 'arcaneForce';
-  sacredForce.className = 'sacredForce';
-
   //Arcame Force Block
+  const arcaneForce = document.createElement('div');
+  arcaneForce.className = 'arcaneForce';
+
   const spanArcaneForce = document.createElement('span');
   spanArcaneForce.innerText = 'Arcane Force';
   spanArcaneForce.className = 'Title';
   arcaneForce.appendChild(spanArcaneForce);
 
-  for (arcaneArea of characterData.ArcaneForce) {
-    const wrapper = document.createElement('div');
-    wrapper.className = 'arcaneWrapper';
-    const areaName = arcaneArea.name;
-    const areaCode = areaName.replace(/\s+/g, '_').toLowerCase();
-    forceImg = document.createElement('img');
-    forceImg.src = `../../public/assets/arcane_force/${areaCode}.webp`;
-    forceImg.alt = areaName;
-    forceImg.className = 'ArcaneImage';
+  const arcaneForceContent = await createForce(characterData, 'arcane');
+  arcaneForce.appendChild(arcaneForceContent);
 
-    var level = arcaneArea.level;
-    if(level === 0){
-      forceImg.classList.toggle('off');
-    }
-    if(level === 20){
-      level = 'MAX';
-    }
-    else{
-      level = 'Lv. ' + level;
-    }
-    const forceLevel = document.createElement('span');
-    forceLevel.innerText = level;
+  //Sacred Force Block
+  const sacredForce = document.createElement('div');
+  sacredForce.className = 'sacredForce';
 
-    wrapper.appendChild(forceImg);
-    wrapper.appendChild(forceLevel);
-    arcaneForce.appendChild(wrapper);  
-  }
+  const spanSacredForce = document.createElement('span');
+  spanSacredForce.innerText = 'Sacred Force';
+  spanSacredForce.className = 'Title';
+  sacredForce.appendChild(spanSacredForce);
 
-    //Sacred Force Block
-    const spanSacredForce = document.createElement('span');
-    spanSacredForce.innerText = 'Sacred Force';
-    spanSacredForce.className = 'Title';
-    sacredForce.appendChild(spanSacredForce);
-  
-    for (sacredArea of characterData.SacredForce) {
-      const wrapper = document.createElement('div');
-      wrapper.className = 'sacredWrapper';
-      const areaName = sacredArea.name;
-      const areaCode = areaName.replace(/\s+/g, '_').toLowerCase();
-      forceImg = document.createElement('img');
-      forceImg.src = `../../public/assets/sacred_force/${areaCode}.webp`;
-      forceImg.alt = areaName;
-      forceImg.className = 'SacredImage';
-  
-      var level = sacredArea.level;
-      if(level === 0){
-        forceImg.classList.toggle('off');
-      }
-      if(level === 10){
-        level = 'MAX';
-      }
-      else{
-        level = 'Lv. ' + level;
-      }
-      const forceLevel = document.createElement('span');
-      forceLevel.innerText = level;
-  
-      wrapper.appendChild(forceImg);
-      wrapper.appendChild(forceLevel);
-      sacredForce.appendChild(wrapper);  
-    }
+  const sacredForceContent = await createForce(characterData, 'sacred');
+  sacredForce.appendChild(sacredForceContent);
 
+  //appending Arcane and Sacred Force
+  const forceDiv = document.createElement('div');
+  forceDiv.className = 'forceDiv';
   forceDiv.appendChild(arcaneForce);
   forceDiv.appendChild(sacredForce);
-  forceDiv.className = 'forceDiv';
 
-  const portrait = document.createElement('img');
-  portrait.setAttribute('class', 'cardPortrait');
-  portrait.src = `../../public/assets/cards/${characterData.code}.webp`
-  portrait.alt = characterData.class;
+  //Creating character portrait image
+  const portrait = await createCharacterPortrait(characterData);
 
+  //upper part appending
+  const upperPart = document.createElement('div');
   upperPart.className = 'upperPart';
   upperPart.appendChild(forceDiv);
   upperPart.appendChild(portrait);
   
   
-  const lowerPart = document.createElement('div');
-  lowerPart.className = 'lowerPart';
-
   //link SKill creation
-  const linkImageLevelDiv = document.createElement('div');
-  linkImageLevelDiv.className = 'linkImageLevel';
-
-  const linkspan = document.createElement('span');
-  linkspan.className = 'linkLegionTitle';
-  linkspan.innerText = 'Link Skill';
-
-  linkSkillData = await fetch('../../public/data/linkskill.json').then(response => response.json());
-  filteredLink = linkSkillData.filter(item =>{
-    return item.name === characterData.linkSkill;
-  })
-  const wrapper = document.createElement('div');
-  wrapper.className = 'linkWrapper';
-
-  const linkImg = document.createElement('img');
-  linkImg.alt = filteredLink[0].name;
-  linkImg.src = filteredLink[0].image;
-  linkImg.className = 'linkImg';
-  const linkLevel = document.createElement('span');
-  linkLevel.className = 'linkLevel';
-
-  if (characterData.level > 178 && characterData.code === 'zero') {
-    linkLevel.innerText = 'Lv. 5';
-  }
-  else if (characterData.level >= 210 && filteredLink[0].levels.length > 2) {
-    linkLevel.innerText = 'Lv. 3';
-  }
-  else if (characterData.level >= 120) {
-    linkLevel.innerText = 'Lv. 2';
-  }
-  else if (characterData.level < 120) {
-    linkLevel.innerText = 'Lv. 1';
-  }
-
-  wrapper.appendChild(linkImg);
-  wrapper.appendChild(linkLevel);
-
-  linkImageLevelDiv.appendChild(linkspan);
-  linkImageLevelDiv.appendChild(wrapper); 
+  const linkSkillContainer = await createLinkSkillContent(characterData);
 
   //Legion Creation
+  const legionContainer = await createLegionContent(characterData);
+
+  //Appending
+  const linkLegion = document.createElement('div');
+  linkLegion.className = 'linkLegionContainer';
+
+  linkLegion.appendChild(linkSkillContainer);
+  linkLegion.appendChild(legionContainer);
+
+
+  //Name and Boss Icon creation
+  const nameAndLevel = await createLowerPart(characterData);
+
+  //LowerPart appending
+
+  const lowerPart = document.createElement('div');
+  lowerPart.className = 'lowerPart';
+  lowerPart.appendChild(linkLegion);
+  lowerPart.appendChild(nameAndLevel);
+
+  //Bar level
+  const levelBarWrapper = await createLeveLBar(characterData);
+
+
+  const cardBody = document.createElement('div');
+  cardBody.className = 'cardBody';
+  cardBody.appendChild(upperPart);
+  cardBody.appendChild(lowerPart);
+  cardBody.appendChild(levelBarWrapper);
+
+  parentDiv.appendChild(cardBody);
+}
+
+async function createForce(characterData, forceType) {
+  let outerWrapper = document.createDocumentFragment();
+  const forceData = forceType === 'arcane' ? characterData.ArcaneForce : characterData.SacredForce;
+
+  try {
+    for (forceArea of forceData) {
+      const wrapper = document.createElement('div');
+      wrapper.className = forceType === 'arcane' ? 'arcaneWrapper' : 'sacredWrapper';
+      const areaName = forceArea.name;
+      const areaCode = areaName.replace(/\s+/g, '_').toLowerCase();
+
+      const forceImg = document.createElement('img');
+      forceImg.src = `../../public/assets/${forceType}_force/${areaCode}.webp`;
+      forceImg.alt = areaName;
+      forceImg.className = `${forceType === 'arcane' ? 'Arcane' : 'Sacred'}Image`;
+
+      var level = forceArea.level;
+      if (level === 0) {
+        forceImg.classList.toggle('off');
+      }
+      if (level === (forceType === 'arcane' ? 20 : 10)) {
+        level = 'MAX';
+      } else {
+        level = 'Lv. ' + level;
+      }
+      const forceLevel = document.createElement('span');
+      forceLevel.innerText = level;
+
+      wrapper.appendChild(forceImg);
+      wrapper.appendChild(forceLevel);
+      outerWrapper.appendChild(wrapper);
+    }
+  } catch (error) {
+    console.error(`Error loading ${forceType === 'arcane' ? 'Arcane' : 'Sacred'} Force:`, error);
+    throw error;
+  }
+  return outerWrapper;
+}
+
+async function createCharacterPortrait(characterData){
+  const portrait = document.createElement('img');
+  if(characterData.level === 0 && characterData.name === 'Character Name'){
+    portrait.setAttribute('class', 'cardPortrait off');
+  }
+  else{
+    portrait.setAttribute('class', 'cardPortrait');
+  }
+  portrait.src = `../../public/assets/cards/${characterData.code}.webp`
+  portrait.alt = characterData.class;
+
+  return portrait;
+}
+
+async function createLinkSkillContent(characterData){
+    const linkImageLevelDiv = document.createElement('div');
+    linkImageLevelDiv.className = 'linkImageLevel';
+
+    const linkspan = document.createElement('span');
+    linkspan.className = 'linkLegionTitle';
+    linkspan.innerText = 'Link Skill';
+
+    linkSkillData = await fetch('../../public/data/linkskill.json').then(response => response.json());
+    filteredLink = linkSkillData.find(item => item.name === characterData.linkSkill);
+    const wrapper = document.createElement('div');
+    wrapper.className = 'linkWrapper';
+
+    const linkImg = document.createElement('img');
+    linkImg.alt = filteredLink.name;
+    linkImg.src = filteredLink.image;
+    linkImg.className = 'linkImg';
+
+    const linkLevel = document.createElement('span');
+    linkLevel.className = 'linkLevel';
+
+    switch (true) {
+      case characterData.level > 178 && characterData.code === 'zero':
+        linkLevel.innerText = 'Lv. 5';
+        break;
+      case characterData.level >= 210 && filteredLink.levels.length > 2:
+        linkLevel.innerText = 'Lv. 3';
+        break;
+      case characterData.level >= 120:
+        linkLevel.innerText = 'Lv. 2';
+        break;
+      default:
+        linkLevel.innerText = 'Lv. 1';
+    }
+
+    wrapper.appendChild(linkImg);
+    wrapper.appendChild(linkLevel);
+
+    linkImageLevelDiv.appendChild(linkspan);
+    linkImageLevelDiv.appendChild(wrapper);
+
+    return linkImageLevelDiv; 
+}
+
+async function createLegionContent(characterData){
   const legionDiv = document.createElement('div');
   legionDiv.className = 'legionDiv';
+
   const legionspan = document.createElement('span');
   legionspan.className = 'linkLegionTitle';
   legionspan.innerText = 'Legion';
 
   legionData = await fetch('../../public/data/legionsystems.json').then(response => response.json());
-  filterLegion = legionData.filter(item =>{
-    return item.name === characterData.legion;
-  })
+  filterLegion = legionData.find(item => item.name === characterData.legion);
+
   const legionImg = document.createElement('img');
   legionImg.className = 'legionImg';
   legionImg.alt = `${characterData.class} legion`;
-  legionRank = getRank(characterData);
+
+  let legionRank = getRank(characterData);
   if(legionRank == 'no_rank'){
     legionImg.src = '../../public/assets/legion/no_rank.webp';
   }
@@ -392,143 +432,8 @@ async function generateCard(characterData, parentDiv){
   legionDiv.appendChild(legionspan);
   legionDiv.appendChild(legionImg);
 
-  //Appending
-
-  
-
-
-  const bossIconpath = '../../public/assets/icons/menu/boss_slayer.svg';
-  const bossIcon = await loadAndCreateSVG(bossIconpath);
-  bossIcon.setAttribute('width', '33');
-  bossIcon.setAttribute('height', '25.76');
-
-  
-  const characterName = document.createElement('span');
-  characterName.className = 'characterName';
-  characterName.innerText = characterData.name;
-
-  const nameAndIcon = document.createElement('div');
-  nameAndIcon.className = 'nameAndIcon';
-
-  nameAndIcon.appendChild(bossIcon);
-  nameAndIcon.appendChild(characterName);
-
-  const job = document.createElement('span');
-  job.className = 'job';
-  job.innerText = characterData.job;
-
-  const levelSpan = document.createElement('span');
-  levelSpan.className = 'level';
-  levelSpan.innerText = `${characterData.level}/${characterData.targetLevel}`;
-  switch(characterData.jobType){
-    case 'mage':
-      levelSpan.style.color ='#92BCE3';
-      break;
-
-    case 'thief':
-      levelSpan.style.color ='#B992E3';
-      break;
-
-    case 'warrior':
-      levelSpan.style.color ='#E39294';
-      break;
-    
-    case 'bowman':
-      levelSpan.style.color ='#96E4A5';
-      break;
-
-    case 'pirate':
-      levelSpan.style.color ='#E3C192';
-      break;                
-  } 
-  if(characterData.level >= characterData.targetLevel){
-    levelSpan.style.color = '#48AA39';
-  }
-  
-  const nameAndLevel = document.createElement('div');
-  nameAndLevel.className = 'nameAndLevel';
-
-  nameAndLevel.appendChild(nameAndIcon);
-  nameAndLevel.appendChild(job);
-  nameAndLevel.appendChild(levelSpan);
-
-//Bar level code
-
-  const levelBarWrapper = document.createElement('div');
-  levelBarWrapper.className = 'levelBarWrapper';
-  const levelBar = document.createElement('div');
-  levelBar.className = 'levelBar';
-
-  const progressBar = document.createElement('div');
-  progressBar.className = 'progressBar';
-  if(characterData.level == 0){
-    progressBar.style.width = 0;
-  }
-  else{
-    const maxWidth = 480;
-    let BarSize = (characterData.level / characterData.targetLevel) * maxWidth;
-
-    if(BarSize > maxWidth){
-      BarSize = maxWidth;
-    }
-    progressBar.style.width = BarSize + 'px';
-  }
-
-  switch(characterData.jobType){
-    case 'mage':
-      progressBar.style.backgroundColor  ='#92BCE3';
-      break;
-
-    case 'thief':
-      progressBar.style.backgroundColor ='#B992E3';
-      break;
-
-    case 'warrior':
-      progressBar.style.backgroundColor ='#E39294';
-      break;
-    
-    case 'bowman':
-      progressBar.style.backgroundColor ='#96E4A5';
-      break;
-
-    case 'pirate':
-      progressBar.style.backgroundColor ='#E3C192';
-      break;                
-  } 
-  if(characterData.level >= characterData.targetLevel){
-    progressBar.style.backgroundColor = '#48AA39';
-  }
-
-
-
-
-
-  //console.log(characterData);
-
-
-  const linkLegion = document.createElement('div');
-  linkLegion.className = 'linkLegionContainer';
-
-  linkLegion.appendChild(linkImageLevelDiv);
-  linkLegion.appendChild(legionDiv);
-
-
-
-  levelBar.appendChild(progressBar);
-  levelBarWrapper.appendChild(levelBar);
-
-  lowerPart.appendChild(linkLegion);
-  lowerPart.appendChild(nameAndLevel);
-  
-  cardBody.className = 'cardBody';
-  cardBody.appendChild(upperPart);
-  cardBody.appendChild(lowerPart);
-  cardBody.appendChild(levelBarWrapper);
-  //console.log(characterData);
-  
-  parentDiv.appendChild(cardBody);
+  return legionDiv;
 }
-
 
 function getRank(characterData) {
   const { level, code } = characterData;
@@ -548,6 +453,29 @@ function getRank(characterData) {
   }
 
   return 'no_rank';
+}
+
+async function createBossIconAndName(characterData) {
+  const bossIconpath = '../../public/assets/icons/menu/boss_slayer.svg';
+  const bossIcon = await loadAndCreateSVG(bossIconpath);
+
+  bossIcon.setAttribute('width', '34');
+  bossIcon.setAttribute('height', '34');
+
+  const characterName = document.createElement('span');
+  characterName.className = 'characterName';
+  characterName.innerText = characterData.name;
+
+  const nameAndIcon = document.createElement('div');
+  nameAndIcon.className = 'nameAndIcon';
+
+  if (characterData.bossing) {
+    nameAndIcon.appendChild(bossIcon);
+  }
+  
+  nameAndIcon.appendChild(characterName);
+
+  return nameAndIcon;
 }
 
 async function loadAndCreateSVG(svgFilePath) {
@@ -570,4 +498,96 @@ async function loadAndCreateSVG(svgFilePath) {
     console.error('Error loading SVG:', error);
     throw error;
   }
+}
+
+async function createLowerPart(characterData){
+  const nameAndIcon = await createBossIconAndName(characterData);
+  const job = document.createElement('span');
+  job.className = 'job';
+  job.innerText = characterData.job;
+
+  const levelSpan = document.createElement('span');
+  levelSpan.className = 'level';
+  levelSpan.innerText = `${characterData.level}/${characterData.targetLevel}`;
+
+  setStyle(levelSpan, characterData, true);
+  
+  const nameAndLevel = document.createElement('div');
+  nameAndLevel.className = 'nameAndLevel';
+
+  nameAndLevel.appendChild(nameAndIcon);
+  nameAndLevel.appendChild(job);
+  nameAndLevel.appendChild(levelSpan);
+
+  return nameAndLevel;
+}
+
+async function createLeveLBar(characterData){
+
+  const levelBarWrapper = document.createElement('div');
+  levelBarWrapper.className = 'levelBarWrapper';
+  const levelBar = document.createElement('div');
+  levelBar.className = 'levelBar';
+
+  const progressBar = document.createElement('div');
+  progressBar.className = 'progressBar';
+  if(characterData.level == 0){
+    progressBar.style.width = 0;
+  }
+  else{
+    const maxWidth = 480;
+    let BarSize = (characterData.level / characterData.targetLevel) * maxWidth;
+
+    if(BarSize > maxWidth){
+      BarSize = maxWidth;
+    }
+    progressBar.style.width = BarSize + 'px';
+  }
+
+  setStyle(progressBar, characterData, false); 
+
+  levelBar.appendChild(progressBar);
+  levelBarWrapper.appendChild(levelBar);
+  return levelBarWrapper;
+}
+
+
+function setStyle(element, characterData, isColor) {
+  let styleProperty;
+  let value;
+
+  switch (characterData.jobType) {
+    case 'mage':
+      value = '#92BCE3';
+      break;
+
+    case 'thief':
+    case 'xenon':
+      value = '#B992E3';
+      break;
+    
+    case 'warrior':
+      value = '#E39294';
+      break;
+
+    case 'bowman':
+      value = '#96E4A5';
+      break;
+
+    case 'pirate':
+      value = '#E3C192';
+      break;
+  }
+
+  if (characterData.level >= characterData.targetLevel) {
+    value = '#48AA39';
+  }
+
+  if (isColor) {
+    styleProperty = 'color';
+  } else {
+    styleProperty = 'backgroundColor';
+  }
+
+  element.style[styleProperty] = value;
 }

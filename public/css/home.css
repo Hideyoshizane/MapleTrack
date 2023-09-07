@@ -294,6 +294,11 @@ body{
     border-radius: 25px;
 }
 
+.cardPortrait.off{
+    filter: saturate(0%);
+}
+
+
 .lowerPart{
     display: flex;
     width: 504px;
