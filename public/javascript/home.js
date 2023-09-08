@@ -1,6 +1,7 @@
 
 document.addEventListener('DOMContentLoaded', async () => {
   try {
+
     const data = await fetchData('/userServer');
 
     const serverSelector = document.getElementById('serverSelector');
@@ -41,6 +42,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         serverSelector.appendChild(createdButton);
 
+      
+
+
       } catch (error) {
         console.error('Error fetching server name:', error);
       }
@@ -49,29 +53,64 @@ document.addEventListener('DOMContentLoaded', async () => {
     const serverButtons = serverSelector.querySelectorAll('.serverButton'); 
 
     let selectedButton = dropdownToggle.querySelector('.SelectedButton');
-    createCharacterCards();
+    await createCharacterCards();
     
-serverButtons.forEach(serverButton => {
-  serverButton.addEventListener('click', () => {
-    serverButtons.forEach(button => {
-      if (button !== serverButton) {
-        button.classList.add('not-checked');
-        button.classList.remove('checked');
-      }
+    serverButtons.forEach(serverButton => {
+      serverButton.addEventListener('click', async () => {
+        serverButtons.forEach(button => {
+          if (button !== serverButton) {
+            button.classList.add('not-checked');
+            button.classList.remove('checked');
+          }
+        });
+
+        swapContentAndStoreCookie(selectedButton, serverButton);
+        serverButton.classList.toggle('not-checked');
+        serverButton.classList.toggle('checked');
+        const characterCardDiv = document.querySelector('.characterCards');
+        characterCardDiv.innerHTML = '';
+        await createCharacterCards();
+      });
     });
 
-    swapContentAndStoreCookie(selectedButton, serverButton);
-    serverButton.classList.toggle('not-checked');
-    serverButton.classList.toggle('checked');
-    //update characters Cards function goes here
-  });
-});
-    
+    observeCardBodyChanges();
 
   } catch (error) {
     console.error('Error fetching user data:', error);
   }
 });
+
+function observeCardBodyChanges() {
+  const targetNode = document.querySelector('.characterCards');
+  const observer = new MutationObserver((mutationsList) => {
+    for (const mutation of mutationsList) {
+      if (mutation.type === 'childList') {
+        // Call the function to add event listeners to cardBody elements
+        setupCardClickListeners();
+      }
+    }
+  });
+  observer.observe(targetNode, { childList: true, subtree: true });
+  setupCardClickListeners();
+}
+
+function setupCardClickListeners() {
+  const cardBodyElements = document.querySelectorAll('.cardBody');
+  cardBodyElements.forEach((card) => {
+    card.addEventListener('click', cardClickRedirect);
+  });
+}
+
+function cardClickRedirect(){
+  const selectedButton = document.querySelector('.SelectedButton');
+  const server = selectedButton.querySelector('span').innerText;
+  const character = this.getAttribute('characterclass');
+  const scriptElement = document.getElementById('userdata');
+  const username = scriptElement.getAttribute('data-username');
+  var url = `${username}/${server}/${character}`;
+  window.location.href = url;
+}
+
 
 async function fetchData(url) {
   const response = await fetch(url);
@@ -146,9 +185,6 @@ function swapContentAndStoreCookie(selectedButton, serverButton) {
   });
 })();
 
-
-
-
 function setCookie(name, value, days) {
   const expires = new Date();
   expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
@@ -207,12 +243,13 @@ filterButtons.forEach(button => {
                 selectedValues.splice(dataIndex, 1);
             }
         }
-        
+        filterCharacterCards(selectedValues);
         updateSelectedValuesCookie();
     });
 });
 
-function updateSelectedValuesCookie() {
+async function updateSelectedValuesCookie() {
+    sort(selectedValues, true);
     const selectedValuesString = selectedValues.join(',');
     setCookie('filterValues', selectedValuesString, 7);
 }
@@ -225,13 +262,49 @@ async function createCharacterCards(){
   const selectedServer = document.querySelector('.SelectedButton').querySelector('span').innerText;
 
   const characters = await fetchData(`/${username}/${selectedServer}`);
-  for(characterData of characters){
-    await generateCard(characterData, parentDiv);
-  }
+
+  const characterCards = await Promise.all(characters.map(generateCard));
+
+  await sort(characterCards, false);
+  
+  characterCards.forEach((card) => parentDiv.appendChild(card));
+
+  filterCharacterCards(selectedValues);
 }
 
+async function sort(cards, includeBossing = false) {
+  const customOrder = ['mage', 'thief', 'warrior', 'bowman', 'pirate', 'bossing'];
 
-async function generateCard(characterData, parentDiv){
+  cards.sort((a, b) => {
+    if (includeBossing || (a.jobType !== 'bossing' && b.jobType !== 'bossing')) {
+      const indexA = customOrder.indexOf(a.jobType);
+      const indexB = customOrder.indexOf(b.jobType);
+
+      return indexA - indexB;
+    }
+    return 0;
+  });
+}
+
+function filterCharacterCards(selectedValues){
+  document.querySelectorAll('.cardBody').forEach((element) => {
+    const jobType = element.getAttribute('job-type');
+    const hasBossIcon = element.querySelector('.bossIcon');
+    if (!selectedValues.includes(jobType))
+      element.classList.add('off');
+     else 
+      element.classList.remove('off');
+
+
+    if (selectedValues.includes('bossing') && hasBossIcon) 
+      element.classList.remove('off');
+
+    if (selectedValues.length === 0) 
+      element.classList.remove('off');
+  });
+}
+
+async function generateCard(characterData){
   //Arcame Force Block
   const arcaneForce = document.createElement('div');
   arcaneForce.className = 'arcaneForce';
@@ -302,11 +375,14 @@ async function generateCard(characterData, parentDiv){
 
   const cardBody = document.createElement('div');
   cardBody.className = 'cardBody';
+  cardBody.setAttribute('job-type', characterData.jobType);
+  cardBody.setAttribute('characterClass', characterData.code);
+
   cardBody.appendChild(upperPart);
   cardBody.appendChild(lowerPart);
   cardBody.appendChild(levelBarWrapper);
 
-  parentDiv.appendChild(cardBody);
+  return cardBody;
 }
 
 async function createForce(characterData, forceType) {
@@ -461,6 +537,7 @@ async function createBossIconAndName(characterData) {
 
   bossIcon.setAttribute('width', '34');
   bossIcon.setAttribute('height', '34');
+  bossIcon.setAttribute('class', 'bossIcon');
 
   const characterName = document.createElement('span');
   characterName.className = 'characterName';

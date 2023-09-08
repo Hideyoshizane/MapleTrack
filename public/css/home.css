@@ -207,6 +207,10 @@ body{
     border-radius: 25px;
     padding: 0px;
     margin: 0px;
+    cursor: pointer;
+}
+.cardBody.off{
+    display:none;
 }
 
 .upperPart{
