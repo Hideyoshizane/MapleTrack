@@ -1,7 +1,7 @@
 const {Character} = require('../models/character');
 
 module.exports = {
-    showCharacter: async (ctx) => {
+    redirectCharacter: async (ctx) => {
       try {
         const { username, server, characterClass } = ctx.params;
         await ctx.render('character', {
@@ -16,15 +16,16 @@ module.exports = {
       }
     },
 
-    characterData: async (ctx) => {
+    getCharacterData: async (ctx) => {
       try {
-        const { username, server, characterClass } = ctx.params;
-        const character = await Character.findOne({
+        const { username, server, characterCode } = ctx.params;
+        let query = {
           userOrigin: username,
           server: server,
-          characterClass: characterClass
-          }
-        )
+          code: characterCode
+        };
+        const character = await Character.findOne(query);
+
         ctx.body = character;
       } catch (error) {
         console.error('Error retrieving character Data:', error);

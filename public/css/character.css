@@ -3,3 +3,204 @@ body{
     padding: 0;
     margin: 0;
 }
+.center-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+}
+
+.mainContent{
+    display: flex;
+    margin: 0px;
+    padding: 0px;
+    width: 1596px;
+    background-color: #EDEDED;
+    box-sizing: border-box;
+    box-shadow: 0px 3px 250px 0px rgba(0, 0, 0, 0.25);
+    position: relative;
+}
+
+.portraitImage{
+    height: calc(100vh - 116px);
+}
+
+.characterData{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    width: calc(100vw - 659px);
+    height: calc(100vh - 116px);
+    margin-right: 32px;
+}
+.buttonWrapper{
+    width: 100%;
+    height: 88px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    gap:24px;
+}
+
+.increaseAllButton,
+.editButton{
+    font-family: 'Inter';
+    font-size: 28px;
+    font-weight: 600;
+    height: 56px;
+    width: 284px;
+    color: #3D3D3D;
+    border: none;
+    border-radius: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.increaseAllButton{
+    background-color: #96E4A5;
+}
+.editButton{
+    background-color: #D7D7D7;
+}
+
+.nameLinkLegion{
+    display: flex;
+    width: 724px;
+    height: 221px;
+    margin-top: 16px;
+    flex-direction: column;
+    align-items: flex-end;
+}
+.characterIconDiv{
+    display: flex;
+    text-align: right;
+    align-items: center;
+}
+
+.bossIcon{
+    width: 77px;
+    margin-right: 16px;
+    height: 94px;
+}
+
+.chracterName{
+    display: inline;
+    font-family: 'Inter';
+    font-weight: 500;
+    font-size: 72px;
+    color: black;
+    width: 631px;
+    height: fit-content;
+}
+
+.linkLegionClassJob{
+    display: flex;
+    right: 0;
+    height: 127px;
+    width: 600px;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.linkSkillBlock,
+.legionBlock{
+    margin-top: 8px;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    width: 86px;
+    height: 13px;
+    gap: 8px;
+}
+
+.linkSkillBlock span,
+.legionBlock span{
+    font-family: 'Montserrat';
+    font-size: 16px;
+}
+
+.linkLegionTitle{
+    font-weight: 500;
+}
+
+.linkImg,
+.legionImg{
+    width: 64px;
+    height: 64px;
+}
+
+.jobDiv{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.classType{
+    font-size: 56px;
+    font-family: 'Inter';
+    width: 367px;
+    text-align: right;
+}
+
+.jobLevel{
+    font-size: 40px;
+    font-family: 'Inter';
+}
+
+.levelDiv{
+    display: flex;
+    flex-direction: row;
+    text-align: end;
+    align-items: flex-end;
+    gap: 8px;
+}
+.level{
+    font-size: 32px;
+    font-family: 'Inter';
+    font-weight: 200;
+}
+
+.levelNumber{
+    font-family: 'Inter';
+    font-weight: 400;
+    font-size: 48px;
+}
+
+.outerLevelBar{
+    display: flex;
+    background-color: black;
+    border-radius: 25px;
+    align-items: center;
+}
+
+.innerLevelBar{
+    height: 28px;
+    margin-left: 2px;
+    border-radius: 25px;
+}
+.arcaneForceDiv{
+    margin-top: 8px;
+}
+.ArcaneForce{
+    font-family: 'Inter';
+    font-weight: 500;
+    font-size: 48px;
+}
+.arcaneGrid{
+    display: flex;
+    width: 794px;
+    height: 240px;
+}
+.arcaneForceWrapper{
+    display: grid-row;
+    height: 82px;
+    width: 256px;
+}
+
+.ArcaneImage{
+    width: 60px;
+    height: 60px;
+}

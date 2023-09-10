@@ -533,11 +533,12 @@ function getRank(characterData) {
 
 async function createBossIconAndName(characterData) {
   const bossIconpath = '../../public/assets/icons/menu/boss_slayer.svg';
-  const bossIcon = await loadAndCreateSVG(bossIconpath);
+  const bossIcon = await loadEditableSVGFile(bossIconpath);
 
-  bossIcon.setAttribute('width', '34');
-  bossIcon.setAttribute('height', '34');
   bossIcon.setAttribute('class', 'bossIcon');
+  const innerSVG = bossIcon.querySelector('svg');
+  innerSVG.setAttribute('width', '38');
+  innerSVG.setAttribute('height', '38');
 
   const characterName = document.createElement('span');
   characterName.className = 'characterName';
@@ -555,25 +556,20 @@ async function createBossIconAndName(characterData) {
   return nameAndIcon;
 }
 
-async function loadAndCreateSVG(svgFilePath) {
+async function loadEditableSVGFile(filePath) {
   try {
-    const response = await fetch(svgFilePath);
+    const response = await fetch(filePath);
     const svgData = await response.text();
 
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(svgData, 'image/svg+xml');
+    const svgElement = document.createElementNS("http://www.w3.org/2000/svg", "svg");
 
-    const svgElement = doc.querySelector('svg');
+    svgElement.innerHTML = svgData;
 
-    if (svgElement) {
-      return svgElement.cloneNode(true);
-    } else {
-      console.error('No <svg> element found in the SVG file:', svgFilePath);
-      return null;
-    }
+    return svgElement;
+
   } catch (error) {
-    console.error('Error loading SVG:', error);
-    throw error;
+    console.error("Error loading SVG file:", error);
+    return null;
   }
 }
 

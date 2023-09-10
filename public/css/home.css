@@ -4,17 +4,11 @@ body{
     margin: 0;
 }
 
-.topnav {
-    z-index: 3;
-}
-
-
 .center-container {
     display: flex;
     justify-content: center;
     align-items: center;
     flex: 1;
-    margin-top: 112px;
 }
 
 .mainContent{
@@ -373,6 +367,17 @@ body{
     gap: 8px;
     justify-content: flex-end;
 }
+
+.bossIcon{
+    width: 36px;
+    height: 36px;
+}
+
+.bossIcon path{
+    fill: white;
+}
+
+
 .characterName{
     font-size: 28px;
     font-family: 'Montserrat', sans-serif;
