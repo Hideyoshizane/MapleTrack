@@ -282,8 +282,7 @@ body{
 
 .ArcaneImage.off,
 .SacredImage.off{
-    filter: saturate(0%);
-    filter: brightness(12%);
+    filter: brightness(12%) saturate(0%);
 }
 
 .cardPortrait{

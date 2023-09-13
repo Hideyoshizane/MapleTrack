@@ -51,6 +51,7 @@ const Character = mongoose.model('Character', new mongoose.Schema({
           contentType: {type: String,required: true, editable: false},
           expGain:     {type: Number},
           checked:     {type: Boolean},
+          minLevel:    {type: Number},
           tries:       {type: Number},
           maxTries:    {type: Number}
         }]
@@ -64,7 +65,8 @@ const Character = mongoose.model('Character', new mongoose.Schema({
       content: [{
         contentType: {type: String,required: true, editable: false},
         expGain:     {type: Number},
-        checked:     {type: Boolean}
+        checked:     {type: Boolean},
+        minLevel:    {type: Number}
       }]
   }],
 }, { strictPopulate: false })); 
@@ -84,7 +86,7 @@ const templateCharacter = {
       content:[
         {
         contentType: "Daily Quest",
-        expGain: 18,
+        expGain: 9,
         checked: false,
         },
         {
@@ -96,6 +98,7 @@ const templateCharacter = {
         {
           contentType: "Reverse City",
           checked: false,
+          minLevel: 205
         },
       ]
     },
@@ -107,7 +110,7 @@ const templateCharacter = {
       content:[
         {
         contentType: "Daily Quest",
-        expGain: 16,
+        expGain: 8,
         checked: false,
         },
         {
@@ -119,6 +122,7 @@ const templateCharacter = {
         {
           contentType: "Yum Yum Island",
           checked: false,
+          minLevel: 215
         }
       ]
     },
@@ -173,7 +177,6 @@ const templateCharacter = {
         },
         {
           contentType: "Ranheim Defense",
-          expGain: 6,
           checked: false,
           tries: 3,
           maxTries: 3
@@ -193,7 +196,6 @@ const templateCharacter = {
         },
         {
           contentType: "Esfera Guardian",
-          expGain: 6,
           checked: false,
           tries: 3,
           maxTries: 3

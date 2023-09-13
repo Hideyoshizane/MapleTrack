@@ -189,18 +189,92 @@ body{
     font-weight: 500;
     font-size: 48px;
 }
-.arcaneGrid{
+.arcaneGrid {
     display: flex;
     width: 794px;
     height: 240px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: flex-start;
 }
-.arcaneForceWrapper{
-    display: grid-row;
+.arcaneForceWrapper {
+    display: flex;
     height: 82px;
     width: 256px;
+    align-items: center;
+}
+
+.arcaneData{
+    display: flex;
+    flex-direction: column;
 }
 
 .ArcaneImage{
     width: 60px;
     height: 60px;
+}
+
+.ArcaneImage.off{
+    filter: brightness(50%) saturate(0%);
+}
+
+.ArcaneLevel{
+    font-family: 'Inter';
+    font-weight: 300;
+    font-size: 20px;
+}
+.levelWrapper{
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+}
+.exp{
+    font-family: 'Inter';
+    font-weight: 200;
+    font-size: 14px;
+}
+
+.expNumber{
+    font-family: 'Inter';
+    font-weight: 300;
+    font-size: 16px;
+}
+
+.outerEXPBar,
+.innerEXPBar{
+    border-radius: 25px;
+}
+
+.outerEXPBar{
+    display: flex;
+    align-items: center;
+}
+.innerEXPBar{
+    margin-left: 2px;
+}
+
+.daysTo20{
+    font-family: 'Inter';
+    font-weight: 300;
+    font-size: 16px;
+}
+
+.unlockText{
+    font-family: 'Inter';
+    font-weight: 700;
+    font-size: 16px;
+}
+
+.dailyButton,
+.weeklyButton{
+    font-family: 'Inter';
+    font-size: 14px;
+    background-color: #96E4A5;
+    border-radius: 25px;
+    width: 96px;
+    height: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
 }

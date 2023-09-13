@@ -402,8 +402,9 @@ async function createForce(characterData, forceType) {
       forceImg.className = `${forceType === 'arcane' ? 'Arcane' : 'Sacred'}Image`;
 
       var level = forceArea.level;
-      if (level === 0) {
+      if (characterData.level < forceArea.minLevel) {
         forceImg.classList.toggle('off');
+        level = 0;
       }
       if (level === (forceType === 'arcane' ? 20 : 10)) {
         level = 'MAX';
