@@ -397,7 +397,7 @@ async function createForce(characterData, forceType) {
       const areaCode = areaName.replace(/\s+/g, '_').toLowerCase();
 
       const forceImg = document.createElement('img');
-      forceImg.src = `../../public/assets/${forceType}_force/${areaCode}.webp`;
+      forceImg.src = `../../public/assets/${forceType}force/${areaCode}.webp`;
       forceImg.alt = areaName;
       forceImg.className = `${forceType === 'arcane' ? 'Arcane' : 'Sacred'}Image`;
 

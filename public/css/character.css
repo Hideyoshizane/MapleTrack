@@ -86,7 +86,7 @@ body{
     height: 94px;
 }
 
-.chracterName{
+.characterName{
     display: inline;
     font-family: 'Inter';
     font-weight: 500;
@@ -170,11 +170,18 @@ body{
     font-size: 48px;
 }
 
-.outerLevelBar{
-    display: flex;
-    background-color: black;
+.OuterEXPBar,
+.InnerEXPBar{
     border-radius: 25px;
+}
+
+.OuterEXPBar{
+    display: flex;
     align-items: center;
+    background-color: black;
+}
+.InnerEXPBar{
+    margin-left: 2px;
 }
 
 .innerLevelBar{
@@ -192,41 +199,41 @@ body{
     font-weight: 500;
     font-size: 48px;
 }
-.arcaneGrid,
-.sacredGrid{
+.ArcaneForceGrid,
+.SacredForceGrid{
     display: flex;
     width: 794px;
     flex-direction: row;
     flex-wrap: wrap;
     align-content: flex-start;
 }
-.arcaneForceWrapper,
-.sacredForceWrapper {
+.ArcaneForceWrapper,
+.SacredForceWrapper {
     display: flex;
     height: 82px;
     width: 256px;
     align-items: center;
 }
 
-.arcaneData,
-.sacredData{
+.arcaneForceData,
+.sacredForceData{
     display: flex;
     flex-direction: column;
 }
 
-.ArcaneImage,
-.SacredImage{
+.ArcaneForceImage,
+.SacredForceImage{
     width: 60px;
     height: 60px;
 }
 
-.ArcaneImage.off,
-.SacredImage.off{
+.ArcaneForceImage.off,
+.SacredForceImage.off{
     filter: brightness(50%) saturate(0%);
 }
 
-.ArcaneLevel,
-.SacredLevel{
+.ArcaneForceLevel,
+.SacredForceLevel{
     font-family: 'Inter';
     font-weight: 300;
     font-size: 20px;
@@ -248,18 +255,7 @@ body{
     font-size: 16px;
 }
 
-.outerEXPBar,
-.innerEXPBar{
-    border-radius: 25px;
-}
 
-.outerEXPBar{
-    display: flex;
-    align-items: center;
-}
-.innerEXPBar{
-    margin-left: 2px;
-}
 
 .daysToMax{
     font-family: 'Inter';

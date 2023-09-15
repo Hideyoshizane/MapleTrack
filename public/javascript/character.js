@@ -3,108 +3,133 @@ const segments = path.split('/');
 const username = segments[1];
 const server = segments[2];
 const characterCode = segments[3];
+
 document.addEventListener('DOMContentLoaded', async () => {
-    try {
-        const response = await fetch(`/code/${username}/${server}/${characterCode}`);
-        const characterData = await response.json();
-        await loadCharacterImage(characterData);
-        await loadTopButtons();
-        await loadCharacterNameDiv(characterData);
-        await loadLevelAndLevelBar(characterData);
-        await loadArcaneForce(characterData);
-        await loadSacredForce(characterData);
-
-
-    } catch(error){
-        console.error('error loading page', error);
+  try {
+    const response = await fetch(`/code/${username}/${server}/${characterCode}`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch character data');
     }
+    const characterData = await response.json();
+
+    await loadCharacterContent(characterData);
+
+    dailyButtons = document.querySelectorAll('.dailyButton');
+
+  } catch(error){
+      console.error('error loading page', error);
+  }
 }); 
 
+async function loadCharacterContent(characterData) {
+  await loadCharacterImage(characterData);
+  await loadTopButtons();
+  await loadCharacterNameDiv(characterData);
+  await loadLevelAndLevelBar(characterData);
+  await loadForce(characterData, true);
+  await loadForce(characterData, false);
+}
 
 async function loadCharacterImage(characterData) {
-    const parentDiv = document.querySelector('.classImage');
+  const parentDiv = document.querySelector('.classImage');
 
-    const image = document.createElement('img');
-    image.src = `../../public/assets/profile/${characterData.code}.webp`;
-    image.alt = `${characterData.class} profile picture`;
-    image.className = 'portraitImage';
+  const image = await createImageElement(`../../public/assets/profile/${characterData.code}.webp`, `${characterData.class} profile picture`, `portraitImage`);
 
-    parentDiv.appendChild(image);
+  parentDiv.appendChild(image);
 };
 
 async function loadTopButtons(){
-    const parentDiv = document.querySelector('.characterData');
+  const parentDiv = document.querySelector('.characterData');
 
-    const blockDiv = document.createElement('div');
-    blockDiv.className = 'buttonWrapper';
+  const blockDiv = createDiv('buttonWrapper');
 
-    const increaseAllButon = document.createElement('div');
-    increaseAllButon.className = 'increaseAllButton';
-    increaseAllButon.innerText = 'Increase all';
+  const increaseAllButon = createButton('Increase all');
+  const editButton = createButton('Edit Character');
+  
+  blockDiv.appendChild(increaseAllButon);
+  blockDiv.appendChild(editButton);
+  parentDiv.appendChild(blockDiv);
+}
 
-    const editButton = document.createElement('div');
-    editButton.className = 'editButton';
-    editButton.innerText = 'Edit Character';
+function createDiv(className, content) {
+  const div = document.createElement('div');
+
+  if (className) {
+    div.classList.add(className);
+  }
+
+  if (content !== undefined) {
+    div.textContent = content;
+  }
+
+  return div;
+}
+
+function createSpan(className, content) {
+  const span = document.createElement('span');
+
+  if (className) {
+    span.classList.add(className);
+  }
+
+  if (content !== undefined) {
+    span.textContent  = content;
+  }
+
+  return span;
+}
 
 
-    blockDiv.appendChild(increaseAllButon);
-    blockDiv.appendChild(editButton);
-    parentDiv.appendChild(blockDiv);
+function createButton(text) {
+  const button = document.createElement('div');
+  button.className = text === 'Increase all' ? 'increaseAllButton' : 'editButton';
+  button.textContent = text;
+
+  return button;
 }
 
 async function loadCharacterNameDiv(characterData){
-    const parentDiv = document.querySelector('.characterData');
+  const parentDiv = document.querySelector('.characterData');
 
-    const characterInfo = document.createElement('div');
-    characterInfo.className = 'nameLinkLegion';
+  const characterInfo = createDiv('nameLinkLegion');
+  
+  const bossIconpath = '../../public/assets/icons/menu/boss_slayer.svg';
+  const bossIcon = await loadEditableSVGFile(bossIconpath, 'bossIcon');
 
-    const bossIconpath = '../../public/assets/icons/menu/boss_slayer.svg';
-    const bossIcon = await loadEditableSVGFile(bossIconpath);
-    bossIcon.classList.add('bossIcon');
+  const characterName =  createSpan('characterName', characterData.name);
+  
+  const characterIconDiv = createDiv('characterIconDiv');
 
-    const characterName = document.createElement('span');
-    characterName.className = 'chracterName';
-    characterName.innerText = characterData.name;
+  characterIconDiv.appendChild(bossIcon);
+  characterIconDiv.appendChild(characterName);
 
-    const characterIconDiv = document.createElement('div');
-    characterIconDiv.className = 'characterIconDiv';
+  characterInfo.appendChild(characterIconDiv);
 
-    characterIconDiv.appendChild(bossIcon);
-    characterIconDiv.appendChild(characterName);
+  const linkLegionClassJob = createDiv('linkLegionClassJob');
 
-    characterInfo.appendChild(characterIconDiv);
+  const linkSkill = await loadLinkSkillDiv(characterData);
+  const legion = await loadLegionDiv(characterData);
 
-    const linkLegionClassJob = document.createElement('div');
-    linkLegionClassJob.className = 'linkLegionClassJob';
+  const JobType = createSpan('classType', characterData.class);
 
-    const linkSkill = await loadLinkSkillDiv(characterData);
-    const legion = await loadLegionDiv(characterData);
+  const JobLevel = createSpan('jobLevel', characterData.job);
 
-    const JobType = document.createElement('span');
-    JobType.className = 'classType';
-    JobType.innerText = characterData.class;
+  const JobDiv = createDiv('jobDiv');
 
-    const JobLevel = document.createElement('span');
-    JobLevel.className = 'jobLevel';
-    JobLevel.innerText = characterData.job;
+  JobDiv.appendChild(JobType);
+  JobDiv.appendChild(JobLevel);
 
-    const JobDiv = document.createElement('div');
-    JobDiv.className = 'jobDiv';
-
-    JobDiv.appendChild(JobType);
-    JobDiv.appendChild(JobLevel);
-
-    linkLegionClassJob.appendChild(linkSkill);
-    linkLegionClassJob.appendChild(legion);
-    linkLegionClassJob.appendChild(JobDiv);
-    
-    characterInfo.appendChild(linkLegionClassJob);
-    parentDiv.appendChild(characterInfo);
+  linkLegionClassJob.appendChild(linkSkill);
+  linkLegionClassJob.appendChild(legion);
+  linkLegionClassJob.appendChild(JobDiv);
+  
+  characterInfo.appendChild(linkLegionClassJob);
+  parentDiv.appendChild(characterInfo);
 }
 
 
 
-async function loadEditableSVGFile(filePath) {
+async function loadEditableSVGFile(filePath, className) {
   try {
     const response = await fetch(filePath);
     const svgData = await response.text();
@@ -112,6 +137,10 @@ async function loadEditableSVGFile(filePath) {
     const svgElement = document.createElementNS("http://www.w3.org/2000/svg", "svg");
    
     svgElement.innerHTML = svgData;
+
+    if (className) {
+      svgElement.classList.add(className);
+    }
 
     return svgElement;
 
@@ -122,20 +151,14 @@ async function loadEditableSVGFile(filePath) {
 }
 
 async function loadLinkSkillDiv(characterData){
-  const linkspan = document.createElement('span');
-  linkspan.className = 'linkLegionTitle';
-  linkspan.innerText = 'Link Skill';
+  const linkspan = createSpan('linkLegionTitle', 'Link Skill');
 
   linkSkillData = await fetch('../../public/data/linkskill.json').then(response => response.json());
   filteredLink = linkSkillData.find(item => item.name === characterData.linkSkill);
 
-  const linkImg = document.createElement('img');
-  linkImg.alt = filteredLink.name;
-  linkImg.src = filteredLink.image;
-  linkImg.className = 'linkImg';
-
-  const linkSkillBlock = document.createElement('div');
-  linkSkillBlock.className = 'linkSkillBlock';
+  const linkImg = await createImageElement(filteredLink.image, filteredLink.name, `linkImg`);
+ 
+  const linkSkillBlock = createDiv('linkSkillBlock');
 
   linkSkillBlock.appendChild(linkspan);
   linkSkillBlock.appendChild(linkImg);
@@ -148,24 +171,16 @@ async function loadLegionDiv(characterData) {
   legionData = await fetch('../../public/data/legionsystems.json').then(response => response.json());
   filterLegion = legionData.find(item => item.name === characterData.legion);
 
-  const legionspan = document.createElement('span');
-  legionspan.className = 'linkLegionTitle';
-  legionspan.innerText = 'Legion';
-
-  const legionImg = document.createElement('img');
-  legionImg.className = 'legionImg';
-  legionImg.alt = `${characterData.class} legion`;
+  const legionspan = createSpan('linkLegionTitle', 'Legion');
 
   let legionRank = getRank(characterData);
-  if(legionRank == 'no_rank'){
-    legionImg.src = '../../public/assets/legion/no_rank.webp';
-  }
-  else{
-    legionImg.src = `../../public/assets/legion/${characterData.jobType}/rank_${legionRank}.webp`;
-  }
+  const legionImgSrc = legionRank === 'no_rank'
+  ? '../../public/assets/legion/no_rank.webp'
+  : `../../public/assets/legion/${characterData.jobType}/rank_${legionRank}.webp`;
 
-  const legionBlock = document.createElement('div');
-  legionBlock.className = 'legionBlock';
+  const legionImg = await createImageElement(legionImgSrc, `${characterData.class} legion`, 'legionImg');
+
+  const legionBlock = createDiv('legionBlock');
 
   legionBlock.appendChild(legionspan);
   legionBlock.appendChild(legionImg);
@@ -196,52 +211,19 @@ function getRank(characterData) {
 async function loadLevelAndLevelBar(characterData){
   const parentDiv = document.querySelector('.characterData');
 
-  const level = document.createElement('span');
-  level.className = 'level';
-  level.innerText = 'Level';
+  const level = createSpan('level', 'Level');
 
-  const levelNumber = document.createElement('span');
-  levelNumber.className = 'levelNumber';
-  levelNumber.innerText = `${characterData.level}/${characterData.targetLevel}`;
+  const levelNumber = createSpan('levelNumber',`${characterData.level}/${characterData.targetLevel}`);
 
-  const levelDiv = document.createElement('div');
-  levelDiv.className = 'levelDiv';
+  const levelDiv = createDiv('levelDiv');
 
-  const levelBar = await levelBarCreation(characterData);
+  const levelBar = createProgressBar(characterData, characterData.level, characterData.targetLevel, 800, 32, 28);
 
   levelDiv.appendChild(level);
   levelDiv.appendChild(levelNumber);
 
   parentDiv.appendChild(levelDiv);
   parentDiv.appendChild(levelBar);
-}
-
-async function levelBarCreation(characterData) {
-
-  const outerDiv = document.createElement('div');
-  outerDiv.className = 'outerLevelBar';
-  outerDiv.style.width = '800px';
-  outerDiv.style.height = '32px';
-
-  const innerDiv = document.createElement('div');
-  innerDiv.className = 'innerLevelBar';
-
-  if(characterData.level == 0){
-    innerDiv.style.width = 0;
-  }
-  else{
-    const maxWidth = 796;
-    let BarSize = (characterData.level / characterData.targetLevel) * maxWidth;
-
-    if(BarSize > maxWidth){
-      BarSize = maxWidth;
-    }
-    innerDiv.style.width = BarSize + 'px';
-  }
-  setStyle(innerDiv, characterData);
-  outerDiv.appendChild(innerDiv);
-
-  return outerDiv;
 }
 
 function setStyle(element, characterData) {
@@ -277,276 +259,178 @@ function setStyle(element, characterData) {
   element.style.backgroundColor = value;
 }
 
-async function loadArcaneForce(characterData){
+async function loadForce(characterData, isArcane){
   const parentDiv = document.querySelector('.characterData');
 
-  const Title = document.createElement('span');
-  Title.className = 'ArcaneForce';
-  Title.innerText = 'Arcane Force';
+  const forceType = isArcane ? 'ArcaneForce' : 'SacredForce';
+  const forceData = characterData[forceType];
 
-  const arcaneForceDiv = document.createElement('div');
-  arcaneForceDiv.className = 'arcaneForceDiv';
-  arcaneForceDiv.appendChild(Title);
+  const Title = createSpan(forceType, isArcane ? 'Arcane Force' : 'Sacred Force');
 
-  const arcaneGrid = document.createElement('div');
-  arcaneGrid.className = 'arcaneGrid';
+  const forceDiv = createDiv(`${forceType}Div`);
+  forceDiv.appendChild(Title);
 
-  for(arcaneForce of characterData.ArcaneForce) {
-    const arcaneForceWrapper = document.createElement('div');
-    arcaneForceWrapper.className = 'arcaneForceWrapper';
+  const forceGrid = createDiv(`${forceType}Grid`);
 
-    const areaName = arcaneForce.name;
+  for(force of forceData){
+    const forceWrapper = createDiv(`${forceType}Wrapper`);
+
+    const areaName = force.name;
     const areaCode = areaName.replace(/\s+/g, '_').toLowerCase();
-    let arcaneForceLevel = arcaneForce.level;
+    let forceLevel = force.level;
 
-    const icon = document.createElement('img');
-    icon.src = `../../public/assets/arcane_force/${areaCode}.webp`;
-    icon.alt = areaName;
-    icon.className = `ArcaneImage`;
+    const icon = await createImageElement(`../../public/assets/${forceType.toLowerCase()}/${areaCode}.webp`, areaName, `${forceType}Image`);
+      if (characterData.level < force.minLevel) {
+          icon.classList.add('off');
+          forceLevel = 0;
+      }
 
-    if(characterData.level < arcaneForce.minLevel){
-      icon.classList.add('off');
-      arcaneForceLevel = 0;
-    }
+    forceWrapper.appendChild(icon);
 
-    arcaneForceWrapper.appendChild(icon);
-    const jsonPath = '../../public/data/arcaneforceexp.json';
-    const expTable = await (await fetch(jsonPath)).json();
+    const jsonPath = isArcane ? '../../public/data/arcaneforceexp.json' : '../../public/data/sacredforceexp.json';
+    const expTable = await fetch(jsonPath).then(response => response.json());
     
-    const levelWrapper = document.createElement('div');
-    levelWrapper.className = 'levelWrapper';
+    const levelWrapper = createDiv('levelWrapper');
 
-    const level = document.createElement('span');
-    level.className = 'ArcaneLevel';
-    level.innerText = `Level: ${arcaneForceLevel}`;
-    level.setAttribute('level', arcaneForceLevel);
-
-    levelWrapper.appendChild(level);  
-
-    if(characterData.level >= arcaneForce.minLevel){
-      const expContent = createExpText(arcaneForce, expTable);
-      levelWrapper.appendChild(expContent);
-    }
-    
-    const expBar = await createBar(arcaneForce, expTable, characterData, true);
-
-    const arcaneData = document.createElement('div');
-    arcaneData.className = 'arcaneData';
-    arcaneData.appendChild(levelWrapper);
-    arcaneData.appendChild(expBar);
-
-    if(characterData.level >= arcaneForce.minLevel){
-      const daysToMax = await returnDaysToMax(arcaneForce, expTable,characterData, true); 
-      const wrap = document.createElement('div');
-      wrap.style.display = 'flex';
-      wrap.style.justifyContent = 'space-between';
-
-      const dailyButton = createDailyButton(arcaneForce, characterData, true);
-      const weeklyButton = createWeeklyButton(arcaneForce);
-
-      wrap.appendChild(dailyButton);
-      wrap.appendChild(weeklyButton);
-
-      arcaneData.appendChild(daysToMax);
-      arcaneData.appendChild(wrap);
-    }
-    else{
-      const unlockText = document.createElement('span');
-      unlockText.className = 'unlockText';
-      unlockText.innerText = `Unlock at Level ${arcaneForce.minLevel}`;
-      arcaneData.appendChild(unlockText);
-    }
-
-
-    arcaneForceWrapper.appendChild(arcaneData);
-
-    arcaneGrid.appendChild(arcaneForceWrapper);
-  }
-
-  arcaneForceDiv.appendChild(arcaneGrid);
-  parentDiv.appendChild(arcaneForceDiv);
-}
-
-async function loadSacredForce(characterData){
-  const parentDiv = document.querySelector('.characterData');
-
-  const Title = document.createElement('span');
-  Title.className = 'SacredForce';
-  Title.innerText = 'Sacred Force';
-
-  const sacredForceDiv = document.createElement('div');
-  sacredForceDiv.className = 'sacredForceDiv';
-  sacredForceDiv.appendChild(Title);
-
-  const sacredGrid = document.createElement('div');
-  sacredGrid.className = 'sacredGrid';
-
-  for(sacredForce of characterData.SacredForce){
-    const sacredForceWrapper = document.createElement('div');
-    sacredForceWrapper.className = 'sacredForceWrapper';
-
-    const areaName = sacredForce.name;
-    const areaCode = areaName.replace(/\s+/g, '_').toLowerCase();
-    let sacredForceLevel = sacredForce.level;
-
-    const icon = document.createElement('img');
-    icon.src = `../../public/assets/sacred_force/${areaCode}.webp`;
-    icon.alt = areaName;
-    icon.className = `SacredImage`;
-
-    if(characterData.level < sacredForce.minLevel){
-      icon.classList.add('off');
-      sacredForceLevel = 0;
-    }
-
-    sacredForceWrapper.appendChild(icon);
-    
-    const jsonPath = '../../public/data/sacredforceexp.json';
-    const expTable = await (await fetch(jsonPath)).json();
-    
-    const levelWrapper = document.createElement('div');
-    levelWrapper.className = 'levelWrapper';
-
-    const level = document.createElement('span');
-    level.className = 'SacredLevel';
-    level.innerText = `Level: ${sacredForceLevel}`;
-    level.setAttribute('level', sacredForceLevel);
+    const level = createSpan(`${forceType}Level`, `Level: ${forceLevel}`);
 
     levelWrapper.appendChild(level);
 
-    if(characterData.level >= sacredForce.minLevel){
-      const expContent = createExpText(sacredForce, expTable);
+    if (characterData.level >= force.minLevel) {
+      const expContent = createExpText(force, expTable, isArcane);
       levelWrapper.appendChild(expContent);
     }
-    
-    const expBar = await createBar(sacredForce, expTable, characterData);
 
-    const sacredData = document.createElement('div');
-    sacredData.className = 'sacredData';
-    sacredData.appendChild(levelWrapper);
-    sacredData.appendChild(expBar);
+    let expTotal = (isArcane && force.level === 20) || (!isArcane && force.level === 11)
+    ? force.exp
+    : expTable.level[force.level].EXP;
 
-    if(characterData.level >= sacredForce.minLevel){
-      const daysToMax = await returnDaysToMax(sacredForce, expTable,characterData); 
-      const wrap = document.createElement('div');
+    const expBar = createProgressBar(characterData, force.exp, expTotal , 195, 8, 4, true, true); 
+
+    const forceDataElement = createDiv(`${forceType}Data`);
+    forceDataElement.appendChild(levelWrapper);
+    forceDataElement.appendChild(expBar);
+
+    if (characterData.level >= force.minLevel) {
+      const daysToMax = await returnDaysToMax(force, expTable, characterData, isArcane);
+      const wrap = createDiv();
       wrap.style.display = 'flex';
       wrap.style.justifyContent = 'space-between';
 
-      const dailyButton = createDailyButton(sacredForce, characterData, false);
-
+      const dailyButton = createDailyButton(force, characterData, isArcane);
       wrap.appendChild(dailyButton);
-
-      sacredData.appendChild(daysToMax);
-      sacredData.appendChild(wrap);
-    }
-    else{
-      const unlockText = document.createElement('span');
-      unlockText.className = 'unlockText';
-      unlockText.innerHTML = `Unlock at Level ${sacredForce.minLevel}`;
-      sacredData.appendChild(unlockText);
-    }
-
-
+      if(isArcane){
+        const weeklyButton = createWeeklyButton(force, characterData, isArcane);
+        wrap.appendChild(weeklyButton);
+      }
     
-    sacredForceWrapper.appendChild(sacredData);
-    sacredGrid.appendChild(sacredForceWrapper);
+      forceDataElement.appendChild(daysToMax);
+      forceDataElement.appendChild(wrap);
+      
+    } else {
+      const unlockText = createSpan('unlockText', `Unlock at Level ${force.minLevel}`);
+      forceDataElement.appendChild(unlockText);
+    }
+
+    forceWrapper.appendChild(forceDataElement);
+    forceGrid.appendChild(forceWrapper);
   }
-
-
-  sacredForceDiv.appendChild(sacredGrid);
-  parentDiv.appendChild(sacredForceDiv);
+  forceDiv.appendChild(forceGrid);
+  parentDiv.appendChild(forceDiv);
 }
 
-function createExpText(Force, expTable){
+async function createImageElement(src, alt, className = '') {
+  const image = document.createElement('img');
+  image.src = src;
+  image.alt = alt;
+  if (className) {
+      image.classList.add(className);
+  }
+  await image.decode();
+  return image;
+}
+
+function createExpText(Force, expTable, isArcane = false){
     const exp = document.createElement('span');
     exp.className = 'exp';
     exp.innerText = 'EXP:';
+    let expNumber;
 
-    const nextLevelEXP = expTable.level[Force.level].EXP;
+    if((isArcane && Force.level < 20) || (!isArcane && Force.level < 11)){
+      const nextLevelEXP = expTable.level[Force.level].EXP;
     
-    const expNumber = document.createElement('span');
-    expNumber.className = 'expNumber';
-    expNumber.innerText = `${Force.exp}/${nextLevelEXP}`;
-    expNumber.setAttribute('expAmount',Force.exp);
-    expNumber.setAttribute('nextLevelEXP',nextLevelEXP);
-
-    const wrap = document.createElement('div');
+      expNumber = createSpan('expNumber', `${Force.exp}/${nextLevelEXP}`);
+      expNumber.setAttribute('expAmount',Force.exp);
+      expNumber.setAttribute('nextLevelEXP',nextLevelEXP);
+    } else{
+      expNumber = createSpan('expNumber', `MAX`);
+    }
+    
+    const wrap = createDiv();
 
     wrap.appendChild(exp);
     wrap.appendChild(expNumber);
 
     return wrap;
 }
-async function createBar(Force, expTable, characterData, isArcane = false){
-  const nextLevelEXP = expTable.level[Force.level].EXP;
 
-  const outerEXPBar = document.createElement('div');
-  outerEXPBar.className = 'outerEXPBar';
-  outerEXPBar.style.width = '195px';
-  outerEXPBar.style.height = '8px';
-  outerEXPBar.style.backgroundColor = 'black';
+function createProgressBar(characterData, current, total, maxWidth, outerHeight, innerHeight, isArcane = false, isForce = false) {
+  const outerDiv = createDiv('OuterEXPBar');
+  outerDiv.style.width = `${maxWidth}px`;
+  outerDiv.style.height = `${outerHeight}px`;
 
-  const innerEXPBar = document.createElement('div');
-  innerEXPBar.className = 'innerEXPBar';
-  innerEXPBar.style.height = '4px';
-
-  if(characterData.level < Force.minLevel){
-    innerEXPBar.style.width = 0;
-  }
-  else{
-    const maxWidth = 191;
-    let BarSize = (Force.exp / nextLevelEXP) * maxWidth;
+  const innerDiv = createDiv('InnerEXPBar');
+  innerDiv.style.height = `${innerHeight}px`;
+  if (current == 0) {
+    innerDiv.style.width = 0;
+  } else {
+    let barSize = (current / total) * maxWidth;
+    if ((isArcane && total.level === 20) && isForce) {
+      barSize = maxWidth;
+    } else if ((!isArcane && total.level === 11 ) && isForce) {
+      barSize = maxWidth;
+    }
     
-    BarSize = (BarSize > maxWidth || (isArcane && Force.level === 20) || (!isArcane && Force.level === 11)) ? maxWidth : BarSize;
+    if(barSize >= maxWidth)
+      barSize = (maxWidth - 4);
 
-    innerEXPBar.style.width = BarSize + 'px';
+    innerDiv.style.width = `${barSize}px`;
   }
-  setStyle(innerEXPBar, characterData);
 
-  outerEXPBar.appendChild(innerEXPBar);
-  return outerEXPBar;
+  setStyle(innerDiv, characterData);
+  outerDiv.appendChild(innerDiv);
+  return outerDiv;
 }
 
-
 async function returnDaysToMax(Force, expTable, characterData, isArcane = false){
-  const forceLevel = Force.level;
 
-  let totalExp = 0;
-  let dailyExp = 0;
-  for (let level = forceLevel; level <= Object.keys(expTable.level).length; level++) {
-    if (expTable.level[level]) {
-      totalExp += expTable.level[level].EXP;
-    }
-  }
+  let totalExp = calculateTotalExp(Force.level, expTable);
+  let dailyExp = getDailyValue(Force, characterData, isArcane);
+  const weeklyExp = (Force.content[1].checked && isArcane) ? 45 : 0;
   totalExp -= Force.exp;
-    dailyExp = getDailyValue(Force, characterData, isArcane);
-
-  let weeklyExp;
-  if(Force.content[1].checked == true && isArcane){
-    weeklyExp = 45;
-  } else{
-    weeklyExp = 0;
-  }
-  const daysToReachTotalExp = Math.ceil(totalExp / (dailyExp + (weeklyExp / 7)));
   
-  const daysToMax = document.createElement('span');
-  daysToMax.className = 'daysToMax';
-  if(isArcane){
-    daysToMax.innerText = `Days to Level 20: ${daysToReachTotalExp}`;
-  }
-  else{
-    daysToMax.innerText = `Days to Level 11: ${daysToReachTotalExp}`;
-  }
+  let daysToReachTotalExp = Math.ceil(totalExp / (dailyExp + (weeklyExp / 7)));
+  if(daysToReachTotalExp < 0)
+    daysToReachTotalExp = 0;
   
+  const daysToMax = createSpan('daysToMax', isArcane ? `Days to Level 20: ${daysToReachTotalExp}` : `Days to Level 11: ${daysToReachTotalExp}`);
 
   return daysToMax;
 }
 
+function calculateTotalExp(forceLevel, expTable) {
+  let totalExp = 0;
+  for (let level = forceLevel; level <= Object.keys(expTable.level).length; level++) {
+      if (expTable.level[level]) {
+          totalExp += expTable.level[level].EXP;
+      }
+  }
+  return totalExp;
+}
+
 function createDailyButton(Force, characterData, isArcane = false){
   const dailyValue = getDailyValue(Force, characterData, isArcane);
-  const dailyButton = document.createElement('div');
-  dailyButton.className = 'dailyButton';
-  dailyButton.innerText = `Daily: + ${dailyValue}`
+  const dailyButton = createDiv('dailyButton', `Daily: + ${dailyValue}`);
   dailyButton.setAttribute('value', dailyValue);
   return dailyButton;
 }
@@ -571,9 +455,8 @@ function getDailyValue(Force, characterData, isArcane = false){
 }
 
 function createWeeklyButton(Force){
-  const weeklyButton = document.createElement('div');
-  weeklyButton.className = 'weeklyButton';
-  weeklyButton.innerText = `Weekly: ${Force.content[1].tries}/3`
+  const weeklyButton = createDiv('weeklyButton', `Weekly: ${Force.content[1].tries}/3`);
+  weeklyButton.setAttribute('tries', Force.content[1].tries);
 
   return weeklyButton;
 }
