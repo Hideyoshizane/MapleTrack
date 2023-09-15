@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         await loadCharacterNameDiv(characterData);
         await loadLevelAndLevelBar(characterData);
         await loadArcaneForce(characterData);
+        await loadSacredForce(characterData);
 
 
     } catch(error){
@@ -318,6 +319,7 @@ async function loadArcaneForce(characterData){
     const level = document.createElement('span');
     level.className = 'ArcaneLevel';
     level.innerText = `Level: ${arcaneForceLevel}`;
+    level.setAttribute('level', arcaneForceLevel);
 
     levelWrapper.appendChild(level);  
 
@@ -326,7 +328,7 @@ async function loadArcaneForce(characterData){
       levelWrapper.appendChild(expContent);
     }
     
-    const expBar = await createBar(arcaneForce, expTable, characterData);
+    const expBar = await createBar(arcaneForce, expTable, characterData, true);
 
     const arcaneData = document.createElement('div');
     arcaneData.className = 'arcaneData';
@@ -334,24 +336,24 @@ async function loadArcaneForce(characterData){
     arcaneData.appendChild(expBar);
 
     if(characterData.level >= arcaneForce.minLevel){
-      const daysTo20 = await returnDaysTo20(arcaneForce, expTable,characterData); 
+      const daysToMax = await returnDaysToMax(arcaneForce, expTable,characterData, true); 
       const wrap = document.createElement('div');
       wrap.style.display = 'flex';
       wrap.style.justifyContent = 'space-between';
 
-      const dailyButton = createDailyButton(arcaneForce, characterData);
+      const dailyButton = createDailyButton(arcaneForce, characterData, true);
       const weeklyButton = createWeeklyButton(arcaneForce);
 
       wrap.appendChild(dailyButton);
       wrap.appendChild(weeklyButton);
 
-      arcaneData.appendChild(daysTo20);
+      arcaneData.appendChild(daysToMax);
       arcaneData.appendChild(wrap);
     }
     else{
       const unlockText = document.createElement('span');
       unlockText.className = 'unlockText';
-      unlockText.innerHTML = `Unlock at Level ${arcaneForce.minLevel}`;
+      unlockText.innerText = `Unlock at Level ${arcaneForce.minLevel}`;
       arcaneData.appendChild(unlockText);
     }
 
@@ -361,21 +363,112 @@ async function loadArcaneForce(characterData){
     arcaneGrid.appendChild(arcaneForceWrapper);
   }
 
-
-
   arcaneForceDiv.appendChild(arcaneGrid);
   parentDiv.appendChild(arcaneForceDiv);
 }
-function createExpText(arcaneForce, expTable){
+
+async function loadSacredForce(characterData){
+  const parentDiv = document.querySelector('.characterData');
+
+  const Title = document.createElement('span');
+  Title.className = 'SacredForce';
+  Title.innerText = 'Sacred Force';
+
+  const sacredForceDiv = document.createElement('div');
+  sacredForceDiv.className = 'sacredForceDiv';
+  sacredForceDiv.appendChild(Title);
+
+  const sacredGrid = document.createElement('div');
+  sacredGrid.className = 'sacredGrid';
+
+  for(sacredForce of characterData.SacredForce){
+    const sacredForceWrapper = document.createElement('div');
+    sacredForceWrapper.className = 'sacredForceWrapper';
+
+    const areaName = sacredForce.name;
+    const areaCode = areaName.replace(/\s+/g, '_').toLowerCase();
+    let sacredForceLevel = sacredForce.level;
+
+    const icon = document.createElement('img');
+    icon.src = `../../public/assets/sacred_force/${areaCode}.webp`;
+    icon.alt = areaName;
+    icon.className = `SacredImage`;
+
+    if(characterData.level < sacredForce.minLevel){
+      icon.classList.add('off');
+      sacredForceLevel = 0;
+    }
+
+    sacredForceWrapper.appendChild(icon);
+    
+    const jsonPath = '../../public/data/sacredforceexp.json';
+    const expTable = await (await fetch(jsonPath)).json();
+    
+    const levelWrapper = document.createElement('div');
+    levelWrapper.className = 'levelWrapper';
+
+    const level = document.createElement('span');
+    level.className = 'SacredLevel';
+    level.innerText = `Level: ${sacredForceLevel}`;
+    level.setAttribute('level', sacredForceLevel);
+
+    levelWrapper.appendChild(level);
+
+    if(characterData.level >= sacredForce.minLevel){
+      const expContent = createExpText(sacredForce, expTable);
+      levelWrapper.appendChild(expContent);
+    }
+    
+    const expBar = await createBar(sacredForce, expTable, characterData);
+
+    const sacredData = document.createElement('div');
+    sacredData.className = 'sacredData';
+    sacredData.appendChild(levelWrapper);
+    sacredData.appendChild(expBar);
+
+    if(characterData.level >= sacredForce.minLevel){
+      const daysToMax = await returnDaysToMax(sacredForce, expTable,characterData); 
+      const wrap = document.createElement('div');
+      wrap.style.display = 'flex';
+      wrap.style.justifyContent = 'space-between';
+
+      const dailyButton = createDailyButton(sacredForce, characterData, false);
+
+      wrap.appendChild(dailyButton);
+
+      sacredData.appendChild(daysToMax);
+      sacredData.appendChild(wrap);
+    }
+    else{
+      const unlockText = document.createElement('span');
+      unlockText.className = 'unlockText';
+      unlockText.innerHTML = `Unlock at Level ${sacredForce.minLevel}`;
+      sacredData.appendChild(unlockText);
+    }
+
+
+    
+    sacredForceWrapper.appendChild(sacredData);
+    sacredGrid.appendChild(sacredForceWrapper);
+  }
+
+
+  sacredForceDiv.appendChild(sacredGrid);
+  parentDiv.appendChild(sacredForceDiv);
+}
+
+function createExpText(Force, expTable){
     const exp = document.createElement('span');
     exp.className = 'exp';
     exp.innerText = 'EXP:';
 
-    const nextLevelEXP = expTable.level[arcaneForce.level].EXP;
+    const nextLevelEXP = expTable.level[Force.level].EXP;
     
     const expNumber = document.createElement('span');
     expNumber.className = 'expNumber';
-    expNumber.innerText = `${arcaneForce.exp}/${nextLevelEXP}`;
+    expNumber.innerText = `${Force.exp}/${nextLevelEXP}`;
+    expNumber.setAttribute('expAmount',Force.exp);
+    expNumber.setAttribute('nextLevelEXP',nextLevelEXP);
 
     const wrap = document.createElement('div');
 
@@ -384,8 +477,8 @@ function createExpText(arcaneForce, expTable){
 
     return wrap;
 }
-async function createBar(arcaneForce, expTable, characterData){
-  const nextLevelEXP = expTable.level[arcaneForce.level].EXP;
+async function createBar(Force, expTable, characterData, isArcane = false){
+  const nextLevelEXP = expTable.level[Force.level].EXP;
 
   const outerEXPBar = document.createElement('div');
   outerEXPBar.className = 'outerEXPBar';
@@ -397,15 +490,14 @@ async function createBar(arcaneForce, expTable, characterData){
   innerEXPBar.className = 'innerEXPBar';
   innerEXPBar.style.height = '4px';
 
-  if(characterData.level < arcaneForce.minLevel){
+  if(characterData.level < Force.minLevel){
     innerEXPBar.style.width = 0;
   }
   else{
     const maxWidth = 191;
-    let BarSize = (arcaneForce.exp / nextLevelEXP) * maxWidth;
-
-    if(BarSize > maxWidth || arcaneForce.level == 20)
-      BarSize = maxWidth;
+    let BarSize = (Force.exp / nextLevelEXP) * maxWidth;
+    
+    BarSize = (BarSize > maxWidth || (isArcane && Force.level === 20) || (!isArcane && Force.level === 11)) ? maxWidth : BarSize;
 
     innerEXPBar.style.width = BarSize + 'px';
   }
@@ -416,58 +508,72 @@ async function createBar(arcaneForce, expTable, characterData){
 }
 
 
-async function returnDaysTo20(arcaneForce, expTable, characterData){
-  const arcaneLevel = arcaneForce.level;
+async function returnDaysToMax(Force, expTable, characterData, isArcane = false){
+  const forceLevel = Force.level;
 
   let totalExp = 0;
-  for (let level = arcaneLevel; level <= Object.keys(expTable.level).length; level++) {
+  let dailyExp = 0;
+  for (let level = forceLevel; level <= Object.keys(expTable.level).length; level++) {
     if (expTable.level[level]) {
       totalExp += expTable.level[level].EXP;
     }
   }
-  totalExp -= arcaneForce.exp;
-
-  let dailyExp = getDailyValue(arcaneForce, characterData);
-  console.log(dailyExp);
+  totalExp -= Force.exp;
+    dailyExp = getDailyValue(Force, characterData, isArcane);
 
   let weeklyExp;
-  if(arcaneForce.content[1].checked == true){
+  if(Force.content[1].checked == true && isArcane){
     weeklyExp = 45;
   } else{
     weeklyExp = 0;
   }
-
   const daysToReachTotalExp = Math.ceil(totalExp / (dailyExp + (weeklyExp / 7)));
   
-  const daysTo20 = document.createElement('span');
-  daysTo20.className = 'daysTo20';
-  daysTo20.innerText = `Days to Level 20: ${daysToReachTotalExp}`;
+  const daysToMax = document.createElement('span');
+  daysToMax.className = 'daysToMax';
+  if(isArcane){
+    daysToMax.innerText = `Days to Level 20: ${daysToReachTotalExp}`;
+  }
+  else{
+    daysToMax.innerText = `Days to Level 11: ${daysToReachTotalExp}`;
+  }
+  
 
-  return daysTo20;
+  return daysToMax;
 }
 
-function createDailyButton(arcaneForce, characterData){
-  const dailyValue = getDailyValue(arcaneForce, characterData);
+function createDailyButton(Force, characterData, isArcane = false){
+  const dailyValue = getDailyValue(Force, characterData, isArcane);
   const dailyButton = document.createElement('div');
   dailyButton.className = 'dailyButton';
   dailyButton.innerText = `Daily: + ${dailyValue}`
+  dailyButton.setAttribute('value', dailyValue);
   return dailyButton;
 }
 
-function getDailyValue(arcaneForce, characterData){
-  let dailyValue = arcaneForce.content[0].expGain;
-  if(arcaneForce.content[2] && arcaneForce.content[2].checked == true){
-    if(characterData.level >= arcaneForce.content[2].minLevel){
-      dailyValue *= 2;
+function getDailyValue(Force, characterData, isArcane = false){
+  let dailyValue = Force.content[0].expGain;
+
+  if(isArcane){
+    if(Force.content[2] && Force.content[2].checked == true){
+      if(characterData.level >= Force.content[2].minLevel){
+        dailyValue *= 2;
+      }
+    }
+  }
+      
+  if(!isArcane && Force.name === 'Cernium'){
+    if(Force.content[1].checked == true){
+      dailyValue += Force.content[1].expGain;
     }
   }
   return dailyValue;
 }
 
-function createWeeklyButton(arcaneForce){
+function createWeeklyButton(Force){
   const weeklyButton = document.createElement('div');
   weeklyButton.className = 'weeklyButton';
-  weeklyButton.innerText = `Weekly: ${arcaneForce.content[1].tries}/3`
+  weeklyButton.innerText = `Weekly: ${Force.content[1].tries}/3`
 
   return weeklyButton;
 }

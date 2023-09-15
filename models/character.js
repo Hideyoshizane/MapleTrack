@@ -212,13 +212,14 @@ const templateCharacter = {
     minLevel: 260,
       content: [{
           contentType: "Cernium",
-          expGain: 5,
+          expGain: 10,
           checked: false,
         },
         {
           contentType: "Burning Cernium",
           expGain: 5,
           checked: false,
+          minLevel: 265
         }
       ]
     },
