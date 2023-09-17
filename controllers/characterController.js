@@ -45,9 +45,35 @@ module.exports = {
         ctx.status = 500;
         ctx.body = { error: 'An error occurred while getting characters data' };
       }
-    }
+    },
 
+    increaseForce: async (ctx) =>{
+      try{
+        const {forceType, forceName, value, characterData, necessaryExp} = ctx.request.body;
+        const foundCharacter = await Character.findOne(characterData);
+        let AreaData;
+        if (forceType) {
+          AreaData = foundCharacter.ArcaneForce;
+        } else if (!forceType) {
+          AreaData = foundCharacter.SacredForce;
+        }
+        const foundArea = AreaData.find((obj) => obj.name === forceName);
 
+        if(foundArea){
+          foundArea.exp += Number(value);
+          if(foundArea.exp >= necessaryExp){
+            foundArea.exp = Number(foundArea.exp - necessaryExp);
+            foundArea.level +=Number(1);
+          }
+          await foundCharacter.save();
+          ctx.status = 200;
+        }
 
+      }catch(error){
+        console.log('Error updating value', error);
+        ctx.status = 500;
+        ctx.body = {error: 'Error updating value'};
+      }
+    } 
   };
   

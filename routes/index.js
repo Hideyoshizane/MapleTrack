@@ -42,5 +42,6 @@ router.get('/serverName/:serverID', authenticate.ensureAuthenticated, searchCont
 
 router.get('/:username/:server', authenticate.ensureAuthenticated, characterController.fullCharacter);
 
+router.post('/increaseForce', authenticate.ensureAuthenticated, characterController.increaseForce);
 
 module.exports = router;
