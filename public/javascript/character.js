@@ -13,12 +13,27 @@ document.addEventListener('DOMContentLoaded', async () => {
     await loadCharacterContent(characterData);
 
     dailyButtons = document.querySelectorAll('.dailyButton');
-
     dailyButtons.forEach((dailyButton) => {
       dailyButton.addEventListener('click', (event) => {
-        event.stopPropagation();
         increaseDaily(event, characterData);
       });
+    });
+
+    weeklyButtons = document.querySelectorAll('.weeklyButton');
+    weeklyButtons.forEach((weeklyButton) => {
+      weeklyButton.addEventListener('click', (event) => {
+        increaseWeekly(event, characterData);
+      });
+    });
+
+    increaseAllButton = document.querySelector('.increaseAllButton');
+    increaseAllButton.addEventListener('click', (event) => {
+      console.log('hi');
+    });
+
+    editButton = document.querySelector('.editButton');
+    editButton.addEventListener('click', (event) => {
+      console.log('hi');
     });
 }
 ); 
@@ -50,7 +65,19 @@ async function loadCharacterImage(characterData) {
   parentDiv.appendChild(image);
 };
 
+function createButton(className, content){
+  const button = document.createElement('button');
 
+  if (className) {
+    button.classList.add(className);
+  }
+
+  if (content !== undefined) {
+    button.textContent = content;
+  }
+
+  return button;
+}
 
 function createDiv(className, content) {
   const div = document.createElement('div');
@@ -85,21 +112,14 @@ async function loadTopButtons(){
 
   const blockDiv = createDiv('buttonWrapper');
 
-  const increaseAllButon = createButton('Increase all');
-  const editButton = createButton('Edit Character');
+  const increaseAllButon = createButton('increaseAllButton','Increase all');
+  const editButton = createButton('editButton','Edit Character');
   
   blockDiv.appendChild(increaseAllButon);
   blockDiv.appendChild(editButton);
   parentDiv.appendChild(blockDiv);
 }
 
-function createButton(text) {
-  const button = document.createElement('div');
-  button.className = text === 'Increase all' ? 'increaseAllButton' : 'editButton';
-  button.textContent = text;
-
-  return button;
-}
 
 async function loadCharacterNameDiv(characterData){
   const parentDiv = document.querySelector('.characterData');
@@ -443,7 +463,7 @@ function calculateTotalExp(forceLevel, expTable) {
 
 function createDailyButton(Force, characterData, isArcane = false){
   const dailyValue = getDailyValue(Force, characterData, isArcane);
-  const dailyButton = createDiv('dailyButton', `Daily: + ${dailyValue}`);
+  const dailyButton = createButton('dailyButton', `Daily: + ${dailyValue}`);
   dailyButton.setAttribute('name', force.name);
   dailyButton.setAttribute('value', dailyValue);
   dailyButton.setAttribute('Arcane', isArcane);
@@ -470,7 +490,7 @@ function getDailyValue(Force, characterData, isArcane = false){
 }
 
 function createWeeklyButton(Force){
-  const weeklyButton = createDiv('weeklyButton', `Weekly: ${Force.content[1].tries}/3`);
+  const weeklyButton = createButton('weeklyButton', `Weekly: ${Force.content[1].tries}/3`);
   weeklyButton.setAttribute('tries', Force.content[1].tries);
 
   return weeklyButton;

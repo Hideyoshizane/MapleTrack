@@ -275,6 +275,7 @@ body{
     font-size: 14px;
     background-color: #96E4A5;
     border-radius: 25px;
+    border: none;
     width: 96px;
     height: 24px;
     display: flex;

@@ -1,21 +1,51 @@
-
 document.addEventListener('DOMContentLoaded', async () => {
   try {
 
     const data = await fetchData('/userServer');
-
+    await loadServerButtons(data);
+  
     const serverSelector = document.getElementById('serverSelector');
-    const selectedServer  = document.querySelector('.selectedServer');
+    const characterCardDiv = document.querySelector('.characterCards');
+    const selectedButton = dropdownToggle.querySelector('.SelectedButton');
+    
+    await createCharacterCards();
+    
+    const serverButtons = serverSelector.querySelectorAll('.serverButton'); 
+    
+    serverButtons.forEach(serverButton => {
+      serverButton.addEventListener('click', async () => {
+        await handleServerButtonClick(serverButton, serverButtons, selectedButton, characterCardDiv);
+      });
+    });
 
-    let isFirstButton = true;
-    const savedServerContent = getCookie('selectedServerContent');
+    observeCardBodyChanges();
 
-    for (const serverID of data) {
-      try {
-        const serverData = await fetchData(`/serverName/${serverID}`);
-        const createdButton = createServerButton(serverData);
+  } catch (error) {
+    console.error('Error fetching user data:', error);
+  }
+});
+
+async function fetchData(url) {
+  const response = await fetch(url);
+  return response.json();
+}
+
+async function loadServerButtons(data){
+  const serverSelector = document.getElementById('serverSelector');
+  const selectedServer  = document.querySelector('.selectedServer');
+  const savedServerContent = getCookie('selectedServerContent');
+  let isFirstButton = true;
+
+  try {
+    const serverDataPromises = data.map(serverID => fetchData(`/serverName/${serverID}`));
+    const serverDataArray = await Promise.all(serverDataPromises);
+
+    const fragment = document.createDocumentFragment();
 
 
+    for (const serverData of serverDataArray) {
+      const createdButton = await createServerButton(serverData);
+      
         if(isFirstButton){
           createdSelectedButton = createdButton.cloneNode(true);
           createdSelectedButton.classList.replace('serverButton', 'SelectedButton');
@@ -39,57 +69,34 @@ document.addEventListener('DOMContentLoaded', async () => {
           createdButton.classList.toggle('not-checked');
           createdButton.classList.toggle('checked');
         }
-
-        serverSelector.appendChild(createdButton);
-
+        fragment.appendChild(createdButton);
+      } 
+      serverSelector.appendChild(fragment);
       
-
-
-      } catch (error) {
-        console.error('Error fetching server name:', error);
-      }
+  }catch (error) {
+      console.error('Error fetching server name:', error);
     }
+}
 
-    const serverButtons = serverSelector.querySelectorAll('.serverButton'); 
+async function handleServerButtonClick(serverButton, serverButtons, selectedButton, characterCardDiv) {
+  serverButtons.forEach(button => {
+    if (button !== serverButton) {
+      button.classList.add('not-checked');
+      button.classList.remove('checked');
+    }
+  });
 
-    let selectedButton = dropdownToggle.querySelector('.SelectedButton');
-    await createCharacterCards();
-    
-    serverButtons.forEach(serverButton => {
-      serverButton.addEventListener('click', async () => {
-        serverButtons.forEach(button => {
-          if (button !== serverButton) {
-            button.classList.add('not-checked');
-            button.classList.remove('checked');
-          }
-        });
+  swapContentAndStoreCookie(selectedButton, serverButton);
+  serverButton.classList.toggle('not-checked');
+  serverButton.classList.toggle('checked');
 
-        swapContentAndStoreCookie(selectedButton, serverButton);
-        serverButton.classList.toggle('not-checked');
-        serverButton.classList.toggle('checked');
-        const characterCardDiv = document.querySelector('.characterCards');
-        characterCardDiv.innerHTML = '';
-        await createCharacterCards();
-      });
-    });
-
-    observeCardBodyChanges();
-
-  } catch (error) {
-    console.error('Error fetching user data:', error);
-  }
-});
+  characterCardDiv.innerHTML = '';
+  await createCharacterCards();
+}
 
 function observeCardBodyChanges() {
   const targetNode = document.querySelector('.characterCards');
-  const observer = new MutationObserver((mutationsList) => {
-    for (const mutation of mutationsList) {
-      if (mutation.type === 'childList') {
-        // Call the function to add event listeners to cardBody elements
-        setupCardClickListeners();
-      }
-    }
-  });
+  const observer = new MutationObserver(() => {});
   observer.observe(targetNode, { childList: true, subtree: true });
   setupCardClickListeners();
 }
@@ -111,17 +118,64 @@ function cardClickRedirect(){
   window.location.href = url;
 }
 
+function createDiv(className, content) {
+  const div = document.createElement('div');
 
-async function fetchData(url) {
-  const response = await fetch(url);
-  return response.json();
+  if (className) {
+    div.classList.add(className);
+  }
+
+  if (content !== undefined) {
+    div.textContent = content;
+  }
+
+  return div;
 }
 
-function createServerButton(serverData) {
+function createSpan(className, content) {
+  const span = document.createElement('span');
+
+  if (className) {
+    span.classList.add(className);
+  }
+
+  if (content !== undefined) {
+    span.textContent  = content;
+  }
+
+  return span;
+}
+
+async function createImageElement(src, alt, className = '') {
+  const image = document.createElement('img');
+  image.src = src;
+  image.alt = alt;
+  if (className) {
+      image.classList.add(className);
+  }
+  await image.decode();
+  return image;
+}
+
+async function createServerButton(serverData) {
   const createdButton = document.createElement('button');
   createdButton.classList.add('serverButton');
 
-  //Create selected SVG
+  const serverImage = await createImageElement(`${serverData.img}.webp`, serverData.name, 'serverIcon');
+  const serverNameSpan = createSpan('', serverData.name);
+  const checkSVG = createCheckSVG();
+
+  createdButton.appendChild(serverImage);
+  createdButton.appendChild(serverNameSpan);
+  createdButton.appendChild(checkSVG);
+
+  createdButton.classList.toggle('not-checked');
+
+  return createdButton;
+
+}
+
+function createCheckSVG(){
   const checkSVG = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
   checkSVG.setAttribute('width', '30');
   checkSVG.setAttribute('height', '30');
@@ -132,26 +186,8 @@ function createServerButton(serverData) {
   path.setAttribute('d', 'M12 21.4L3.59999 13L0.799988 15.8L12 27L36 2.99995L33.2 0.199951L12 21.4Z');
   path.setAttribute('fill', '#E3E3E3');
 
-
   checkSVG.appendChild(path);
-
-  //Add server image
-  const serverImage = document.createElement('img');
-  serverImage.src = `${serverData.img}.webp`;
-  serverImage.alt = serverData.name;
-  serverImage.classList.add('serverIcon');
-  createdButton.appendChild(serverImage);
-
-  //Add server name
-  const serverNameSpan = document.createElement('span');
-  serverNameSpan.textContent = serverData.name;
-
-  //Create button
-  createdButton.appendChild(serverNameSpan);
-  createdButton.appendChild(checkSVG);
-  createdButton.classList.toggle('not-checked');
-  return createdButton;
-
+  return checkSVG;
 }
 
 function swapContentAndStoreCookie(selectedButton, serverButton) {
@@ -213,12 +249,12 @@ function updateToCookie(selectedServer, savedServerContent){
 
 }
 
-
 const filterButtons = document.querySelectorAll('.filterButton');
 const savedFilterValues = getCookie('filterValues');
 const filterCookies = savedFilterValues ? savedFilterValues.split(',') : [];
 
 // Load filter values from cookies
+
 filterButtons.forEach(button => {
     const dataValue = button.getAttribute('data-value');
     if (filterCookies.includes(dataValue))
@@ -254,21 +290,29 @@ async function updateSelectedValuesCookie() {
     setCookie('filterValues', selectedValuesString, 7);
 }
 
-const userDataScript = document.getElementById('userdata');
-const username = userDataScript.getAttribute('data-username');
-
 async function createCharacterCards(){
   const parentDiv = document.querySelector('.characterCards');
   const selectedServer = document.querySelector('.SelectedButton').querySelector('span').innerText;
+
+  
+  const userDataScript = document.getElementById('userdata');
+  const username = userDataScript.getAttribute('data-username');
+
 
   const characters = await fetchData(`/${username}/${selectedServer}`);
 
   const characterCards = await Promise.all(characters.map(generateCard));
 
+  const characterCardFragment = document.createDocumentFragment();
+
+
   await sort(characterCards, false);
   
-  characterCards.forEach((card) => parentDiv.appendChild(card));
-
+  characterCards.forEach((card) => {
+    characterCardFragment.appendChild(card);
+  });
+  parentDiv.appendChild(characterCardFragment);
+  
   filterCharacterCards(selectedValues);
 }
 
@@ -306,32 +350,25 @@ function filterCharacterCards(selectedValues){
 
 async function generateCard(characterData){
   //Arcame Force Block
-  const arcaneForce = document.createElement('div');
-  arcaneForce.className = 'arcaneForce';
+  const arcaneForce = createDiv('arcaneForce');
 
-  const spanArcaneForce = document.createElement('span');
-  spanArcaneForce.innerText = 'Arcane Force';
-  spanArcaneForce.className = 'Title';
+  const spanArcaneForce = createSpan('Title','Arcane Force');
   arcaneForce.appendChild(spanArcaneForce);
 
   const arcaneForceContent = await createForce(characterData, 'arcane');
   arcaneForce.appendChild(arcaneForceContent);
 
   //Sacred Force Block
-  const sacredForce = document.createElement('div');
-  sacredForce.className = 'sacredForce';
+  const sacredForce = createDiv('sacredForce');
 
-  const spanSacredForce = document.createElement('span');
-  spanSacredForce.innerText = 'Sacred Force';
-  spanSacredForce.className = 'Title';
+  const spanSacredForce = createSpan('Title','Sacred Force');
   sacredForce.appendChild(spanSacredForce);
 
   const sacredForceContent = await createForce(characterData, 'sacred');
   sacredForce.appendChild(sacredForceContent);
 
   //appending Arcane and Sacred Force
-  const forceDiv = document.createElement('div');
-  forceDiv.className = 'forceDiv';
+  const forceDiv = createDiv('forceDiv');
   forceDiv.appendChild(arcaneForce);
   forceDiv.appendChild(sacredForce);
 
@@ -339,8 +376,7 @@ async function generateCard(characterData){
   const portrait = await createCharacterPortrait(characterData);
 
   //upper part appending
-  const upperPart = document.createElement('div');
-  upperPart.className = 'upperPart';
+  const upperPart = createDiv('upperPart');
   upperPart.appendChild(forceDiv);
   upperPart.appendChild(portrait);
   
@@ -352,20 +388,17 @@ async function generateCard(characterData){
   const legionContainer = await createLegionContent(characterData);
 
   //Appending
-  const linkLegion = document.createElement('div');
-  linkLegion.className = 'linkLegionContainer';
+  const linkLegion = createDiv('linkLegionContainer');
 
   linkLegion.appendChild(linkSkillContainer);
   linkLegion.appendChild(legionContainer);
-
 
   //Name and Boss Icon creation
   const nameAndLevel = await createLowerPart(characterData);
 
   //LowerPart appending
 
-  const lowerPart = document.createElement('div');
-  lowerPart.className = 'lowerPart';
+  const lowerPart = createDiv('lowerPart');
   lowerPart.appendChild(linkLegion);
   lowerPart.appendChild(nameAndLevel);
 
@@ -373,8 +406,8 @@ async function generateCard(characterData){
   const levelBarWrapper = await createLeveLBar(characterData);
 
 
-  const cardBody = document.createElement('div');
-  cardBody.className = 'cardBody';
+  const cardBody = createDiv('cardBody');
+
   cardBody.setAttribute('job-type', characterData.jobType);
   cardBody.setAttribute('characterClass', characterData.code);
 
@@ -390,29 +423,19 @@ async function createForce(characterData, forceType) {
   const forceData = forceType === 'arcane' ? characterData.ArcaneForce : characterData.SacredForce;
 
   try {
-    for (forceArea of forceData) {
-      const wrapper = document.createElement('div');
-      wrapper.className = forceType === 'arcane' ? 'arcaneWrapper' : 'sacredWrapper';
+    for (const forceArea of forceData) {
+      const wrapper = createDiv(forceType === 'arcane' ? 'arcaneWrapper' : 'sacredWrapper');
       const areaName = forceArea.name;
       const areaCode = areaName.replace(/\s+/g, '_').toLowerCase();
 
-      const forceImg = document.createElement('img');
-      forceImg.src = `../../public/assets/${forceType}force/${areaCode}.webp`;
-      forceImg.alt = areaName;
-      forceImg.className = `${forceType === 'arcane' ? 'Arcane' : 'Sacred'}Image`;
+      const forceImgSrc = `../../public/assets/${forceType}force/${areaCode}.webp`;
+      const forceImgAlt = areaName;
+      const forceImgClassName  = `${forceType === 'arcane' ? 'Arcane' : 'Sacred'}Image`;
 
-      var level = forceArea.level;
-      if (characterData.level < forceArea.minLevel) {
-        forceImg.classList.toggle('off');
-        level = 0;
-      }
-      if (level === (forceType === 'arcane' ? 20 : 10)) {
-        level = 'MAX';
-      } else {
-        level = 'Lv. ' + level;
-      }
-      const forceLevel = document.createElement('span');
-      forceLevel.innerText = level;
+      const forceImg = await createImageElement(forceImgSrc,forceImgAlt, forceImgClassName);
+
+      var level = await setForceLevel(forceArea, characterData, forceImg, forceType);
+      const forceLevel = createSpan('', level);
 
       wrapper.appendChild(forceImg);
       wrapper.appendChild(forceLevel);
@@ -425,54 +448,63 @@ async function createForce(characterData, forceType) {
   return outerWrapper;
 }
 
+async function setForceLevel(forceArea, characterData, forceImg, forceType){
+  let level = forceArea.level;
+      if (characterData.level < forceArea.minLevel) {
+        forceImg.classList.toggle('off');
+        level = 0;
+      }
+      if (level === (forceType === 'arcane' ? 20 : 10)) {
+        level = 'MAX';
+      } else {
+        level = 'Lv. ' + level;
+      }
+  return level;
+}
+
 async function createCharacterPortrait(characterData){
-  const portrait = document.createElement('img');
+
+  const portrait =   await createImageElement(`../../public/assets/cards/${characterData.code}.webp`, characterData.class);
+
   if(characterData.level === 0 && characterData.name === 'Character Name'){
     portrait.setAttribute('class', 'cardPortrait off');
   }
   else{
     portrait.setAttribute('class', 'cardPortrait');
   }
-  portrait.src = `../../public/assets/cards/${characterData.code}.webp`
-  portrait.alt = characterData.class;
 
   return portrait;
 }
 
 async function createLinkSkillContent(characterData){
-    const linkImageLevelDiv = document.createElement('div');
-    linkImageLevelDiv.className = 'linkImageLevel';
+    const linkImageLevelDiv = createDiv('linkImageLevel');
 
-    const linkspan = document.createElement('span');
-    linkspan.className = 'linkLegionTitle';
-    linkspan.innerText = 'Link Skill';
+    const linkspan = createSpan('linkLegionTitle', 'Link Skill');
 
     linkSkillData = await fetch('../../public/data/linkskill.json').then(response => response.json());
     filteredLink = linkSkillData.find(item => item.name === characterData.linkSkill);
-    const wrapper = document.createElement('div');
-    wrapper.className = 'linkWrapper';
 
-    const linkImg = document.createElement('img');
-    linkImg.alt = filteredLink.name;
-    linkImg.src = filteredLink.image;
-    linkImg.className = 'linkImg';
+    const wrapper = createDiv('linkWrapper');
 
-    const linkLevel = document.createElement('span');
-    linkLevel.className = 'linkLevel';
+    const linkImg = await createImageElement(filteredLink.image, filteredLink.name, 'linkImg');
 
+    
+    let LinkLevelText;
     switch (true) {
       case characterData.level > 178 && characterData.code === 'zero':
-        linkLevel.innerText = 'Lv. 5';
+        LinkLevelText = 'Lv. 5';
         break;
       case characterData.level >= 210 && filteredLink.levels.length > 2:
-        linkLevel.innerText = 'Lv. 3';
+        LinkLevelText = 'Lv. 3';
         break;
       case characterData.level >= 120:
-        linkLevel.innerText = 'Lv. 2';
+        LinkLevelText = 'Lv. 2';
         break;
       default:
-        linkLevel.innerText = 'Lv. 1';
+        LinkLevelText = 'Lv. 1';
     }
+
+    const linkLevel = createSpan('linkLevel',LinkLevelText);
 
     wrapper.appendChild(linkImg);
     wrapper.appendChild(linkLevel);
@@ -484,27 +516,23 @@ async function createLinkSkillContent(characterData){
 }
 
 async function createLegionContent(characterData){
-  const legionDiv = document.createElement('div');
-  legionDiv.className = 'legionDiv';
+  const legionDiv = createDiv('legionDiv');
 
-  const legionspan = document.createElement('span');
-  legionspan.className = 'linkLegionTitle';
-  legionspan.innerText = 'Legion';
+  const legionspan = createSpan('linkLegionTitle', 'Legion');
 
   legionData = await fetch('../../public/data/legionsystems.json').then(response => response.json());
   filterLegion = legionData.find(item => item.name === characterData.legion);
 
-  const legionImg = document.createElement('img');
-  legionImg.className = 'legionImg';
-  legionImg.alt = `${characterData.class} legion`;
-
   let legionRank = getRank(characterData);
+  let legionSrc;
   if(legionRank == 'no_rank'){
-    legionImg.src = '../../public/assets/legion/no_rank.webp';
+    legionSrc = '../../public/assets/legion/no_rank.webp';
   }
   else{
-    legionImg.src = `../../public/assets/legion/${characterData.jobType}/rank_${legionRank}.webp`;
+    legionSrc = `../../public/assets/legion/${characterData.jobType}/rank_${legionRank}.webp`;
   }
+
+  const legionImg = await createImageElement(legionSrc, `${characterData.class} legion`, 'legionImg');
 
   legionDiv.appendChild(legionspan);
   legionDiv.appendChild(legionImg);
@@ -541,12 +569,9 @@ async function createBossIconAndName(characterData) {
   innerSVG.setAttribute('width', '38');
   innerSVG.setAttribute('height', '38');
 
-  const characterName = document.createElement('span');
-  characterName.className = 'characterName';
-  characterName.innerText = characterData.name;
+  const characterName = createSpan('characterName', characterData.name);
 
-  const nameAndIcon = document.createElement('div');
-  nameAndIcon.className = 'nameAndIcon';
+  const nameAndIcon = createDiv('nameAndIcon');
 
   if (characterData.bossing) {
     nameAndIcon.appendChild(bossIcon);
@@ -576,18 +601,13 @@ async function loadEditableSVGFile(filePath) {
 
 async function createLowerPart(characterData){
   const nameAndIcon = await createBossIconAndName(characterData);
-  const job = document.createElement('span');
-  job.className = 'job';
-  job.innerText = characterData.job;
+  const job = createSpan('job', characterData.job);
 
-  const levelSpan = document.createElement('span');
-  levelSpan.className = 'level';
-  levelSpan.innerText = `${characterData.level}/${characterData.targetLevel}`;
+  const levelSpan = createSpan('level', `${characterData.level}/${characterData.targetLevel}`);
 
   setStyle(levelSpan, characterData, true);
   
-  const nameAndLevel = document.createElement('div');
-  nameAndLevel.className = 'nameAndLevel';
+  const nameAndLevel = createDiv('nameAndLevel');
 
   nameAndLevel.appendChild(nameAndIcon);
   nameAndLevel.appendChild(job);
@@ -598,13 +618,10 @@ async function createLowerPart(characterData){
 
 async function createLeveLBar(characterData){
 
-  const levelBarWrapper = document.createElement('div');
-  levelBarWrapper.className = 'levelBarWrapper';
-  const levelBar = document.createElement('div');
-  levelBar.className = 'levelBar';
+  const levelBarWrapper = createDiv('levelBarWrapper');
+  const levelBar = createDiv('levelBar');
 
-  const progressBar = document.createElement('div');
-  progressBar.className = 'progressBar';
+  const progressBar = createDiv('progressBar');
   if(characterData.level == 0){
     progressBar.style.width = 0;
   }
@@ -624,7 +641,6 @@ async function createLeveLBar(characterData){
   levelBarWrapper.appendChild(levelBar);
   return levelBarWrapper;
 }
-
 
 function setStyle(element, characterData, isColor) {
   let styleProperty;

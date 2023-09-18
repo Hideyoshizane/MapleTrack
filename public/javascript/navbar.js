@@ -174,7 +174,6 @@ document.addEventListener("DOMContentLoaded", function() {
     //Menu buttons event handlers
     const menuButtons = document.querySelectorAll('.menu-button');
 
-
     const fetchData = async (url, method) => {
       try {
           const response = await fetch(url, {
