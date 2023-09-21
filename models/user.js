@@ -1,5 +1,6 @@
 const Joi = require('joi');
 const mongoose = require('mongoose');
+const {DateTime} = require('luxon');
 const passportLocalMongoose = require('passport-local-mongoose');
 
 const userSchema = new mongoose.Schema({
@@ -23,6 +24,7 @@ const userSchema = new mongoose.Schema({
         minlength: 8,
         maxlength: 61
     },
+    date: {type: Date},
     servers: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Server'
@@ -44,7 +46,15 @@ function validate(user) {
     
     return schema.validate(user);
 }
+
+async function updateLastLogin(userID){
+    const userData = await User.findById(userID);
+
+}
+
+
 module.exports = {
     User,
-    validate
+    validate,
+    updateLastLogin
 };

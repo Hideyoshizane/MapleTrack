@@ -47,9 +47,9 @@ module.exports = {
       }
     },
 
-    increaseForce: async (ctx) =>{
+    increaseDaily: async (ctx) =>{
       try{
-        const {forceType, forceName, value, characterData, necessaryExp} = ctx.request.body;
+        const {forceType, forceName, value, characterData, necessaryExp, date} = ctx.request.body;
         const foundCharacter = await Character.findOne(characterData);
         let AreaData;
         if (forceType) {
@@ -65,6 +65,7 @@ module.exports = {
             foundArea.exp = Number(foundArea.exp - necessaryExp);
             foundArea.level +=Number(1);
           }
+          foundArea.content[0].date = date;
           await foundCharacter.save();
           ctx.status = 200;
         }
@@ -74,6 +75,34 @@ module.exports = {
         ctx.status = 500;
         ctx.body = {error: 'Error updating value'};
       }
-    } 
-  };
+    },
+    increaseWeekly: async (ctx) =>{
+      try{
+        const {forceName, value, characterData, necessaryExp, date} = ctx.request.body;
+        const foundCharacter = await Character.findOne(characterData);
+        console.log(foundCharacter);
+        let AreaData = foundCharacter.ArcaneForce;
+        const foundArea = AreaData.find((obj) => obj.name === forceName);
+
+        if(foundArea){
+          foundArea.exp += Number(value);
+          if(foundArea.exp >= necessaryExp){
+            foundArea.exp = Number(foundArea.exp - necessaryExp);
+            foundArea.level +=Number(1);
+          }
+          foundArea.content[1].date = date;
+          if(foundArea.content[1].tries > 0){
+            foundArea.content[1].tries -=Number(1);
+          }
+          await foundCharacter.save();
+          ctx.status = 200;
+        }
+
+      }catch(error){
+        console.log('Error updating value', error);
+        ctx.status = 500;
+        ctx.body = {error: 'Error updating value'};
+      }
+  }
+};
   

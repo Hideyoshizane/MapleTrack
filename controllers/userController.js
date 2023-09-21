@@ -2,7 +2,6 @@ const bcrypt = require('bcrypt');
 const {User, validate} = require('../models/user');
 const { searchServersAndCreateMissing } = require('../models/servers');
 
-
 module.exports = {
   signup: async (ctx) => {
     try {

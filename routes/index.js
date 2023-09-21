@@ -32,6 +32,8 @@ router.get('/search', searchController.search);
 
 router.get('/:username/:server/:characterClass', authenticate.ensureAuthenticated, characterController.redirectCharacter);
 
+router.get('/:username/:server/:characterClass/edit', authenticate.ensureAuthenticated, characterController.redirectCharacter);
+
 router.get('/code/:username/:server/:characterCode', characterController.getCharacterData);
 
 router.get('/username', authenticate.ensureAuthenticated, searchController.username);
@@ -42,6 +44,8 @@ router.get('/serverName/:serverID', authenticate.ensureAuthenticated, searchCont
 
 router.get('/:username/:server', authenticate.ensureAuthenticated, characterController.fullCharacter);
 
-router.post('/increaseForce', authenticate.ensureAuthenticated, characterController.increaseForce);
+router.post('/increaseDaily', authenticate.ensureAuthenticated, characterController.increaseDaily);
+
+router.post('/increaseWeekly', authenticate.ensureAuthenticated, characterController.increaseWeekly);
 
 module.exports = router;

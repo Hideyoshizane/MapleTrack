@@ -39,8 +39,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     editButton = document.querySelector('.editButton');
     editButton.addEventListener('click', (event) => {
-      const currentUrl = `${window.location.href}/edit`;
-      window.location.href = currentUrl;    
+      console.log('hi');
     });
 }
 ); 

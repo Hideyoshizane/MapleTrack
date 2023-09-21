@@ -3,6 +3,7 @@ const path = require('path');
 const jsonData = require('../public/data/classes.json');
 const { User } = require('./user');
 const { template } = require('lodash');
+const {DateTime} = require('luxon');
 
 const Character = mongoose.model('Character', new mongoose.Schema({
     name: {
@@ -53,7 +54,8 @@ const Character = mongoose.model('Character', new mongoose.Schema({
           checked:     {type: Boolean},
           minLevel:    {type: Number},
           tries:       {type: Number},
-          maxTries:    {type: Number}
+          maxTries:    {type: Number},
+          date:        {type: Date}
         }]
         
     }],
@@ -66,7 +68,8 @@ const Character = mongoose.model('Character', new mongoose.Schema({
         contentType: {type: String,required: true, editable: false},
         expGain:     {type: Number},
         checked:     {type: Boolean},
-        minLevel:    {type: Number}
+        minLevel:    {type: Number},
+        date:        {type: Date}
       }]
   }],
 }, { strictPopulate: false })); 
@@ -80,20 +83,22 @@ const templateCharacter = {
   ArcaneForce:[
     {
       name: "Vanish Journey",
-      level: 0,
-      exp: 0,
+      level: 1,
+      exp: 1,
       minLevel: 200,
       content:[
         {
         contentType: "Daily Quest",
         expGain: 9,
         checked: false,
+        date: null
         },
         {
           contentType: "Erda Spectrum",
           checked: false,
           tries: 3,
-          maxTries: 3
+          maxTries: 3,
+          date: null
         },
         {
           contentType: "Reverse City",
@@ -104,20 +109,22 @@ const templateCharacter = {
     },
     {
       name: "Chu chu Island",
-      level: 0,
-      exp: 0,
+      level: 1,
+      exp: 1,
       minLevel: 210,
       content:[
         {
         contentType: "Daily Quest",
         expGain: 8,
         checked: false,
+        date: null
         },
         {
           contentType: "Hungry Muto",
           checked: false,
           tries: 3,
-          maxTries: 3
+          maxTries: 3,
+          date: null
         },
         {
           contentType: "Yum Yum Island",
@@ -128,77 +135,85 @@ const templateCharacter = {
     },
     {
       name: "Lachelein",
-      level: 0,
-      exp: 0,
+      level: 1,
+      exp: 1,
       minLevel: 220,
       content:[
         {
         contentType: "Daily Quest",
         expGain: 11,
         checked: false,
+        date: null
         },
         {
           contentType: "Dream Defender",
           checked: false,
           tries: 3,
-          maxTries: 3
+          maxTries: 3,
+          date: null
         }
       ]
     },
     {
       name: "Arcana",
-      level: 0,
-      exp: 0,
+      level: 1,
+      exp: 1,
       minLevel: 225,
       content:[
         {
         contentType: "Daily Quest",
         expGain: 9,
         checked: false,
+        date: null
         },
         {
           contentType: "Spirit Savior",
           checked: false,
           tries: 3,
-          maxTries: 3
+          maxTries: 3,
+          date: null
         }
       ]
     },
     {
       name: "Morass",
-      level: 0,
-      exp: 0,
+      level: 1,
+      exp: 1,
       minLevel: 230,
       content:[
         {
         contentType: "Daily Quest",
         expGain: 8,
         checked: false,
+        date: null
         },
         {
           contentType: "Ranheim Defense",
           checked: false,
           tries: 3,
-          maxTries: 3
+          maxTries: 3,
+          date: null
         }
       ]
     },
     {
       name: "Esfera",
-      level: 0,
-      exp: 0,
+      level: 1,
+      exp: 1,
       minLevel: 235,
       content:[
         {
         contentType: "Daily Quest",
         expGain: 8,
         checked: false,
+        date: null
         },
         {
           contentType: "Esfera Guardian",
           checked: false,
           tries: 3,
-          maxTries: 3
+          maxTries: 3,
+          date: null
         }
       ]
     },
@@ -207,13 +222,14 @@ const templateCharacter = {
   [
     {
     name: "Cernium",
-    level: 0,
-    exp: 0,
+    level: 1,
+    exp: 1,
     minLevel: 260,
       content: [{
-          contentType: "Cernium",
+          contentType: "Daily Quest",
           expGain: 10,
           checked: false,
+          date: null
         },
         {
           contentType: "Burning Cernium",
@@ -225,25 +241,27 @@ const templateCharacter = {
     },
     {
       name: "Arcus",
-      level: 0,
-      exp: 0,
+      level: 1,
+      exp: 1,
       minLevel: 270,
         content: [{
             contentType: "Daily Quest",
             expGain: 5,
             checked: false,
+            date: null
           },
         ]
     },
     {
       name: "Odium",
-      level: 0,
-      exp: 0,
+      level: 1,
+      exp: 1,
       minLevel: 275,
         content: [{
             contentType: "Daily Quest",
             expGain: 5,
             checked: false,
+            date: null
           },
         ]
     },
@@ -335,6 +353,46 @@ async function updateCharacters(userID) {
   }
 }
 
+async function updateCharactersWeekly(userID) {
+  try {
+    const userData = await User.findById(userID)
+      .populate({
+        path: 'servers',
+        populate: {
+          path: 'characters',
+          model: Character,
+          populate: [
+            { path: 'ArcaneForce' },
+          ],
+        },
+      })
+      .exec();
+
+    const timeNow = DateTime.utc();
+    const userLastLogin = DateTime.fromISO(userData.date);
+    const nextMonday = userLastLogin.plus({ days: 1 }).set({ weekday: 2, hour: 0, minute: 0, second: 0, millisecond: 0 });
+
+    // Check if the last login date is before the most recent Monday midnight (UTC)
+    if (userLastLogin < nextMonday && timeNow >= nextMonday) {
+      for (const server of userData.servers) {
+        for (const character of server.characters) {
+          for (const force of character.ArcaneForce) {
+            force.content[1].tries = Number(3);
+          }
+          await character.save();
+        }
+      }
+      userData.date = timeNow;
+      await userData.save();
+      console.log('Weekly update performed.');
+    } else {
+      console.log('Weekly update not needed.');
+    }
+  } catch (error) {
+    console.error('Error updating characters weekly:', error);
+  }
+}
+
 
 
 async function updateForceData(updatingCharacter, forceType, templateForce) {
@@ -408,4 +466,4 @@ async function updateForceData(updatingCharacter, forceType, templateForce) {
 }
 
 
-module.exports = { Character, createDefaultCharacters, createMissingCharacters, updateCharacters };
+module.exports = { Character, createDefaultCharacters, createMissingCharacters, updateCharacters, updateCharactersWeekly };
