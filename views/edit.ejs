@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>MapleTrack</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/navbar.css">
+    <link rel="stylesheet" href="/css/edit.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <base href="http://localhost:8080/">
+</head>
+<body>
+    <%- include('navbar') %>
+    <div class="center-container">
+        <div class="mainContent">
+            <div class="classImage"></div>
+            <div class="characterData"></div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/luxon@3.4.3/build/global/luxon.min.js"></script>
+    <script src="/dist/navbar.js"></script>
+    <script src="/public/javascript/edit.js"></script>
+    <script id="userdata" data-username="<%- username %>"></script>
+</body>
+</html>

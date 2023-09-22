@@ -16,6 +16,21 @@ module.exports = {
       }
     },
 
+    editCharacter: async (ctx) => {
+      try {
+        const { username, server, characterCode } = ctx.params;
+        await ctx.render('edit', {
+          username: username,
+          server: server,
+          characterCode: characterCode,
+        });
+      } catch (error) {
+        console.error('Error rendering edit page:', error);
+        ctx.status = 500;
+        ctx.body = { error: 'An error occurred while rendering edit page' };
+      }
+    },
+
     getCharacterData: async (ctx) => {
       try {
         const { username, server, characterCode } = ctx.params;
@@ -80,7 +95,6 @@ module.exports = {
       try{
         const {forceName, value, characterData, necessaryExp, date} = ctx.request.body;
         const foundCharacter = await Character.findOne(characterData);
-        console.log(foundCharacter);
         let AreaData = foundCharacter.ArcaneForce;
         const foundArea = AreaData.find((obj) => obj.name === forceName);
 

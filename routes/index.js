@@ -32,7 +32,7 @@ router.get('/search', searchController.search);
 
 router.get('/:username/:server/:characterClass', authenticate.ensureAuthenticated, characterController.redirectCharacter);
 
-router.get('/:username/:server/:characterClass/edit', authenticate.ensureAuthenticated, characterController.redirectCharacter);
+router.get('/:username/:server/:characterCode/edit', authenticate.ensureAuthenticated, characterController.editCharacter);
 
 router.get('/code/:username/:server/:characterCode', characterController.getCharacterData);
 
