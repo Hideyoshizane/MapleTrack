@@ -10,40 +10,36 @@ window.CharacterData;
 const { DateTime } = luxon;
 
 document.addEventListener('DOMContentLoaded', async () => {
-  
-    characterData = await fetchCharacterData(username, server, characterCode);
+  characterData = await fetchCharacterData(username, server, characterCode);
+  await loadCharacterContent(characterData);
 
-    await loadCharacterContent(characterData);
-
-    dailyButtons = document.querySelectorAll('.dailyButton');
-    dailyButtons.forEach((dailyButton) => {
-      dailyButton.addEventListener('click', (event) => {
-        increaseDaily(event, characterData);
-      });
+  let dailyButtons = document.querySelectorAll('.dailyButton');
+  dailyButtons.forEach((dailyButton) => {
+    dailyButton.addEventListener('click', async (event) => {
+      if (!dailyButton.disabled) {
+        await increaseDaily(event, characterData);
+      }
     });
+  });
 
-    weeklyButtons = document.querySelectorAll('.weeklyButton');
-    weeklyButtons.forEach((weeklyButton) => {
-      weeklyButton.addEventListener('click', (event) => {
-        increaseWeekly(event, characterData);
-      });
+  weeklyButtons = document.querySelectorAll('.weeklyButton');
+  weeklyButtons.forEach((weeklyButton) => {
+    weeklyButton.addEventListener('click', (event) => {
+      increaseWeekly(event, characterData);
     });
+  });
 
-    increaseAllButton = document.querySelector('.increaseAllButton');
-    increaseAllButton.addEventListener('click', (event) => {
-      dailyButtons.forEach((button) => {
-        if (!button.disabled) 
-          button.click();
-      })
-    });
+  increaseAllButton = document.querySelector('.increaseAllButton');
+  increaseAllButton.addEventListener('click', async (event) => {
+    await processButtons(dailyButtons, characterData);
+  });
 
-    editButton = document.querySelector('.editButton');
-    editButton.addEventListener('click', (event) => {
-      var url = `/${username}/${server}/${characterCode}/edit`;
-      window.location.href = url;
-    });
-}
-); 
+  editButton = document.querySelector('.editButton');
+  editButton.addEventListener('click', (event) => {
+    var url = `/${username}/${server}/${characterCode}/edit`;
+    window.location.href = url;
+  });
+});
 
 async function fetchCharacterData(username, server, characterCode){
   try {
@@ -682,4 +678,23 @@ async function updateDayToMax(areaData, isArcane, characterData){
   totalExp -= areaData.exp;
   let daysToReachTotalExp = Math.ceil(totalExp / (dailyExp + (weeklyExp / 7)));
   return daysToReachTotalExp;
+}
+
+async function processButtons(dailyButtons, characterData) {
+  let currentIndex = 0;
+
+  async function processNextButton() {
+    if (currentIndex < dailyButtons.length) {
+      const dailyButton = dailyButtons[currentIndex];
+
+      if (!dailyButton.disabled) {
+        await increaseDaily({ target: dailyButton }, characterData);
+      }
+
+      currentIndex++;
+      await processNextButton(); // Process the next button
+    }
+  }
+
+  await processNextButton(); // Start processing buttons
 }

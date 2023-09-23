@@ -14,6 +14,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     
     await loadCharacterContent(characterData);
 
+    
+    const bossSwitch = document.querySelector('.bossSwitch input[type="checkbox"]');
+    bossSwitch.addEventListener('change', (event) => {
+      changebossIcon(bossSwitch.checked);
+    })
+
     discardButton = document.querySelector('.discardButton');
     discardButton.addEventListener('click', () => {
       var url = `/${username}/${server}/${characterCode}`;
@@ -22,6 +28,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const levelNumber = document.querySelector('.levelNumber');
     const levelTarget = document.querySelector('.levelTarget');
+
 
     levelNumber.addEventListener('input', async () => {
       const levelNumberValue = levelNumber.value;
@@ -46,25 +53,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     saveButton = document.querySelector('.saveButton');
     saveButton.addEventListener('click', async (event) =>{
-      console.log('hi');
       await saveDataAndPost();
-      //var url = `/${username}/${server}/${characterCode}`;
-      //window.location.href = url;
+      var url = `/${username}/${server}/${characterCode}`;
+      window.location.href = url;
     });
 
-
- /*   increaseAllButton = document.querySelector('.increaseAllButton');
-    increaseAllButton.addEventListener('click', (event) => {
-      dailyButtons.forEach((button) => {
-        if (!button.disabled) 
-          button.click();
-      })
-    });
-
-    editButton = document.querySelector('.editButton');
-    editButton.addEventListener('click', (event) => {
-      console.log('hi');
-    });*/
 }
 ); 
 
@@ -122,7 +115,7 @@ function createDiv(className, content) {
   return div;
 }
 
-function createInput(className, content){
+function createInput(className, content, type){
   const input = document.createElement('input');
 
   if (className) {
@@ -131,6 +124,10 @@ function createInput(className, content){
 
   if (content !== undefined) {
     input.placeholder  = content;
+  }
+
+  if (type !== undefined) {
+    input.type  = type;
   }
 
   return input;
@@ -332,8 +329,8 @@ async function loadLevelAndLevelBar(characterData){
 
   const level = createSpan('level', 'Level');
 
-  const levelNumber = createInput('levelNumber',`${characterData.level}`);
-  const levelTarget = createInput('levelTarget', `${characterData.targetLevel}`);
+  const levelNumber = createInput('levelNumber',`${characterData.level}`, 'number');
+  const levelTarget = createInput('levelTarget', `${characterData.targetLevel}`, 'number');
   const Bar = createSpan('Bar', '/');
 
   const levelDiv = createDiv('levelDiv');
@@ -523,6 +520,21 @@ function createExpText(Force, expTable, isArcane = false){
     return wrap;
 }
 
+async function changebossIcon(checked){
+  bossIcon = document.querySelector('.bossIcon');
+  if(checked){
+    const bossIconpath = '../../../public/assets/icons/menu/boss_slayer.svg';
+    const bossIconON = await loadEditableSVGFile(bossIconpath, 'bossIcon');
+    bossIcon.replaceWith(bossIconON);
+  }
+  else{
+    const bossIconpath = '../../../public/assets/icons/menu/boss_slayer_off.svg';
+    const bossIconOFF = await loadEditableSVGFile(bossIconpath, 'bossIcon');
+    bossIcon.replaceWith(bossIconOFF);
+  }
+}
+
+
 async function updateExpBar(levelNumberValue, levelTargetValue) {
   const outerDiv = document.querySelector('.OuterEXPBar');
   const innerExpBar = document.querySelector('.InnerEXPBar');
@@ -535,6 +547,8 @@ async function updateExpBar(levelNumberValue, levelTargetValue) {
   if(levelValue >= targetValue) {
     innerExpBar.style.backgroundColor = '#48AA39';
   }
+  if(barSize >= maxWidth)
+    barSize = maxWidth;
   else{
     setStyle(innerExpBar, jobType, levelValue, targetValue);
   }
@@ -622,17 +636,99 @@ async function updateForce(type, levelNumberValue) {
 }
 
 async function saveDataAndPost(){
-  
-}
+  let characterName = document.querySelector('.characterName').value;
+  if(characterName.length == 0){
+    characterName = 'Character Name';
+  }
 
-/*
-async function postRequest(postData){
-  fetch(URL, {
+  let bossSwitch = document.querySelector('.bossSwitch input[type="checkbox"]').checked;
+
+  let jobLevel = document.querySelector('.jobLevel').innerText;
+
+  let level = Number(document.querySelector('.levelNumber').value);
+  if(level == 0 || level < 0){
+    level = Number(document.querySelector('.levelNumber').placeholder);
+  }
+  if(level > 300){
+    level = 300;
+  }
+
+  let targetLevel = Number(document.querySelector('.levelTarget').value);
+  if(targetLevel == 0 || targetLevel < 0){
+    targetLevel = Number(document.querySelector('.levelTarget').placeholder);
+  }
+  if(targetLevel > 300){ 
+    targetLevel = 300;
+  }
+  const arcaneForceArray = returnForceArray('Arcane');
+  const sacredForceArray = returnForceArray('Sacred');
+
+  const characterToUpdate = {
+    _id: characterData._id,
+    name: characterName,
+    level: level,
+    targetLevel: targetLevel,
+    job: jobLevel,
+    bossing: bossSwitch,
+    ArcaneForce: arcaneForceArray,
+    SacredForce: sacredForceArray
+  }
+  fetch('/updateCharacter', {
     method: 'POST',
     headers: {
-        'Content-Type': 'application/json',
+      'Content-Type': 'application/json',
     },
-    body: JSON.stringify(postData),
-})
+    body: JSON.stringify(characterToUpdate),
+  })
+    .catch(error => {
+      console.error('Error:', error);
+    });
 }
-*/
+
+
+function returnForceArray(forceType) {
+  const forceWrapperClass = forceType === 'Arcane' ? '.ArcaneForceWrapper' : '.SacredForceWrapper';
+  const ForceArray = [];
+
+  const forceWrappers = document.querySelectorAll(forceWrapperClass);
+  
+  for (const forceWrapper of forceWrappers) {
+    if (!forceWrapper.classList.contains('off')) {
+      const name = forceWrapper.querySelector(`.${forceType}ForceData`).getAttribute('area');
+      let level = forceWrapper.querySelector(`.${forceType}ForceWrapper .levelInput`).value;
+      if (level <= 0) {
+        level = forceWrapper.querySelector(`.${forceType}ForceWrapper .levelInput`).placeholder;
+      }
+      let exp = forceWrapper.querySelector(`.${forceType}ForceWrapper .expInput`).value;
+      if (exp <= 0) {
+        exp = forceWrapper.querySelector(`.${forceType}ForceWrapper .expInput`).placeholder;
+      }
+
+      const checksArray = [];
+      const checkboxes = forceWrapper.querySelectorAll(`.${forceType}ForceWrapper .forceCheckbox`);
+      
+      for (const checkbox of checkboxes) {
+        const checkboxName = checkbox.querySelector('span').textContent;
+        const checkboxChecked = checkbox.querySelector(`.${forceType}ForceWrapper input[type="checkbox"]`).checked;
+        
+        const checkObject = {
+          name: checkboxName,
+          checked: checkboxChecked
+        };
+        
+        checksArray.push(checkObject);
+      }
+
+      const forceObject = {
+        name: name,
+        level: level,
+        exp: exp,
+        content: checksArray
+      };
+      
+      ForceArray.push(forceObject);
+    }
+  }
+
+  return ForceArray;
+}

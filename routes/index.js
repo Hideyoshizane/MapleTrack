@@ -48,4 +48,6 @@ router.post('/increaseDaily', authenticate.ensureAuthenticated, characterControl
 
 router.post('/increaseWeekly', authenticate.ensureAuthenticated, characterController.increaseWeekly);
 
+router.post('/updateCharacter', authenticate.ensureAuthenticated, characterController.updateCharacter);
+
 module.exports = router;

@@ -30,6 +30,52 @@ module.exports = {
         ctx.body = { error: 'An error occurred while rendering edit page' };
       }
     },
+    updateCharacter: async (ctx) =>{
+      try{
+        const { _id,
+                name,
+                level,
+                targetLevel,
+                bossing,
+                ArcaneForce, 
+                SacredForce } = ctx.request.body;
+        const character = await Character.findById(_id);
+        character.name = name;
+        character.level = level;
+        character.targetLevel = targetLevel;
+        character.bossing =bossing;
+    /*
+        for (const updatedForce of ArcaneForce) {
+          const forceToUpdate = character.ArcaneForce.find(force => force.name === updatedForce.name);
+          if (forceToUpdate) {
+            forceToUpdate.level = updatedForce.level;
+            forceToUpdate.exp = updatedForce.exp;
+
+            for(let i = 0; i < forceToUpdate.content.length; i++) {
+              forceToUpdate.content[i].checked = updatedForce.content[i].checked;
+            }
+          }
+        }
+
+        for (const updatedForce of SacredForce) {
+          const forceToUpdate = character.SacredForce.find(force => force.name === SacredForce.name);
+          if (forceToUpdate) {
+            forceToUpdate.level = updatedForce.level;
+            forceToUpdate.exp = updatedForce.exp;
+
+            for(let i = 0; i < forceToUpdate.content.length; i++) {
+              forceToUpdate.content[i].checked = updatedForce.content[i].checked;
+            }
+          }
+        }*/
+        await character.save();
+    
+      } catch (error) {
+        console.error('Error updating character:', error);
+        ctx.status = 500;
+        ctx.body = { error: 'An error occurred while updating character' };
+      }
+    },
 
     getCharacterData: async (ctx) => {
       try {
@@ -65,7 +111,7 @@ module.exports = {
     increaseDaily: async (ctx) =>{
       try{
         const {forceType, forceName, value, characterData, necessaryExp, date} = ctx.request.body;
-        const foundCharacter = await Character.findOne(characterData);
+        const foundCharacter = await Character.findById(characterData._id);
         let AreaData;
         if (forceType) {
           AreaData = foundCharacter.ArcaneForce;
