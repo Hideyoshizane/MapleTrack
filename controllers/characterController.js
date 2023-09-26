@@ -44,7 +44,7 @@ module.exports = {
         character.level = level;
         character.targetLevel = targetLevel;
         character.bossing =bossing;
-    /*
+    
         for (const updatedForce of ArcaneForce) {
           const forceToUpdate = character.ArcaneForce.find(force => force.name === updatedForce.name);
           if (forceToUpdate) {
@@ -58,7 +58,7 @@ module.exports = {
         }
 
         for (const updatedForce of SacredForce) {
-          const forceToUpdate = character.SacredForce.find(force => force.name === SacredForce.name);
+          const forceToUpdate = character.SacredForce.find(force => force.name === updatedForce.name);
           if (forceToUpdate) {
             forceToUpdate.level = updatedForce.level;
             forceToUpdate.exp = updatedForce.exp;
@@ -67,7 +67,7 @@ module.exports = {
               forceToUpdate.content[i].checked = updatedForce.content[i].checked;
             }
           }
-        }*/
+        }
         await character.save();
     
       } catch (error) {
@@ -140,7 +140,7 @@ module.exports = {
     increaseWeekly: async (ctx) =>{
       try{
         const {forceName, value, characterData, necessaryExp, date} = ctx.request.body;
-        const foundCharacter = await Character.findOne(characterData);
+        const foundCharacter = await Character.findById(characterData._id);
         let AreaData = foundCharacter.ArcaneForce;
         const foundArea = AreaData.find((obj) => obj.name === forceName);
 

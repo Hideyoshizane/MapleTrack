@@ -49,7 +49,9 @@ function validate(user) {
 
 async function updateLastLogin(userID){
     const userData = await User.findById(userID);
-
+    const luxonDate = DateTime.utc();
+    userData.date = luxonDate.toJSDate();
+    await userData.save();
 }
 
 

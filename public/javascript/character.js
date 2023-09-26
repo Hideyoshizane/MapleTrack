@@ -450,7 +450,6 @@ async function returnDaysToMax(Force, expTable, characterData, isArcane = false)
   let dailyExp = getDailyValue(Force, characterData, isArcane);
   
   totalExp -= Force.exp;
-  
   let daysToReachTotalExp = await updateDayToMax(Force, isArcane, characterData);
 
   
@@ -674,7 +673,7 @@ async function updateDayToMax(areaData, isArcane, characterData){
   const expTable = await fetch(jsonPath).then(response => response.json());
   let totalExp = calculateTotalExp(areaData.level, expTable);
   let dailyExp = getDailyValue(areaData, characterData, isArcane);
-  const weeklyExp = (areaData.content[1].checked && isArcane) ? 45 : 0;
+  const weeklyExp = (areaData.content[1] && areaData.content[1].checked && isArcane) ? 45 : 0;
   totalExp -= areaData.exp;
   let daysToReachTotalExp = Math.ceil(totalExp / (dailyExp + (weeklyExp / 7)));
   return daysToReachTotalExp;

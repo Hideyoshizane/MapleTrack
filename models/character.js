@@ -369,18 +369,17 @@ async function updateCharactersWeekly(userID) {
       .exec();
 
     const timeNow = DateTime.utc();
-    const userLastLogin = DateTime.fromISO(userData.date);
+    const userLastLogin = DateTime.fromJSDate(userData.date);
     const nextMonday = userLastLogin.plus({ days: 1 }).set({ weekday: 2, hour: 0, minute: 0, second: 0, millisecond: 0 });
-
     // Check if the last login date is before the most recent Monday midnight (UTC)
-    if (userLastLogin < nextMonday && timeNow >= nextMonday) {
+    if ((userLastLogin < nextMonday) && (timeNow > nextMonday)) {
       for (const server of userData.servers) {
         for (const character of server.characters) {
           for (const force of character.ArcaneForce) {
             force.content[1].tries = Number(3);
           }
           await character.save();
-        }
+        }   
       }
       userData.date = timeNow;
       await userData.save();
@@ -417,7 +416,8 @@ async function updateForceData(updatingCharacter, forceType, templateForce) {
       usedKeys.add(key);
       const templateContent = templateContentMap.get(key);
       if (templateContent) {
-        const updatedContentEntry = { ...templateContent, checked: content.checked };
+        const tries = content.tries !== undefined ? content.tries : templateContent.tries;
+        const updatedContentEntry = { ...templateContent, checked: content.checked, date: content.date, tries };
         updatedContent.push(updatedContentEntry);
       }
     }
