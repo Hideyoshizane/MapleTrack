@@ -454,7 +454,11 @@ async function loadForce(characterData, isArcane){
       levelWrapper.appendChild(expInput);
 
       for(forceContent of force.content){
-        const checkbox = createCheckboxWithLabel('forceCheckbox', `${forceContent.contentType}`, forceContent.checked);
+        let expGain = forceContent.expGain;
+        if(forceContent.contentType == 'Reverse City' || forceContent.contentType == 'Yum Yum Island'){
+          expGain = '2x';
+        }
+        const checkbox = createCheckboxWithLabel('forceCheckbox', `${forceContent.contentType}: +${expGain}`, forceContent.checked);
         checkboxContent.appendChild(checkbox);
       }
     }

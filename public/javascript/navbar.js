@@ -1,4 +1,4 @@
-import { DateTime } from "luxon";
+const { DateTime } = luxon;
 
 document.addEventListener("DOMContentLoaded", function() {
   const dailyOutput = document.getElementById("daily");

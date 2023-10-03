@@ -1,7 +1,8 @@
 document.addEventListener('DOMContentLoaded', async () => {
   try {
 
-    const data = await fetchData('/userServer');
+    const data = await fetch('/userServer').then(response => response.json());
+
     await loadServerButtons(data);
   
     const serverSelector = document.getElementById('serverSelector');
@@ -25,11 +26,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 });
 
-async function fetchData(url) {
-  const response = await fetch(url);
-  return response.json();
-}
-
 async function loadServerButtons(data){
   const serverSelector = document.getElementById('serverSelector');
   const selectedServer  = document.querySelector('.selectedServer');
@@ -37,7 +33,11 @@ async function loadServerButtons(data){
   let isFirstButton = true;
 
   try {
-    const serverDataPromises = data.map(serverID => fetchData(`/serverName/${serverID}`));
+    const serverDataPromises = data.map(async (serverID) => {
+      const response = await fetch(`/serverName/${serverID}`);
+      return response.json();
+    });
+
     const serverDataArray = await Promise.all(serverDataPromises);
 
     const fragment = document.createDocumentFragment();
@@ -299,7 +299,7 @@ async function createCharacterCards(){
   const username = userDataScript.getAttribute('data-username');
 
 
-  const characters = await fetchData(`/${username}/${selectedServer}`);
+  const characters = await fetch(`/${username}/${selectedServer}`).then(response => response.json());
 
   const characterCards = await Promise.all(characters.map(generateCard));
 

@@ -1,4 +1,3 @@
-
 const path = window.location.pathname;
 const segments = path.split('/');
 const username = segments[1];
@@ -14,20 +13,24 @@ document.addEventListener('DOMContentLoaded', async () => {
   await loadCharacterContent(characterData);
 
   let dailyButtons = document.querySelectorAll('.dailyButton');
-  dailyButtons.forEach((dailyButton) => {
-    dailyButton.addEventListener('click', async (event) => {
-      if (!dailyButton.disabled) {
-        await increaseDaily(event, characterData);
-      }
+  if(dailyButtons.length > 0) {
+    dailyButtons.forEach((dailyButton) => {
+      dailyButton.addEventListener('click', async (event) => {
+        if (!dailyButton.disabled) {
+          await increaseDaily(event, characterData);
+        }
+      });
     });
-  });
+  }
 
   weeklyButtons = document.querySelectorAll('.weeklyButton');
-  weeklyButtons.forEach((weeklyButton) => {
-    weeklyButton.addEventListener('click', (event) => {
-      increaseWeekly(event, characterData);
+  if(weeklyButtons.length > 0){
+    weeklyButtons.forEach((weeklyButton) => {
+      weeklyButton.addEventListener('click', (event) => {
+        increaseWeekly(event, characterData);
+      });
     });
-  });
+  }
 
   increaseAllButton = document.querySelector('.increaseAllButton');
   increaseAllButton.addEventListener('click', async (event) => {
@@ -129,14 +132,18 @@ async function loadCharacterNameDiv(characterData){
 
   const characterInfo = createDiv('nameLinkLegion');
   
-  const bossIconpath = '../../public/assets/icons/menu/boss_slayer.svg';
-  const bossIcon = await loadEditableSVGFile(bossIconpath, 'bossIcon');
+ 
 
   const characterName =  createSpan('characterName', characterData.name);
   
   const characterIconDiv = createDiv('characterIconDiv');
 
-  characterIconDiv.appendChild(bossIcon);
+  if(characterData.bossing == true){
+    const bossIconpath = '../../public/assets/icons/menu/boss_slayer.svg';
+    const bossIcon = await loadEditableSVGFile(bossIconpath, 'bossIcon');
+    characterIconDiv.appendChild(bossIcon);
+  }
+
   characterIconDiv.appendChild(characterName);
 
   characterInfo.appendChild(characterIconDiv);
@@ -481,6 +488,10 @@ function createDailyButton(Force, characterData, isArcane = false){
     dailyButton.textContent = "Daily done!";
     dailyButton.disabled = true;
   }
+  if(Force.content[0].checked == false){
+    dailyButton.disabled = true;
+    dailyButton.textContent = "OFF!";
+  }
 
   dailyButton.setAttribute('name', force.name);
   dailyButton.setAttribute('value', dailyValue);
@@ -516,6 +527,10 @@ function createWeeklyButton(Force){
   else{
     weeklyButton.disabled = true;
     weeklyButton.textContent = 'Done!';
+  }
+  if(Force.content[1].checked == false){
+    weeklyButton.disabled = true;
+    weeklyButton.textContent = 'OFF!';
   }
   weeklyButton.setAttribute('tries', Force.content[1].tries);
   weeklyButton.setAttribute('area' , Force.name);

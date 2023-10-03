@@ -95,6 +95,7 @@ const templateCharacter = {
         },
         {
           contentType: "Erda Spectrum",
+          expGain: 15,
           checked: false,
           tries: 3,
           maxTries: 3,
@@ -121,6 +122,7 @@ const templateCharacter = {
         },
         {
           contentType: "Hungry Muto",
+          expGain: 15,
           checked: false,
           tries: 3,
           maxTries: 3,
@@ -148,6 +150,7 @@ const templateCharacter = {
         {
           contentType: "Dream Defender",
           checked: false,
+          expGain: 15,
           tries: 3,
           maxTries: 3,
           date: null
@@ -168,6 +171,7 @@ const templateCharacter = {
         },
         {
           contentType: "Spirit Savior",
+          expGain: 15,
           checked: false,
           tries: 3,
           maxTries: 3,
@@ -189,6 +193,7 @@ const templateCharacter = {
         },
         {
           contentType: "Ranheim Defense",
+          expGain: 15,
           checked: false,
           tries: 3,
           maxTries: 3,
@@ -210,6 +215,7 @@ const templateCharacter = {
         },
         {
           contentType: "Esfera Guardian",
+          expGain: 15,
           checked: false,
           tries: 3,
           maxTries: 3,
