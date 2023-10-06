@@ -378,7 +378,7 @@ async function updateCharactersWeekly(userID) {
     const userLastLogin = DateTime.fromJSDate(userData.date);
     const nextMonday = userLastLogin.plus({ days: 1 }).set({ weekday: 2, hour: 0, minute: 0, second: 0, millisecond: 0 });
     // Check if the last login date is before the most recent Monday midnight (UTC)
-    if ((userLastLogin < nextMonday) && (timeNow > nextMonday)) {
+    if (timeNow >= nextMonday) {
       for (const server of userData.servers) {
         for (const character of server.characters) {
           for (const force of character.ArcaneForce) {

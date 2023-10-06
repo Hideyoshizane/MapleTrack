@@ -30,6 +30,8 @@ router.get('/home', authenticate.ensureAuthenticated, userController.home);
 
 router.get('/search', searchController.search);
 
+router.get('/weeklyBoss', authenticate.ensureAuthenticated, userController.weeklyBoss);
+
 router.get('/:username/:server/:characterClass', authenticate.ensureAuthenticated, characterController.redirectCharacter);
 
 router.get('/:username/:server/:characterCode/edit', authenticate.ensureAuthenticated, characterController.editCharacter);

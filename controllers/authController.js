@@ -5,7 +5,7 @@ const { searchServersAndCreateMissing } = require('../models/servers');
 const {createMissingCharacters} = require('../models/character');
 const {updateCharacters} = require('../models/character');
 const {updateCharactersWeekly} = require('../models/character');
-const {updateLastLogin} = require('../models/user');
+const {updateLastLogin, updateWeeklyBosses} = require('../models/user');
 
 module.exports = {
   login: async (ctx, next) => {
@@ -31,6 +31,7 @@ module.exports = {
           await createMissingCharacters(ctx.session.passport.user._id, ctx.session.passport.user.username);
           await updateCharacters(ctx.session.passport.user._id);
           await updateCharactersWeekly(ctx.session.passport.user._id);
+          await updateWeeklyBosses(ctx.session.passport.user._id);
           await updateLastLogin(ctx.session.passport.user._id);
           ctx.redirect('/home');
         }

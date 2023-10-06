@@ -25,6 +25,7 @@ const userSchema = new mongoose.Schema({
         maxlength: 61
     },
     date: {type: Date},
+    weeklyBosses: {type: Number},
     servers: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Server'
@@ -54,9 +55,26 @@ async function updateLastLogin(userID){
     await userData.save();
 }
 
+async function updateWeeklyBosses(userID){
+    const userData = await User.findById(userID);
+    const timeNow = DateTime.utc();
+    const userLastLogin = DateTime.fromJSDate(userData.date);
+    const nextWednesday = userLastLogin.plus({ days: 1 }).set({ weekday: 3, hour: 0, minute: 0, second: 0, millisecond: 0 });
+   // Check if the last login date is before the most recent Wednesday midnight (UTC)
+    if (timeNow >= nextWednesday) {
+        userData.weeklyBosses = Number(0);
+        await userData.save();
+        console.log("Bosses updated.");
+    }
+    else{
+        console.log("Bosses not needed update.");
+    }
+}
+
 
 module.exports = {
     User,
     validate,
-    updateLastLogin
+    updateLastLogin,
+    updateWeeklyBosses
 };

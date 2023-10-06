@@ -6,8 +6,6 @@ const characterCode = segments[3];
 
 window.CharacterData;
 
-const { DateTime } = luxon;
-
 document.addEventListener('DOMContentLoaded', async () => {
   characterData = await fetchCharacterData(username, server, characterCode);
   await loadCharacterContent(characterData);
