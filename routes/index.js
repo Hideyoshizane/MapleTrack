@@ -28,7 +28,7 @@ router.post('/signup', userController.signup);
 
 router.get('/home', authenticate.ensureAuthenticated, userController.home);
 
-router.get('/search', searchController.search);
+router.get('/search', authenticate.ensureAuthenticated, searchController.search);
 
 router.get('/weeklyBoss', authenticate.ensureAuthenticated, userController.weeklyBoss);
 
@@ -37,8 +37,6 @@ router.get('/:username/:server/:characterClass', authenticate.ensureAuthenticate
 router.get('/:username/:server/:characterCode/edit', authenticate.ensureAuthenticated, characterController.editCharacter);
 
 router.get('/code/:username/:server/:characterCode', characterController.getCharacterData);
-
-router.get('/username', authenticate.ensureAuthenticated, searchController.username);
 
 router.get('/userServer', authenticate.ensureAuthenticated, searchController.userServer);
 

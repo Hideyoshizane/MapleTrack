@@ -117,52 +117,35 @@ function cardClickRedirect(){
   var url = `${username}/${server}/${character}`;
   window.location.href = url;
 }
-
-function createDiv(className, content) {
-  const div = document.createElement('div');
-
-  if (className) {
-    div.classList.add(className);
-  }
-
-  if (content !== undefined) {
-    div.textContent = content;
-  }
-
-  return div;
-}
-
-function createSpan(className, content) {
-  const span = document.createElement('span');
+function createDOMElement(tag, className = '', content = '') {
+  const element = document.createElement(tag);
 
   if (className) {
-    span.classList.add(className);
+    element.classList.add(className);
   }
 
-  if (content !== undefined) {
-    span.textContent  = content;
+  if (content !== '') {
+    element.textContent = content;
   }
 
-  return span;
+  return element;
 }
-
 async function createImageElement(src, alt, className = '') {
-  const image = document.createElement('img');
+  const image = createDOMElement('img', className);
   image.src = src;
   image.alt = alt;
-  if (className) {
-      image.classList.add(className);
-  }
+
   await image.decode();
   return image;
 }
+
 
 async function createServerButton(serverData) {
   const createdButton = document.createElement('button');
   createdButton.classList.add('serverButton');
 
   const serverImage = await createImageElement(`${serverData.img}.webp`, serverData.name, 'serverIcon');
-  const serverNameSpan = createSpan('', serverData.name);
+  const serverNameSpan = createDOMElement('span', '', serverData.name);
   const checkSVG = createCheckSVG();
 
   createdButton.appendChild(serverImage);
@@ -350,25 +333,25 @@ function filterCharacterCards(selectedValues){
 
 async function generateCard(characterData){
   //Arcame Force Block
-  const arcaneForce = createDiv('arcaneForce');
+  const arcaneForce = createDOMElement('div', 'arcaneForce');
 
-  const spanArcaneForce = createSpan('Title','Arcane Force');
+  const spanArcaneForce = createDOMElement('span', 'Title','Arcane Force');
   arcaneForce.appendChild(spanArcaneForce);
 
   const arcaneForceContent = await createForce(characterData, 'arcane');
   arcaneForce.appendChild(arcaneForceContent);
 
   //Sacred Force Block
-  const sacredForce = createDiv('sacredForce');
+  const sacredForce = createDOMElement('div', 'sacredForce');
 
-  const spanSacredForce = createSpan('Title','Sacred Force');
+  const spanSacredForce = createDOMElement('span', 'Title','Sacred Force');
   sacredForce.appendChild(spanSacredForce);
 
   const sacredForceContent = await createForce(characterData, 'sacred');
   sacredForce.appendChild(sacredForceContent);
 
   //appending Arcane and Sacred Force
-  const forceDiv = createDiv('forceDiv');
+  const forceDiv = createDOMElement('div', 'forceDiv');
   forceDiv.appendChild(arcaneForce);
   forceDiv.appendChild(sacredForce);
 
@@ -376,7 +359,7 @@ async function generateCard(characterData){
   const portrait = await createCharacterPortrait(characterData);
 
   //upper part appending
-  const upperPart = createDiv('upperPart');
+  const upperPart = createDOMElement('div', 'upperPart');
   upperPart.appendChild(forceDiv);
   upperPart.appendChild(portrait);
   
@@ -388,7 +371,7 @@ async function generateCard(characterData){
   const legionContainer = await createLegionContent(characterData);
 
   //Appending
-  const linkLegion = createDiv('linkLegionContainer');
+  const linkLegion = createDOMElement('div', 'linkLegionContainer');
 
   linkLegion.appendChild(linkSkillContainer);
   linkLegion.appendChild(legionContainer);
@@ -398,7 +381,7 @@ async function generateCard(characterData){
 
   //LowerPart appending
 
-  const lowerPart = createDiv('lowerPart');
+  const lowerPart = createDOMElement('div', 'lowerPart');
   lowerPart.appendChild(linkLegion);
   lowerPart.appendChild(nameAndLevel);
 
@@ -406,7 +389,7 @@ async function generateCard(characterData){
   const levelBarWrapper = await createLeveLBar(characterData);
 
 
-  const cardBody = createDiv('cardBody');
+  const cardBody = createDOMElement('div', 'cardBody');
 
   cardBody.setAttribute('job-type', characterData.jobType);
   cardBody.setAttribute('characterClass', characterData.code);
@@ -424,7 +407,7 @@ async function createForce(characterData, forceType) {
 
   try {
     for (const forceArea of forceData) {
-      const wrapper = createDiv(forceType === 'arcane' ? 'arcaneWrapper' : 'sacredWrapper');
+      const wrapper = createDOMElement('div', forceType === 'arcane' ? 'arcaneWrapper' : 'sacredWrapper');
       const areaName = forceArea.name;
       const areaCode = areaName.replace(/\s+/g, '_').toLowerCase();
 
@@ -435,7 +418,7 @@ async function createForce(characterData, forceType) {
       const forceImg = await createImageElement(forceImgSrc,forceImgAlt, forceImgClassName);
 
       var level = await setForceLevel(forceArea, characterData, forceImg, forceType);
-      const forceLevel = createSpan('', level);
+      const forceLevel = createDOMElement('span', '', level);
 
       wrapper.appendChild(forceImg);
       wrapper.appendChild(forceLevel);
@@ -477,14 +460,14 @@ async function createCharacterPortrait(characterData){
 }
 
 async function createLinkSkillContent(characterData){
-    const linkImageLevelDiv = createDiv('linkImageLevel');
+    const linkImageLevelDiv = createDOMElement('div', 'linkImageLevel');
 
-    const linkspan = createSpan('linkLegionTitle', 'Link Skill');
+    const linkspan = createDOMElement('span', 'linkLegionTitle', 'Link Skill');
 
     linkSkillData = await fetch('../../public/data/linkskill.json').then(response => response.json());
     filteredLink = linkSkillData.find(item => item.name === characterData.linkSkill);
 
-    const wrapper = createDiv('linkWrapper');
+    const wrapper = createDOMElement('div', 'linkWrapper');
 
     const linkImg = await createImageElement(filteredLink.image, filteredLink.name, 'linkImg');
 
@@ -504,7 +487,7 @@ async function createLinkSkillContent(characterData){
         LinkLevelText = 'Lv. 1';
     }
 
-    const linkLevel = createSpan('linkLevel',LinkLevelText);
+    const linkLevel = createDOMElement('span', 'linkLevel',LinkLevelText);
 
     wrapper.appendChild(linkImg);
     wrapper.appendChild(linkLevel);
@@ -516,9 +499,9 @@ async function createLinkSkillContent(characterData){
 }
 
 async function createLegionContent(characterData){
-  const legionDiv = createDiv('legionDiv');
+  const legionDiv = createDOMElement('div', 'legionDiv');
 
-  const legionspan = createSpan('linkLegionTitle', 'Legion');
+  const legionspan = createDOMElement('span', 'linkLegionTitle', 'Legion');
 
   legionData = await fetch('../../public/data/legionsystems.json').then(response => response.json());
   filterLegion = legionData.find(item => item.name === characterData.legion);
@@ -569,9 +552,9 @@ async function createBossIconAndName(characterData) {
   innerSVG.setAttribute('width', '38');
   innerSVG.setAttribute('height', '38');
 
-  const characterName = createSpan('characterName', characterData.name);
+  const characterName = createDOMElement('span', 'characterName', characterData.name);
 
-  const nameAndIcon = createDiv('nameAndIcon');
+  const nameAndIcon = createDOMElement('div', 'nameAndIcon');
 
   if (characterData.bossing) {
     nameAndIcon.appendChild(bossIcon);
@@ -601,13 +584,13 @@ async function loadEditableSVGFile(filePath) {
 
 async function createLowerPart(characterData){
   const nameAndIcon = await createBossIconAndName(characterData);
-  const job = createSpan('job', characterData.job);
+  const job = createDOMElement('span', 'job', characterData.job);
 
-  const levelSpan = createSpan('level', `${characterData.level}/${characterData.targetLevel}`);
+  const levelSpan = createDOMElement('span', 'level', `${characterData.level}/${characterData.targetLevel}`);
 
   setStyle(levelSpan, characterData, true);
   
-  const nameAndLevel = createDiv('nameAndLevel');
+  const nameAndLevel = createDOMElement('div', 'nameAndLevel');
 
   nameAndLevel.appendChild(nameAndIcon);
   nameAndLevel.appendChild(job);
@@ -618,10 +601,10 @@ async function createLowerPart(characterData){
 
 async function createLeveLBar(characterData){
 
-  const levelBarWrapper = createDiv('levelBarWrapper');
-  const levelBar = createDiv('levelBar');
+  const levelBarWrapper = createDOMElement('div', 'levelBarWrapper');
+  const levelBar = createDOMElement('div', 'levelBar');
 
-  const progressBar = createDiv('progressBar');
+  const progressBar = createDOMElement('div', 'progressBar');
   if(characterData.level == 0){
     progressBar.style.width = 0;
   }

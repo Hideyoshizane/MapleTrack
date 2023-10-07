@@ -40,3 +40,16 @@ body{
     width: 154px;
     color: #3D3D3D;
 }
+
+.WeekProgressDiv{
+    height: 96px;
+    width: 328px;
+    background-color: #91C9E3;
+    border-radius: 25px;
+}
+
+.crystalIcon{
+    width: 65px;
+    height: 73px;
+    margin-left: 16px;
+}

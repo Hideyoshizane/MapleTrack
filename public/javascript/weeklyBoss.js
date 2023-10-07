@@ -5,33 +5,28 @@ document.addEventListener('DOMContentLoaded', async () => {
 })
 
 
-function createDiv(className, content) {
-	const div = document.createElement('div');
+function createDOMElement(tag, className = '', content = '') {
+    const element = document.createElement(tag);
+  
+    if (className) {
+      element.classList.add(className);
+    }
+  
+    if (content !== '') {
+      element.textContent = content;
+    }
+  
+    return element;
+  }
 
-	if (className) {
-		div.classList.add(className);
-	}
-
-	if (content !== undefined) {
-		div.textContent = content;
-	}
-
-	return div;
-}
-
-function createSpan(className, content) {
-	const span = document.createElement('span');
-
-	if (className) {
-		span.classList.add(className);
-	}
-
-	if (content !== undefined) {
-		span.textContent = content;
-	}
-
-	return span;
-}
+  async function createImageElement(src, alt, className = '') {
+    const image = createDOMElement('img', className);
+    image.src = src;
+    image.alt = alt;
+  
+    await image.decode();
+    return image;
+  }
 
 
 async function loadPage(){
@@ -50,12 +45,12 @@ async function loadTopButtons(){
 async function createBossingLogo(){
     const parentDiv = document.querySelector('.topButtons');
 
-    const bossDiv = createDiv('bossDiv');
+    const bossDiv = createDOMElement('div', 'bossDiv');
     
     const bossIconpath = '../../public/assets/icons/menu/boss_slayer.svg';
     const bossIcon = await loadEditableSVGFile(bossIconpath, 'bossIcon');
 
-    const bossSpan = createSpan('bossHunting', 'Boss Hunting');
+    const bossSpan = createDOMElement('span', 'bossHunting', 'Boss Hunting');
 
     bossDiv.appendChild(bossIcon);
     bossDiv.appendChild(bossSpan);
@@ -91,16 +86,32 @@ async function loadEditableSVGFile(filePath, className) {
   }
 
 async function createWeekProgress(){
-    
+    const username = document.getElementById("userdata").getAttribute('data-username');
+    //const userData = await fetch('/username').then(response => response.json());
+    console.log(username);
+
+    const parentDiv = document.querySelector('.topButtons');
+    const WeekProgressDiv = createDOMElement('div', 'WeekProgressDiv');
+    const crystal = await createImageElement(`../../public/assets/icons/menu/crystal.webp`,'Boss Crystal Icon', 'crystalIcon');
+
+    const WeekProgress = createDOMElement('span','WeekProgress', 'Week Progress');
+
+    WeekProgressDiv.appendChild(crystal);
+    parentDiv.appendChild(WeekProgressDiv);
+
 }
+
+
+
+
 async function createTotalGain(){
-    
+
 }
 async function createServerButton(){
-    
+
 }
 async function createEditBossesButton(){
-    
+
 }
   
 

@@ -69,55 +69,27 @@ async function loadCharacterImage(characterData) {
   parentDiv.appendChild(image);
 };
 
-function createButton(className, content){
-  const button = document.createElement('button');
+function createDOMElement(tag, className = '', content = '') {
+  const element = document.createElement(tag);
 
   if (className) {
-    button.classList.add(className);
+    element.classList.add(className);
   }
 
-  if (content !== undefined) {
-    button.textContent = content;
+  if (content !== '') {
+    element.textContent = content;
   }
 
-  return button;
-}
-
-function createDiv(className, content) {
-  const div = document.createElement('div');
-
-  if (className) {
-    div.classList.add(className);
-  }
-
-  if (content !== undefined) {
-    div.textContent = content;
-  }
-
-  return div;
-}
-
-function createSpan(className, content) {
-  const span = document.createElement('span');
-
-  if (className) {
-    span.classList.add(className);
-  }
-
-  if (content !== undefined) {
-    span.textContent  = content;
-  }
-
-  return span;
+  return element;
 }
 
 async function loadTopButtons(){
   const parentDiv = document.querySelector('.characterData');
 
-  const blockDiv = createDiv('buttonWrapper');
+  const blockDiv = createDOMElement('div','buttonWrapper');
 
-  const increaseAllButon = createButton('increaseAllButton','Increase all');
-  const editButton = createButton('editButton','Edit Character');
+  const increaseAllButon = createDOMElement('button', 'increaseAllButton','Increase all');
+  const editButton = createDOMElement('button','editButton','Edit Character');
   
   blockDiv.appendChild(increaseAllButon);
   blockDiv.appendChild(editButton);
@@ -128,13 +100,13 @@ async function loadTopButtons(){
 async function loadCharacterNameDiv(characterData){
   const parentDiv = document.querySelector('.characterData');
 
-  const characterInfo = createDiv('nameLinkLegion');
+  const characterInfo = createDOMElement('div','nameLinkLegion');
   
  
 
-  const characterName =  createSpan('characterName', characterData.name);
+  const characterName = createDOMElement('span', 'characterName', characterData.name);
   
-  const characterIconDiv = createDiv('characterIconDiv');
+  const characterIconDiv = createDOMElement('div','characterIconDiv');
 
   if(characterData.bossing == true){
     const bossIconpath = '../../public/assets/icons/menu/boss_slayer.svg';
@@ -146,16 +118,17 @@ async function loadCharacterNameDiv(characterData){
 
   characterInfo.appendChild(characterIconDiv);
 
-  const linkLegionClassJob = createDiv('linkLegionClassJob');
+  const linkLegionClassJob = createDOMElement('div','linkLegionClassJob');
 
   const linkSkill = await loadLinkSkillDiv(characterData);
   const legion = await loadLegionDiv(characterData);
 
-  const JobType = createSpan('classType', characterData.class);
+  const JobType = createDOMElement('span','classType', characterData.class);
+  adjustFontSizeToFit(JobType);
 
-  const JobLevel = createSpan('jobLevel', characterData.job);
+  const JobLevel = createDOMElement('span','jobLevel', characterData.job);
 
-  const JobDiv = createDiv('jobDiv');
+  const JobDiv = createDOMElement('div','jobDiv');
 
   JobDiv.appendChild(JobType);
   JobDiv.appendChild(JobLevel);
@@ -168,6 +141,28 @@ async function loadCharacterNameDiv(characterData){
   parentDiv.appendChild(characterInfo);
 }
 
+function adjustFontSizeToFit(JobType) {
+  const copy = JobType.cloneNode(true); 
+  const container = document.createElement('div');
+  container.style.position = 'absolute';
+  container.style.left = '-9999px';
+  container.appendChild(copy);
+  document.body.appendChild(container);
+  let width = copy.offsetWidth;
+
+  const maxWidth = 367;
+  const originalFontSize = 56;
+  let fontSize = originalFontSize;
+  copy.style.fontSize = fontSize + 'px';
+  console.log(width);
+  while (width > maxWidth && fontSize > 0) {
+    fontSize -= 1;
+    copy.style.fontSize = fontSize + 'px';
+    width = copy.offsetWidth;
+  }
+  document.body.removeChild(container);
+  JobType.style.fontSize = fontSize + 'px';
+}
 
 
 async function loadEditableSVGFile(filePath, className) {
@@ -192,14 +187,14 @@ async function loadEditableSVGFile(filePath, className) {
 }
 
 async function loadLinkSkillDiv(characterData){
-  const linkspan = createSpan('linkLegionTitle', 'Link Skill');
+  const linkspan = createDOMElement('span', 'linkLegionTitle', 'Link Skill');
 
   linkSkillData = await fetch('../../public/data/linkskill.json').then(response => response.json());
   filteredLink = linkSkillData.find(item => item.name === characterData.linkSkill);
 
   const linkImg = await createImageElement(filteredLink.image, filteredLink.name, `linkImg`);
  
-  const linkSkillBlock = createDiv('linkSkillBlock');
+  const linkSkillBlock = createDOMElement('div','linkSkillBlock');
 
   linkSkillBlock.appendChild(linkspan);
   linkSkillBlock.appendChild(linkImg);
@@ -212,7 +207,7 @@ async function loadLegionDiv(characterData) {
   legionData = await fetch('../../public/data/legionsystems.json').then(response => response.json());
   filterLegion = legionData.find(item => item.name === characterData.legion);
 
-  const legionspan = createSpan('linkLegionTitle', 'Legion');
+  const legionspan = createDOMElement('span','linkLegionTitle', 'Legion');
 
   let legionRank = getRank(characterData);
   const legionImgSrc = legionRank === 'no_rank'
@@ -221,7 +216,7 @@ async function loadLegionDiv(characterData) {
 
   const legionImg = await createImageElement(legionImgSrc, `${characterData.class} legion`, 'legionImg');
 
-  const legionBlock = createDiv('legionBlock');
+  const legionBlock = createDOMElement('div','legionBlock');
 
   legionBlock.appendChild(legionspan);
   legionBlock.appendChild(legionImg);
@@ -252,11 +247,11 @@ function getRank(characterData) {
 async function loadLevelAndLevelBar(characterData){
   const parentDiv = document.querySelector('.characterData');
 
-  const level = createSpan('level', 'Level');
+  const level = createDOMElement('span','level', 'Level');
 
-  const levelNumber = createSpan('levelNumber',`${characterData.level}/${characterData.targetLevel}`);
+  const levelNumber = createDOMElement('span', 'levelNumber',`${characterData.level}/${characterData.targetLevel}`);
 
-  const levelDiv = createDiv('levelDiv');
+  const levelDiv = createDOMElement('div','levelDiv');
 
   const levelBar = createProgressBar(characterData, characterData.level, characterData.targetLevel, 800, 32, 28);
 
@@ -268,11 +263,11 @@ async function loadLevelAndLevelBar(characterData){
 }
 
 function createProgressBar(characterData, current, total, maxWidth, outerHeight, innerHeight, isArcane = false, isForce = false) {
-  const outerDiv = createDiv('OuterEXPBar');
+  const outerDiv = createDOMElement('div','OuterEXPBar');
   outerDiv.style.width = `${maxWidth}px`;
   outerDiv.style.height = `${outerHeight}px`;
 
-  const innerDiv = createDiv('InnerEXPBar');
+  const innerDiv = createDOMElement('div','InnerEXPBar');
   innerDiv.style.height = `${innerHeight}px`;
   let barSize = (current / total) * maxWidth;
     if ((isArcane && total.level === 20) && isForce) {
@@ -333,15 +328,15 @@ async function loadForce(characterData, isArcane){
   const forceType = isArcane ? 'ArcaneForce' : 'SacredForce';
   const forceData = characterData[forceType];
 
-  const Title = createSpan(forceType, isArcane ? 'Arcane Force' : 'Sacred Force');
+  const Title = createDOMElement('span', forceType, isArcane ? 'Arcane Force' : 'Sacred Force');
 
-  const forceDiv = createDiv(`${forceType}Div`);
+  const forceDiv = createDOMElement('div',`${forceType}Div`);
   forceDiv.appendChild(Title);
 
-  const forceGrid = createDiv(`${forceType}Grid`);
+  const forceGrid = createDOMElement('div',`${forceType}Grid`);
 
   for(force of forceData){
-    const forceWrapper = createDiv(`${forceType}Wrapper`);
+    const forceWrapper = createDOMElement('div',`${forceType}Wrapper`);
 
     const areaName = force.name;
     const areaCode = areaName.replace(/\s+/g, '_').toLowerCase();
@@ -358,9 +353,9 @@ async function loadForce(characterData, isArcane){
     const jsonPath = isArcane ? '../../public/data/arcaneforceexp.json' : '../../public/data/sacredforceexp.json';
     const expTable = await fetch(jsonPath).then(response => response.json());
     
-    const levelWrapper = createDiv('levelWrapper');
+    const levelWrapper = createDOMElement('div','levelWrapper');
 
-    const level = createSpan(`${forceType}Level`, `Level: ${forceLevel}`);
+    const level = createDOMElement('span',`${forceType}Level`, `Level: ${forceLevel}`);
 
     levelWrapper.appendChild(level);
 
@@ -380,14 +375,14 @@ async function loadForce(characterData, isArcane){
   }
 
 
-    const forceDataElement = createDiv(`${forceType}Data`);
+    const forceDataElement = createDOMElement('div',`${forceType}Data`);
     forceDataElement.setAttribute('area', areaName);
     forceDataElement.appendChild(levelWrapper);
     forceDataElement.appendChild(expBar);
     if((isArcane && force.level < 20) || (!isArcane && force.level < 11)){
       if (characterData.level >= force.minLevel) {
         const daysToMax = await returnDaysToMax(force, expTable, characterData, isArcane);
-        const wrap = createDiv();
+        const wrap = createDOMElement('div');
         wrap.className = 'buttons';
         wrap.style.display = 'flex';
         wrap.style.justifyContent = 'space-between';
@@ -404,7 +399,7 @@ async function loadForce(characterData, isArcane){
         forceDataElement.appendChild(wrap);
         
       } else {
-        const unlockText = createSpan('unlockText', `Unlock at Level ${force.minLevel}`);
+        const unlockText = createDOMElement('span','unlockText', `Unlock at Level ${force.minLevel}`);
         forceDataElement.appendChild(unlockText);
       }
     }
@@ -417,7 +412,7 @@ async function loadForce(characterData, isArcane){
 }
 
 async function createImageElement(src, alt, className = '') {
-  const image = document.createElement('img');
+  const image = createDOMElement('img', className);
   image.src = src;
   image.alt = alt;
   if (className) {
@@ -436,12 +431,12 @@ function createExpText(Force, expTable, isArcane = false){
     if((isArcane && Force.level < 20) || (!isArcane && Force.level < 11)){
       const nextLevelEXP = expTable.level[Force.level].EXP;
     
-      expNumber = createSpan('expNumber', `${Force.exp}/${nextLevelEXP}`);
+      expNumber = createDOMElement('span', 'expNumber', `${Force.exp}/${nextLevelEXP}`);
     } else{
-      expNumber = createSpan('expNumber', `MAX`);
+      expNumber = createDOMElement('span', 'expNumber', `MAX`);
     }
     
-    const wrap = createDiv();
+    const wrap = createDOMElement('div');
 
     wrap.appendChild(exp);
     wrap.appendChild(expNumber);
@@ -458,7 +453,7 @@ async function returnDaysToMax(Force, expTable, characterData, isArcane = false)
   let daysToReachTotalExp = await updateDayToMax(Force, isArcane, characterData);
 
   
-  const daysToMax = createSpan('daysToMax', isArcane ? `Days to Level 20: ${daysToReachTotalExp}` : `Days to Level 11: ${daysToReachTotalExp}`);
+  const daysToMax = createDOMElement('span', 'daysToMax', isArcane ? `Days to Level 20: ${daysToReachTotalExp}` : `Days to Level 11: ${daysToReachTotalExp}`);
 
   return daysToMax;
 }
@@ -478,7 +473,7 @@ function createDailyButton(Force, characterData, isArcane = false){
   let currentDate = DateTime.utc();
   let date = DateTime.fromISO(Force.content[0].date);
   let duration = currentDate.diff(date, 'days').days;
-  const dailyButton = createButton('dailyButton');
+  const dailyButton = createDOMElement('button','dailyButton');
   if (duration >= 1 || isNaN(duration)){
     dailyButton.textContent = `Daily: + ${dailyValue}`;
   }
@@ -518,7 +513,7 @@ function getDailyValue(Force, characterData, isArcane = false){
 
 function createWeeklyButton(Force){
 
-  const weeklyButton = createButton('weeklyButton');
+  const weeklyButton = createDOMElement('button', 'weeklyButton');
   if(Force.content[1].tries > 0){
     weeklyButton.textContent =  `Weekly: ${Force.content[1].tries}/3`;
   }

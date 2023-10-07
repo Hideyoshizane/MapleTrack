@@ -88,65 +88,27 @@ async function loadCharacterImage(characterData) {
 	parentDiv.appendChild(image);
 }
 
-function createButton(className, content) {
-	const button = document.createElement('button');
+function createDOMElement(tag, className = '', content = '', type = '') {
+    const element = document.createElement(tag);
+  
+    if (className) {
+      element.classList.add(className);
+    }
+  
+    if (content !== '') {
+      element.textContent = content;
+    }
 
-	if (className) {
-		button.classList.add(className);
+	if(tag == 'input'){
+		element.placeholder = content;
 	}
-
-	if (content !== undefined) {
-		button.textContent = content;
+	
+	if(type !== ''){
+		element.type = type;
 	}
-
-	return button;
-}
-
-function createDiv(className, content) {
-	const div = document.createElement('div');
-
-	if (className) {
-		div.classList.add(className);
-	}
-
-	if (content !== undefined) {
-		div.textContent = content;
-	}
-
-	return div;
-}
-
-function createInput(className, content, type) {
-	const input = document.createElement('input');
-
-	if (className) {
-		input.classList.add(className);
-	}
-
-	if (content !== undefined) {
-		input.placeholder = content;
-	}
-
-	if (type !== undefined) {
-		input.type = type;
-	}
-
-	return input;
-}
-
-function createSpan(className, content) {
-	const span = document.createElement('span');
-
-	if (className) {
-		span.classList.add(className);
-	}
-
-	if (content !== undefined) {
-		span.textContent = content;
-	}
-
-	return span;
-}
+  
+    return element;
+  }
 
 function createCheckboxWithLabel(className, labelText, checked) {
 	const container = document.createElement('label');
@@ -156,7 +118,7 @@ function createCheckboxWithLabel(className, labelText, checked) {
 	checkboxElement.type = 'checkbox';
 	checkboxElement.checked = checked;
 
-	const textSpan = createSpan(null, labelText);
+	const textSpan = createDOMElement('span',null, labelText);
 
 	container.appendChild(checkboxElement);
 	container.appendChild(textSpan);
@@ -184,10 +146,10 @@ function createSwitchButton(className, bossing) {
 async function loadTopButtons() {
 	const parentDiv = document.querySelector('.characterData');
 
-	const blockDiv = createDiv('buttonWrapper');
+	const blockDiv = createDOMElement('div', 'buttonWrapper');
 
-	const discardButton = createButton('discardButton', 'Discard Changes');
-	const saveButton = createButton('saveButton', 'Save Changes');
+	const discardButton = createDOMElement('button', 'discardButton', 'Discard Changes');
+	const saveButton = createDOMElement('button', 'saveButton', 'Save Changes');
 
 	blockDiv.appendChild(discardButton);
 	blockDiv.appendChild(saveButton);
@@ -197,7 +159,7 @@ async function loadTopButtons() {
 async function loadCharacterNameDiv(characterData) {
 	const parentDiv = document.querySelector('.characterData');
 
-	const characterInfo = createDiv('nameLinkLegion');
+	const characterInfo = createDOMElement('div','nameLinkLegion');
 
 	let bossIconPath;
 	if (characterData.bossing == true) {
@@ -208,30 +170,31 @@ async function loadCharacterNameDiv(characterData) {
 
 	const bossIcon = await loadEditableSVGFile(bossIconPath, 'bossIcon');
 
-	const characterName = createInput('characterName', characterData.name);
+	const characterName = createDOMElement('input', 'characterName', characterData.name);
 
-	const characterIconDiv = createDiv('characterIconDiv');
+	const characterIconDiv = createDOMElement('div', 'characterIconDiv');
 
 	characterIconDiv.appendChild(bossIcon);
 	characterIconDiv.appendChild(characterName);
 
 	characterInfo.appendChild(characterIconDiv);
 
-	const linkLegionClassJob = createDiv('linkLegionClassJob');
+	const linkLegionClassJob = createDOMElement('div', 'linkLegionClassJob');
 
 	const linkSkill = await loadLinkSkillDiv(characterData);
 	const legion = await loadLegionDiv(characterData);
 
-	const JobType = createSpan('classType', characterData.class);
+	const JobType = createDOMElement('span', 'classType', characterData.class);
+	adjustFontSizeToFit(JobType);
 
-	const JobLevel = createSpan('jobLevel', characterData.job);
+	const JobLevel = createDOMElement('span', 'jobLevel', characterData.job);
 
-	const JobDiv = createDiv('jobDiv');
+	const JobDiv = createDOMElement('div', 'jobDiv');
 
-	const bossText = createSpan('bossText', 'Bossing Character');
+	const bossText = createDOMElement('span', 'bossText', 'Bossing Character');
 	const switchButton = createSwitchButton('bossSwitch', characterData.bossing);
 
-	const bossArea = createDiv('bossArea');
+	const bossArea = createDOMElement('div', 'bossArea');
 
 	JobDiv.appendChild(JobType);
 	JobDiv.appendChild(JobLevel);
@@ -246,6 +209,29 @@ async function loadCharacterNameDiv(characterData) {
 	characterInfo.appendChild(linkLegionClassJob);
 	parentDiv.appendChild(characterInfo);
 }
+function adjustFontSizeToFit(JobType) {
+	const copy = JobType.cloneNode(true); 
+	const container = document.createElement('div');
+	container.style.position = 'absolute';
+	container.style.left = '-9999px';
+	container.appendChild(copy);
+	document.body.appendChild(container);
+	let width = copy.offsetWidth;
+  
+	const maxWidth = 367;
+	const originalFontSize = 56;
+	let fontSize = originalFontSize;
+	copy.style.fontSize = fontSize + 'px';
+	console.log(width);
+	while (width > maxWidth && fontSize > 0) {
+	  fontSize -= 1;
+	  copy.style.fontSize = fontSize + 'px';
+	  width = copy.offsetWidth;
+	}
+	document.body.removeChild(container);
+	JobType.style.fontSize = fontSize + 'px';
+  }
+  
 
 async function loadEditableSVGFile(filePath, className) {
 	try {
@@ -271,7 +257,7 @@ async function loadEditableSVGFile(filePath, className) {
 }
 
 async function loadLinkSkillDiv(characterData) {
-	const linkspan = createSpan('linkLegionTitle', 'Link Skill');
+	const linkspan = createDOMElement('span', 'linkLegionTitle', 'Link Skill');
 
 	linkSkillData = await fetch('../../../public/data/linkskill.json').then(
 		(response) => response.json()
@@ -286,7 +272,7 @@ async function loadLinkSkillDiv(characterData) {
 		`linkImg`
 	);
 
-	const linkSkillBlock = createDiv('linkSkillBlock');
+	const linkSkillBlock = createDOMElement('div', 'linkSkillBlock');
 
 	linkSkillBlock.appendChild(linkspan);
 	linkSkillBlock.appendChild(linkImg);
@@ -300,7 +286,7 @@ async function loadLegionDiv(characterData) {
 	);
 	filterLegion = legionData.find((item) => item.name === characterData.legion);
 
-	const legionspan = createSpan('linkLegionTitle', 'Legion');
+	const legionspan = createDOMElement('span', 'linkLegionTitle', 'Legion');
 
 	let legionRank = getRank(characterData);
 	const legionImgSrc =
@@ -314,7 +300,7 @@ async function loadLegionDiv(characterData) {
 		'legionImg'
 	);
 
-	const legionBlock = createDiv('legionBlock');
+	const legionBlock = createDOMElement('div', 'legionBlock');
 
 	legionBlock.appendChild(legionspan);
 	legionBlock.appendChild(legionImg);
@@ -345,21 +331,23 @@ function getRank(characterData) {
 async function loadLevelAndLevelBar(characterData) {
 	const parentDiv = document.querySelector('.characterData');
 
-	const level = createSpan('level', 'Level');
+	const level = createDOMElement('span', 'level', 'Level');
 
-	const levelNumber = createInput(
+	const levelNumber = createDOMElement(
+		'input',
 		'levelNumber',
 		`${characterData.level}`,
 		'number'
 	);
-	const levelTarget = createInput(
+	const levelTarget = createDOMElement(
+		'input',
 		'levelTarget',
 		`${characterData.targetLevel}`,
 		'number'
 	);
-	const Bar = createSpan('Bar', '/');
+	const Bar = createDOMElement('span', 'Bar', '/');
 
-	const levelDiv = createDiv('levelDiv');
+	const levelDiv = createDOMElement('div', 'levelDiv');
 
 	const levelBar = createProgressBar(
 		characterData,
@@ -389,12 +377,12 @@ function createProgressBar(
 	isArcane = false,
 	isForce = false
 ) {
-	const outerDiv = createDiv('OuterEXPBar');
+	const outerDiv = createDOMElement('div', 'OuterEXPBar');
 	outerDiv.style.width = `${maxWidth}px`;
 	outerDiv.style.height = `${outerHeight}px`;
 	outerDiv.setAttribute('jobType', characterData.jobType);
 
-	const innerDiv = createDiv('InnerEXPBar');
+	const innerDiv = createDOMElement('div', 'InnerEXPBar');
 	innerDiv.style.height = `${innerHeight}px`;
 	let barSize = (current / total) * maxWidth;
 	if (isArcane && total.level === 20 && isForce) {
@@ -454,18 +442,19 @@ async function loadForce(characterData, isArcane) {
 	const forceType = isArcane ? 'ArcaneForce' : 'SacredForce';
 	const forceData = characterData[forceType];
 
-	const Title = createSpan(
+	const Title = createDOMElement(
+		'span',
 		forceType,
 		isArcane ? 'Arcane Force' : 'Sacred Force'
 	);
 
-	const forceDiv = createDiv(`${forceType}Div`);
+	const forceDiv = createDOMElement('div', `${forceType}Div`);
 	forceDiv.appendChild(Title);
 
-	const forceGrid = createDiv(`${forceType}Grid`);
+	const forceGrid = createDOMElement('div', `${forceType}Grid`);
 
 	for (force of forceData) {
-		const forceWrapper = createDiv(`${forceType}Wrapper`);
+		const forceWrapper = createDOMElement('div', `${forceType}Wrapper`);
 
 		const areaName = force.name;
 		const areaCode = areaName.replace(/\s+/g, '_').toLowerCase();
@@ -489,17 +478,17 @@ async function loadForce(characterData, isArcane) {
 			: '../../../public/data/sacredforceexp.json';
 		const expTable = await fetch(jsonPath).then((response) => response.json());
 
-		const levelWrapper = createDiv('levelWrapper');
+		const levelWrapper = createDOMElement('div', 'levelWrapper');
 
-		const level = createSpan(`${forceType}Level`, `Level:`);
-		const levelInput = createInput('levelInput', `${force.level}`);
+		const level = createDOMElement('span', `${forceType}Level`, `Level:`);
+		const levelInput = createDOMElement('input', 'levelInput', `${force.level}`);
 
 		levelWrapper.appendChild(level);
-		let checkboxContent = createDiv('checkboxContent');
+		let checkboxContent = createDOMElement('div', 'checkboxContent');
 		if (characterData.level >= force.minLevel) {
 			levelWrapper.appendChild(levelInput);
-			const expContent = createSpan('expContent', 'EXP:');
-			const expInput = createInput('expInput', `${force.exp}`);
+			const expContent = createDOMElement('span', 'expContent', 'EXP:');
+			const expInput = createDOMElement('input', 'expInput', `${force.exp}`);
 			levelWrapper.appendChild(expContent);
 			levelWrapper.appendChild(expInput);
 
@@ -522,7 +511,7 @@ async function loadForce(characterData, isArcane) {
 			level.textContent = 'Level: 0';
 		}
 
-		const forceDataElement = createDiv(`${forceType}Data`);
+		const forceDataElement = createDOMElement('div', `${forceType}Data`);
 		forceDataElement.setAttribute('area', areaName);
 		forceDataElement.appendChild(levelWrapper);
 		if (characterData.level >= force.minLevel) {
@@ -530,7 +519,8 @@ async function loadForce(characterData, isArcane) {
 		}
 		if ((isArcane && force.level < 20) || (!isArcane && force.level < 11)) {
 			if (characterData.level < force.minLevel) {
-				const unlockText = createSpan(
+				const unlockText = createDOMElement(
+					'span',
 					'unlockText',
 					`Unlock at Level ${force.minLevel}`
 				);
@@ -546,35 +536,28 @@ async function loadForce(characterData, isArcane) {
 }
 
 async function createImageElement(src, alt, className = '') {
-	try {
-		const image = document.createElement('img');
-		image.src = src;
-		image.alt = alt;
-		if (className) {
-			image.classList.add(className);
-		}
-		await image.decode();
-		return image;
-	} catch (error) {
-		console.error(error);
-	}
-}
+    const image = createDOMElement('img', className);
+    image.src = src;
+    image.alt = alt;
+  
+    await image.decode();
+    return image;
+  }
+
 
 function createExpText(Force, expTable, isArcane = false) {
-	const exp = document.createElement('span');
-	exp.className = 'exp';
-	exp.innerText = 'EXP:';
+	const exp = createDOMElement('span', 'exp', 'EXP:');
 	let expNumber;
 
 	if ((isArcane && Force.level < 20) || (!isArcane && Force.level < 11)) {
 		const nextLevelEXP = expTable.level[Force.level].EXP;
 
-		expNumber = createSpan('expNumber', `${Force.exp}/${nextLevelEXP}`);
+		expNumber = createDOMElement('span', 'expNumber', `${Force.exp}/${nextLevelEXP}`);
 	} else {
-		expNumber = createSpan('expNumber', `MAX`);
+		expNumber = createDOMElement('span', 'expNumber', `MAX`);
 	}
 
-	const wrap = createDiv();
+	const wrap = createDOMElement('div');
 
 	wrap.appendChild(exp);
 	wrap.appendChild(expNumber);
@@ -662,13 +645,14 @@ async function updateForce(type, levelNumberValue) {
 			image.classList.add('off');
 			force.classList.add('off');
 			const levelWrapper = force.querySelector('.levelWrapper');
-			const wrap = createDiv('levelWrapper');
-			const level = createSpan(`${type}ForceLevel`, `Level: 0`);
+			const wrap = createDOMElement('div', 'levelWrapper');
+			const level = createDOMElement('span', `${type}ForceLevel`, `Level: 0`);
 			wrap.appendChild(level);
 			levelWrapper.replaceWith(wrap);
 
 			const checkboxContent = force.querySelector('.checkboxContent');
-			const unlockText = createSpan(
+			const unlockText = createDOMElement(
+				'span',
 				'unlockText',
 				`Unlock at Level ${areaData[0].minLevel}`
 			);
@@ -679,11 +663,11 @@ async function updateForce(type, levelNumberValue) {
 			image.classList.remove('off');
 			force.classList.remove('off');
 			const levelWrapper = force.querySelector('.levelWrapper');
-			const wrap = createDiv('levelWrapper');
-			const level = createSpan(`${type}ForceLevel`, `Level:`);
-			const levelInput = createInput('levelInput', `${areaData[0].level}`);
-			const expContent = createSpan('expContent', 'EXP:');
-			const expInput = createInput('expInput', `${areaData[0].exp}`);
+			const wrap = createDOMElement('div', 'levelWrapper');
+			const level = createDOMElement('span', `${type}ForceLevel`, `Level:`);
+			const levelInput = createDOMElement('input', 'levelInput', `${areaData[0].level}`);
+			const expContent = createDOMElement('span', 'expContent', 'EXP:');
+			const expInput = createDOMElement('input', 'expInput', `${areaData[0].exp}`);
 			wrap.appendChild(level);
 			wrap.appendChild(levelInput);
 			wrap.appendChild(expContent);
@@ -691,7 +675,7 @@ async function updateForce(type, levelNumberValue) {
 			levelWrapper.replaceWith(wrap);
 
 			const unlockText = areaDiv.querySelector('.unlockText');
-			let checkboxContent = createDiv('checkboxContent');
+			let checkboxContent = createDOMElement('div', 'checkboxContent');
 			for (const forceContent of areaData[0].content) {
 				const checkbox = createCheckboxWithLabel(
 					'forceCheckbox',
