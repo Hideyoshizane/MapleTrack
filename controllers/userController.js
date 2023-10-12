@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const { User, validate } = require('../models/user');
 const { searchServersAndCreateMissing } = require('../models/servers');
+const { createBossList } = require('../models/bossingList');
 
 module.exports = {
 	signup: async (ctx) => {
@@ -23,8 +24,9 @@ module.exports = {
 				return;
 			}
 
-			createdUser = new User({ username, email, password: hashedPassword, weeklyBosses: 0 });
-			searchServersAndCreateMissing(createdUser._id, createdUser.username);
+			createdUser = new User({ username, email, password: hashedPassword});
+			await searchServersAndCreateMissing(createdUser._id, createdUser.username);
+			await createBossList(createdUser.username);
 
 			await createdUser.save();
 			ctx.status = 200;

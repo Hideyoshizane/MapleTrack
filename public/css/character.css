@@ -142,6 +142,7 @@ body{
 .classType{
     font-size: 56px;
     font-family: 'Inter';
+    height: 68px;
     width: 367px;
     text-align: right;
 }

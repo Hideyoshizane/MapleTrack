@@ -70,6 +70,7 @@ async function loadServerButtons(data){
           createdButton.classList.toggle('checked');
         }
         fragment.appendChild(createdButton);
+
       } 
       serverSelector.appendChild(fragment);
       
@@ -207,7 +208,7 @@ function swapContentAndStoreCookie(selectedButton, serverButton) {
 function setCookie(name, value, days) {
   const expires = new Date();
   expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
-  document.cookie = `${name}=${encodeURIComponent(value)};expires=${expires.toUTCString()}`;
+  document.cookie = `${name}=${encodeURIComponent(value)};expires=${expires.toUTCString()};path=/`;
 }
 
 

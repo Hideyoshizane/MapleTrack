@@ -1,4 +1,5 @@
 const {Character} = require('../models/character');
+const {insertOnBossList, removeFromBossList} = require('../models/bossingList');
 
 module.exports = {
     redirectCharacter: async (ctx) => {
@@ -38,7 +39,8 @@ module.exports = {
                 targetLevel,
                 bossing,
                 ArcaneForce, 
-                SacredForce } = ctx.request.body;
+                SacredForce,
+                server } = ctx.request.body;
         const character = await Character.findById(_id);
         character.name = name;
         character.level = level;
@@ -68,6 +70,19 @@ module.exports = {
             }
           }
         }
+        if(bossing == true){
+          const characterData = {
+            id: character._id.toString(),
+            name: character.name,
+            code: character.code,
+            level: character.level,
+          };
+          await insertOnBossList(character.userOrigin, characterData, server);
+        }
+        else if (bossing == false){
+          await removeFromBossList(character.userOrigin, character._id.toString(), server);
+        }
+
         await character.save();
     
       } catch (error) {

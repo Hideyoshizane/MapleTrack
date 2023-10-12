@@ -65,5 +65,5 @@ async function createMissingServer(userID, missingServersData, username) {
 
 
 const Server = mongoose.model('Server', serverSchema);
-module.exports = {Server, serverSchema , searchServersAndCreateMissing, createMissingServer};
+module.exports = {Server, serverSchema , searchServersAndCreateMissing, createMissingServer, defaultServers};
 

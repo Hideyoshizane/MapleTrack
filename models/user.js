@@ -25,7 +25,6 @@ const userSchema = new mongoose.Schema({
         maxlength: 61
     },
     date: {type: Date},
-    weeklyBosses: {type: Number},
     servers: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Server'

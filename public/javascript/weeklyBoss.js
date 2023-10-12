@@ -1,9 +1,22 @@
+window.bossList;
+window.server;
+
 document.addEventListener('DOMContentLoaded', async () => {
+    server = getCookie('selectedServerContent');
+    //bossList = await fetchBossList(server);
     await loadPage();
-
-
 })
 
+async function fetchBossList(server){
+  try {
+    const username = document.getElementById("userdata").getAttribute('data-username');
+    const response = await fetch(`/code/${username}/${server}/${characterCode}`);
+    const characterData = await response.json();
+    return characterData;
+  } catch (error) {
+    console.error('Error fetching character data:', error);
+  }
+}
 
 function createDOMElement(tag, className = '', content = '') {
     const element = document.createElement(tag);
@@ -88,7 +101,6 @@ async function loadEditableSVGFile(filePath, className) {
 async function createWeekProgress(){
     const username = document.getElementById("userdata").getAttribute('data-username');
     //const userData = await fetch('/username').then(response => response.json());
-    console.log(username);
 
     const parentDiv = document.querySelector('.topButtons');
     const WeekProgressDiv = createDOMElement('div', 'WeekProgressDiv');
@@ -100,8 +112,6 @@ async function createWeekProgress(){
     parentDiv.appendChild(WeekProgressDiv);
 
 }
-
-
 
 
 async function createTotalGain(){
@@ -118,4 +128,27 @@ async function createEditBossesButton(){
 async function loadCharacterCards(){
 
 
+}
+
+
+
+
+
+
+function setCookie(name, value, days) {
+  const expires = new Date();
+  expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
+  document.cookie = `${name}=${encodeURIComponent(value)};expires=${expires.toUTCString()};path=/`;
+}
+
+
+function getCookie(name) {
+  const cookieArr = document.cookie.split(';');
+  for (let i = 0; i < cookieArr.length; i++) {
+    const cookiePair = cookieArr[i].split('=');
+    if (cookiePair[0].trim() === name) {
+      return decodeURIComponent(cookiePair[1]);
+    }
+  }
+  return null;
 }

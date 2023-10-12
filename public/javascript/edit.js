@@ -691,8 +691,9 @@ async function updateForce(type, levelNumberValue) {
 
 async function saveDataAndPost() {
 	let characterName = document.querySelector('.characterName').value;
+	let characterNamePlaceholder = document.querySelector('.characterName').placeholder;
 	if (characterName.length == 0) {
-		characterName = 'Character Name';
+		characterName = characterNamePlaceholder;
 	}
 
 	let bossSwitch = document.querySelector(
@@ -728,6 +729,7 @@ async function saveDataAndPost() {
 		bossing: bossSwitch,
 		ArcaneForce: arcaneForceArray,
 		SacredForce: sacredForceArray,
+		server: server
 	};
 	fetch('/updateCharacter', {
 		method: 'POST',
