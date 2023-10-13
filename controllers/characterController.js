@@ -76,6 +76,7 @@ module.exports = {
             name: character.name,
             code: character.code,
             level: character.level,
+            class: character.class,
           };
           await insertOnBossList(character.userOrigin, characterData, server);
         }

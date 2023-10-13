@@ -7,23 +7,21 @@ const bossList = mongoose.model('bossList', new mongoose.Schema({
     userOrigin:{
       type: String,
     },
-    weeklyBosses:{
-      type: Number,
-    },
-    totalGains:{
-      type: Number,
-    },
     server:[{
       name: String,
+      weeklyBosses: {type: Number},
+      totalGains:   {type: Number},
       characters: [{
         id:       {type: String},
         name:     {type: String},
         code:     {type: String},
+        class:    {type: String},
         level:    {type: Number, required: true},
         bosses: [{
           name:      {type: String},
           value:     {type: Number},
           reset:     {type: String},
+          checked:   {type: Boolean},
           date:      {type: Date}
         }]  
       }],
@@ -33,10 +31,10 @@ const bossList = mongoose.model('bossList', new mongoose.Schema({
 async function createBossList(username){
   const newBossList = new bossList({
     userOrigin: username,
-    weeklyBosses: 0,
-    totalGains: 0,
     server: defaultServers.map(server => ({
       name: server.name,
+      weeklyBosses: 0,
+      totalGains: 0,
       characters: [],
     })),
   });
@@ -61,6 +59,7 @@ async function insertOnBossList(username, characterData, server){
       name: characterData.name,
       code: characterData.code,
       level: characterData.level,
+      class: characterData.class,
     }
     serverToUpdate.characters.push(characterToList);
     await bossListDocument.save();

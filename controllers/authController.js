@@ -1,6 +1,4 @@
 const passport = require('koa-passport');
-const bcrypt = require('bcrypt');
-const User = require('../models/user');
 const { searchServersAndCreateMissing } = require('../models/servers');
 const {createMissingCharacters} = require('../models/character');
 const {updateCharacters} = require('../models/character');

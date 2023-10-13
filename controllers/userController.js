@@ -25,9 +25,9 @@ module.exports = {
 			}
 
 			createdUser = new User({ username, email, password: hashedPassword});
+			await createdUser.save();
 			await searchServersAndCreateMissing(createdUser._id, createdUser.username);
 			await createBossList(createdUser.username);
-
 			await createdUser.save();
 			ctx.status = 200;
 			ctx.redirect('/login');

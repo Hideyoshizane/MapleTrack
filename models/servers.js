@@ -52,16 +52,28 @@ async function createMissingServer(userID, missingServersData, username) {
     usernameSource: userID,
     characters: baseCharacters.map((char) => char._id),
   });
-  
+
   await Character.insertMany(baseCharacters);
-  await User.findOneAndUpdate(
-    { _id: userID }, 
-    { $addToSet: { servers: createdServer._id } }, 
-    { new: true }
-  );
-  await createdServer.save();
-  console.log(`${createdServer.name} inserted to the user.`);
+
+  try {
+    const tesing = await User.findById(userID);
+    const updatedUser = await User.findByIdAndUpdate(
+      { _id: userID },
+      { $addToSet: { servers: createdServer._id } },
+      { new: true }
+    );
+
+    if (!updatedUser) {
+      throw new Error('User not found or update failed');
+    }
+
+    await createdServer.save();
+    console.log(`${createdServer.name} inserted to the user.`);
+  } catch (error) {
+    console.error('User.findOneAndUpdate failed:', error);
+  }
 }
+
 
 
 const Server = mongoose.model('Server', serverSchema);

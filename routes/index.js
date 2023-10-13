@@ -33,6 +33,7 @@ router.post('/signup', userController.signup);
 router.post('/increaseDaily', authenticate.ensureAuthenticated, characterController.increaseDaily);
 router.post('/increaseWeekly', authenticate.ensureAuthenticated, characterController.increaseWeekly);
 router.post('/updateCharacter', authenticate.ensureAuthenticated, characterController.updateCharacter);
+router.post('/checkBoss', authenticate.ensureAuthenticated, bossController.increaseBoss);
 
 router.get('/userServer', authenticate.ensureAuthenticated, searchController.userServer);
 router.get('/serverName/:serverID', authenticate.ensureAuthenticated, searchController.serverName);
