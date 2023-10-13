@@ -1,3 +1,4 @@
+window.cardBody;
 document.addEventListener('DOMContentLoaded', async () => {
   try {
 
@@ -8,7 +9,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     const serverSelector = document.getElementById('serverSelector');
     const characterCardDiv = document.querySelector('.characterCards');
     const selectedButton = dropdownToggle.querySelector('.SelectedButton');
-    
     await createCharacterCards();
     
     const serverButtons = serverSelector.querySelectorAll('.serverButton'); 
@@ -19,8 +19,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       });
     });
 
-    observeCardBodyChanges();
-
+    setupCardClickListeners();
+    
   } catch (error) {
     console.error('Error fetching user data:', error);
   }
@@ -85,6 +85,7 @@ async function handleServerButtonClick(serverButton, serverButtons, selectedButt
       button.classList.add('not-checked');
       button.classList.remove('checked');
     }
+    cardBody = document.querySelectorAll('.cardBody');
   });
 
   swapContentAndStoreCookie(selectedButton, serverButton);
@@ -93,18 +94,11 @@ async function handleServerButtonClick(serverButton, serverButtons, selectedButt
 
   characterCardDiv.innerHTML = '';
   await createCharacterCards();
-}
-
-function observeCardBodyChanges() {
-  const targetNode = document.querySelector('.characterCards');
-  const observer = new MutationObserver(() => {});
-  observer.observe(targetNode, { childList: true, subtree: true });
   setupCardClickListeners();
 }
 
 function setupCardClickListeners() {
-  const cardBodyElements = document.querySelectorAll('.cardBody');
-  cardBodyElements.forEach((card) => {
+  cardBody.forEach((card) => {
     card.addEventListener('click', cardClickRedirect);
   });
 }
@@ -208,8 +202,13 @@ function swapContentAndStoreCookie(selectedButton, serverButton) {
 function setCookie(name, value, days) {
   const expires = new Date();
   expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
-  document.cookie = `${name}=${encodeURIComponent(value)};expires=${expires.toUTCString()};path=/`;
+
+  // Check if the cookie is 'selectedServerContent'
+  const path = name === 'selectedServerContent' ? '/' : '';
+
+  document.cookie = `${name}=${encodeURIComponent(value)};expires=${expires.toUTCString()};path=${path}`;
 }
+
 
 
 function getCookie(name) {
@@ -296,8 +295,8 @@ async function createCharacterCards(){
     characterCardFragment.appendChild(card);
   });
   parentDiv.appendChild(characterCardFragment);
-  
   filterCharacterCards(selectedValues);
+  cardBody = document.querySelectorAll('.cardBody');
 }
 
 async function sort(cards, includeBossing = false) {
@@ -330,6 +329,7 @@ function filterCharacterCards(selectedValues){
     if (selectedValues.length === 0) 
       element.classList.remove('off');
   });
+  cardBody = document.querySelectorAll('.cardBody');
 }
 
 async function generateCard(characterData){

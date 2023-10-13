@@ -154,7 +154,6 @@ function adjustFontSizeToFit(JobType) {
   const originalFontSize = 56;
   let fontSize = originalFontSize;
   copy.style.fontSize = fontSize + 'px';
-  console.log(width);
   while (width > maxWidth && fontSize > 0) {
     fontSize -= 1;
     copy.style.fontSize = fontSize + 'px';

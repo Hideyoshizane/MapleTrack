@@ -63,7 +63,7 @@ async function insertOnBossList(username, characterData, server){
       level: characterData.level,
     }
     serverToUpdate.characters.push(characterToList);
-    await serverToUpdate.save();
+    await bossListDocument.save();
   }
 }
 

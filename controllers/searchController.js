@@ -57,10 +57,7 @@ module.exports = {
       ctx.status = 500;
       ctx.body = {error: 'An error ocurred during the search'};
     }
-  }
-
-
-
-
+  },
+  
   
 };
