@@ -9,13 +9,8 @@
 }
 ::-webkit-scrollbar-thumb{
 	border-radius: 10px;
-	background-color: #8F8F8F;
+	background-color: #3D3D3D;
 }
-
-
-
-
-
 
 body{
     background-color: #E8E8E8;
@@ -27,7 +22,7 @@ body{
     display: flex;
     justify-content: center;
     align-items: center;
-    position: relative;
+    flex: 1;
 }
 
 .mainContent{
@@ -41,20 +36,25 @@ body{
     position: relative;
     flex-direction: column;
 }
+
 .topButtons{
     display: flex;
     position: relative;
     margin-top: 32px;
     margin-left: 32px;
+    align-items: flex-end
 }
+
 .bossDiv{
     display: flex;
 }
+
 .bossIcon{
     width: 77px;
     margin-right: 8px;
     height: 97px;
 }
+
 .bossHunting{
     font-family: 'Inter';
     font-size: 40px;
@@ -63,14 +63,15 @@ body{
     color: #3D3D3D;
 }
 
-.WeekProgressDiv{
+.totalSelectedDiv{
     display: flex;
     height: 96px;
-    width: 328px;
+    width: 332px;
     background-color: #91C9E3;
     border-radius: 25px;
     align-items: center;
     margin-left: 16px;
+    justify-content: space-between;
 }
 
 .crystalIcon{
@@ -78,38 +79,37 @@ body{
     height: 73px;
     margin-left: 16px;
 }
-
 .WeekTextDiv,
-.GoldTextDiv{
+.IncomeTextDiv{
     display: flex;
     flex-direction: column;
-    margin-left: 4px;
+    text-align: end;
+    margin-right: 12px;
 }
-.weekProgress,
-.totalProgress{
+
+.totalSelectedBosses,
+.TotalIncome{
+    font-family: 'Inter';
+    font-size: 32px;
+    font-weight: 600;
+    color: #3D3D3D;
+}
+.selectedTotal{
     font-family: 'Inter';
     font-size: 24px;
     font-weight: 500;
     color: #3D3D3D;
 }
 
-.totalProgress{
-    text-align: right;
-}
-
-.OuterEXPBar,
-.InnerEXPBar{
-    border-radius: 25px;
-}
-
-.OuterEXPBar{
+.totalIncomedDiv{
     display: flex;
+    width: 340px;
+    height: 96px;
+    background-color: #91C9E3;
+    border-radius: 25px;
     align-items: center;
-    background-color: black;
-}
-.InnerEXPBar{
-    margin-left: 2px;
-    background-color: #96E4A5;
+    margin-left: 8px;
+    justify-content: space-between;
 }
 
 .goldIcon{
@@ -117,35 +117,48 @@ body{
     width: 80px;
     margin-left: 16px;
 }
-.totalGainDiv{
-    display: flex;
-    height: 96px;
-    width: 376px;
-    background-color: #91C9E3;
-    border-radius: 25px;
-    align-items: center;
-    margin-left: 16px;
-    justify-content: space-between;
-}
-.GoldTextDiv{
-    align-items: flex-end;
-    margin-right: 16px;
-}
-.totalGainText{
+
+.totalIncomeText{
     font-family: 'Inter';
-    font-size: 32px;
-    font-weight: 600;
+    font-size: 20px;
+    font-weight: 500;
     color: #3D3D3D;
+}
+.discardButton{
+    width: 284px;
+    height: 56px;
+    background-color: #C33232;
+    border-radius: 25px;
+    border: none;
+
+    font-family: 'Inter';
+    font-size: 28px;
+    font-weight: 500;
+    color: #EDEDED;
+    text-align: center;
+    margin-left: 8px;
+}
+.saveButton{
+    width: 284px;
+    height: 56px;
+    background-color: #45C332;
+    border-radius: 25px;
+    border: none;
+
+    font-family: 'Inter';
+    font-size: 28px;
+    font-weight: 500;
+    color: #3D3D3D;
+    text-align: center;
+    margin-left: 8px;
 }
 
-.totalGoldValue{
-    display: flex;
-    font-family: 'Inter';
-    font-weight: 400;
-    color: #3D3D3D;
-    height: 39px;
-    align-items: center;
+.characterSelector{
+    margin-top: 58px;
+    margin-left: 32px;
+    height: 118px;
 }
+
 .dropdown{
     display: block;
     position: relative;
@@ -156,9 +169,9 @@ body{
 
 .dropdownToggle{
     display: block;
-    width: 233px;
-    max-height: 56px;
-    background-color: #3C6997;
+    width: 455px;
+    max-height: 80px;
+    background-color: #D7D7D7;
     border-radius: 25px;
     padding: 0;
     margin-top: 38px;
@@ -174,18 +187,21 @@ body{
 
 .dropdownToggle.open{
     position:absolute;
-    max-height: 336px;
+    max-height: 400px;
     cursor: pointer;
     top: 0;
     left: 0;
     z-index: 5;
+    box-shadow: 0px 1px 3px 1px #8F8F8F;
 }
 
-
-.dropdownContent:nth-child(2){
-    border-top: 1px solid #2F5275;
+.dropdownToggle svg{
+    margin-right: 24px;
 }
-
+.characterContent{
+    max-height: 400px;
+    overflow-y: auto;
+}
 .closed{
     display: block;
     transition: all 0.3s ease-in-out;
@@ -196,104 +212,8 @@ body{
     transition: 0.3s ease-in-out;
   }  
 
-  
-.serverButton {
-    height: 56px;
-    width: 233px;
-    display: flex;
-    align-items: left;
-    font-size: 28px;
-    color: #E3E3E3;
-    font-weight: 500;
-    border: none;
-    background-color: #3C6997;
-    padding: 10px;
-    margin: 0px;
-    z-index: 2;
-    cursor: pointer;
-}
 
-.serverButton:hover{
-    background-color: #345C83;
-    cursor: pointer;
-}
-
-.SelectedButton{
-    width: 187px;
-    height: 56px;
-    background-color: #3C6997;
-    border: none;
-    font-size: 28px;
-    color: #E3E3E3;
-    display: flex;
-    align-items: left;
-    padding: 10px;
-    cursor: pointer;
-}
-
-.serverButton img, .SelectedButton img{
-    width: 32px;
-    height: 32px;
-    margin-right: 4px;
-}
-
-
-.serverButton span, .SelectedButton span{
-    padding-left:  16px;
-    padding-right: 16px;
-}
-
-
-.selectedServer{
-    display: flex;
-    width: 233px;
-    align-items: center;
-    
-}
-
-.serverButton svg{
-    margin-left: auto;
-    padding-right: 4px;
-}
-
-.serverButton.not-checked svg{
-    opacity: 0%;
-}
-
-.serverButton.checked svg{
-    opacity: 100%;
-}
-
-.editButton{
-    margin-top: 38px;
-    margin-left: 16px;
-    display: flex;
-    font-family: 'Inter';
-    font-weight: 600;
-    font-size: 28px;
-    color: #3D3D3D;
-    border: none;
-    border-radius: 25px;
-    height: 56px;
-    width: 216px;
-    background-color: #D7D7D7;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-}
-
-.characters{
-    display: grid;
-    grid-template-columns: repeat(3, 0fr);
-    gap: 16px;
-    background-color: rgba(14, 109, 54, 0.226);
-    margin-left: 104px;
-    width: 1386px;
-    height: 200px;
-    margin-top: 66px;
-}
-
-
+.SelectedCharacterButton,
 .characterButton{
     width: 451px;
     height: 80px;
@@ -301,10 +221,11 @@ body{
     border: none;
     display: flex;
     flex-wrap: wrap;
-    align-content: center;
     overflow: hidden;
     padding: 0px;
     position: relative;
+    justify-content: space-between;
+    background-color: #D7D7D7;
     align-items: center;
 }
 
@@ -314,7 +235,6 @@ body{
     margin: 0px;
     padding: 0px;
 }
-
 
 .characterWrapper{
     display: flex;
@@ -338,15 +258,94 @@ body{
     color: #3D3D3D;
 }
 
-.checks{
-    font-family: 'Inter';
-    font-weight: 400;
-    font-size: 36px;
-    color: #3D3D3D;
-    margin-left: auto;
+.characterButton{
+    border-radius: 0px;
+    border-top: 2px solid #ADADAD;
 }
 
-.characterButton svg{
-    margin-left: auto;
-    margin-right: 12px;
+.bossPicture{
+    width: 66px;
+    height: 66px;
+    margin-left: 24px;
+}
+
+.bossGrid{
+    margin-top: 32px;
+    display: grid;
+    grid-template-columns: repeat(2, 0fr);
+    justify-content: space-evenly;
+    gap: 8px;
+}
+
+.bossGrid:last-child{
+    margin-bottom: 8px;
+}
+
+.bossSlot{
+    width: 727px;
+}
+
+.bossBox{
+    display: flex;
+    align-items: center;
+    background-color: #D7D7D7;
+    border-radius: 50px;
+    height: 80px;
+    width: 615px;
+}
+
+.bossBox.open{
+    width: 727px;
+}
+
+.bossName{
+    display: flex;
+    align-items: center;
+    font-family: 'Inter';
+    font-weight: 400;
+    color: #3D3D3D;
+    width: 130px;
+    height: 78px;
+    margin-left: 8px;
+}
+.buttonDiv{
+    display: flex;
+    gap: 8px;
+}
+.easyButton,
+.normalButton,
+.hardButton,
+.chaosButton,
+.extremeButton{
+    font-family: 'Inter';
+    font-size: 20px;
+    width: 117px;
+    height: 40px;
+    border-radius: 50px;
+    border: none;
+}
+
+.easyButton{
+    color: #EDEDED;
+    background-color: #9B9B9B;
+}
+
+.normalButton{
+    color: #3D3D3D;
+    background-color: #91C9E3;
+}
+
+.hardButton{
+    color: #3D3D3D;
+    background-color: #E39294;
+}
+
+.chaosButton{
+    color: #EDEDED;
+    background-color: #3D3D3D;
+}
+
+.extremeButton{
+    color: #E39294;
+    background-color: #3D3D3D;
 }

@@ -27,6 +27,7 @@ router.get('/signup', async (ctx, next) => {
 router.get('/search', authenticate.ensureAuthenticated, searchController.search);
 router.get('/weeklyBoss', authenticate.ensureAuthenticated, userController.weeklyBoss);
 router.get('/bossList/:username', authenticate.ensureAuthenticated, bossController.getList);
+router.get('/editBosses', authenticate.ensureAuthenticated, bossController.editBosses);
 
 router.post('/login', authController.login);
 router.post('/signup', userController.signup);
@@ -34,6 +35,7 @@ router.post('/increaseDaily', authenticate.ensureAuthenticated, characterControl
 router.post('/increaseWeekly', authenticate.ensureAuthenticated, characterController.increaseWeekly);
 router.post('/updateCharacter', authenticate.ensureAuthenticated, characterController.updateCharacter);
 router.post('/checkBoss', authenticate.ensureAuthenticated, bossController.increaseBoss);
+router.post('/saveBossChange', authenticate.ensureAuthenticated, bossController.saveBossChange);
 
 router.get('/userServer', authenticate.ensureAuthenticated, searchController.userServer);
 router.get('/serverName/:serverID', authenticate.ensureAuthenticated, searchController.serverName);

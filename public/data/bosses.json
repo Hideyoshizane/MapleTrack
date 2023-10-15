@@ -137,7 +137,7 @@
   ]
 },
 {
-  "name": "Crimsom Queen",
+  "name": "Crimsom\nQueen",
   "img": "../../assets/boss/crimson_queen.webp",
   "difficulties": [
     {
@@ -239,7 +239,7 @@
   ]
 },
 {
-  "name": "Pink Beam",
+  "name": "Pink\nBeam",
   "img": "../../assets/boss/pink_bean.webp",
   "difficulties": [
     {
@@ -329,7 +329,7 @@
   ]
 },
 {
-  "name": "Guardian Angel Slime",
+  "name": "Guardian\nAngel Slime",
   "img": "../../assets/boss/angel_smile.webp",
   "difficulties": [
     {
@@ -449,7 +449,7 @@
   ]
 },
 {
-  "name": "Black Mage",
+  "name": "Black \nMage",
   "img": "../../assets/boss/black_mage.webp",
   "difficulties": [
     {
@@ -503,7 +503,7 @@
   ]
 },
 {
-  "name": "Princess No",
+  "name": "Princess\nNo",
   "img": "../../assets/boss/princess_no.webp",
   "difficulties": [
     {

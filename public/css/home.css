@@ -1,7 +1,26 @@
+::-webkit-scrollbar-track{
+	border-radius: 10px;
+	background-color: #F5F5F5;
+}
+
+::-webkit-scrollbar{
+	width: 2px;
+	background-color: #F5F5F5;
+}
+::-webkit-scrollbar-thumb{
+	border-radius: 10px;
+	background-color: #8F8F8F;
+}
+
+
+
+
+
 body{
     background-color: #E8E8E8;
     padding: 0;
     margin: 0;
+    overflow-x: hidden;
 }
 
 .center-container {

@@ -65,4 +65,5 @@ module.exports = {
 			ctx.body = { error: 'An error occurred while rendering Weekly Boss page' };
 		}
 	},
+
 };

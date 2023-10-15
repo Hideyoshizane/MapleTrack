@@ -5,10 +5,12 @@ module.exports = {
     redirectCharacter: async (ctx) => {
       try {
         const { username, server, characterClass } = ctx.params;
+        const { _id } = ctx.state.user;
         await ctx.render('character', {
           username: username,
           server: server,
           characterClass: characterClass,
+          _id: _id
         });
       } catch (error) {
         console.error('Error rendering character page:', error);
@@ -20,10 +22,12 @@ module.exports = {
     editCharacter: async (ctx) => {
       try {
         const { username, server, characterCode } = ctx.params;
+        const { _id } = ctx.state.user;
         await ctx.render('edit', {
           username: username,
           server: server,
           characterCode: characterCode,
+          _id: _id
         });
       } catch (error) {
         console.error('Error rendering edit page:', error);

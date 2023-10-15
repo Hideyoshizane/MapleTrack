@@ -22,6 +22,7 @@ const bossList = mongoose.model('bossList', new mongoose.Schema({
           value:     {type: Number},
           reset:     {type: String},
           checked:   {type: Boolean},
+          DailyTotal:{type: Number},
           date:      {type: Date}
         }]  
       }],

@@ -5,6 +5,10 @@ window.username;
 
 document.addEventListener('DOMContentLoaded', async () => {
     server = getCookie('selectedServerContent');
+    if(server == undefined) {
+      server = 'Scania';
+      setCookie('selectedServerContent', server, 7);
+    }
     await fetchBossList();
     await loadPage();
 
@@ -39,7 +43,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   const editButton = document.querySelector('.editButton');
   editButton.addEventListener('click', async () => {
-    console.log('hi');
+    var url = `/editBosses`;
+    window.location.href = url;
   });
 
 })
@@ -51,9 +56,9 @@ async function fetchBossList(){
     const response =  await fetch(`/bossList/${username}`);
     bossList = await response.json();
 
+
     selectedList = bossList.server;
     selectedList = selectedList.find(servers => servers.name === server);
-
   } catch (error) {
     console.error('Error fetching character data:', error);
   }
@@ -146,6 +151,8 @@ async function createWeekProgress(){
     const WeekProgress = createDOMElement('span','weekProgress', 'Week Progress');
     const totalProgress = createDOMElement('span','totalProgress', `${selectedList.weeklyBosses}/180`);
     const progressBar = createProgressBar(selectedList.weeklyBosses);
+
+    
 
     const textDiv = createDOMElement('div', 'WeekTextDiv');
 
@@ -364,7 +371,7 @@ async function loadCharacterCards(){
 
     let totalChecks = 0;
     if(characters.bosses.length > 0){
-      for(bosses of character.bosses){
+      for(bosses of characters.bosses){
         if(bosses.checked == true){
           totalChecks += 1;
         }
