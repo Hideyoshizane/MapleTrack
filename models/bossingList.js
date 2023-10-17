@@ -19,6 +19,7 @@ const bossList = mongoose.model('bossList', new mongoose.Schema({
         level:    {type: Number, required: true},
         bosses: [{
           name:      {type: String},
+          difficulty:{type: String},
           value:     {type: Number},
           reset:     {type: String},
           checked:   {type: Boolean},
