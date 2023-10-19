@@ -17,6 +17,7 @@ const bossList = mongoose.model('bossList', new mongoose.Schema({
         code:     {type: String},
         class:    {type: String},
         level:    {type: Number, required: true},
+        totalIncome: {type: Number},
         bosses: [{
           name:      {type: String},
           difficulty:{type: String},
@@ -62,6 +63,7 @@ async function insertOnBossList(username, characterData, server){
       code: characterData.code,
       level: characterData.level,
       class: characterData.class,
+      totalIncome: 0,
     }
     serverToUpdate.characters.push(characterToList);
     await bossListDocument.save();
@@ -79,12 +81,5 @@ async function removeFromBossList(username, characterID, server){
   } 
 }
 
-async function removeBossFromList(username, characterID){
-
-}
-
-async function addBossToList(username, characterID){
-  
-}
 
 module.exports = { bossList, createBossList, insertOnBossList, removeFromBossList};

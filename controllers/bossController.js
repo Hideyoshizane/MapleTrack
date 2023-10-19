@@ -49,6 +49,7 @@ module.exports = {
 
       for(const character of characterList[0].characters){
         const foundCharacter = foundServer.characters.find((serverCharacter) => serverCharacter.name === character.name);
+
         for (const newBoss of character.bosses) {
           const existingBoss = foundCharacter.bosses.find(
             (existingBoss) => existingBoss.bossName === newBoss.bossName && existingBoss.reset === newBoss.reset
@@ -68,6 +69,7 @@ module.exports = {
         character.bosses.some((newBoss) =>
           existingBoss.bossName === newBoss.bossName && existingBoss.reset === newBoss.reset
         ));
+        foundCharacter.totalIncome = totalIncome;
       }
       await listFound.save();
       ctx.status = 200;

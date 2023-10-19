@@ -91,7 +91,8 @@ body{
 }
 
 .totalSelectedBosses,
-.TotalIncome{
+.TotalIncome,
+.characterTotalIncome{
     font-family: 'Inter';
     font-size: 32px;
     font-weight: 600;
@@ -114,12 +115,12 @@ body{
     margin-left: 8px;
     justify-content: space-between;
 }
-
-.goldIcon{
+.stashIcon{
     height: 78px;
     width: 80px;
-    margin-left: 16px;
+    margin-left: 16px;  
 }
+
 
 .totalIncomeText{
     font-family: 'Inter';
@@ -157,11 +158,15 @@ body{
     margin-left: 8px;
     cursor: pointer;
 }
+.characterInfo{
+    display: flex;
+}
 
 .characterSelector{
     margin-top: 32px;
     margin-left: 45px;
     height: 118px;
+    width: 451px;
 }
 
 .dropdown{
@@ -277,6 +282,24 @@ body{
 .characterButton{
     border-radius: 0px;
     border-top: 2px solid #ADADAD;
+}
+
+.characterIncomeDiv{
+    margin-top: 70px;
+    margin-left: 16px;
+    display: flex;
+    height: 80px;
+    width: 340px;
+    background-color: #d7d7d7;
+    border-radius: 25px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.goldIcon{
+    height: 70px;
+    width: 73px;
+    margin-left: 16px;
 }
 
 .bossPicture{
@@ -426,7 +449,7 @@ body{
 .dropdownWrapper{
     position: relative;
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
     align-items: flex-start;
     width: 18px;
     height: 25px;
@@ -442,8 +465,15 @@ body{
     text-align: center;
     border: none;
     cursor: pointer;
+    width: 25px;
+    overflow-y: hidden;
+    overflow: hidden;
 }
 
-.dailyDropdown option{
+
+option{
     z-index: 5;
+    font-family: 'Inter';
+    font-size: 20px;
+    width: 95%;
 }
