@@ -32,10 +32,11 @@ document.addEventListener('DOMContentLoaded', async () => {
               characters: [
                 {
                   name: 'Sayaka',
+                  totalIncome: '21200000',
                   bosses: [{
                     name: 'Zakum',
                     difficulty: "Easy",
-                    value: '1000000',
+                    value: '200000',
                     reset: 'Daily',
                     checked: false,
                     DailyTotal: '5',
@@ -45,7 +46,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                   {
                     name: 'Zakum',
                     difficulty: "Chaos",
-                    value: '423423423',
+                    value: '16200000',
                     reset: 'Weekly',
                     checked: false,
                     date: null,
@@ -54,6 +55,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 },
                 {
                   name: 'Lilith',
+                  totalIncome: '7000000',
                   bosses: [{
                     name: 'Zakum',
                     difficulty: "Easy",
@@ -77,6 +79,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
 });
+
+
+const difficultyColors = {
+  Easy:   '#EDEDED',
+  Normal: '#3D3D3D',
+  Hard: '#3D3D3D',
+  Chaos: '#EDEDED',
+  Extreme: '#E39294',
+};
+
 
 async function fetchBossList(){
     try {
@@ -387,6 +399,7 @@ async function loadBosses(){
     bossJson = await fetch(jsonPath).then((response) => response.json());
     const bossGrid = createDOMElement('div', 'bossGrid');
     for(const boss of bossJson){
+      let totalIncoming = 0;
       const checkedBoss = Character.bosses.filter((obj) => obj.name === boss.name);
 
       const bossSlot = createDOMElement('div', 'bossSlot');
@@ -401,7 +414,6 @@ async function loadBosses(){
       const buttonDiv = createDOMElement('div', 'buttonDiv');
       for(difficult of boss.difficulties){
         const difficultyFound = checkedBoss.filter((obj) => obj.difficulty === difficult.name);
-
         let classTag;
         let innerText;
         [classTag, innerText] = returnTagAndText(classTag, innerText, difficult.name);
@@ -413,38 +425,43 @@ async function loadBosses(){
         difficultButton.setAttribute('value', `${difficult.value}`);
         difficultButton.setAttribute('reset', `${difficult.reset}`);
         difficultButton.setAttribute('name',  `${innerText}`);
+        difficultButton.setAttribute('minLevel', `${difficult.minLevel}`);
 
         const LevelRequirmentOK = (Character.level > difficult.minLevel);
         if(!LevelRequirmentOK){
-          updateButtonToBlock(difficultButton, difficult.minLevel);
+          updateButtonToBlock(difficultButton);
         }
 
         if(difficult.reset === 'Daily' && LevelRequirmentOK){
           const dailyTotal = difficultyFound[0] !== undefined ? difficultyFound[0].DailyTotal : 0;
+          totalIncoming += Number(difficult.value) * Number(dailyTotal);
           insertDropdownOnButton(difficultButton, dailyTotal);
         }
 
         if (checkedBoss.length > 0) {
-          
-        
           if (difficultyFound.length > 0) {
             if(difficultyFound[0].reset !== 'Daily'){
-              const difficultyColors = {
-                Normal: '#3D3D3D',
-                Hard: '#3D3D3D',
-                Chaos: '#EDEDED',
-                Extreme: '#E39294',
-              };
               let color = difficultyColors[difficult.name];
-
               const checkMark = await createCheckMark(color);
               difficultButton.appendChild(checkMark);
+              totalIncoming += difficultyFound[0].value;
             }   
           }
         }
         buttonDiv.appendChild(difficultButton);
       }
+      
       bossBox.append(buttonDiv);
+      totalBossIncome = createDOMElement('span', 'totalBossIncome', totalIncoming.toLocaleString('en-us'));
+      totalBossIncome.style.display = 'none';
+
+      bossBox.appendChild(totalBossIncome);
+      bossBox.setAttribute('totalIncome', totalIncoming);
+
+      if(totalIncoming > 0){
+        totalBossIncome.style.display = 'block';
+        bossBox.classList.add('open');
+      }
 
       bossSlot.appendChild(bossBox);
       bossGrid.appendChild(bossSlot);
@@ -483,14 +500,12 @@ function returnTagAndText(classTag, innerText, difficult) {
   return [classTag, innerText];
 }
 
-async function updateButtonToBlock(difficultButton, minLevel){
+async function updateButtonToBlock(difficultButton){
   difficultButton.textContent = '';
-  const color = '#C33232';
-  const blockMark = await createBlockMark(color);
+  const blockMark = await createBlockMark();
   difficultButton.appendChild(blockMark);
 
   difficultButton.classList.add('blocked');
-  difficultButton.setAttribute('minLevel', minLevel);
 }
 async function createCheckMark(color){
   const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
@@ -509,7 +524,7 @@ async function createCheckMark(color){
 
 }
 
-async function createBlockMark(color){
+async function createBlockMark(){
   const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   svg.setAttribute("width", "20");
   svg.setAttribute("height", "20");
@@ -518,7 +533,7 @@ async function createBlockMark(color){
 
   const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
   path.setAttribute("d", "M20 0C8.96 0 0 8.96 0 20C0 31.04 8.96 40 20 40C31.04 40 40 31.04 40 20C40 8.96 31.04 0 20 0ZM4 20C4 11.16 11.16 4 20 4C23.7 4 27.1 5.26 29.8 7.38L7.38 29.8C5.26 27.1 4 23.7 4 20ZM20 36C16.3 36 12.9 34.74 10.2 32.62L32.62 10.2C34.74 12.9 36 16.3 36 20C36 28.84 28.84 36 20 36Z");
-  path.setAttribute("fill", color);
+  path.setAttribute("fill", '#C33232');
 
   svg.appendChild(path);
 
@@ -527,28 +542,30 @@ async function createBlockMark(color){
 }
 
 function insertDropdownOnButton(difficultButton, DailyTotal){
-  const dropdown = createDOMElement('select', 'dailyDropdown');
+  const dropdownValue= DailyTotal > 0 ? `${DailyTotal}x` : '0';
+
+  const dropdown = createDOMElement('button', 'dailyDropdown');
   const dropdownWrapper = createDOMElement('div', 'dropdownWrapper');
+  const dropdownText = createDOMElement('span', 'dropdownText', dropdownValue);
   const name = difficultButton.getAttribute('name');
 
   const [color, backgroundColor] = getColor(name);
+
   for(let i=0; i<= 7; i++){
-    const option = createDOMElement('option');
-    option.text = i > 0 ? `${i}x a Week` : `${i}`;
-    option.value = i;
+    const text = i > 0 ? `${i}x a Week` : `${i}`;
+    let option = createDOMElement('div', 'option', text);
+    option.setAttribute('value', i);
     option.style.color = color;
     option.style.backgroundColor = backgroundColor;
     
     dropdown.appendChild(option);
   }
-
-
-
+ 
   dropdown.style.color = color;
   dropdown.style.backgroundColor = backgroundColor;
-  dropdown.value = DailyTotal;
   dropdown.setAttribute('difficult', `${difficultButton.name}`);
-
+  dropdownWrapper.setAttribute('value', DailyTotal);
+  dropdownWrapper.appendChild(dropdownText);
   dropdownWrapper.appendChild(dropdown);
   difficultButton.appendChild(dropdownWrapper);
 }
@@ -725,63 +742,89 @@ async function handleCharacterButtonClick(characterButton, characterButtons) {
 }
 
 function setupBossesButtonEvent() {
-  const body = document.body;
-  const blockedButtons = document.querySelectorAll('.blocked');
-  let blockedTooltip;
+	const body = document.body;
 
-  blockedButtons.forEach(blockedButton => {
-    blockedButton.addEventListener('mouseover', async () => {
-      const buttonRect = blockedButton.getBoundingClientRect();
-      blockedTooltip = await createBlockedTooltip(buttonRect, blockedButton.getAttribute('minLevel')); 
-      body.appendChild(blockedTooltip);
-    });
+	//create interaction for blocked buttons
+	let blockedTooltip;
+	body.addEventListener('mouseover', async (event) => {
+		const target = event.target;
+		const blockedElement = target.closest('.blocked');
+		if (blockedElement) {
+			const buttonRect = blockedElement.getBoundingClientRect();
+			const minLevel = blockedElement.getAttribute('minLevel');
+			blockedTooltip = await createBlockedTooltip(buttonRect, minLevel);
+			body.appendChild(blockedTooltip);
+		}
+	});
+	body.addEventListener('mouseout', (event) => {
+		const target = event.target;
+		const blockedElement = target.closest('.blocked');
+		if (blockedElement) {
+			body.removeChild(blockedTooltip);
+		}
+	});
+	//iteraction for buttons that are not daily and are not blocked
+	body.addEventListener('click', (event) => {
+		const clickedButton = event.target.closest(
+			'.easyButton, .normalButton, .hardButton, .chaosButton, .extremeButton'
+		);
+		if (clickedButton) {
+			const isBlocked = clickedButton.classList.contains('blocked');
+			const hasSelect = clickedButton.querySelector('.option');
 
-    blockedButton.addEventListener('mouseout', () => {
-        body.removeChild(blockedTooltip); 
-    });
-  });
+			if (!isBlocked && !hasSelect) {
+				buttonClickedFunctional(clickedButton);
+			}
+		}
+	});
 
-  const bossesButtons =  document.querySelectorAll('.easyButton, .normalButton, .hardButton, .chaosButton, .extremeButton');
-  const filteredButtons = Array.from(bossesButtons).filter(bossesButtons => !bossesButtons.querySelector('select'));
-
-  filteredButtons.forEach((button) => {
-    button.addEventListener('click', async () => {
-      await buttonClickedFunctional(button);
-    });
-  });
-
-
-  const dailyDropdown = document.querySelectorAll('.dailyDropdown');
-  dailyDropdown.forEach(dropdown => {
-    dropdown.addEventListener('mouseover', async () => {
+	//Iteraction for buttons with dropdown;
+  body.addEventListener('mouseover', (event) => {
+    if (event.target.classList.contains('dropdownText')) {
+      let dropdown = event.target.parentElement;
+      dropdown = dropdown.querySelector('.dailyDropdown');
+      //const dropdown = event.target.parentElement;
       dropdownExpand(dropdown, true);
-    });
-  
-    dropdown.addEventListener('click', async () => {
-      const newValue = dropdown.value;
+    }
+  });
+  body.addEventListener('click', async (event) => {
+    if (event.target.classList.contains('option')) {
+      const dropdownWrapper = event.target.parentElement.parentElement;
+      const dropdown = event.target.parentElement;
+      const newValue = event.target.getAttribute('value');
+      dropdownWrapper.setAttribute('value', newValue);
+      const dropdownText = dropdownWrapper.querySelector('.dropdownText');
+      dropdownText.innerText = newValue > 0 ?`${newValue}x` : `${newValue}`;
       await updateBossValue(newValue, dropdown);
       await resetOtherDropdown(dropdown);
-      dropdown.size = 0;
-      dropdown.style.zIndex = '1';
-
-    });
-  
-    dropdown.addEventListener('mouseout', async () => {
       dropdownExpand(dropdown, false);
-    });
-  }); 
+    }
+  });
+  body.addEventListener('mouseover', (event) => {
+    if (event.target.parentElement.classList.contains('dailyDropdown')) {
+        event.target.parentElement.addEventListener('mouseleave', (e) => {
+            const dropdown = event.target.parentElement;
+            dropdownExpand(dropdown, false);
+            e.stopPropagation();
+        });
+    }
+});
 }
 function dropdownExpand(dropdown, expand = false){
   parentdiv = dropdown.parentNode;
   button = parentdiv.parentNode;
-  buttonText = button.querySelector('span');
+  buttonText = button.querySelector('.buttonText');
   buttonText.style.display = expand === true ? 'none' : 'block';
-  dropdown.size =  expand === true ? dropdown.options.length : 0;
-  dropdown.style.width = expand === true ? 'auto' : '25px';
+  dropdown.style.width = expand === true ? '117px' : '18px';
+  dropdown.style.height = expand === true ? 'auto' : '25px';
   dropdown.style.zIndex = expand === true ? '10' : '1';
-  
-  parentdiv.style.justifyContent = 'center';
+  dropdown.style.display = expand === true ? 'block' : 'none';
 
+  parentdiv.style.overflow = expand === true ? 'hidden' : '';
+  parentdiv.style.marginTop = expand === true ? '3px' : '0';
+  parentdiv.style.width = expand === true ? '117px' : 'auto';
+  parentdiv.style.height = expand === true ? '200px' : '25px';
+  button.style.alignItems = expand === true ? 'flex-start' : 'center';
 }
 
 async function createBlockedTooltip(buttonRect, minLevel){
@@ -792,13 +835,22 @@ async function createBlockedTooltip(buttonRect, minLevel){
 
   return tooltip;
 }
+
 async function buttonClickedFunctional(button){
   let parentDiv = button.parentNode;
   parentDiv = parentDiv.parentNode;
+
   const bossName = parentDiv.querySelector('span').innerText;
   const boss = bossJson.filter((boss)=> boss.name === bossName);
   const difficulty = button.getAttribute('name');
   const svgInsideButton = button.querySelector('svg');
+  let bossBoxValue = parentDiv.getAttribute('totalIncome');
+  bossBoxValue = Number(bossBoxValue);
+  const totalIncomeSpan= parentDiv.querySelector('.totalBossIncome');
+
+  let value = button.getAttribute('value');
+  value = Number(value);
+
   let newValue = 0;
   if(svgInsideButton){
     button.removeChild(svgInsideButton);
@@ -807,27 +859,40 @@ async function buttonClickedFunctional(button){
       difficult: difficulty
     };
     insertBossOnList(boss, data);
+    bossBoxValue -= value;
+    totalIncomeSpan.innerText = bossBoxValue.toLocaleString('en-us');
+    if(bossBoxValue == 0){
+      parentDiv.classList.toggle('open');
+      totalIncomeSpan.style.display = parentDiv.classList.contains('open') ? 'block' : 'none';
+    }
   }
   else{
     newValue = 1;
-
-    const difficultyColors = {
-      Normal: '#3D3D3D',
-      Hard: '#3D3D3D',
-      Chaos: '#EDEDED',
-      Extreme: '#E39294',
-    };
+    allSVGs = parentDiv.querySelector('svg');
+    if(allSVGs){
+      const parentOfSVG = allSVGs.parentElement;
+      parentOfSVG.removeChild(allSVGs);
+    }
     let color = difficultyColors[difficulty];
     const checkMark = await createCheckMark(color);
     button.appendChild(checkMark);
     const data = {
-      newValue: newValue, 
+      newValue: Number(newValue), 
       difficult: difficulty
     };
     insertBossOnList(boss, data);
-
-  }  
+    if(bossBoxValue == 0){
+      parentDiv.classList.add("open");
+      parentDiv.addEventListener('transitionend', () => {
+        totalIncomeSpan.style.display = parentDiv.classList.contains('open') ? 'block' : 'none';
+      });
+    }
+    bossBoxValue += value;
+    totalIncomeSpan.innerText = bossBoxValue.toLocaleString('en-us');
+  }
+  parentDiv.setAttribute('totalIncome', bossBoxValue);  
 }
+
 async function updateBossValue(newValue, dropdown){
     let bossBox = dropdown;
     let button = dropdown;
@@ -848,94 +913,119 @@ async function updateBossValue(newValue, dropdown){
     const name = bossBox.querySelector('.bossName').textContent;
     const boss = bossJson.filter((boss)=> boss.name === name);
     const data = {
-      newValue: newValue, 
+      newValue: Number(newValue), 
       difficult: difficult
     };
     insertBossOnList(boss, data);
     changeCharacterIncome();
-    
-    //console.log(selectedList);
-    //console.log(Character);
 }
 async function insertBossOnList(boss, data){
+
   const bossData = boss[0];
   const bossName = bossData.name;
   const difficultData = bossData.difficulties.find((difficulty) => difficulty.name === data.difficult);
   const value = server === 'Reboot' ? difficultData.value * 5 : difficultData.value;
-  
+
+  const foundBosses = Character.bosses.filter((searchBoss) => searchBoss.name === bossData.name);
   const foundBossIndex = Character.bosses.findIndex((searchBoss) => searchBoss.name === bossData.name && searchBoss.difficulty === data.difficult);
-
-  if (foundBossIndex !== -1) {
+  if (foundBosses.length > 0) {
     //boss found
-		const foundDifficulty = Character.bosses[foundBossIndex];
-
-    console.log(foundDifficulty);
-    if(data.newValue > 0){
-      //update value
-      foundDifficulty.DailyTotal = data.newValue;
-    }
-    else{
-      //remove
-      Character.bosses.splice(foundBossIndex, 1);
-    }
-
-  }
-  else{
-    //boss not found
-    if(difficultData.reset == 'Daily'){
-      //Add Daily boss
-      const bossToAdd = {
-				name: bossName,
-				difficulty: data.difficult,
-				value: value,
-				reset: difficultData.reset,
-        DailyTotal: data.newValue,
-				checked: false,
-				date: null,
-			};
-      Character.bosses.push(bossToAdd);
-    }
-    else{
-      //Add Not Daily boss
-      const bossToAdd ={
-        name: bossName,
-        difficulty: data.difficult,
-        value: value,
-        reset: difficultData.reset,
-        checked: false,
-        date: null,
+		const foundDifficulty = foundBosses.filter((searchBoss) => searchBoss.difficulty === data.difficult);
+    //found difficult
+    if(foundDifficulty.length > 0) {
+      //if Daily Boss
+      if(foundDifficulty[0].reset == 'Daily'){
+        //If daily Total = 0, remove
+        if(data.newValue == 0){
+          Character.bosses.splice(foundBossIndex, 1);
+        }else{
+          //else update Daily Total
+          foundDifficulty[0].DailyTotal = data.newValue;
+        }
+      } else{
+        //Remove not daily boss
+        Character.bosses.splice(foundBossIndex, 1);
       }
-      Character.bosses.push(bossToAdd);
     }
-  }
+    //Difficult not found, but found boss.
+    else{
+      //Add daily boss
+      if(difficultData.reset == 'Daily'){
+        //Add Daily boss
+        const bossToAdd = createBossToAdd(bossName, data.difficult, value, difficultData.reset, data.newValue);    
+        Character.bosses.push(bossToAdd);
+      }else{
+        //Case difficult is not daiy.
+        const weeklyIndex = Character.bosses.findIndex((searchBoss) => searchBoss.name === bossData.name && searchBoss.reset === difficultData.reset);
+        if(weeklyIndex !== -1){
+          //if there is same reset type of boss, remove it.
+          Character.bosses.splice(weeklyIndex, 1);
+        }
+        const bossToAdd = createBossToAdd(bossName, data.difficult, value, difficultData.reset, data.newValue);
+        Character.bosses.push(bossToAdd);
+      }
+    }
+
+
+  } else{ //If boss Name not found.
+      if(difficultData.reset == 'Daily'){
+        //Add Daily boss
+        const bossToAdd = createBossToAdd(bossName, data.difficult, value, difficultData.reset, data.newValue);
+        Character.bosses.push(bossToAdd);
+      }
+      else{
+        //Add Not Daily boss
+        const bossToAdd = createBossToAdd(bossName, data.difficult, value, difficultData.reset, data.newValue);
+        Character.bosses.push(bossToAdd);
+      }
+    }
+
   await updateCharacterTotalIncome();
   await updateTotalCharactersIncome();
   updateTotalSelected();
 }
+
+function createBossToAdd(name, difficulty, value, difficultData, newValue) {
+  const isDailyReset = difficultData === 'Daily';
+  const bossToAdd = {
+    name,
+    difficulty,
+    value,
+    reset: difficultData,
+    checked: false,
+    date: null,
+  };
+
+  // Conditionally add the DailyTotal property
+  if (isDailyReset) {
+    bossToAdd.DailyTotal = newValue;
+  }
+
+  return bossToAdd;
+}
+
 async function resetOtherDropdown(dropdown){
   let bossBox = dropdown;
   const difficult = dropdown.getAttribute('difficult');
+
   while (bossBox && !bossBox.classList.contains('bossBox')) {
     bossBox = bossBox.parentNode;
   }
-  
-  const allDropdown = bossBox.querySelectorAll('select');
-  allDropdown.forEach(dropdown => {
-    const difficultyAttribute = dropdown.getAttribute('difficult');
-    if(difficultyAttribute !== difficult){
-      const value = dropdown.value;
+  const allDropdown = bossBox.querySelectorAll('.dailyDropdown');
+  const filteredDropdown = Array.from(allDropdown).filter((dropdown) => dropdown.getAttribute('difficult') !== difficult);
+  filteredDropdown.forEach(dropdown => {
+      const value = dropdown.parentElement.getAttribute('value');
       if(value > 0){
-        dropdown.value = 0;
+        dropdown.parentElement.setAttribute('value', 0);
+        dropdown.parentElement.querySelector('.dropdownText').innerText = '0';
         updateBossValue(0, dropdown);
       }
-    }
   });
 }
 async function updateCharacterTotalIncome(){
-  console.log(Character);
   let totalIncome = 0;
   for (const newBoss of Character.bosses) {
-    let value = newBoss.reset == 'Daily' ? newBoss.value * newBoss.DailyTotal : Number(newBoss.value);
+    let value = newBoss.reset == 'Daily' ? Number(newBoss.value) * newBoss.DailyTotal : Number(newBoss.value);
     totalIncome += value;
   }
   Character.totalIncome = totalIncome;
@@ -961,7 +1051,23 @@ async function updateTotalCharactersIncome(){
 
 async function updateBosses(){
   const bossesButtons =  document.querySelectorAll('.easyButton, .normalButton, .hardButton, .chaosButton, .extremeButton');
-  console.log(Character);
+  bossesButtons.forEach(async button => {
+    const minLevel = button.getAttribute('minLevel');
+    const reset = button.getAttribute('reset');
+    if(button.classList.contains('blocked') && Character.level >= minLevel){
+      button.classList.remove('blocked');
+      const svgInsideButton = button.querySelector('svg');
+      button.removeChild(svgInsideButton);
+      buttonText = createDOMElement('span', 'buttonText', `${button.getAttribute('name')}`);
+      button.appendChild(buttonText);
+    }
+    if(Character.level < minLevel){
+     await updateButtonToBlock(button);
+    }
+    if(reset == 'Daily' && !button.classList.contains('blocked') && button.querySelector('.option') === null){
+      insertDropdownOnButton(button, 0);
+    }
+  })
 }
 
 

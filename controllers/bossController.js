@@ -56,6 +56,7 @@ module.exports = {
           );
           if (existingBoss) {
             // If the boss has 'Daily' reset, update 'DailyTotal'
+            existingBoss.value = newBoss.value;
             if (newBoss.reset === 'Daily') {
               existingBoss.DailyTotal = newBoss.DailyTotal;
             }
@@ -69,7 +70,7 @@ module.exports = {
         character.bosses.some((newBoss) =>
           existingBoss.bossName === newBoss.bossName && existingBoss.reset === newBoss.reset
         ));
-        foundCharacter.totalIncome = totalIncome;
+        foundCharacter.totalIncome = character.totalIncome;
       }
       await listFound.save();
       ctx.status = 200;
