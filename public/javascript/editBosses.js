@@ -421,8 +421,9 @@ async function loadBosses(){
         difficultButton = createDOMElement('button',  `${classTag}`);
         difficultButtonText = createDOMElement('span', 'buttonText',`${innerText}`);
         difficultButton.appendChild(difficultButtonText);
-
-        difficultButton.setAttribute('value', `${difficult.value}`);
+        
+        const value = server == 'Reboot' ? difficult.value * 5 : difficult.value;
+        difficultButton.setAttribute('value', value);
         difficultButton.setAttribute('reset', `${difficult.reset}`);
         difficultButton.setAttribute('name',  `${innerText}`);
         difficultButton.setAttribute('minLevel', `${difficult.minLevel}`);
@@ -564,6 +565,7 @@ function insertDropdownOnButton(difficultButton, DailyTotal){
   dropdown.style.color = color;
   dropdown.style.backgroundColor = backgroundColor;
   dropdown.setAttribute('difficult', `${difficultButton.name}`);
+  dropdownWrapper.setAttribute('oldValue', DailyTotal);
   dropdownWrapper.setAttribute('value', DailyTotal);
   dropdownWrapper.appendChild(dropdownText);
   dropdownWrapper.appendChild(dropdown);
@@ -783,7 +785,6 @@ function setupBossesButtonEvent() {
     if (event.target.classList.contains('dropdownText')) {
       let dropdown = event.target.parentElement;
       dropdown = dropdown.querySelector('.dailyDropdown');
-      //const dropdown = event.target.parentElement;
       dropdownExpand(dropdown, true);
     }
   });
@@ -836,80 +837,87 @@ async function createBlockedTooltip(buttonRect, minLevel){
   return tooltip;
 }
 
-async function buttonClickedFunctional(button){
-  let parentDiv = button.parentNode;
-  parentDiv = parentDiv.parentNode;
-
-  const bossName = parentDiv.querySelector('span').innerText;
-  const boss = bossJson.filter((boss)=> boss.name === bossName);
+async function buttonClickedFunctional(button) {
+  let bossBox = button.parentNode;
+  bossBox = bossBox.parentNode;
+  const bossName = bossBox.querySelector('span').innerText;
   const difficulty = button.getAttribute('name');
   const svgInsideButton = button.querySelector('svg');
-  let bossBoxValue = parentDiv.getAttribute('totalIncome');
-  bossBoxValue = Number(bossBoxValue);
-  const totalIncomeSpan= parentDiv.querySelector('.totalBossIncome');
-
-  let value = button.getAttribute('value');
-  value = Number(value);
-
+  let bossBoxValue = Number(bossBox.getAttribute('totalIncome'));
+  const totalIncomeSpan = bossBox.querySelector('.totalBossIncome');
+  const value = Number(button.getAttribute('value'));
   let newValue = 0;
-  if(svgInsideButton){
+  if (svgInsideButton) {
     button.removeChild(svgInsideButton);
-    const data = {
-      newValue: newValue, 
-      difficult: difficulty
-    };
-    insertBossOnList(boss, data);
-    bossBoxValue -= value;
-    totalIncomeSpan.innerText = bossBoxValue.toLocaleString('en-us');
-    if(bossBoxValue == 0){
-      parentDiv.classList.toggle('open');
-      totalIncomeSpan.style.display = parentDiv.classList.contains('open') ? 'block' : 'none';
-    }
-  }
-  else{
     newValue = 1;
-    allSVGs = parentDiv.querySelector('svg');
-    if(allSVGs){
-      const parentOfSVG = allSVGs.parentElement;
-      parentOfSVG.removeChild(allSVGs);
+    await updateBossIncomeSpan(value, bossBox, 0, totalIncomeSpan);
+  } else {
+    const allSVGs = bossBox.querySelector('svg');
+    if (allSVGs) {
+      allSVGs.parentElement.removeChild(allSVGs);
     }
-    let color = difficultyColors[difficulty];
+
+    await updateBossIncomeSpan(value, bossBox, 1, totalIncomeSpan);
+    const color = difficultyColors[difficulty];
     const checkMark = await createCheckMark(color);
     button.appendChild(checkMark);
-    const data = {
-      newValue: Number(newValue), 
-      difficult: difficulty
-    };
-    insertBossOnList(boss, data);
-    if(bossBoxValue == 0){
-      parentDiv.classList.add("open");
-      parentDiv.addEventListener('transitionend', () => {
-        totalIncomeSpan.style.display = parentDiv.classList.contains('open') ? 'block' : 'none';
-      });
-    }
-    bossBoxValue += value;
-    totalIncomeSpan.innerText = bossBoxValue.toLocaleString('en-us');
   }
-  parentDiv.setAttribute('totalIncome', bossBoxValue);  
+
+  const data = {
+    newValue,
+    difficult: difficulty
+  };
+
+  const boss = bossJson.filter(boss => boss.name === bossName);
+  insertBossOnList(boss, data);
+}
+
+async function updateBossIncomeSpan(value, bossBox, Add, totalIncomeSpan){
+  let bossBoxValue = Number(bossBox.getAttribute('totalIncome'));
+  bossBoxValue = Add == 1 ? bossBoxValue += value : bossBoxValue -= value;
+  bossBox.setAttribute('totalIncome', bossBoxValue);
+
+  totalIncomeSpan.innerText = bossBoxValue.toLocaleString('en-us');
+  const fontSize = await adjustFontSizeToFit(bossBoxValue.toLocaleString('en-us'), 103, 16);
+  totalIncomeSpan.style.fontSize = fontSize + 'px';
+
+  if (bossBoxValue > 0) {
+    bossBox.classList.add('open');
+    bossBox.addEventListener('transitionend', () => {
+      totalIncomeSpan.style.display = bossBox.classList.contains('open') ? 'block' : 'none';
+    });
+  } else if (bossBoxValue == 0) {
+    bossBox.classList.toggle('open');
+    totalIncomeSpan.style.display = bossBox.classList.contains('open') ? 'block' : 'none';
+  }
+
 }
 
 async function updateBossValue(newValue, dropdown){
     let bossBox = dropdown;
-    let button = dropdown;
-    let foundButton = false; 
+    let buttonValue;
+    const button = dropdown.parentNode.parentNode;
+    const oldValue = Number(dropdown.parentNode.getAttribute('oldValue'));
+    console.log(oldValue);
 
 		const difficult = dropdown.getAttribute('difficult');
-    while (bossBox && (!bossBox.classList.contains('bossBox') || !foundButton)) {
+    while (bossBox && (!bossBox.classList.contains('bossBox'))) {
       bossBox = bossBox.parentNode;
-
-      if (!foundButton) {
-        if (button.nodeName === 'BUTTON') {
-          foundButton = true;
-        } else {
-          button = button.parentNode;
-        }
-      }
     }
+
+    
+    const totalIncomeSpan = bossBox.querySelector('.totalBossIncome');
+    if (oldValue !== newValue) {
+      let change = (oldValue > newValue ? -1 : 1) * Number(button.getAttribute('value')) * Math.abs(oldValue - newValue);
+      updateBossIncomeSpan(change, bossBox, 1, totalIncomeSpan);
+    } else {
+      let change = Number(button.getAttribute('value')) * newValue;
+      updateBossIncomeSpan(change, bossBox, 1, totalIncomeSpan);
+    }
+
+    
+    dropdown.parentNode.setAttribute('oldValue', newValue);
+
     const name = bossBox.querySelector('.bossName').textContent;
     const boss = bossJson.filter((boss)=> boss.name === name);
     const data = {
