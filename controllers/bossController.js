@@ -44,34 +44,36 @@ module.exports = {
   saveBossChange: async (ctx) =>{
     try{
       const characterList = ctx.request.body;
-      const listFound = await bossList.findOne({userOrigin: characterList[0].userOrigin});
-      const foundServer = listFound.server.find(servers => servers.name === characterList[0].server);
+      const listFound = await bossList.findOne({userOrigin: characterList.userOrigin});
+      const foundServer = listFound.server.find(servers => servers.name === characterList.name);
 
-      for(const character of characterList[0].characters){
+      for(const character of characterList.characters){
         const foundCharacter = foundServer.characters.find((serverCharacter) => serverCharacter.name === character.name);
-
-        for (const newBoss of character.bosses) {
-          const existingBoss = foundCharacter.bosses.find(
-            (existingBoss) => existingBoss.bossName === newBoss.bossName && existingBoss.reset === newBoss.reset
+        for(const bossData of character.bosses){
+          const existingBossIndex = foundCharacter.bosses.findIndex((existingBoss) =>
+            (existingBoss.name == bossData.name) && (existingBoss.reset == bossData.reset)
           );
-          if (existingBoss) {
-            // If the boss has 'Daily' reset, update 'DailyTotal'
-            existingBoss.value = newBoss.value;
-            if (newBoss.reset === 'Daily') {
-              existingBoss.DailyTotal = newBoss.DailyTotal;
+          if(existingBossIndex !== -1){
+            const existingBoss = foundCharacter.bosses[existingBossIndex];
+            if(bossData.reset === 'Daily'){
+              existingBoss.DailyTotal = bossData.DailyTotal;
             }
-          } else {
-            // If the boss doesn't exist, add it to 'foundCharacter.bosses'
-            foundCharacter.bosses.push(newBoss);
+          } 
+          else{
+            foundCharacter.bosses.push(bossData);
           }
+          foundCharacter.totalIncome = character.totalIncome;
         }
-        // Remove bosses not present in character.bosses
-        foundCharacter.bosses = foundCharacter.bosses.filter((existingBoss) =>
-        character.bosses.some((newBoss) =>
-          existingBoss.bossName === newBoss.bossName && existingBoss.reset === newBoss.reset
-        ));
-        foundCharacter.totalIncome = character.totalIncome;
+       
       }
+      //Remove bosses that are on character list on database but not on character from the request
+      for(const character of foundServer.characters){
+        const foundCharacter = characterList.characters.find((listCharacter) => listCharacter.name === character.name);
+        character.bosses = character.bosses.filter(onDatabaseBoss => {
+          return foundCharacter.bosses.some(onRequestBoss => (onDatabaseBoss.name === onRequestBoss.name) && (onDatabaseBoss.reset === onRequestBoss.reset))
+        })
+      }
+      
       await listFound.save();
       ctx.status = 200;
     } catch (error) {

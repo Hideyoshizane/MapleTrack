@@ -17,77 +17,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     Character = selectedList.characters[0];
     await loadPage();
     if(Character){
-      setupCharacterDropdownToggle();
-      setupCharacterButtonsEvent();
-      setupBossesButtonEvent();
-
+      await setupCharacterDropdownToggle();
+      await setupCharacterButtonsEvent();
+      await setupBossesButtonEvent();
+      await setupTopButtonsEvent();
     }
-    
-    const button = document.querySelector('.teste');
-    button.addEventListener('click', async () =>{
-        const placeholder = [
-            {
-              server: server,
-              userOrigin: username,
-              characters: [
-                {
-                  name: 'Sayaka',
-                  totalIncome: '21200000',
-                  bosses: [{
-                    name: 'Zakum',
-                    difficulty: "Easy",
-                    value: '200000',
-                    reset: 'Daily',
-                    checked: false,
-                    DailyTotal: '5',
-                    date: null,
 
-                  }, 
-                  {
-                    name: 'Zakum',
-                    difficulty: "Chaos",
-                    value: '16200000',
-                    reset: 'Weekly',
-                    checked: false,
-                    date: null,
-                  }
-                 ],
-                },
-                {
-                  name: 'Lilith',
-                  totalIncome: '7000000',
-                  bosses: [{
-                    name: 'Zakum',
-                    difficulty: "Easy",
-                    value: '1000000',
-                    reset: 'Daily',
-                    checked: false,
-                    DailyTotal: '7',
-                    date: null, 
-                  }],
-                },
-              ],
-            },
-          ];
-      fetch('/saveBossChange', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(placeholder),
-      });
-    });
 
 });
 
 
-const difficultyColors = {
-  Easy:   '#EDEDED',
-  Normal: '#3D3D3D',
-  Hard: '#3D3D3D',
-  Chaos: '#EDEDED',
-  Extreme: '#E39294',
-};
 
 
 async function fetchBossList(){
@@ -302,7 +241,7 @@ async function loadCharacterSelector(){
             createdButton.classList.toggle('checked');
             createdButton.classList.toggle('not-checked');
             createdSelectedButton.classList.toggle('not-checked');
-            const checkSVG = createCheckSVG();
+            const checkSVG = await createCheckSVG();
             createdButton.appendChild(checkSVG);
         }
 
@@ -341,7 +280,7 @@ async function loadCharacterIncome(){
   
 }
 
-function createCheckSVG(){
+async function createCheckSVG(){
     const checkSVG = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     checkSVG.setAttribute('width', '40');
     checkSVG.setAttribute('height', '40');
@@ -430,19 +369,19 @@ async function loadBosses(){
 
         const LevelRequirmentOK = (Character.level > difficult.minLevel);
         if(!LevelRequirmentOK){
-          updateButtonToBlock(difficultButton);
+          await updateButtonToBlock(difficultButton);
         }
 
         if(difficult.reset === 'Daily' && LevelRequirmentOK){
           const dailyTotal = difficultyFound[0] !== undefined ? difficultyFound[0].DailyTotal : 0;
           totalIncoming += Number(difficult.value) * Number(dailyTotal);
-          insertDropdownOnButton(difficultButton, dailyTotal);
+          await insertDropdownOnButton(difficultButton, dailyTotal);
         }
 
         if (checkedBoss.length > 0) {
           if (difficultyFound.length > 0) {
             if(difficultyFound[0].reset !== 'Daily'){
-              let color = difficultyColors[difficult.name];
+              let color = difficultyColors[difficult.name].color;
               const checkMark = await createCheckMark(color);
               difficultButton.appendChild(checkMark);
               totalIncoming += difficultyFound[0].value;
@@ -542,7 +481,7 @@ async function createBlockMark(){
 
 }
 
-function insertDropdownOnButton(difficultButton, DailyTotal){
+async function insertDropdownOnButton(difficultButton, DailyTotal){
   const dropdownValue= DailyTotal > 0 ? `${DailyTotal}x` : '0';
 
   const dropdown = createDOMElement('button', 'dailyDropdown');
@@ -550,7 +489,9 @@ function insertDropdownOnButton(difficultButton, DailyTotal){
   const dropdownText = createDOMElement('span', 'dropdownText', dropdownValue);
   const name = difficultButton.getAttribute('name');
 
-  const [color, backgroundColor] = getColor(name);
+  const color = difficultyColors[name].color;
+  const backgroundColor = difficultyColors[name].backgroundColor;
+  
 
   for(let i=0; i<= 7; i++){
     const text = i > 0 ? `${i}x a Week` : `${i}`;
@@ -572,34 +513,13 @@ function insertDropdownOnButton(difficultButton, DailyTotal){
   difficultButton.appendChild(dropdownWrapper);
 }
 
-function getColor(name){
-  let color;
-  let backgroundColor;
-
-  switch (name) {
-    case 'Easy':
-      color = "#EDEDED";
-      backgroundColor = "#9B9B9B";
-      break;
-
-    case 'Normal':
-      color = '#3D3D3D';
-      backgroundColor = '#91C9E3';
-      break;
-
-    case 'Hard':
-      color = '#3D3D3D';
-      backgroundColor = '#E39294';
-      break;
-
-    case 'Chaos':
-      color = '#EDEDED';
-      backgroundColor = '#3D3D3D';
-      break;
-  }
-
-  return [color, backgroundColor];
-}
+const difficultyColors = {
+  Easy:   { color: '#EDEDED', backgroundColor: '#9B9B9B' },
+  Normal: { color: '#3D3D3D', backgroundColor: '#91C9E3' },
+  Hard:   { color: '#3D3D3D', backgroundColor: '#E39294' },
+  Chaos:  { color: '#EDEDED', backgroundColor: '#3D3D3D' },
+  Extreme: { color: '#E39294', backgroundColor: '#FFFFFF' },
+};
 
 
 async function loadMissingCharacter(){
@@ -693,7 +613,7 @@ function swapContent(selectedButton, characterButton) {
   
 }
 
-function setupCharacterDropdownToggle() {
+async function setupCharacterDropdownToggle() {
   const dropdownToggle = document.querySelector('.dropdownToggle');
   const svgIcon = dropdownToggle.querySelector('.icon');
   let isOpen = false;
@@ -707,7 +627,7 @@ function setupCharacterDropdownToggle() {
   });
 }
 
-function setupCharacterButtonsEvent(){
+async function setupCharacterButtonsEvent(){
 
   const characterButtons = document.querySelectorAll('.characterButton'); 
       
@@ -737,13 +657,13 @@ async function handleCharacterButtonClick(characterButton, characterButtons) {
   characterButton.classList.toggle('not-checked');
   characterButton.classList.toggle('checked');
 
-  checkSVG = createCheckSVG();
+  checkSVG = await createCheckSVG();
   characterButton.appendChild(checkSVG);
-  changeCharacterIncome();
-  updateBosses();
+  await changeCharacterIncome();
+  await updateBosses();
 }
 
-function setupBossesButtonEvent() {
+async function setupBossesButtonEvent() {
 	const body = document.body;
 
 	//create interaction for blocked buttons
@@ -766,7 +686,7 @@ function setupBossesButtonEvent() {
 		}
 	});
 	//iteraction for buttons that are not daily and are not blocked
-	body.addEventListener('click', (event) => {
+	body.addEventListener('click', async (event) => {
 		const clickedButton = event.target.closest(
 			'.easyButton, .normalButton, .hardButton, .chaosButton, .extremeButton'
 		);
@@ -775,7 +695,7 @@ function setupBossesButtonEvent() {
 			const hasSelect = clickedButton.querySelector('.option');
 
 			if (!isBlocked && !hasSelect) {
-				buttonClickedFunctional(clickedButton);
+				await buttonClickedFunctional(clickedButton);
 			}
 		}
 	});
@@ -838,27 +758,35 @@ async function createBlockedTooltip(buttonRect, minLevel){
 }
 
 async function buttonClickedFunctional(button) {
-  let bossBox = button.parentNode;
-  bossBox = bossBox.parentNode;
+  const bossBox = button.closest('.bossBox');
+
   const bossName = bossBox.querySelector('span').innerText;
   const difficulty = button.getAttribute('name');
-  const svgInsideButton = button.querySelector('svg');
-  let bossBoxValue = Number(bossBox.getAttribute('totalIncome'));
+
   const totalIncomeSpan = bossBox.querySelector('.totalBossIncome');
   const value = Number(button.getAttribute('value'));
+
+  const svgInsideButton = button.querySelector('svg');
+
   let newValue = 0;
+  let otherButtonValue;
+
   if (svgInsideButton) {
     button.removeChild(svgInsideButton);
     newValue = 1;
     await updateBossIncomeSpan(value, bossBox, 0, totalIncomeSpan);
-  } else {
+  } 
+  else {
     const allSVGs = bossBox.querySelector('svg');
     if (allSVGs) {
-      allSVGs.parentElement.removeChild(allSVGs);
+      otherButtonValue = Number(allSVGs.parentElement.getAttribute('value'));
+      allSVGs.parentElement.removeChild(allSVGs);      
     }
-
     await updateBossIncomeSpan(value, bossBox, 1, totalIncomeSpan);
-    const color = difficultyColors[difficulty];
+    if(otherButtonValue){
+      await updateBossIncomeSpan(otherButtonValue, bossBox, 0, totalIncomeSpan);
+    }
+    const color = difficultyColors[difficulty].color;
     const checkMark = await createCheckMark(color);
     button.appendChild(checkMark);
   }
@@ -869,7 +797,7 @@ async function buttonClickedFunctional(button) {
   };
 
   const boss = bossJson.filter(boss => boss.name === bossName);
-  insertBossOnList(boss, data);
+  await insertBossOnList(boss, data);
 }
 
 async function updateBossIncomeSpan(value, bossBox, Add, totalIncomeSpan){
@@ -886,19 +814,26 @@ async function updateBossIncomeSpan(value, bossBox, Add, totalIncomeSpan){
     bossBox.addEventListener('transitionend', () => {
       totalIncomeSpan.style.display = bossBox.classList.contains('open') ? 'block' : 'none';
     });
-  } else if (bossBoxValue == 0) {
+  } else if (bossBoxValue == 0 && bossBox.classList.contains('open')) {
     bossBox.classList.toggle('open');
     totalIncomeSpan.style.display = bossBox.classList.contains('open') ? 'block' : 'none';
+  }
+  if(Add == 2){
+    if(bossBox.classList.contains('open')){
+      bossBox.classList.toggle('open');
+    }
+    totalIncomeSpan.style.display = 'none';
+    bossBox.setAttribute('totalIncome', 0);
+    totalIncomeSpan.innerText = '0';
   }
 
 }
 
-async function updateBossValue(newValue, dropdown){
+async function updateBossValue(newValue, dropdown, characterChange = false){
     let bossBox = dropdown;
-    let buttonValue;
+
     const button = dropdown.parentNode.parentNode;
     const oldValue = Number(dropdown.parentNode.getAttribute('oldValue'));
-    console.log(oldValue);
 
 		const difficult = dropdown.getAttribute('difficult');
     while (bossBox && (!bossBox.classList.contains('bossBox'))) {
@@ -909,10 +844,10 @@ async function updateBossValue(newValue, dropdown){
     const totalIncomeSpan = bossBox.querySelector('.totalBossIncome');
     if (oldValue !== newValue) {
       let change = (oldValue > newValue ? -1 : 1) * Number(button.getAttribute('value')) * Math.abs(oldValue - newValue);
-      updateBossIncomeSpan(change, bossBox, 1, totalIncomeSpan);
+      await updateBossIncomeSpan(change, bossBox, 1, totalIncomeSpan);
     } else {
       let change = Number(button.getAttribute('value')) * newValue;
-      updateBossIncomeSpan(change, bossBox, 1, totalIncomeSpan);
+      await updateBossIncomeSpan(change, bossBox, 1, totalIncomeSpan);
     }
 
     
@@ -924,8 +859,10 @@ async function updateBossValue(newValue, dropdown){
       newValue: Number(newValue), 
       difficult: difficult
     };
-    insertBossOnList(boss, data);
-    changeCharacterIncome();
+    if(!characterChange){
+      await insertBossOnList(boss, data);
+    }
+    await changeCharacterIncome();
 }
 async function insertBossOnList(boss, data){
 
@@ -960,7 +897,7 @@ async function insertBossOnList(boss, data){
       //Add daily boss
       if(difficultData.reset == 'Daily'){
         //Add Daily boss
-        const bossToAdd = createBossToAdd(bossName, data.difficult, value, difficultData.reset, data.newValue);    
+        const bossToAdd = await createBossToAdd(bossName, data.difficult, value, difficultData.reset, data.newValue);    
         Character.bosses.push(bossToAdd);
       }else{
         //Case difficult is not daiy.
@@ -969,7 +906,7 @@ async function insertBossOnList(boss, data){
           //if there is same reset type of boss, remove it.
           Character.bosses.splice(weeklyIndex, 1);
         }
-        const bossToAdd = createBossToAdd(bossName, data.difficult, value, difficultData.reset, data.newValue);
+        const bossToAdd = await createBossToAdd(bossName, data.difficult, value, difficultData.reset, data.newValue);
         Character.bosses.push(bossToAdd);
       }
     }
@@ -978,22 +915,22 @@ async function insertBossOnList(boss, data){
   } else{ //If boss Name not found.
       if(difficultData.reset == 'Daily'){
         //Add Daily boss
-        const bossToAdd = createBossToAdd(bossName, data.difficult, value, difficultData.reset, data.newValue);
+        const bossToAdd = await createBossToAdd(bossName, data.difficult, value, difficultData.reset, data.newValue);
         Character.bosses.push(bossToAdd);
       }
       else{
         //Add Not Daily boss
-        const bossToAdd = createBossToAdd(bossName, data.difficult, value, difficultData.reset, data.newValue);
+        const bossToAdd = await createBossToAdd(bossName, data.difficult, value, difficultData.reset, data.newValue);
         Character.bosses.push(bossToAdd);
       }
     }
 
   await updateCharacterTotalIncome();
   await updateTotalCharactersIncome();
-  updateTotalSelected();
+  await updateTotalSelected();
 }
 
-function createBossToAdd(name, difficulty, value, difficultData, newValue) {
+async function createBossToAdd(name, difficulty, value, difficultData, newValue) {
   const isDailyReset = difficultData === 'Daily';
   const bossToAdd = {
     name,
@@ -1021,12 +958,12 @@ async function resetOtherDropdown(dropdown){
   }
   const allDropdown = bossBox.querySelectorAll('.dailyDropdown');
   const filteredDropdown = Array.from(allDropdown).filter((dropdown) => dropdown.getAttribute('difficult') !== difficult);
-  filteredDropdown.forEach(dropdown => {
+  filteredDropdown.forEach(async dropdown => {
       const value = dropdown.parentElement.getAttribute('value');
       if(value > 0){
         dropdown.parentElement.setAttribute('value', 0);
         dropdown.parentElement.querySelector('.dropdownText').innerText = '0';
-        updateBossValue(0, dropdown);
+        await updateBossValue(0, dropdown);
       }
   });
 }
@@ -1060,20 +997,71 @@ async function updateTotalCharactersIncome(){
 async function updateBosses(){
   const bossesButtons =  document.querySelectorAll('.easyButton, .normalButton, .hardButton, .chaosButton, .extremeButton');
   bossesButtons.forEach(async button => {
+
+    const bossBox = button.parentElement.parentElement;
+    const totalIncomeSpan = bossBox.querySelector('.totalBossIncome');
+    const value = Number(button.getAttribute('value'));
     const minLevel = button.getAttribute('minLevel');
     const reset = button.getAttribute('reset');
-    if(button.classList.contains('blocked') && Character.level >= minLevel){
-      button.classList.remove('blocked');
-      const svgInsideButton = button.querySelector('svg');
-      button.removeChild(svgInsideButton);
-      buttonText = createDOMElement('span', 'buttonText', `${button.getAttribute('name')}`);
-      button.appendChild(buttonText);
-    }
+
     if(Character.level < minLevel){
      await updateButtonToBlock(button);
+     await updateBossIncomeSpan(value, bossBox, 2, totalIncomeSpan);
     }
-    if(reset == 'Daily' && !button.classList.contains('blocked') && button.querySelector('.option') === null){
-      insertDropdownOnButton(button, 0);
+
+    if(Character.level >= minLevel){
+
+      if(button.classList.contains('blocked')){
+        button.classList.remove('blocked');
+        const blockedIcon = button.querySelector('svg');
+        button.removeChild(blockedIcon);
+        buttonText = createDOMElement('span', 'buttonText', `${button.getAttribute('name')}`);
+        button.appendChild(buttonText);
+      }
+
+      if(reset == 'Daily' && !button.classList.contains('blocked') && button.querySelector('.option') === null){
+        await insertDropdownOnButton(button, 0);
+      }
+
+      const bossName = button.parentElement.parentElement.querySelector('.bossName').innerText;
+      const difficult = button.querySelector('.buttonText').innerText;
+      const foundBoss = Character.bosses.find((searchBoss) => searchBoss.name === bossName && searchBoss.difficulty === difficult);
+      if(foundBoss) {
+
+        if(reset == 'Daily'){
+          const dropdown = button.querySelector('.dailyDropdown');
+          await updateBossValue(foundBoss.DailyTotal, dropdown, true);
+          const dropdownText = button.querySelector('.dropdownText');
+          dropdownText.innerText = foundBoss.DailyTotal;
+          const dropdownWrapper = button.querySelector('.dropdownWrapper');
+          dropdownWrapper.setAttribute('value', foundBoss.DailyTotal);
+        }
+        else{
+          const hasCheck = button.querySelector('svg');
+          if(!hasCheck) {
+          const color = difficultyColors[difficult].color;
+          const checkMark = await createCheckMark(color);
+          button.appendChild(checkMark);
+          }
+          await updateBossIncomeSpan(value, bossBox, 1, totalIncomeSpan);
+        }
+      } else{
+
+        if(reset == 'Daily'){
+          const dropdown = button.querySelector('.dailyDropdown');
+          await updateBossValue(0, dropdown, true);
+          const dropdownText = button.querySelector('.dropdownText');
+          dropdownText.innerText = 0;
+          const dropdownWrapper = button.querySelector('.dropdownWrapper');
+          dropdownWrapper.setAttribute('value', 0);
+        } else{
+          const svgIcon = button.querySelector('svg');
+          if(svgIcon){
+            button.removeChild(svgIcon);
+            await updateBossIncomeSpan(value, bossBox, 0, totalIncomeSpan);
+          }
+        }
+      }
     }
   })
 }
@@ -1083,4 +1071,27 @@ async function updateTotalSelected(){
     const totalBosses = await calculateTotalBosses();
     const totalSelectedBosses = document.querySelector('.totalSelectedBosses');
     totalSelectedBosses.innerText = `${totalBosses}/180`;
+}
+
+async function setupTopButtonsEvent(){
+  const discardButton = document.querySelector('.discardButton');
+
+  discardButton.addEventListener('click', () => {
+    window.location.href = '/weeklyBoss';
+  });
+
+
+
+  const saveButton = document.querySelector('.saveButton');
+  saveButton.addEventListener('click', async () => {
+    selectedList['userOrigin'] = username;
+    await fetch('/saveBossChange', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(selectedList),
+    });
+    window.location.href = '/weeklyBoss';
+  });
 }
