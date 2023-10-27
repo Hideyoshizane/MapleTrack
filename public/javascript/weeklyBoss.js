@@ -1,4 +1,5 @@
 window.bossList;
+window.bossJson;
 window.server;
 window.selectedList;
 window.username;
@@ -32,6 +33,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
   
   setupServerDropdownToggle();
+  await setupCharactersDropdownToggle();
+  setupBossClickEvents();
 
   const serverButtons = document.querySelectorAll('.serverButton'); 
     
@@ -55,6 +58,9 @@ async function fetchBossList(){
   
     const response =  await fetch(`/bossList/${username}`);
     bossList = await response.json();
+
+    const jsonPath = '../../../public/data/bosses.json';
+    bossJson = await fetch(jsonPath).then((response) => response.json());
 
 
     selectedList = bossList.server;
@@ -187,13 +193,13 @@ function createProgressBar(current) {
 
 async function createTotalGain(){
   const parentDiv = document.querySelector('.topButtons');
-  const Gold = await createImageElement(`../../public/assets/icons/menu/gold.webp`,'Gold Icon', 'goldIcon');
+  const Gold = await createImageElement(`../../public/assets/icons/menu/stash.webp`,'Gold Icon', 'goldIcon');
   const GoldtextDiv = createDOMElement('div', 'GoldTextDiv');
 
   const totalGainText = createDOMElement('span', 'totalGainText', 'Total Gain');
   const GainValue = `${selectedList.totalGains.toLocaleString('en-US')}`;
   const totalGainValue = createDOMElement('span','totalGoldValue', GainValue);
-  const fontSize = await adjustFontSizeToFit(GainValue);
+  const fontSize = await adjustFontSizeToFit(GainValue, 265, 32);
   totalGainValue.style.fontSize = fontSize + 'px';
 
   GoldtextDiv.appendChild(totalGainText);
@@ -204,9 +210,7 @@ async function createTotalGain(){
   parentDiv.appendChild(totalGainDiv);
 }
 
-async function adjustFontSizeToFit(totalGainValue) {
-  const maxWidth = 265;
-  const originalFontSize = 32;
+async function adjustFontSizeToFit(totalGainValue, maxWidth, originalFontSize) {
 
   const copy = document.createElement('span');
   copy.textContent = totalGainValue;
@@ -353,7 +357,13 @@ async function createEditBossesButton(){
 async function loadCharacterCards(){
   const parentDiv = document.querySelector('.characters');
   for(characters of selectedList.characters){
-    characterButton = createDOMElement('button', 'characterButton');
+    dropdown = createDOMElement('div', 'characterDropdown');
+
+    characterButton = createDOMElement('div', 'characterButton');
+    buttonWrapper = createDOMElement('button', 'buttonWrapper');
+    buttonWrapper.classList.add('closed');
+    
+    bossDiv = createDOMElement('div', 'bossButtonDiv');
 
     const imgSource = `../../public/assets/buttom_profile/${characters.code}.webp`;
     characterImage = await createImageElement(imgSource, 'character Profile', 'profile');
@@ -372,6 +382,8 @@ async function loadCharacterCards(){
     let totalChecks = 0;
     if(characters.bosses.length > 0){
       for(bosses of characters.bosses){
+        const bossButton = await createBossButton(bosses);
+        bossDiv.appendChild(bossButton);
         if(bosses.checked == true){
           totalChecks += 1;
         }
@@ -381,13 +393,15 @@ async function loadCharacterCards(){
     let checks;
     
     if(totalChecks == characters.bosses.length){
-      characterButton.style.backgroundColor = "#9EE493";
+      buttonWrapper.style.backgroundColor = "#9EE493";
       checks = await createCheckMark();
     }
     else{
-      characterButton.style.backgroundColor = "#D7D7D7";
-      checks = createDOMElement('span', 'checks', `${totalChecks}/${characters.bosses.length}`);
+      buttonWrapper.style.backgroundColor = "#D7D7D7";
+      checks = createDOMElement('span', 'checked', `${totalChecks}/${characters.bosses.length}`);
     }
+    checks.setAttribute('checked', totalChecks);
+    checks.setAttribute('total', characters.bosses.length);
     characterButton.appendChild(checks);
 
     const arrowSVG = await createArrowSVG();
@@ -395,11 +409,51 @@ async function loadCharacterCards(){
     
     characterButton.appendChild(arrowSVG);
 
-    parentDiv.appendChild(characterButton);
+    buttonWrapper.appendChild(characterButton);
+    buttonWrapper.appendChild(bossDiv);
+
+    dropdown.appendChild(buttonWrapper);
+
+    parentDiv.appendChild(dropdown);
   }
+}
+async function createBossButton(boss){
+  const bossData = bossJson.find(bossData => bossData.name == boss.name);
+
+  const bossImgPath = bossData.img;
+  const bossImage = await createImageElement(bossImgPath, `${boss.name}`, 'bossImg');
+
+  const bossInfo = createDOMElement('span', 'BossName', `${boss.difficulty} ${boss.name}`);
+  bossInfo.setAttribute('name', boss.name);
+  bossInfo.setAttribute('difficult', boss.difficulty);
+
+  const bossValue = createDOMElement('span', 'BossValue', `${boss.value.toLocaleString('en-us')}`);
+  bossValue.setAttribute('value', boss.value);
+
+  const fontSize = await adjustFontSizeToFit(bossInfo.textContent, 268, 32);
+  bossInfo.style.fontSize = fontSize + 'px';
+
+  const checkMark = boss.checked ? await createCheckMark() : await createUncheckMark();
+
+
+
+  const bossButton = createDOMElement('button', 'BossButton');
+  const bossText = createDOMElement('div', 'BossText');
+
+  bossText.appendChild(bossInfo);
+  bossText.appendChild(bossValue);
+
+  bossButton.appendChild(bossImage);
+  bossButton.appendChild(bossText);
+  bossButton.appendChild(checkMark);
+
+  bossButton.style.backgroundColor = boss.checked ? "#9EE493" :  "#D7D7D7";
+
+  return bossButton;
 }
 async function createCheckMark(){
   const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  svg.classList.add("checked");
   svg.setAttribute("width", "40");
   svg.setAttribute("height", "40");
   svg.setAttribute("viewBox", "0 0 40 40");
@@ -414,40 +468,26 @@ async function createCheckMark(){
   return svg;
 
 }
-async function createUncheckMark(){
+
+async function createUncheckMark() {
   const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-  svg.setAttribute("width", "48");
-  svg.setAttribute("height", "48");
-  svg.setAttribute("viewBox", "0 0 48 48");
+  svg.classList.add("unchecked");
 
-  const clipPath0 = document.createElementNS("http://www.w3.org/2000/svg", "clipPath");
-  clipPath0.setAttribute("id", "clip0_210_3756");
-  const rect0 = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-  rect0.setAttribute("width", "48");
-  rect0.setAttribute("height", "48");
-  rect0.setAttribute("fill", "white");
-  clipPath0.appendChild(rect0);
-
-  const clipPath1 = document.createElementNS("http://www.w3.org/2000/svg", "clipPath");
-  clipPath1.setAttribute("id", "clip1_210_3756");
-  const rect1 = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-  rect1.setAttribute("width", "48");
-  rect1.setAttribute("height", "48");
-  rect1.setAttribute("fill", "white");
-  clipPath1.appendChild(rect1);
+  svg.setAttribute("width", "40");
+  svg.setAttribute("height", "40");
+  svg.setAttribute("viewBox", "0 0 40 40");
+  svg.setAttribute("fill", "none");
 
 
   const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-  path.setAttribute("d", "M24 4C12.96 4 4 12.96 4 24C4 35.04 12.96 44 24 44C35.04 44 44 35.04 44 24C44 12.96 35.04 4 24 4ZM24 40C15.16 40 8 32.84 8 24C8 15.16 15.16 8 24 8C32.84 8 40 15.16 40 24C40 32.84 32.84 40 24 40Z");
-  path.setAttribute("fill", "black");
+  path.setAttribute("d", "M20 0C8.96 0 0 8.96 0 20C0 31.04 8.96 40 20 40C31.04 40 40 31.04 40 20C40 8.96 31.04 0 20 0ZM20 36C11.16 36 4 28.84 4 20C4 11.16 11.16 4 20 4C28.84 4 36 11.16 36 20C36 28.84 28.84 36 20 36Z");
+  path.setAttribute("fill", "#3D3D3D");
 
-
-  svg.appendChild(clipPath0);
-  svg.appendChild(clipPath1);
   svg.appendChild(path);
 
   return svg;
 }
+
 async function updateTopButtons(){
   const copyServer = selectedList.name;
   await fetchBossList();
@@ -456,13 +496,13 @@ async function updateTopButtons(){
   await updateProgressBar();
   const totalGoldValue = document.querySelector('.totalGoldValue');
   newGoldValue = `${selectedList.totalGains.toLocaleString('en-US')}`;
-  const fontSize = await adjustFontSizeToFit(newGoldValue);
+  const fontSize = await adjustFontSizeToFit(newGoldValue, 265, 32);
   totalGoldValue.style.fontSize = fontSize + 'px';
   totalGoldValue.textContent = newGoldValue;
   const characters = document.querySelector('.characters');
   if(copyServer != selectedList.name){
     characters.innerHTML = '';
-    loadCharacterCards()
+    loadCharacterCards();
   }
 }
 
@@ -539,6 +579,23 @@ function setupServerDropdownToggle() {
   });
 }
 
+async function setupCharactersDropdownToggle() {
+  document.body.addEventListener('click', (event) => {
+    if(event.target.closest('.BossButton')){
+      return;
+    }
+    if (event.target.closest('.buttonWrapper')) {
+      const button = event.target.closest('.buttonWrapper');
+      const svgIcon = button.querySelector('.icon');
+        button.classList.toggle('open');
+        button.classList.toggle('closed');
+        svgIcon.classList.toggle('rotate');
+    }
+  });
+}
+
+
+
 async function handleServerButtonClick(serverButton, serverButtons) {
   const selectedButton = document.querySelector('.SelectedButton');
   serverButtons.forEach(button => {
@@ -555,3 +612,76 @@ async function handleServerButtonClick(serverButton, serverButtons) {
   updateTopButtons();
 }
 
+function setupBossClickEvents() {
+	document.body.addEventListener('click', async (event) => {
+		if (event.target.closest('.BossButton')) {
+			const button = event.target.closest('.BossButton');
+
+			const bossName = button.querySelector('.BossName').getAttribute('name');
+			const difficult = button
+				.querySelector('.BossName')
+				.getAttribute('difficult');
+			const value = button.querySelector('.BossValue').getAttribute('value');
+			const characterName = button
+				.closest('.buttonWrapper')
+				.querySelector('.characterName').innerText;
+			const date = DateTime.utc();
+			const checkMark = button.querySelector('.checked') ? true : false;
+			const requestContent = {
+				server: server,
+				username: username,
+				characterName: characterName,
+				bossName: bossName,
+				difficult: difficult,
+				value: value,
+				date: date,
+				checkMark: !checkMark,
+			};
+
+			fetch('/checkBoss', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(requestContent),
+			}).catch((error) => {
+				console.error('Error:', error);
+			});
+
+			const checkSVG = checkMark
+				? button.querySelector('.checked')
+				: button.querySelector('.unchecked');
+			const newSVG = checkMark
+				? await createUncheckMark()
+				: await createCheckMark();
+			checkSVG.replaceWith(newSVG);
+			await updateCharacterButton(button, !checkMark);
+			updateTopButtons();
+		}
+	});
+}
+
+async function updateCharacterButton(button, checkMark) {
+  const characterButton = button.parentElement.parentElement.querySelector('.characterButton');
+  let checks = characterButton.querySelector('.checked');
+  let checked = Number(checks.getAttribute('checked'));
+  const total = checks.getAttribute('total');
+  checked = checkMark ? checked + Number(1) : checked - Number(1);
+
+  if(checked == total){
+    const checkSVG = await createCheckMark();
+    checks.replaceWith(checkSVG);
+    characterButton.style.backgroundColor = "#9EE493";
+    checks = checkSVG;
+  }else{
+    checkedSpan = createDOMElement('span', 'checked', `${checked}/${total}`);
+    checks.replaceWith(checkedSpan);
+    checks = checkedSpan;
+    characterButton.style.backgroundColor = "#D7D7D7";
+  }
+  checks.setAttribute("checked", checked);
+  checks.setAttribute("total", total);
+  console.log(checks);
+  button.style.backgroundColor = checkMark ? "#9EE493": "#D7D7D7";
+
+}

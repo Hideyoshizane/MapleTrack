@@ -150,7 +150,7 @@ body{
     display: block;
     position: relative;
     width: 233px;
-    z-index: 2;
+    z-index: 5;
     margin-left: 25px;
 }
 
@@ -291,22 +291,104 @@ body{
     width: 1386px;
     height: 200px;
     margin-top: 66px;
+    position: relative;
+}
+
+.characterDropdown{
+    width: 451px;
+    display: block;
+    position: relative;
+    cursor: pointer;
+    z-index: 2;
+}
+
+
+.buttonWrapper{
+    display: block;
+    width: 451px;
+    max-height: 80px;
+    border-radius: 25px;
+    border: none;
+    position: absolute;
+    transition: all 0.3s ease-in-out;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+}
+
+.buttonWrapper.open{
+    position:absolute;
+    max-height: 472px;
+    width: 451px;
+    cursor: pointer;
+    border-radius: 25px;
+    margin: 0;
+    padding: 0;
+    z-index: 5;
+    box-shadow: 0px 1px 3px 1px #8F8F8F;
 }
 
 
 .characterButton{
     width: 451px;
     height: 80px;
-    border-radius: 25px;
-    border: none;
     display: flex;
-    flex-wrap: wrap;
-    align-content: center;
-    overflow: hidden;
-    padding: 0px;
-    position: relative;
     align-items: center;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
 }
+
+.bossButtonDiv{
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: 288px;
+    width: 451px;
+}
+
+.BossButton{
+    border: none;
+    border-top: 2px solid #ADADAD;
+    width: 451px;
+    display: flex;
+    height: 96px;
+    cursor: pointer;
+    align-items: center;
+    transition: all 0.3s ease-in-out;
+}
+
+.BossButton:hover{
+    filter:brightness(90%);
+}
+
+.BossButton svg{
+    margin-left: auto;
+    margin-right: 21px;
+}
+
+.bossImg{
+    height: 67px;
+    width: 66px;
+    margin-left: 10px;
+}
+
+.BossText{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-left: 8px;
+}
+.BossName{
+    font-family: 'Inter';
+    font-size: 32px;
+}
+
+.BossValue{
+    font-family: 'Inter';
+    font-size: 20px;
+}
+
+
 
 .profile{
     position: absolute;
@@ -338,7 +420,7 @@ body{
     color: #3D3D3D;
 }
 
-.checks{
+.checked{
     font-family: 'Inter';
     font-weight: 400;
     font-size: 36px;
@@ -349,4 +431,8 @@ body{
 .characterButton svg{
     margin-left: auto;
     margin-right: 12px;
+}
+
+#icon{
+    margin-right: 32px;
 }

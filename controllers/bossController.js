@@ -15,12 +15,19 @@ module.exports = {
   },
   increaseBoss: async (ctx) => {
     try{
+      const { server, username, characterName, bossName, difficult, value, date, checkMark} = ctx.request.body;
 
-      const { value, server, username } = ctx.request.body;
       const ListFound = await bossList.findOne({userOrigin: username});
       const foundServer = ListFound.server.find(servers => servers.name === server);
-      foundServer.totalGains += Number(value);
-      foundServer.weeklyBosses++;
+      const foundCharacter = foundServer.characters.find(character => character.name === characterName);
+      const foundBoss = foundCharacter.bosses.find(boss => boss.name == bossName && boss.difficulty == difficult);
+
+      foundBoss.checked = checkMark;
+      
+      foundServer.totalGains = checkMark ? foundServer.totalGains + Number(value) : foundServer.totalGains - Number(value);
+      foundServer.weeklyBosses = checkMark ? foundServer.weeklyBosses + 1 : foundServer.weeklyBosses - 1;
+
+      foundBoss.date = date;
 
       await ListFound.save();
       ctx.status = 200;
