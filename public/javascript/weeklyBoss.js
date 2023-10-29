@@ -13,25 +13,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     await fetchBossList();
     await loadPage();
 
-  const button = document.querySelector('.teste');
-  button.addEventListener('click', async () =>{
-    const placeholder = {
-      value: 10000000000,
-      server: server,
-      username: username
-    };
-    fetch('/checkBoss', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(placeholder),
-    }).catch((error) => {
-      console.error('Error:', error);
-    });
-    updateTopButtons();
-  });
-  
   setupServerDropdownToggle();
   await setupCharactersDropdownToggle();
   setupBossClickEvents();
@@ -269,20 +250,20 @@ async function createAllServerButton() {
         createdSelectedButton.removeChild(svgElement);
         
         selectedServer.insertBefore(createdSelectedButton, selectedServer.firstChild);
-        createdSelectedButton.classList.toggle('not-checked');
+        createdSelectedButton.classList.toggle('not-selected');
 
         if(server){
           updateToCookie(selectedServer, server);
         }
         else{
-          createdSelectedButton.classList.toggle('checked');
+          createdSelectedButton.classList.toggle('selected');
         }
         isFirstButton = false;
       }
 
       if(createdButton.querySelector('span').textContent === server){
-        createdButton.classList.toggle('not-checked');
-        createdButton.classList.toggle('checked');
+        createdButton.classList.toggle('not-selected');
+        createdButton.classList.toggle('selected');
       }
       fragment.appendChild(createdButton);
       serverSelector.appendChild(fragment);
@@ -326,7 +307,7 @@ async function createServerButton(serverData) {
   createdButton.appendChild(serverNameSpan);
   createdButton.appendChild(checkSVG);
 
-  createdButton.classList.toggle('not-checked');
+  createdButton.classList.toggle('not-selected');
 
   return createdButton;
 
@@ -580,7 +561,7 @@ function setupServerDropdownToggle() {
 }
 
 async function setupCharactersDropdownToggle() {
-  document.body.addEventListener('click', (event) => {
+  document.body.addEventListener('click', async (event) => {
     if(event.target.closest('.BossButton')){
       return;
     }
@@ -590,25 +571,49 @@ async function setupCharactersDropdownToggle() {
         button.classList.toggle('open');
         button.classList.toggle('closed');
         svgIcon.classList.toggle('rotate');
+        const toggle = button.classList.contains('open') ? true : false;
+          await updateGrid(event.target, toggle);
     }
   });
+  
 }
+async function updateGrid(buttonWrapper, toggle){
+  const characterDropdown = document.querySelectorAll('.characterDropdown');
+  const grid =  characterDropdown[0].parentElement;
+  const quantity = characterDropdown.length;
+  const numRows = Math.ceil(quantity/ 3);
+  if(toggle){
+    for (let i = 0; i < characterDropdown.length; i++) {
+      if (characterDropdown[i].contains(buttonWrapper)) {
+        const startIndexOfLastRow = (numRows - 1) * 3;
+        const endIndexOfLastRow = quantity - 1;
+        if(i >= startIndexOfLastRow && i <= endIndexOfLastRow){
+          const height = (numRows * 150) + 322;
+          grid.style.minHeight = height + 'px';
+        }
 
-
+        break;
+      }
+    }
+  }else{
+    grid.style.transition = 'min-height 0.3s ease';
+    grid.style.minHeight =  '615px';
+  }
+}
 
 async function handleServerButtonClick(serverButton, serverButtons) {
   const selectedButton = document.querySelector('.SelectedButton');
   serverButtons.forEach(button => {
     if (button !== serverButton) {
-      button.classList.add('not-checked');
-      button.classList.remove('checked');
+      button.classList.add('not-selected');
+      button.classList.remove('selected');
     }
   });
 
   swapContentAndStoreCookie(selectedButton, serverButton);
   server = selectedButton.querySelector('span').innerText;
-  serverButton.classList.toggle('not-checked');
-  serverButton.classList.toggle('checked');
+  serverButton.classList.toggle('not-selected');
+  serverButton.classList.toggle('selected');
   updateTopButtons();
 }
 
@@ -622,15 +627,15 @@ function setupBossClickEvents() {
 				.querySelector('.BossName')
 				.getAttribute('difficult');
 			const value = button.querySelector('.BossValue').getAttribute('value');
-			const characterName = button
+			const characterClass = button
 				.closest('.buttonWrapper')
-				.querySelector('.characterName').innerText;
+				.querySelector('.characterClass').innerText;
 			const date = DateTime.utc();
 			const checkMark = button.querySelector('.checked') ? true : false;
 			const requestContent = {
 				server: server,
 				username: username,
-				characterName: characterName,
+				characterClass: characterClass,
 				bossName: bossName,
 				difficult: difficult,
 				value: value,
@@ -681,7 +686,6 @@ async function updateCharacterButton(button, checkMark) {
   }
   checks.setAttribute("checked", checked);
   checks.setAttribute("total", total);
-  console.log(checks);
   button.style.backgroundColor = checkMark ? "#9EE493": "#D7D7D7";
 
 }

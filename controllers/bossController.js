@@ -15,11 +15,10 @@ module.exports = {
   },
   increaseBoss: async (ctx) => {
     try{
-      const { server, username, characterName, bossName, difficult, value, date, checkMark} = ctx.request.body;
-
+      const { server, username, characterClass, bossName, difficult, value, date, checkMark} = ctx.request.body;
       const ListFound = await bossList.findOne({userOrigin: username});
       const foundServer = ListFound.server.find(servers => servers.name === server);
-      const foundCharacter = foundServer.characters.find(character => character.name === characterName);
+      const foundCharacter = foundServer.characters.find(character => character.class === characterClass);
       const foundBoss = foundCharacter.bosses.find(boss => boss.name == bossName && boss.difficulty == difficult);
 
       foundBoss.checked = checkMark;
@@ -27,7 +26,7 @@ module.exports = {
       foundServer.totalGains = checkMark ? foundServer.totalGains + Number(value) : foundServer.totalGains - Number(value);
       foundServer.weeklyBosses = checkMark ? foundServer.weeklyBosses + 1 : foundServer.weeklyBosses - 1;
 
-      foundBoss.date = date;
+      foundBoss.date = checkMark ? date : null;
 
       await ListFound.save();
       ctx.status = 200;
@@ -55,7 +54,7 @@ module.exports = {
       const foundServer = listFound.server.find(servers => servers.name === characterList.name);
 
       for(const character of characterList.characters){
-        const foundCharacter = foundServer.characters.find((serverCharacter) => serverCharacter.name === character.name);
+        const foundCharacter = foundServer.characters.find((serverCharacter) => serverCharacter.code === character.code);
         for(const bossData of character.bosses){
           const existingBossIndex = foundCharacter.bosses.findIndex((existingBoss) =>
             (existingBoss.name == bossData.name) && (existingBoss.reset == bossData.reset)
@@ -75,7 +74,7 @@ module.exports = {
       }
       //Remove bosses that are on character list on database but not on character from the request
       for(const character of foundServer.characters){
-        const foundCharacter = characterList.characters.find((listCharacter) => listCharacter.name === character.name);
+        const foundCharacter = characterList.characters.find((listCharacter) => listCharacter.code === character.code);
         character.bosses = character.bosses.filter(onDatabaseBoss => {
           return foundCharacter.bosses.some(onRequestBoss => (onDatabaseBoss.name === onRequestBoss.name) && (onDatabaseBoss.reset === onRequestBoss.reset))
         })

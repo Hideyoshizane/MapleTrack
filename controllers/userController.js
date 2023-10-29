@@ -65,5 +65,21 @@ module.exports = {
 			ctx.body = { error: 'An error occurred while rendering Weekly Boss page' };
 		}
 	},
+	signout: async(ctx) =>{
+		try{
+			if(ctx.isAuthenticated()){
+				ctx.logout();
+				ctx.redirect('/');
+			} else{
+				ctx.redirect('/login');
+			}
+
+
+		} catch (error) {
+			console.error('Error signing out', error);
+			ctx.status = 500;
+			ctx.body = { error: 'An error occurred while signing out'};
+		}
+	}
 
 };

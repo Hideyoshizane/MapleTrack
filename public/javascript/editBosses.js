@@ -633,6 +633,7 @@ async function setupCharacterButtonsEvent(){
       
   characterButtons.forEach(characterButton => {
     characterButton.addEventListener('click', async () => {
+      console.log(characterButton);
       await handleCharacterButtonClick(characterButton, characterButtons);
     });
   });
@@ -738,7 +739,7 @@ function dropdownExpand(dropdown, expand = false){
   buttonText.style.display = expand === true ? 'none' : 'block';
   dropdown.style.width = expand === true ? '117px' : '18px';
   dropdown.style.height = expand === true ? 'auto' : '25px';
-  dropdown.style.zIndex = expand === true ? '10' : '1';
+  dropdown.style.zIndex = expand === true ? '9' : '1';
   dropdown.style.display = expand === true ? 'block' : 'none';
 
   parentdiv.style.overflow = expand === true ? 'hidden' : '';
@@ -978,9 +979,9 @@ async function updateCharacterTotalIncome(){
 }
 async function changeCharacterIncome(){
   const SelectedCharacterButton = document.querySelector('.SelectedCharacterButton');
-  const characterName = SelectedCharacterButton.querySelector('.characterName').innerText;
+  const characterClass = SelectedCharacterButton.querySelector('.characterClass').innerText;
 
-  Character = selectedList.characters.find(character => character.name === characterName);
+  Character = selectedList.characters.find(character => character.class === characterClass);
   const totalIncomeValue = Character.totalIncome.toLocaleString('en-us');
   const TotalIncome = document.querySelector('.characterTotalIncome');
   const fontSize = await adjustFontSizeToFit(totalIncomeValue, 224, 32);

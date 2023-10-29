@@ -478,6 +478,7 @@ body{
     align-items: center;
     font-family: 'Inter';
     font-size: 20px;
+    z-index: 6;
 }
 
 

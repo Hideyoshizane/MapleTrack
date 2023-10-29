@@ -28,6 +28,7 @@ router.get('/search', authenticate.ensureAuthenticated, searchController.search)
 router.get('/weeklyBoss', authenticate.ensureAuthenticated, userController.weeklyBoss);
 router.get('/bossList/:username', authenticate.ensureAuthenticated, bossController.getList);
 router.get('/editBosses', authenticate.ensureAuthenticated, bossController.editBosses);
+router.get('/signout', authenticate.ensureAuthenticated, userController.signout);
 
 router.post('/login', authController.login);
 router.post('/signup', userController.signup);
@@ -46,6 +47,7 @@ router.get('/code/:username/:server/:characterCode', characterController.getChar
 
 router.get('/:username/:server', authenticate.ensureAuthenticated, characterController.fullCharacter);
 router.get('/home', authenticate.ensureAuthenticated, userController.home);
+
 
 
 module.exports = router;
