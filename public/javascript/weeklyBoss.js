@@ -51,29 +51,6 @@ async function fetchBossList(){
   }
 }
 
-function createDOMElement(tag, className = '', content = '') {
-    const element = document.createElement(tag);
-  
-    if (className) {
-      element.classList.add(className);
-    }
-  
-    if (content !== '') {
-      element.textContent = content;
-    }
-  
-    return element;
-  }
-
-  async function createImageElement(src, alt, className = '') {
-    const image = createDOMElement('img', className);
-    image.src = src;
-    image.alt = alt;
-  
-    await image.decode();
-    return image;
-  }
-
 async function loadPage(){
     await loadTopButtons();
     await loadCharacterCards();
@@ -83,7 +60,9 @@ async function loadTopButtons(){
     await createBossingLogo();
     await createWeekProgress();
     await createTotalGain();
-    await createAllServerButton();
+    const data = await fetch('/userServer').then(response => response.json());
+
+    await loadServerButtons(data, document.querySelector('.topButtons'));
     await createEditBossesButton();
 }
 
@@ -151,7 +130,6 @@ async function createWeekProgress(){
     parentDiv.appendChild(WeekProgressDiv);
 }
 
-
 function createProgressBar(current) {
   const maxWidth = 227;
   const total = 180;
@@ -216,71 +194,6 @@ async function adjustFontSizeToFit(totalGainValue, maxWidth, originalFontSize) {
   return fontSize;
 }
 
-
-async function createAllServerButton() {
-	const parentDiv = document.querySelector('.topButtons');
-  const dropdownToggle = createDOMElement('button', 'dropdownToggle');
-  dropdownToggle.id = 'dropdownToggle';
-
-  const selectedServer = createDOMElement('div', 'selectedServer');
-  const arrowSVG = await createArrowSVG();
-  const serverSelector = createDOMElement('div', 'serverSelector');
-
-  selectedServer.appendChild(arrowSVG);
-
-  let isFirstButton = true;
-
-  try{
-    const data = await fetch('/userServer').then(response => response.json());
-    const serverDataPromises = data.map(async (serverID) => {
-      const response = await fetch(`/serverName/${serverID}`);
-      return response.json();
-    });
-
-    const serverDataArray = await Promise.all(serverDataPromises);
-    const fragment = document.createDocumentFragment();
-
-    for(servers of serverDataArray) {
-      const createdButton = await createServerButton(servers);
-      if(isFirstButton){
-        createdSelectedButton = createdButton.cloneNode(true);
-        createdSelectedButton.classList.replace('serverButton', 'SelectedButton');
-
-        const svgElement = createdSelectedButton.querySelector('svg');
-        createdSelectedButton.removeChild(svgElement);
-        
-        selectedServer.insertBefore(createdSelectedButton, selectedServer.firstChild);
-        createdSelectedButton.classList.toggle('not-selected');
-
-        if(server){
-          updateToCookie(selectedServer, server);
-        }
-        else{
-          createdSelectedButton.classList.toggle('selected');
-        }
-        isFirstButton = false;
-      }
-
-      if(createdButton.querySelector('span').textContent === server){
-        createdButton.classList.toggle('not-selected');
-        createdButton.classList.toggle('selected');
-      }
-      fragment.appendChild(createdButton);
-      serverSelector.appendChild(fragment);
-
-    }
-
-  } catch(error){
-    console.error(error);
-  };
-
-  const dropdown = createDOMElement('div', 'dropdown');
-  dropdownToggle.appendChild(selectedServer);
-  dropdownToggle.appendChild(serverSelector);
-  dropdown.appendChild(dropdownToggle);
-  parentDiv.appendChild(dropdown);
-}
-
 async function createArrowSVG() {
   const svgElement = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   svgElement.setAttribute("id", "icon");
@@ -296,37 +209,6 @@ async function createArrowSVG() {
   return svgElement;
 }
 
-async function createServerButton(serverData) {
-
-  const createdButton = createDOMElement('button', 'serverButton');
-  const serverImage = await createImageElement(`${serverData.img}.webp`, serverData.name, 'serverIcon');
-  const serverNameSpan = createDOMElement('span', '', serverData.name);
-  const checkSVG = createCheckSVG();
-
-  createdButton.appendChild(serverImage);
-  createdButton.appendChild(serverNameSpan);
-  createdButton.appendChild(checkSVG);
-
-  createdButton.classList.toggle('not-selected');
-
-  return createdButton;
-
-}
-
-function createCheckSVG(){
-  const checkSVG = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-  checkSVG.setAttribute('width', '30');
-  checkSVG.setAttribute('height', '30');
-  checkSVG.setAttribute('viewBox', '0 0 36 27');
-  checkSVG.setAttribute('fill', 'none');
-
-  const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-  path.setAttribute('d', 'M12 21.4L3.59999 13L0.799988 15.8L12 27L36 2.99995L33.2 0.199951L12 21.4Z');
-  path.setAttribute('fill', '#E3E3E3');
-
-  checkSVG.appendChild(path);
-  return checkSVG;
-}
 
 async function createEditBossesButton(){
   const parentDiv = document.querySelector('.topButtons');
@@ -530,22 +412,6 @@ function updateToCookie(selectedServer, savedServerContent){
 
 }
 
-function swapContentAndStoreCookie(selectedButton, serverButton) {
-  const selectedImage = selectedButton.querySelector('img');
-  const selectedName = selectedButton.querySelector('span');
-
-  const serverImage = serverButton.querySelector('img');
-  const serverNameSpan = serverButton.querySelector('span');
-
-
-  selectedImage.setAttribute('alt', serverNameSpan.textContent);
-  selectedImage.src = serverImage.src;
-  selectedName.textContent = serverNameSpan.textContent;
-
-  setCookie('selectedServerContent', serverNameSpan.textContent);
-
-}
-
 function setupServerDropdownToggle() {
   const dropdownToggle = document.querySelector('.dropdownToggle');
   const svgIcon = dropdownToggle.querySelector('.icon');
@@ -605,17 +471,18 @@ async function handleServerButtonClick(serverButton, serverButtons) {
   const selectedButton = document.querySelector('.SelectedButton');
   serverButtons.forEach(button => {
     if (button !== serverButton) {
-      button.classList.add('not-selected');
+      button.classList.add('notSelected');
       button.classList.remove('selected');
     }
   });
 
   swapContentAndStoreCookie(selectedButton, serverButton);
   server = selectedButton.querySelector('span').innerText;
-  serverButton.classList.toggle('not-selected');
+  serverButton.classList.toggle('notSelected');
   serverButton.classList.toggle('selected');
   updateTopButtons();
 }
+
 
 function setupBossClickEvents() {
 	document.body.addEventListener('click', async (event) => {

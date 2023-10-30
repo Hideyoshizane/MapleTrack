@@ -149,11 +149,11 @@ body{
     padding-right: 4px;
 }
 
-.serverButton.not-checked svg{
+.serverButton.notSelected svg{
     opacity: 0%;
 }
 
-.serverButton.checked svg{
+.serverButton.selected svg{
     opacity: 100%;
 }
 

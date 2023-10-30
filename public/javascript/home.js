@@ -1,18 +1,22 @@
 window.cardBody;
+window.username;
+
 document.addEventListener('DOMContentLoaded', async () => {
   try {
 
-    const data = await fetch('/userServer').then(response => response.json());
+    username = document.getElementById('userdata').getAttribute('data-username');
 
-    await loadServerButtons(data);
+    const data = await fetch('/userServer').then(response => response.json());
+    const mainContent = document.querySelector('.mainContent');
+    await loadServerButtons(data, mainContent);
+
+    setupDropdownToggle();
   
-    const serverSelector = document.getElementById('serverSelector');
     const characterCardDiv = document.querySelector('.characterCards');
     const selectedButton = dropdownToggle.querySelector('.SelectedButton');
     await createCharacterCards();
-    
-    const serverButtons = serverSelector.querySelectorAll('.serverButton'); 
-    
+  
+    const serverButtons = document.querySelector('.serverSelector').querySelectorAll('.serverButton');     
     serverButtons.forEach(serverButton => {
       serverButton.addEventListener('click', async () => {
         await handleServerButtonClick(serverButton, serverButtons, selectedButton, characterCardDiv);
@@ -26,71 +30,19 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 });
 
-async function loadServerButtons(data){
-  const serverSelector = document.getElementById('serverSelector');
-  const selectedServer  = document.querySelector('.selectedServer');
-  const savedServerContent = getCookie('selectedServerContent');
-  let isFirstButton = true;
-
-  try {
-    const serverDataPromises = data.map(async (serverID) => {
-      const response = await fetch(`/serverName/${serverID}`);
-      return response.json();
-    });
-
-    const serverDataArray = await Promise.all(serverDataPromises);
-
-    const fragment = document.createDocumentFragment();
-
-
-    for (const serverData of serverDataArray) {
-      const createdButton = await createServerButton(serverData);
-      
-        if(isFirstButton){
-          createdSelectedButton = createdButton.cloneNode(true);
-          createdSelectedButton.classList.replace('serverButton', 'SelectedButton');
-
-          const svgElement = createdSelectedButton.querySelector('svg');
-          createdSelectedButton.removeChild(svgElement);
-          
-          selectedServer.insertBefore(createdSelectedButton, selectedServer.firstChild);
-          createdSelectedButton.classList.toggle('not-checked');
-
-          if(savedServerContent){
-            updateToCookie(selectedServer, savedServerContent);
-          }
-          else{
-            createdSelectedButton.classList.toggle('checked');
-          }
-          isFirstButton = false;
-        }
-
-        if(createdButton.querySelector('span').textContent === savedServerContent){
-          createdButton.classList.toggle('not-checked');
-          createdButton.classList.toggle('checked');
-        }
-        fragment.appendChild(createdButton);
-
-      } 
-      serverSelector.appendChild(fragment);
-      
-  }catch (error) {
-      console.error('Error fetching server name:', error);
-    }
-}
 
 async function handleServerButtonClick(serverButton, serverButtons, selectedButton, characterCardDiv) {
   serverButtons.forEach(button => {
     if (button !== serverButton) {
-      button.classList.add('not-checked');
-      button.classList.remove('checked');
+      button.classList.add('notSelected');
+      button.classList.remove('selected');
     }
     cardBody = document.querySelectorAll('.cardBody');
   });
 
   swapContentAndStoreCookie(selectedButton, serverButton);
-  serverButton.classList.toggle('not-checked');
-  serverButton.classList.toggle('checked');
+  serverButton.classList.toggle('notSelected');
+  serverButton.classList.toggle('selected');
 
   characterCardDiv.innerHTML = '';
   await createCharacterCards();
@@ -104,132 +56,11 @@ function setupCardClickListeners() {
 }
 
 function cardClickRedirect(){
-  const selectedButton = document.querySelector('.SelectedButton');
-  const server = selectedButton.querySelector('span').innerText;
+  const server = document.querySelector('.SelectedButton').querySelector('span').innerText;
   const character = this.getAttribute('characterclass');
-  const scriptElement = document.getElementById('userdata');
-  const username = scriptElement.getAttribute('data-username');
+
   var url = `${username}/${server}/${character}`;
   window.location.href = url;
-}
-function createDOMElement(tag, className = '', content = '') {
-  const element = document.createElement(tag);
-
-  if (className) {
-    element.classList.add(className);
-  }
-
-  if (content !== '') {
-    element.textContent = content;
-  }
-
-  return element;
-}
-async function createImageElement(src, alt, className = '') {
-  const image = createDOMElement('img', className);
-  image.src = src;
-  image.alt = alt;
-
-  await image.decode();
-  return image;
-}
-
-
-async function createServerButton(serverData) {
-  const createdButton = document.createElement('button');
-  createdButton.classList.add('serverButton');
-
-  const serverImage = await createImageElement(`${serverData.img}.webp`, serverData.name, 'serverIcon');
-  const serverNameSpan = createDOMElement('span', '', serverData.name);
-  const checkSVG = createCheckSVG();
-
-  createdButton.appendChild(serverImage);
-  createdButton.appendChild(serverNameSpan);
-  createdButton.appendChild(checkSVG);
-
-  createdButton.classList.toggle('not-checked');
-
-  return createdButton;
-
-}
-
-function createCheckSVG(){
-  const checkSVG = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-  checkSVG.setAttribute('width', '30');
-  checkSVG.setAttribute('height', '30');
-  checkSVG.setAttribute('viewBox', '0 0 36 27');
-  checkSVG.setAttribute('fill', 'none');
-
-  const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-  path.setAttribute('d', 'M12 21.4L3.59999 13L0.799988 15.8L12 27L36 2.99995L33.2 0.199951L12 21.4Z');
-  path.setAttribute('fill', '#E3E3E3');
-
-  checkSVG.appendChild(path);
-  return checkSVG;
-}
-
-function swapContentAndStoreCookie(selectedButton, serverButton) {
-  const selectedImage = selectedButton.querySelector('img');
-  const selectedName = selectedButton.querySelector('span');
-
-  const serverImage = serverButton.querySelector('img');
-  const serverNameSpan = serverButton.querySelector('span');
-
-
-  selectedImage.setAttribute('alt', serverNameSpan.textContent);
-  selectedImage.src = serverImage.src;
-  selectedName.textContent = serverNameSpan.textContent;
-
-  setCookie('selectedServerContent', serverNameSpan.textContent);
-
-}
-
-
-(function setupDropdownToggle() {
-  const dropdownToggle = document.querySelector('.dropdownToggle');
-  const svgIcon = dropdownToggle.querySelector('.icon');
-  let isOpen = false;
-
-  dropdownToggle.addEventListener('click', function() {
-    isOpen = !isOpen;
-
-    dropdownToggle.classList.toggle('open', isOpen);
-    dropdownToggle.classList.toggle('closed', !isOpen);
-    svgIcon.classList.toggle('rotate', isOpen);
-  });
-})();
-
-function setCookie(name, value, days) {
-  const expires = new Date();
-  expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
-
-  // Check if the cookie is 'selectedServerContent'
-  const path = name === 'selectedServerContent' ? '/' : '';
-
-  document.cookie = `${name}=${encodeURIComponent(value)};expires=${expires.toUTCString()};path=${path}`;
-}
-
-
-
-function getCookie(name) {
-  const cookieArr = document.cookie.split(';');
-  for (let i = 0; i < cookieArr.length; i++) {
-    const cookiePair = cookieArr[i].split('=');
-    if (cookiePair[0].trim() === name) {
-      return decodeURIComponent(cookiePair[1]);
-    }
-  }
-  return null;
-}
-
-function updateToCookie(selectedServer, savedServerContent){
-  const selectedServerImg = selectedServer.querySelector('img');
-  const currentImgSrc = selectedServerImg.getAttribute('src');
-  const newImgSrc = currentImgSrc.replace(/[^/]*\.webp$/, `${savedServerContent}.webp`);
-  selectedServerImg.src = newImgSrc;
-  selectedServerImg.setAttribute('alt', savedServerContent);
-  selectedServer.querySelector('span').textContent = savedServerContent;
-
 }
 
 const filterButtons = document.querySelectorAll('.filterButton');
@@ -276,10 +107,6 @@ async function updateSelectedValuesCookie() {
 async function createCharacterCards(){
   const parentDiv = document.querySelector('.characterCards');
   const selectedServer = document.querySelector('.SelectedButton').querySelector('span').innerText;
-
-  
-  const userDataScript = document.getElementById('userdata');
-  const username = userDataScript.getAttribute('data-username');
 
 
   const characters = await fetch(`/${username}/${selectedServer}`).then(response => response.json());
@@ -448,7 +275,7 @@ async function setForceLevel(forceArea, characterData, forceImg, forceType){
 
 async function createCharacterPortrait(characterData){
 
-  const portrait =   await createImageElement(`../../public/assets/cards/${characterData.code}.webp`, characterData.class);
+  const portrait = await createImageElement(`../../public/assets/cards/${characterData.code}.webp`, characterData.class);
 
   if(characterData.level === 0 && characterData.name === 'Character Name'){
     portrait.setAttribute('class', 'cardPortrait off');
@@ -564,23 +391,6 @@ async function createBossIconAndName(characterData) {
   nameAndIcon.appendChild(characterName);
 
   return nameAndIcon;
-}
-
-async function loadEditableSVGFile(filePath) {
-  try {
-    const response = await fetch(filePath);
-    const svgData = await response.text();
-
-    const svgElement = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-
-    svgElement.innerHTML = svgData;
-
-    return svgElement;
-
-  } catch (error) {
-    console.error("Error loading SVG file:", error);
-    return null;
-  }
 }
 
 async function createLowerPart(characterData){

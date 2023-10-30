@@ -261,7 +261,7 @@ body{
     padding-right: 4px;
 }
 
-.serverButton.not-selected svg{
+.serverButton.notSelected svg{
     opacity: 0%;
 }
 

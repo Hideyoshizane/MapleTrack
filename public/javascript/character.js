@@ -1,3 +1,4 @@
+
 const path = window.location.pathname;
 const segments = path.split('/');
 const username = segments[1];

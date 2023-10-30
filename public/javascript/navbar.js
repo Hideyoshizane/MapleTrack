@@ -3,16 +3,18 @@ const { DateTime } = luxon;
 document.addEventListener("DOMContentLoaded", function() {
   setInterval(updateCountdown, 1000);
 
+  const username = document.getElementById("userdata").getAttribute('data-username');
+  
   const searchInput = document.getElementById("search");
   const searchResultsDiv = document.getElementById("searchResults");
   const searchSectionDiv = document.querySelector(".searchSection");
-  const username = document.getElementById("userdata").getAttribute('data-username');
 
   searchInput.addEventListener("input", () => {
     performSearch(searchInput, searchResultsDiv, searchSectionDiv, username); 
   });
 
   // Event listener for transition end
+
   searchSectionDiv.addEventListener("transitionend", () => {
     if (!searchSectionDiv.classList.contains("expanded")) {
       searchResultsDiv.innerHTML = "";
@@ -41,17 +43,41 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   });
 
+  
+//Menu buttons event handlers
+  const menuButtons = document.querySelectorAll('.menuButton');
+  menuButtons.forEach((button) => {
+    button.addEventListener('click', async (event) => {
+      const redirectUrl = button.getAttribute('data-redirect');
+      
+      try {
+        const response = await fetch(redirectUrl, { method: 'GET' });
+
+        if (response.ok) {
+          window.location.href = redirectUrl;
+        } else {
+          console.error('Request was not successful.');
+        }
+      } catch (error) {
+        console.error('Error during button action:', error);
+      }
+    });
+  });
 
 });
 
 function updateCountdown() {
   const dailyOutput = document.getElementById("daily");
   const weeklyOutput =  document.getElementById("weekly");
+  
   const now = DateTime.utc();
+
   let wednesday = DateTime.utc().set({weekday: 4, hour: 0, minute: 0, second: 0, millisecond: 0});
+
   if (now >= wednesday) {
     wednesday = wednesday.plus({ weeks: 1 });
   }
+
   const diff = wednesday.diff(now);
 
   let daily = DateTime.utc().set({hour: 0, minute: 0, second: 0, millisecond: 0});
@@ -83,7 +109,7 @@ async function performSearch(searchInput, searchResultsDiv, searchSectionDiv, us
 
   // Send a request to the server to search for characters
   try {
-    const characters = await (await fetch(`/search?query=${query}&username=${username}`)).json();
+    const characters = await fetch(`/search?query=${query}&username=${username}`).then(response => response.json());
     await createSearchResults(characters, searchResultsDiv);
     searchSectionDiv.classList.add("expanded");
 
@@ -112,28 +138,6 @@ async function createSearchResults(characters, parentDiv){
   }
 }
 
-function createDOMElement(tag, className = '', content = '') {
-  const element = document.createElement(tag);
-
-  if (className) {
-    element.classList.add(className);
-  }
-
-  if (content !== '') {
-    element.textContent = content;
-  }
-
-  return element;
-}
-async function createImageElement(src, alt, className = '') {
-  const image = createDOMElement('img', className);
-  image.src = src;
-  image.alt = alt;
-
-  await image.decode();
-  return image;
-}
-
 function clearSearch(searchResultsDiv, searchSectionDiv, searchInput){
   searchResultsDiv.innerHTML = "";
   searchResultsDiv.style.display = "none";
@@ -160,25 +164,3 @@ usernameBlock.addEventListener('click', function() {
     isOpen = !isOpen;
 });
 
-
-//Menu buttons event handlers
-document.addEventListener('DOMContentLoaded', () => {
-  const menuButtons = document.querySelectorAll('.menuButton');
-  menuButtons.forEach((button) => {
-    button.addEventListener('click', async (event) => {
-      const redirectUrl = button.getAttribute('data-redirect');
-      
-      try {
-        const response = await fetch(redirectUrl, { method: 'GET' });
-
-        if (response.ok) {
-          window.location.href = redirectUrl;
-        } else {
-          console.error('Request was not successful.');
-        }
-      } catch (error) {
-        console.error('Error during button action:', error);
-      }
-    });
-  });
-});
