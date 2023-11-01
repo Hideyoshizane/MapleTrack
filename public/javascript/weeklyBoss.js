@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     await fetchBossList();
     await loadPage();
 
-  setupServerDropdownToggle();
+  setupDropdownToggle();
   await setupCharactersDropdownToggle();
   setupBossClickEvents();
 
@@ -74,6 +74,12 @@ async function createBossingLogo(){
     const bossIconpath = '../../public/assets/icons/menu/boss_slayer.svg';
     const bossIcon = await loadEditableSVGFile(bossIconpath, 'bossIcon');
 
+    const pathElements = bossIcon.querySelectorAll("path");
+
+    pathElements.forEach((path) => {
+      path.setAttribute("fill", '#3D3D3D');
+    });
+
     const bossSpan = createDOMElement('span', 'bossHunting', 'Boss Hunting');
 
     bossDiv.appendChild(bossIcon);
@@ -82,33 +88,6 @@ async function createBossingLogo(){
     parentDiv.appendChild(bossDiv);
 }
 
-async function loadEditableSVGFile(filePath, className) {
-    try {
-      const response = await fetch(filePath);
-      const svgData = await response.text();
-  
-      const svgElement = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-     
-      svgElement.innerHTML = svgData;
-  
-      if (className) {
-        svgElement.classList.add(className);
-      }
-  
-      const pathElements = svgElement.querySelectorAll("path");
-
-      pathElements.forEach((path) => {
-        path.setAttribute("fill", '#3D3D3D');
-      });
-      
-      return svgElement;
-  
-    } catch (error) {
-      console.error("Error loading SVG file:", error);
-      return null;
-    }
-  }
-
 async function createWeekProgress(){
     const parentDiv = document.querySelector('.topButtons');
     const WeekProgressDiv = createDOMElement('div', 'WeekProgressDiv');
@@ -116,9 +95,12 @@ async function createWeekProgress(){
 
     const WeekProgress = createDOMElement('span','weekProgress', 'Week Progress');
     const totalProgress = createDOMElement('span','totalProgress', `${selectedList.weeklyBosses}/180`);
-    const progressBar = createProgressBar(selectedList.weeklyBosses);
-
-    
+    const levelBarData = {
+      level: selectedList.weeklyBosses,
+      targetLevel: 180,
+      jobType: 'default',
+    }
+    const progressBar = await createLeveLBar(levelBarData, 223, "WeeklyProgress");    
 
     const textDiv = createDOMElement('div', 'WeekTextDiv');
 
@@ -129,26 +111,6 @@ async function createWeekProgress(){
     WeekProgressDiv.appendChild(textDiv);
     parentDiv.appendChild(WeekProgressDiv);
 }
-
-function createProgressBar(current) {
-  const maxWidth = 227;
-  const total = 180;
-	const outerDiv = createDOMElement('div', 'OuterEXPBar');
-	outerDiv.style.width = `${maxWidth}px`;
-	outerDiv.style.height = '16px';
-
-	const innerDiv = createDOMElement('div', 'InnerEXPBar');
-	innerDiv.style.height = '12px';
-	let barSize = (current / total) * maxWidth;
-	if (current == 180) {
-    barSize = maxWidth - 4;
-    innerDiv.style.backgroundColor = '#48AA39'; 
-  }
-
- 	innerDiv.style.width = `${barSize}px`;
-	outerDiv.appendChild(innerDiv);
-	return outerDiv;
-  }
 
 async function createTotalGain(){
   const parentDiv = document.querySelector('.topButtons');
@@ -298,8 +260,6 @@ async function createBossButton(boss){
 
   const checkMark = boss.checked ? await createCheckMark() : await createUncheckMark();
 
-
-
   const bossButton = createDOMElement('button', 'BossButton');
   const bossText = createDOMElement('div', 'BossText');
 
@@ -353,77 +313,26 @@ async function createUncheckMark() {
 
 async function updateTopButtons(){
   const copyServer = selectedList.name;
+
   await fetchBossList();
+
   const totalProgress = document.querySelector('.totalProgress');
   totalProgress.textContent = `${selectedList.weeklyBosses}/180`;
-  await updateProgressBar();
+
+  await updateExpBar(document.querySelector('.progressBar'), selectedList.weeklyBosses, 180, 223);
+
   const totalGoldValue = document.querySelector('.totalGoldValue');
   newGoldValue = `${selectedList.totalGains.toLocaleString('en-US')}`;
+
   const fontSize = await adjustFontSizeToFit(newGoldValue, 265, 32);
   totalGoldValue.style.fontSize = fontSize + 'px';
   totalGoldValue.textContent = newGoldValue;
+
   const characters = document.querySelector('.characters');
   if(copyServer != selectedList.name){
     characters.innerHTML = '';
     loadCharacterCards();
   }
-}
-
-async function updateProgressBar(){
-  const InnerEXPBar = document.querySelector('.InnerEXPBar');
-  let barSize = (selectedList.weeklyBosses / 180) * 223;
-	if (selectedList.weeklyBosses == 180) {
-    barSize = 223;
-    InnerEXPBar.style.backgroundColor = '#48AA39'; 
-  }
-  InnerEXPBar.style.width = `${barSize}px`;
-
-}
-
-
-function setCookie(name, value, days) {
-  const expires = new Date();
-  expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
-
-  // Check if the cookie is 'selectedServerContent'
-  const path = name === 'selectedServerContent' ? '/' : '';
-
-  document.cookie = `${name}=${encodeURIComponent(value)};expires=${expires.toUTCString()};path=${path}`;
-}
-
-function getCookie(name) {
-  const cookieArr = document.cookie.split(';');
-  for (let i = 0; i < cookieArr.length; i++) {
-    const cookiePair = cookieArr[i].split('=');
-    if (cookiePair[0].trim() === name) {
-      return decodeURIComponent(cookiePair[1]);
-    }
-  }
-  return null;
-}
-
-function updateToCookie(selectedServer, savedServerContent){
-  const selectedServerImg = selectedServer.querySelector('img');
-  const currentImgSrc = selectedServerImg.getAttribute('src');
-  const newImgSrc = currentImgSrc.replace(/[^/]*\.webp$/, `${savedServerContent}.webp`);
-  selectedServerImg.src = newImgSrc;
-  selectedServerImg.setAttribute('alt', savedServerContent);
-  selectedServer.querySelector('span').textContent = savedServerContent;
-
-}
-
-function setupServerDropdownToggle() {
-  const dropdownToggle = document.querySelector('.dropdownToggle');
-  const svgIcon = dropdownToggle.querySelector('.icon');
-  let isOpen = false;
-
-  dropdownToggle.addEventListener('click', function() {
-    isOpen = !isOpen;
-
-    dropdownToggle.classList.toggle('open', isOpen);
-    dropdownToggle.classList.toggle('closed', !isOpen);
-    svgIcon.classList.toggle('rotate', isOpen);
-  });
 }
 
 async function setupCharactersDropdownToggle() {

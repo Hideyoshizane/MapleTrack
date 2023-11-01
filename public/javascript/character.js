@@ -70,19 +70,6 @@ async function loadCharacterImage(characterData) {
   parentDiv.appendChild(image);
 };
 
-function createDOMElement(tag, className = '', content = '') {
-  const element = document.createElement(tag);
-
-  if (className) {
-    element.classList.add(className);
-  }
-
-  if (content !== '') {
-    element.textContent = content;
-  }
-
-  return element;
-}
 
 async function loadTopButtons(){
   const parentDiv = document.querySelector('.characterData');
@@ -165,27 +152,6 @@ function adjustFontSizeToFit(JobType) {
 }
 
 
-async function loadEditableSVGFile(filePath, className) {
-  try {
-    const response = await fetch(filePath);
-    const svgData = await response.text();
-
-    const svgElement = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-   
-    svgElement.innerHTML = svgData;
-
-    if (className) {
-      svgElement.classList.add(className);
-    }
-
-    return svgElement;
-
-  } catch (error) {
-    console.error("Error loading SVG file:", error);
-    return null;
-  }
-}
-
 async function loadLinkSkillDiv(characterData){
   const linkspan = createDOMElement('span', 'linkLegionTitle', 'Link Skill');
 
@@ -224,26 +190,6 @@ async function loadLegionDiv(characterData) {
   return legionBlock;
 }
 
-function getRank(characterData) {
-  const { level, code } = characterData;
-
-  if (code === 'zero') {
-    if (level >= 130 && level <= 159) return 'b';
-    if (level >= 160 && level <= 179) return 'a';
-    if (level >= 180 && level <= 199) return 's';
-    if (level >= 200 && level <= 249) return 'ss';
-    if (level >= 250) return 'sss';
-  } else {
-    if (level >= 60 && level <= 99) return 'b';
-    if (level >= 100 && level <= 139) return 'a';
-    if (level >= 140 && level <= 199) return 's';
-    if (level >= 200 && level <= 249) return 'ss';
-    if (level >= 250) return 'sss';
-  }
-
-  return 'no_rank';
-}
-
 async function loadLevelAndLevelBar(characterData){
   const parentDiv = document.querySelector('.characterData');
 
@@ -252,74 +198,18 @@ async function loadLevelAndLevelBar(characterData){
   const levelNumber = createDOMElement('span', 'levelNumber',`${characterData.level}/${characterData.targetLevel}`);
 
   const levelDiv = createDOMElement('div','levelDiv');
-
-  const levelBar = createProgressBar(characterData, characterData.level, characterData.targetLevel, 800, 32, 28);
+  const levelBarData = {
+    level: characterData.level,
+    targetLevel: characterData.targetLevel,
+    jobType: characterData.jobType,
+  }
+  const levelBar = await createLeveLBar(levelBarData, 796, 'characterLevelBar');
 
   levelDiv.appendChild(level);
   levelDiv.appendChild(levelNumber);
 
   parentDiv.appendChild(levelDiv);
   parentDiv.appendChild(levelBar);
-}
-
-function createProgressBar(characterData, current, total, maxWidth, outerHeight, innerHeight, isArcane = false, isForce = false) {
-  const outerDiv = createDOMElement('div','OuterEXPBar');
-  outerDiv.style.width = `${maxWidth}px`;
-  outerDiv.style.height = `${outerHeight}px`;
-
-  const innerDiv = createDOMElement('div','InnerEXPBar');
-  innerDiv.style.height = `${innerHeight}px`;
-  let barSize = (current / total) * maxWidth;
-    if ((isArcane && total.level === 20) && isForce) {
-      barSize = maxWidth;
-    } else if ((!isArcane && total.level === 11 ) && isForce) {
-      barSize = maxWidth;
-    }
-    
-    if(barSize >= maxWidth)
-      barSize = (maxWidth - 4);
-    if(current === 0 && total === 0 ){
-      barSize = (maxWidth - 4);
-    }
-
-  innerDiv.style.width = `${barSize}px`;
- 
-  setStyle(innerDiv, characterData.jobType, current, total);
-  outerDiv.appendChild(innerDiv);
-  return outerDiv;
-}
-
-function setStyle(element, jobType, currentLevel, targetLevel) {
-  let value;
-
-  switch (jobType) {
-    case 'mage':
-      value = '#92BCE3';
-      break;
-
-    case 'thief':
-    case 'xenon':
-      value = '#B992E3';
-      break;
-    
-    case 'warrior':
-      value = '#E39294';
-      break;
-
-    case 'bowman':
-      value = '#96E4A5';
-      break;
-
-    case 'pirate':
-      value = '#E3C192';
-      break;
-  }
-
-  if (currentLevel >= targetLevel) {
-    value = '#48AA39';
-  }
-
-  element.style.backgroundColor = value;
 }
 
 async function loadForce(characterData, isArcane){
@@ -368,9 +258,18 @@ async function loadForce(characterData, isArcane){
     ? force.exp
     : expTable.level[force.level].EXP;
 
-    const expBar = createProgressBar(characterData, force.exp, expTotal , 195, 8, 4, true, true);
+    console.log(expTotal);
+
+    const levelBarData = {
+      level: force.exp,
+      targetLevel: expTotal,
+      jobType: characterData.jobType,
+    }
+
+    const expBar = await createLeveLBar(levelBarData, 191, 'forceLevelBar');
+    
     if (characterData.level < force.minLevel) {
-      const innerbar = expBar.querySelector('.InnerEXPBar');
+      const innerbar = expBar.querySelector('.progressBar');
       innerbar.style.width = '0px';
   }
 
@@ -409,17 +308,6 @@ async function loadForce(characterData, isArcane){
   }
   forceDiv.appendChild(forceGrid);
   parentDiv.appendChild(forceDiv);
-}
-
-async function createImageElement(src, alt, className = '') {
-  const image = createDOMElement('img', className);
-  image.src = src;
-  image.alt = alt;
-  if (className) {
-      image.classList.add(className);
-  }
-  await image.decode();
-  return image;
 }
 
 function createExpText(Force, expTable, isArcane = false){
@@ -651,9 +539,9 @@ async function updateArea(forceName, isArcane){
     ForceEXPNumber.textContent = `${nextLevelEXPNumber}`;
   }
 
-  innerExpBar = targetDiv.querySelector('.InnerEXPBar');
+  innerExpBar = targetDiv.querySelector('.progressBar');
 
-  await updateExpBar(innerExpBar, areaData.exp, nextLevelEXPNumber);
+  await updateExpBar(innerExpBar, areaData.exp, nextLevelEXPNumber, 191);
   const remainDays = await updateDayToMax(areaData, isArcane, characterData);
   const daysToMax = targetDiv.querySelector('.daysToMax');
   daysToMax.textContent = isArcane ? `Days to Level 20: ${remainDays}` : `Days to Level 11: ${remainDays}`;
@@ -665,17 +553,6 @@ async function updateArea(forceName, isArcane){
   }
 }
 
-async function updateExpBar(innerExpBar, areaExp, nextLevelEXPNumber) {
-  maxWidth = 191
-  let barSize = (areaExp / nextLevelEXPNumber) * maxWidth;
-  if(nextLevelEXPNumber === 'MAX') {
-    barSize = maxWidth
-  }
-  if(barSize == maxWidth) {
-    innerExpBar.style.backgroundColor = '#48AA39';
-  }
-  innerExpBar.style.width = barSize + 'px';
-}
 async function updateDayToMax(areaData, isArcane, characterData){
   const jsonPath = isArcane ? '../../public/data/arcaneforceexp.json' : '../../public/data/sacredforceexp.json';
   const expTable = await fetch(jsonPath).then(response => response.json());

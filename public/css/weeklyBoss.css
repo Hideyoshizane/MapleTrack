@@ -75,6 +75,22 @@ body{
     margin-left: 16px;
 }
 
+.WeeklyProgress{
+    display: flex;
+    align-items: center;
+    border-radius: 25px;
+    width: 227px;
+    height: 16px;
+    background-color: #000000;
+}
+
+
+.WeeklyProgress .progressBar{
+    margin-left: 2px;
+    border-radius: 25px;
+    height: 12px;
+}
+
 .crystalIcon{
     width: 65px;
     height: 73px;
@@ -85,7 +101,7 @@ body{
 .GoldTextDiv{
     display: flex;
     flex-direction: column;
-    margin-left: 4px;
+    margin-left: 2px;
 }
 .weekProgress,
 .totalProgress{

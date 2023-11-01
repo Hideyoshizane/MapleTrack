@@ -1,4 +1,4 @@
-function createDOMElement(tag, className = '', content = '') {
+function createDOMElement(tag, className = '', content = '', type = '') {
 	const element = document.createElement(tag);
 
 	if (className) {
@@ -9,8 +9,17 @@ function createDOMElement(tag, className = '', content = '') {
 		element.textContent = content;
 	}
 
+	if (tag == 'input') {
+		element.placeholder = content;
+	}
+
+	if (type !== '') {
+		element.type = type;
+	}
+
 	return element;
 }
+
 async function createImageElement(src, alt, className = '') {
 	const image = createDOMElement('img', className);
 	image.src = src;
@@ -20,7 +29,7 @@ async function createImageElement(src, alt, className = '') {
 	return image;
 }
 
-async function loadEditableSVGFile(filePath) {
+async function loadEditableSVGFile(filePath, className) {
 	try {
 		const response = await fetch(filePath);
 		const svgData = await response.text();
@@ -31,6 +40,10 @@ async function loadEditableSVGFile(filePath) {
 		);
 
 		svgElement.innerHTML = svgData;
+
+		if (className) {
+			svgElement.classList.add(className);
+		}
 
 		return svgElement;
 	} catch (error) {

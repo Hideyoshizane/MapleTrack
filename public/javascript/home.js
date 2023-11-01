@@ -213,10 +213,17 @@ async function generateCard(characterData){
   lowerPart.appendChild(linkLegion);
   lowerPart.appendChild(nameAndLevel);
 
-  //Bar level
-  const levelBarWrapper = await createLeveLBar(characterData);
+  //Bar level 
+  const levelBarData = {
+    level: characterData.level,
+    targetLevel: characterData.targetLevel,
+    jobType: characterData.jobType,
+  }
+  const levelBarWrapper = createDOMElement('div', 'levelBarWrapper');
+  const levelBar = await createLeveLBar(levelBarData, 480, 'levelBar');
 
-
+  levelBarWrapper.appendChild(levelBar);
+  
   const cardBody = createDOMElement('div', 'cardBody');
 
   cardBody.setAttribute('job-type', characterData.jobType);
@@ -351,25 +358,6 @@ async function createLegionContent(characterData){
   return legionDiv;
 }
 
-function getRank(characterData) {
-  const { level, code } = characterData;
-
-  if (code === 'zero') {
-    if (level >= 130 && level <= 159) return 'b';
-    if (level >= 160 && level <= 179) return 'a';
-    if (level >= 180 && level <= 199) return 's';
-    if (level >= 200 && level <= 249) return 'ss';
-    if (level >= 250) return 'sss';
-  } else {
-    if (level >= 60 && level <= 99) return 'b';
-    if (level >= 100 && level <= 139) return 'a';
-    if (level >= 140 && level <= 199) return 's';
-    if (level >= 200 && level <= 249) return 'ss';
-    if (level >= 250) return 'sss';
-  }
-
-  return 'no_rank';
-}
 
 async function createBossIconAndName(characterData) {
   const bossIconpath = '../../public/assets/icons/menu/boss_slayer.svg';
@@ -397,9 +385,10 @@ async function createLowerPart(characterData){
   const nameAndIcon = await createBossIconAndName(characterData);
   const job = createDOMElement('span', 'job', characterData.job);
 
-  const levelSpan = createDOMElement('span', 'level', `${characterData.level}/${characterData.targetLevel}`);
+  const { color } = characterData.level >= characterData.targetLevel ? characterColors["complete"] : characterColors[characterData.jobType];
 
-  setStyle(levelSpan, characterData, true);
+  const levelSpan = createDOMElement('span', 'level', `${characterData.level}/${characterData.targetLevel}`);
+  levelSpan.style.color = color;
   
   const nameAndLevel = createDOMElement('div', 'nameAndLevel');
 
@@ -408,70 +397,4 @@ async function createLowerPart(characterData){
   nameAndLevel.appendChild(levelSpan);
 
   return nameAndLevel;
-}
-
-async function createLeveLBar(characterData){
-
-  const levelBarWrapper = createDOMElement('div', 'levelBarWrapper');
-  const levelBar = createDOMElement('div', 'levelBar');
-
-  const progressBar = createDOMElement('div', 'progressBar');
-  if(characterData.level == 0){
-    progressBar.style.width = 0;
-  }
-  else{
-    const maxWidth = 480;
-    let BarSize = (characterData.level / characterData.targetLevel) * maxWidth;
-
-    if(BarSize > maxWidth){
-      BarSize = maxWidth;
-    }
-    progressBar.style.width = BarSize + 'px';
-  }
-
-  setStyle(progressBar, characterData, false); 
-
-  levelBar.appendChild(progressBar);
-  levelBarWrapper.appendChild(levelBar);
-  return levelBarWrapper;
-}
-
-function setStyle(element, characterData, isColor) {
-  let styleProperty;
-  let value;
-
-  switch (characterData.jobType) {
-    case 'mage':
-      value = '#92BCE3';
-      break;
-
-    case 'thief':
-    case 'xenon':
-      value = '#B992E3';
-      break;
-    
-    case 'warrior':
-      value = '#E39294';
-      break;
-
-    case 'bowman':
-      value = '#96E4A5';
-      break;
-
-    case 'pirate':
-      value = '#E3C192';
-      break;
-  }
-
-  if (characterData.level >= characterData.targetLevel) {
-    value = '#48AA39';
-  }
-
-  if (isColor) {
-    styleProperty = 'color';
-  } else {
-    styleProperty = 'backgroundColor';
-  }
-
-  element.style[styleProperty] = value;
 }

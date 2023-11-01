@@ -88,27 +88,7 @@ async function loadCharacterImage(characterData) {
 	parentDiv.appendChild(image);
 }
 
-function createDOMElement(tag, className = '', content = '', type = '') {
-    const element = document.createElement(tag);
-  
-    if (className) {
-      element.classList.add(className);
-    }
-  
-    if (content !== '') {
-      element.textContent = content;
-    }
 
-	if(tag == 'input'){
-		element.placeholder = content;
-	}
-	
-	if(type !== ''){
-		element.type = type;
-	}
-  
-    return element;
-  }
 
 function createCheckboxWithLabel(className, labelText, checked) {
 	const container = document.createElement('label');

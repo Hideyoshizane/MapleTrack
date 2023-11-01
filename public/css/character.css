@@ -171,25 +171,34 @@ body{
     font-size: 48px;
 }
 
-.OuterEXPBar,
-.InnerEXPBar{
-    border-radius: 25px;
-}
-
-.OuterEXPBar{
+.characterLevelBar{
     display: flex;
     align-items: center;
     background-color: black;
-}
-.InnerEXPBar{
-    margin-left: 2px;
-}
-
-.innerLevelBar{
-    height: 28px;
-    margin-left: 2px;
+    height: 32px;
+    width: 800px;
     border-radius: 25px;
 }
+.characterLevelBar .progressBar{
+    margin-left: 2px;
+    height: 28px;
+    border-radius: 25px;
+}
+
+.forceLevelBar{
+    display: flex;
+    align-items: center;
+    background-color: black;
+    height: 8px;
+    width: 195px;
+    border-radius: 25px;
+}
+.forceLevelBar .progressBar{
+    margin-left: 2px;
+    height: 4px;
+    border-radius: 25px;
+}
+
 .arcaneForceDiv,
 .sacredForceDiv{
     margin-top: 8px;
