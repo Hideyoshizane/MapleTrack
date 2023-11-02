@@ -42,8 +42,8 @@ router.get('/userServer', authenticate.ensureAuthenticated, searchController.use
 router.get('/serverName/:serverID', authenticate.ensureAuthenticated, searchController.serverName);
 
 router.get('/:username/:server/:characterClass', authenticate.ensureAuthenticated, characterController.redirectCharacter);
-router.get('/:username/:server/:characterCode/edit', authenticate.ensureAuthenticated, characterController.editCharacter);
-router.get('/code/:username/:server/:characterCode', characterController.getCharacterData);
+router.get('/:username/:server/:characterClass/edit', authenticate.ensureAuthenticated, characterController.editCharacter);
+router.get('/class/:username/:server/:characterClass', characterController.getCharacterData);
 
 router.get('/:username/:server', authenticate.ensureAuthenticated, characterController.fullCharacter);
 router.get('/home', authenticate.ensureAuthenticated, userController.home);

@@ -156,21 +156,6 @@ async function adjustFontSizeToFit(totalGainValue, maxWidth, originalFontSize) {
   return fontSize;
 }
 
-async function createArrowSVG() {
-  const svgElement = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-  svgElement.setAttribute("id", "icon");
-  svgElement.setAttribute("width", "30px");
-  svgElement.setAttribute("height", "30px");
-  svgElement.setAttribute("viewBox", "0 0 1024 1024");
-  svgElement.setAttribute("class", "icon");
-
-  const pathElement = document.createElementNS("http://www.w3.org/2000/svg", "path");
-  pathElement.setAttribute("d", "M917.333333 364.8L851.2 298.666667 512 637.866667 172.8 298.666667 106.666667 364.8 512 768z");
-  pathElement.setAttribute("fill", "#F6F6F6");
-  svgElement.appendChild(pathElement);
-  return svgElement;
-}
-
 
 async function createEditBossesButton(){
   const parentDiv = document.querySelector('.topButtons');
@@ -190,7 +175,7 @@ async function loadCharacterCards(){
     
     bossDiv = createDOMElement('div', 'bossButtonDiv');
 
-    const imgSource = `../../public/assets/buttom_profile/${characters.code}.webp`;
+    const imgSource = `../../public/assets/buttom_profile/${getCode(characters)}.webp`;
     characterImage = await createImageElement(imgSource, 'character Profile', 'profile');
 
     characterName = createDOMElement('span', 'characterName',`${characters.name}`);
@@ -274,42 +259,7 @@ async function createBossButton(boss){
 
   return bossButton;
 }
-async function createCheckMark(){
-  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-  svg.classList.add("checked");
-  svg.setAttribute("width", "40");
-  svg.setAttribute("height", "40");
-  svg.setAttribute("viewBox", "0 0 40 40");
-  svg.setAttribute("fill", "none");
 
-  const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-  path.setAttribute("d", "M20 0C8.96 0 0 8.96 0 20C0 31.04 8.96 40 20 40C31.04 40 40 31.04 40 20C40 8.96 31.04 0 20 0ZM16 30L6 20L8.82 17.18L16 24.34L31.18 9.16L34 12L16 30Z");
-  path.setAttribute("fill", "#3D3D3D");
-
-  svg.appendChild(path);
-
-  return svg;
-
-}
-
-async function createUncheckMark() {
-  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-  svg.classList.add("unchecked");
-
-  svg.setAttribute("width", "40");
-  svg.setAttribute("height", "40");
-  svg.setAttribute("viewBox", "0 0 40 40");
-  svg.setAttribute("fill", "none");
-
-
-  const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-  path.setAttribute("d", "M20 0C8.96 0 0 8.96 0 20C0 31.04 8.96 40 20 40C31.04 40 40 31.04 40 20C40 8.96 31.04 0 20 0ZM20 36C11.16 36 4 28.84 4 20C4 11.16 11.16 4 20 4C28.84 4 36 11.16 36 20C36 28.84 28.84 36 20 36Z");
-  path.setAttribute("fill", "#3D3D3D");
-
-  svg.appendChild(path);
-
-  return svg;
-}
 
 async function updateTopButtons(){
   const copyServer = selectedList.name;
@@ -319,7 +269,7 @@ async function updateTopButtons(){
   const totalProgress = document.querySelector('.totalProgress');
   totalProgress.textContent = `${selectedList.weeklyBosses}/180`;
 
-  await updateExpBar(document.querySelector('.progressBar'), selectedList.weeklyBosses, 180, 223);
+  await updateExpBar(document.querySelector('.progressBar'), selectedList.weeklyBosses, 180, 223, 'default');
 
   const totalGoldValue = document.querySelector('.totalGoldValue');
   newGoldValue = `${selectedList.totalGains.toLocaleString('en-US')}`;
@@ -353,8 +303,8 @@ async function setupCharactersDropdownToggle() {
   
 }
 async function updateGrid(buttonWrapper, toggle){
-  const characterDropdown = document.querySelectorAll('.characterDropdown');
-  const grid =  characterDropdown[0].parentElement;
+  const characterDropdown = document.querySelector('.characterDropdown');
+  const grid =  characterDropdown.parentElement;
   const quantity = characterDropdown.length;
   const numRows = Math.ceil(quantity/ 3);
   if(toggle){
@@ -377,19 +327,21 @@ async function updateGrid(buttonWrapper, toggle){
 }
 
 async function handleServerButtonClick(serverButton, serverButtons) {
-  const selectedButton = document.querySelector('.SelectedButton');
-  serverButtons.forEach(button => {
-    if (button !== serverButton) {
-      button.classList.add('notSelected');
-      button.classList.remove('selected');
-    }
-  });
+	const selectedButton = document.querySelector('.SelectedButton');
+	if (server !== serverButton.querySelector('span').innerText) {
+		serverButtons.forEach((button) => {
+			button.classList.add('notSelected');
+			button.classList.remove('selected');
+		});
 
-  swapContentAndStoreCookie(selectedButton, serverButton);
-  server = selectedButton.querySelector('span').innerText;
-  serverButton.classList.toggle('notSelected');
-  serverButton.classList.toggle('selected');
-  updateTopButtons();
+		swapContentAndStoreCookie(selectedButton, serverButton);
+
+		server = selectedButton.querySelector('span').innerText;
+
+		serverButton.classList.toggle('notSelected');
+		serverButton.classList.toggle('selected');
+		updateTopButtons();
+	}
 }
 
 
@@ -399,13 +351,9 @@ function setupBossClickEvents() {
 			const button = event.target.closest('.BossButton');
 
 			const bossName = button.querySelector('.BossName').getAttribute('name');
-			const difficult = button
-				.querySelector('.BossName')
-				.getAttribute('difficult');
+			const difficult = button.querySelector('.BossName').getAttribute('difficult');
 			const value = button.querySelector('.BossValue').getAttribute('value');
-			const characterClass = button
-				.closest('.buttonWrapper')
-				.querySelector('.characterClass').innerText;
+			const characterClass = button.closest('.buttonWrapper').querySelector('.characterClass').innerText;
 			const date = DateTime.utc();
 			const checkMark = button.querySelector('.checked') ? true : false;
 			const requestContent = {

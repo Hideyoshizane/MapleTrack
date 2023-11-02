@@ -4,10 +4,8 @@ async function createLeveLBar(levelBarData, maxWidth, className){
     const levelBar = createDOMElement('div', className);
     const progressBar = createDOMElement('div', 'progressBar');
 
-    updateExpBar(progressBar, levelBarData.level, levelBarData.targetLevel, maxWidth);
+    await updateExpBar(progressBar, levelBarData.level, levelBarData.targetLevel, maxWidth, levelBarData.jobType);
     
-    const { color } = levelBarData.level >= levelBarData.targetLevel ? characterColors["complete"] : characterColors[levelBarData.jobType];
-    progressBar.style.backgroundColor = color;
   
     levelBar.appendChild(progressBar);
     return levelBar;
@@ -25,15 +23,18 @@ async function createLeveLBar(levelBarData, maxWidth, className){
     complete: {color: '#48AA39'}
   };
   
-  async function updateExpBar(progressBar, level, targetLevel, maxWidth) {
-    let barSize = (level / targetLevel) * maxWidth;
-    if(targetLevel === 'MAX') {
-      barSize = maxWidth;
-    }
 
-    if(barSize > maxWidth){
-      barSize = maxWidth;
-    }
+async function updateExpBar(progressBar, level, targetLevel, maxWidth, jobType) {
 
-    progressBar.style.width = barSize + 'px';
+  let barSize = (level / targetLevel) * maxWidth;
+  if (targetLevel === 'MAX') {
+    barSize = maxWidth;
   }
+
+  if (barSize > maxWidth) {
+    barSize = maxWidth;
+  }
+  progressBar.style.width = barSize + 'px';
+  const { color } = Number(level) >= Number(targetLevel) ? characterColors["complete"] : characterColors[jobType];
+  progressBar.style.backgroundColor = color;
+}

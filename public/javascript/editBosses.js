@@ -5,40 +5,39 @@ window.selectedList;
 window.Character;
 window.username;
 
-
 document.addEventListener('DOMContentLoaded', async () => {
+
     server = getCookie('selectedServerContent'); 
     if(server == undefined) {
       server = 'Scania';
       setCookie('selectedServerContent', server, 7);
     }
+
     await fetchBossList();
+
     server = selectedList.name;
     Character = selectedList.characters[0];
+
     await loadPage();
+
     if(Character){
       await setupCharacterDropdownToggle();
       await setupCharacterButtonsEvent();
       await setupBossesButtonEvent();
-      await setupTopButtonsEvent();
     }
-
+    await setupTopButtonsEvent();
 
 });
-
-
-
 
 async function fetchBossList(){
     try {
       username = document.getElementById("userdata").getAttribute('data-username');
     
-      const response =  await fetch(`/bossList/${username}`);
-      bossList = await response.json();
-  
+      bossList = await fetch(`/bossList/${username}`).then(response => response.json());
   
       selectedList = bossList.server;
       selectedList = selectedList.find(servers => servers.name === server);
+
     } catch (error) {
       console.error('Error fetching character data:', error);
     }
@@ -46,6 +45,7 @@ async function fetchBossList(){
 
 async function loadPage(){
     await loadTopButtons();
+
     if(Character){
       await loadCharacterSelector();
       await loadCharacterIncome();
@@ -71,42 +71,20 @@ async function createBossingLogo(){
   
   const bossIconpath = '../../public/assets/icons/menu/boss_slayer.svg';
   const bossIcon = await loadEditableSVGFile(bossIconpath, 'bossIcon');
+  
+  const pathElements = bossIcon.querySelectorAll("path");
+    pathElements.forEach((path) => {
+      path.setAttribute("fill", '#3D3D3D');
+    });
 
   const bossSpan = createDOMElement('span', 'bossHunting', 'Boss Hunting');
+
 
   bossDiv.appendChild(bossIcon);
   bossDiv.appendChild(bossSpan);
 
   parentDiv.appendChild(bossDiv);
 }
-
-async function loadEditableSVGFile(filePath, className) {
-    try {
-      const response = await fetch(filePath);
-      const svgData = await response.text();
-  
-      const svgElement = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-     
-      svgElement.innerHTML = svgData;
-  
-      if (className) {
-        svgElement.classList.add(className);
-      }
-  
-      const pathElements = svgElement.querySelectorAll("path");
-
-      pathElements.forEach((path) => {
-        path.setAttribute("fill", '#3D3D3D');
-      });
-      
-      return svgElement;
-  
-    } catch (error) {
-      console.error("Error loading SVG file:", error);
-      return null;
-    }
-}
-
 
 async function createTotalSelected(){
     const parentDiv = document.querySelector('.topButtons');
@@ -119,7 +97,6 @@ async function createTotalSelected(){
 
     const textDiv = createDOMElement('div', 'WeekTextDiv');
 
-    
     totalSelectedDiv.appendChild(crystal);
     textDiv.appendChild(selectedTotal);
     textDiv.appendChild(totalSelectedBosses);
@@ -127,7 +104,6 @@ async function createTotalSelected(){
     parentDiv.appendChild(totalSelectedDiv);
 }
     
-
 async function calculateTotalBosses(){
     let totalBosses = 0;
     for(characters of selectedList.characters){
@@ -149,16 +125,11 @@ async function createTotalIncome(){
     const Gold = await createImageElement(`../../public/assets/icons/menu/stash.webp`,'Gold Icon', 'stashIcon');
     const IncomeTextDiv = createDOMElement('div', 'IncomeTextDiv');
     const totalIncomeText = createDOMElement('span', 'totalIncomeText', 'All Characters Income');
-    let totalIncome;
-    if(Character){
-      totalIncome = await calculateTotalIncome();
-    }
-    else{
-      totalIncome = 0;
-    }
-    const totalIncomeSpan = createDOMElement('span', 'TotalIncome', `${totalIncome}`);
-    const fontSize = await adjustFontSizeToFit(totalIncome, 224, 32);
-    totalIncomeSpan.style.fontSize = fontSize + 'px';
+
+    const totalIncome = Character ? await calculateTotalIncome() : 0;
+
+    const totalIncomeSpan = createDOMElement('span', 'TotalIncome', totalIncome);
+    totalIncomeSpan.style.fontSize = await adjustFontSizeToFit(totalIncomeSpan, 224, 32) + 'px';
 
     IncomeTextDiv.appendChild(totalIncomeText);
     IncomeTextDiv.appendChild(totalIncomeSpan);
@@ -173,34 +144,6 @@ async function calculateTotalIncome(){
     totalIncome += character.totalIncome;
   }
   return totalIncome.toLocaleString('en-US');
-}
-
-async function adjustFontSizeToFit(totalGainValue, boxWidth, originalSize) {
-    const maxWidth = boxWidth;
-    const originalFontSize = originalSize;
-  
-    const copy = document.createElement('span');
-    copy.textContent = totalGainValue;
-    copy.style.fontSize = originalFontSize + 'px';
-    copy.style.fontFamily = 'Inter';
-    copy.style.whiteSpace = 'pre-line';
-  
-    const container = document.createElement('div');
-    container.style.position = 'absolute';
-    container.style.left = '-9999px';
-  
-    container.appendChild(copy);
-    document.body.appendChild(container);
-  
-    let width = copy.offsetWidth;
-    let fontSize = originalFontSize;
-    while (width > maxWidth && fontSize > 0) {
-      fontSize -= 1;
-      copy.style.fontSize = fontSize + 'px';
-      width = copy.offsetWidth;
-    }
-    document.body.removeChild(container);
-    return fontSize;
 }
 
 async function createTopButtons(){
@@ -219,7 +162,7 @@ async function loadCharacterSelector(){
     dropdownToggle.id = 'dropdownToggle';
 
     const selectedCharacter = createDOMElement('div', 'selectedCharacter');
-    const arrowSVG = await createArrowSVG();
+    const arrowSVG = await createArrowSVG("#3D3D3D", "48px");
 
     const characterContent = createDOMElement('div', 'characterContent');
 
@@ -229,7 +172,7 @@ async function loadCharacterSelector(){
     
     for(character of selectedList.characters){
         const createdButton = await createCharacterButton(character);
-        createdButton.classList.toggle('not-checked');
+        createdButton.classList.toggle('notSelected');
         if(isFirstButton){  
             const createdSelectedButton = createdButton.cloneNode(true);
 
@@ -238,9 +181,9 @@ async function loadCharacterSelector(){
 
             selectedCharacter.appendChild(createdSelectedButton);
             isFirstButton = false;
-            createdButton.classList.toggle('checked');
-            createdButton.classList.toggle('not-checked');
-            createdSelectedButton.classList.toggle('not-checked');
+            createdButton.classList.toggle('selected');
+            createdButton.classList.toggle('notSelected');
+            createdSelectedButton.classList.toggle('notSelected');
             const checkSVG = await createCheckSVG();
             createdButton.appendChild(checkSVG);
         }
@@ -264,12 +207,12 @@ async function loadCharacterIncome(){
   const Gold = await createImageElement(`../../public/assets/icons/menu/gold.webp`,'Gold Icon', 'goldIcon');
   const IncomeTextDiv = createDOMElement('div', 'IncomeTextDiv');
   const totalIncomeText = createDOMElement('span', 'totalIncomeText', 'Character Total Income');
+  
   const totalIncome = Character.totalIncome.toLocaleString('en-US');
 
   const totalIncomeSpan = createDOMElement('span', 'characterTotalIncome', `${totalIncome}`);
+  totalIncomeSpan.style.fontSize = await adjustFontSizeToFit(totalIncomeSpan, 224, 32) + 'px';
 
-  const fontSize = await adjustFontSizeToFit(totalIncome, 224, 32);
-  totalIncomeSpan.style.fontSize = fontSize + 'px';
 
   IncomeTextDiv.appendChild(totalIncomeText);
   IncomeTextDiv.appendChild(totalIncomeSpan);
@@ -295,30 +238,17 @@ async function createCheckSVG(){
     return checkSVG;
 }
 
-async function createArrowSVG() {
-    const svgElement = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    svgElement.setAttribute("id", "icon");
-    svgElement.setAttribute("width", "48px");
-    svgElement.setAttribute("height", "48px");
-    svgElement.setAttribute("viewBox", "0 0 1024 1024");
-    svgElement.setAttribute("class", "icon");
-  
-    const pathElement = document.createElementNS("http://www.w3.org/2000/svg", "path");
-    pathElement.setAttribute("d", "M917.333333 364.8L851.2 298.666667 512 637.866667 172.8 298.666667 106.666667 364.8 512 768z");
-    pathElement.setAttribute("fill", "#3D3D3D");
-    svgElement.appendChild(pathElement);
-    return svgElement;
-}
-  
 async function createCharacterButton(character) {
 
     const characterButton = createDOMElement('button', 'characterButton');
-    const imgSource = `../../public/assets/buttom_profile/${character.code}.webp`;
-    characterImage = await createImageElement(imgSource, 'character Profile', 'profile');
-    characterName = createDOMElement('span', 'characterName',`${character.name}`);
-    characterClass = createDOMElement('span', 'characterClass', `${character.class}`);
+    const imgSource = `../../public/assets/buttom_profile/${getCode(character)}.webp`;
 
-    characterWrapper = createDOMElement('div', 'characterWrapper');
+    const characterImage = await createImageElement(imgSource, 'character Profile', 'profile');
+
+    const characterName = createDOMElement('span', 'characterName',`${character.name}`);
+    const characterClass = createDOMElement('span', 'characterClass', `${character.class}`);
+
+    const characterWrapper = createDOMElement('div', 'characterWrapper');
   
     characterWrapper.appendChild(characterName);
     characterWrapper.appendChild(characterClass);
@@ -330,12 +260,21 @@ async function createCharacterButton(character) {
 
 }
 
+const classTag = {
+	Easy:   { tag: 'easyButton'    },
+	Normal: { tag: 'normalButton'  },
+	Hard:   { tag: 'hardButton'    },
+	Chaos:  { tag: 'chaosButton'   },
+	Extreme:{ tag: 'extremeButton' },
+};
+
+
 async function loadBosses(){
     const parentDiv = document.querySelector('.bosses');
 
-
     const jsonPath = '../../../public/data/bosses.json';
     bossJson = await fetch(jsonPath).then((response) => response.json());
+
     const bossGrid = createDOMElement('div', 'bossGrid');
     for(const boss of bossJson){
       let totalIncoming = 0;
@@ -343,31 +282,34 @@ async function loadBosses(){
 
       const bossSlot = createDOMElement('div', 'bossSlot');
       const bossBox = createDOMElement('div', 'bossBox');
+
       const image = await createImageElement(boss.img, `${boss.name}` ,'bossPicture');
       const name = createDOMElement('span', 'bossName', boss.name);
-      const fontSize = await adjustFontSizeToFit(boss.name, 126, 32);
-      name.style.fontSize = fontSize + 'px';
+      name.style.fontSize = await adjustFontSizeToFit(name, 124, 32) + 'px';
       
       bossBox.appendChild(image);
       bossBox.appendChild(name);
-      const buttonDiv = createDOMElement('div', 'buttonDiv');
-      for(difficult of boss.difficulties){
-        const difficultyFound = checkedBoss.filter((obj) => obj.difficulty === difficult.name);
-        let classTag;
-        let innerText;
-        [classTag, innerText] = returnTagAndText(classTag, innerText, difficult.name);
 
-        difficultButton = createDOMElement('button',  `${classTag}`);
-        difficultButtonText = createDOMElement('span', 'buttonText',`${innerText}`);
-        difficultButton.appendChild(difficultButtonText);
-        
+      const buttonDiv = createDOMElement('div', 'buttonDiv');
+
+      for(difficult of boss.difficulties){
+
+        const difficultyFound = checkedBoss.filter((obj) => obj.difficulty === difficult.name);
+
+        const {tag} = classTag[difficult.name];
+
+        const difficultButton = createDOMElement('button',  `${tag}`);
+        const difficultButtonText = createDOMElement('span', 'buttonText',`${difficult.name}`);
         const value = server == 'Reboot' ? difficult.value * 5 : difficult.value;
+
+        difficultButton.appendChild(difficultButtonText);
         difficultButton.setAttribute('value', value);
         difficultButton.setAttribute('reset', `${difficult.reset}`);
-        difficultButton.setAttribute('name',  `${innerText}`);
+        difficultButton.setAttribute('name',  `${difficult.name}`);
         difficultButton.setAttribute('minLevel', `${difficult.minLevel}`);
 
         const LevelRequirmentOK = (Character.level > difficult.minLevel);
+
         if(!LevelRequirmentOK){
           await updateButtonToBlock(difficultButton);
         }
@@ -381,8 +323,8 @@ async function loadBosses(){
         if (checkedBoss.length > 0) {
           if (difficultyFound.length > 0) {
             if(difficultyFound[0].reset !== 'Daily'){
-              let color = difficultyColors[difficult.name].color;
-              const checkMark = await createCheckMark(color);
+              const color = bossesButtonColors[difficult.name].color;
+              const checkMark = await createCheckMark(color, 20);
               difficultButton.appendChild(checkMark);
               totalIncoming += difficultyFound[0].value;
             }   
@@ -392,7 +334,7 @@ async function loadBosses(){
       }
       
       bossBox.append(buttonDiv);
-      totalBossIncome = createDOMElement('span', 'totalBossIncome', totalIncoming.toLocaleString('en-us'));
+      const totalBossIncome = createDOMElement('span', 'totalBossIncome', totalIncoming.toLocaleString('en-us'));
       totalBossIncome.style.display = 'none';
 
       bossBox.appendChild(totalBossIncome);
@@ -409,36 +351,6 @@ async function loadBosses(){
     parentDiv.appendChild(bossGrid);
 }
 
-function returnTagAndText(classTag, innerText, difficult) {
-  switch (difficult) {
-    case 'Easy':
-      classTag = 'easyButton';
-      innerText = 'Easy';
-      break;
-
-    case 'Normal':
-      classTag = 'normalButton';
-      innerText = 'Normal';
-      break;
-
-    case 'Hard':
-      classTag = 'hardButton';
-      innerText = 'Hard';
-      break;
-
-    case 'Chaos':
-      classTag = 'chaosButton';
-      innerText = 'Chaos';
-      break;
-
-    case 'Extreme':
-      classTag = 'extremeButton';
-      innerText = 'Extreme';
-      break;
-  }
-
-  return [classTag, innerText];
-}
 
 async function updateButtonToBlock(difficultButton){
   difficultButton.textContent = '';
@@ -446,39 +358,6 @@ async function updateButtonToBlock(difficultButton){
   difficultButton.appendChild(blockMark);
 
   difficultButton.classList.add('blocked');
-}
-async function createCheckMark(color){
-  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-  svg.setAttribute("width", "20");
-  svg.setAttribute("height", "20");
-  svg.setAttribute("viewBox", "0 0 40 40");
-  svg.setAttribute("fill", "none");
-
-  const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-  path.setAttribute("d", "M20 0C8.96 0 0 8.96 0 20C0 31.04 8.96 40 20 40C31.04 40 40 31.04 40 20C40 8.96 31.04 0 20 0ZM16 30L6 20L8.82 17.18L16 24.34L31.18 9.16L34 12L16 30Z");
-  path.setAttribute("fill", color);
-
-  svg.appendChild(path);
-
-  return svg;
-
-}
-
-async function createBlockMark(){
-  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-  svg.setAttribute("width", "20");
-  svg.setAttribute("height", "20");
-  svg.setAttribute("viewBox", "0 0 40 40");
-  svg.setAttribute("fill", "none");
-
-  const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-  path.setAttribute("d", "M20 0C8.96 0 0 8.96 0 20C0 31.04 8.96 40 20 40C31.04 40 40 31.04 40 20C40 8.96 31.04 0 20 0ZM4 20C4 11.16 11.16 4 20 4C23.7 4 27.1 5.26 29.8 7.38L7.38 29.8C5.26 27.1 4 23.7 4 20ZM20 36C16.3 36 12.9 34.74 10.2 32.62L32.62 10.2C34.74 12.9 36 16.3 36 20C36 28.84 28.84 36 20 36Z");
-  path.setAttribute("fill", '#C33232');
-
-  svg.appendChild(path);
-
-  return svg;
-
 }
 
 async function insertDropdownOnButton(difficultButton, DailyTotal){
@@ -489,8 +368,8 @@ async function insertDropdownOnButton(difficultButton, DailyTotal){
   const dropdownText = createDOMElement('span', 'dropdownText', dropdownValue);
   const name = difficultButton.getAttribute('name');
 
-  const color = difficultyColors[name].color;
-  const backgroundColor = difficultyColors[name].backgroundColor;
+  const color = bossesButtonColors[name].color;
+  const backgroundColor = bossesButtonColors[name].backgroundColor;
   
 
   for(let i=0; i<= 7; i++){
@@ -513,7 +392,7 @@ async function insertDropdownOnButton(difficultButton, DailyTotal){
   difficultButton.appendChild(dropdownWrapper);
 }
 
-const difficultyColors = {
+const bossesButtonColors = {
   Easy:   { color: '#EDEDED', backgroundColor: '#9B9B9B' },
   Normal: { color: '#3D3D3D', backgroundColor: '#91C9E3' },
   Hard:   { color: '#3D3D3D', backgroundColor: '#E39294' },
@@ -523,13 +402,13 @@ const difficultyColors = {
 
 
 async function loadMissingCharacter(){
-  characterSelector = document.querySelector('.characterSelector');
+  const characterSelector = document.querySelector('.characterSelector');
   characterSelector.remove();
 
-  parentDiv = document.querySelector('.bosses');
-  warningSVG = await loadWarningSVG();
-  warningText = createDOMElement('span', 'warningText', 'No bossing character selected!');
-  warningDiv = createDOMElement('div', 'warningDiv');
+  const parentDiv = document.querySelector('.bosses');
+  const warningSVG = await loadWarningSVG();
+  const warningText = createDOMElement('span', 'warningText', 'No bossing character selected!');
+  const warningDiv = createDOMElement('div', 'warningDiv');
 
   warningDiv.appendChild(warningSVG);
   warningDiv.appendChild(warningText);
@@ -550,52 +429,6 @@ async function loadWarningSVG(){
   return svg;
 }
 
-
-function createDOMElement(tag, className = '', content = '') {
-const element = document.createElement(tag);
-
-if (className) {
-  element.classList.add(className);
-}
-
-if (content !== '') {
-  element.textContent = content;
-}
-
-return element;
-}
-
-async function createImageElement(src, alt, className = '') {
-const image = createDOMElement('img', className);
-image.src = src;
-image.alt = alt;
-
-await image.decode();
-return image;
-}
-
-
-function setCookie(name, value, days) {
-    const expires = new Date();
-    expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
-  
-    // Check if the cookie is 'selectedServerContent'
-    const path = name === 'selectedServerContent' ? '/' : '';
-  
-    document.cookie = `${name}=${encodeURIComponent(value)};expires=${expires.toUTCString()};path=${path}`;
-}
-  
-function getCookie(name) {
-  const cookieArr = document.cookie.split(';');
-  for (let i = 0; i < cookieArr.length; i++) {
-    const cookiePair = cookieArr[i].split('=');
-    if (cookiePair[0].trim() === name) {
-      return decodeURIComponent(cookiePair[1]);
-    }
-  }
-  return null;
-}
-
 function swapContent(selectedButton, characterButton) {
   const selectedImage = selectedButton.querySelector('img');
   const selectedName = selectedButton.querySelector('.characterName');
@@ -604,7 +437,6 @@ function swapContent(selectedButton, characterButton) {
   const characterImage = characterButton.querySelector('img');
   const characterName = characterButton.querySelector('.characterName');
   const characterClass = characterButton.querySelector('.characterClass');
-
 
   selectedImage.setAttribute('alt', characterName.textContent);
   selectedImage.src = characterImage.src;
@@ -633,21 +465,19 @@ async function setupCharacterButtonsEvent(){
       
   characterButtons.forEach(characterButton => {
     characterButton.addEventListener('click', async () => {
-      console.log(characterButton);
       await handleCharacterButtonClick(characterButton, characterButtons);
     });
   });
 
 }
 
-
 async function handleCharacterButtonClick(characterButton, characterButtons) {
   const selectedCharacterButton = document.querySelector('.SelectedCharacterButton');
   characterButtons.forEach(button => {
     const checkSVG = button.querySelector('svg');
     if (button !== characterButton) {
-      button.classList.add('not-checked');
-      button.classList.remove('checked');
+      button.classList.add('notSelected');
+      button.classList.remove('selected');
     }
     if(checkSVG){
       button.removeChild(checkSVG);
@@ -655,8 +485,8 @@ async function handleCharacterButtonClick(characterButton, characterButtons) {
   });
   
   swapContent(selectedCharacterButton, characterButton);
-  characterButton.classList.toggle('not-checked');
-  characterButton.classList.toggle('checked');
+  characterButton.classList.toggle('notSelected');
+  characterButton.classList.toggle('selected');
 
   checkSVG = await createCheckSVG();
   characterButton.appendChild(checkSVG);
@@ -787,8 +617,8 @@ async function buttonClickedFunctional(button) {
     if(otherButtonValue){
       await updateBossIncomeSpan(otherButtonValue, bossBox, 0, totalIncomeSpan);
     }
-    const color = difficultyColors[difficulty].color;
-    const checkMark = await createCheckMark(color);
+    const color = bossesButtonColors[difficulty].color;
+    const checkMark = await createCheckMark(color, 20);
     button.appendChild(checkMark);
   }
 
@@ -807,8 +637,7 @@ async function updateBossIncomeSpan(value, bossBox, Add, totalIncomeSpan){
   bossBox.setAttribute('totalIncome', bossBoxValue);
 
   totalIncomeSpan.innerText = bossBoxValue.toLocaleString('en-us');
-  const fontSize = await adjustFontSizeToFit(bossBoxValue.toLocaleString('en-us'), 103, 16);
-  totalIncomeSpan.style.fontSize = fontSize + 'px';
+  totalIncomeSpan.style.fontSize = await adjustFontSizeToFit(totalIncomeSpan, 103, 16) + 'px';
 
   if (bossBoxValue > 0) {
     bossBox.classList.add('open');
@@ -850,16 +679,17 @@ async function updateBossValue(newValue, dropdown, characterChange = false){
       let change = Number(button.getAttribute('value')) * newValue;
       await updateBossIncomeSpan(change, bossBox, 1, totalIncomeSpan);
     }
-
     
     dropdown.parentNode.setAttribute('oldValue', newValue);
 
     const name = bossBox.querySelector('.bossName').textContent;
     const boss = bossJson.filter((boss)=> boss.name === name);
+
     const data = {
       newValue: Number(newValue), 
       difficult: difficult
     };
+
     if(!characterChange){
       await insertBossOnList(boss, data);
     }
@@ -984,8 +814,9 @@ async function changeCharacterIncome(){
   Character = selectedList.characters.find(character => character.class === characterClass);
   const totalIncomeValue = Character.totalIncome.toLocaleString('en-us');
   const TotalIncome = document.querySelector('.characterTotalIncome');
-  const fontSize = await adjustFontSizeToFit(totalIncomeValue, 224, 32);
   TotalIncome.textContent = totalIncomeValue;
+  const fontSize = await adjustFontSizeToFit(TotalIncome, 224, 32);
+
   TotalIncome.style.fontSize = fontSize + 'px';
 }
 
@@ -1040,8 +871,8 @@ async function updateBosses(){
         else{
           const hasCheck = button.querySelector('svg');
           if(!hasCheck) {
-          const color = difficultyColors[difficult].color;
-          const checkMark = await createCheckMark(color);
+          const color = bossesButtonColors[difficult].color;
+          const checkMark = await createCheckMark(color, 20);
           button.appendChild(checkMark);
           }
           await updateBossIncomeSpan(value, bossBox, 1, totalIncomeSpan);

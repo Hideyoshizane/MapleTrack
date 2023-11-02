@@ -21,12 +21,12 @@ module.exports = {
 
     editCharacter: async (ctx) => {
       try {
-        const { username, server, characterCode } = ctx.params;
+        const { username, server, characterClass } = ctx.params;
         const { _id } = ctx.state.user;
         await ctx.render('edit', {
           username: username,
           server: server,
-          characterCode: characterCode,
+          characterClass: characterClass,
           _id: _id
         });
       } catch (error) {
@@ -99,11 +99,11 @@ module.exports = {
 
     getCharacterData: async (ctx) => {
       try {
-        const { username, server, characterCode } = ctx.params;
+        const { username, server, characterClass } = ctx.params;
         let query = {
           userOrigin: username,
           server: server,
-          code: characterCode
+          class: characterClass
         };
         const character = await Character.findOne(query);
 

@@ -223,6 +223,7 @@ body{
 .classType{
     font-size: 56px;
     font-family: 'Inter';
+    height: 68px;
     width: 367px;
     text-align: right;
 }
@@ -275,25 +276,23 @@ body{
     outline:none;
 }
 
-.OuterEXPBar,
-.InnerEXPBar{
+.characterLevelBar,
+.progressBar{
     border-radius: 25px;
 }
 
-.OuterEXPBar{
+.characterLevelBar{
     display: flex;
     align-items: center;
     background-color: black;
+    width: 800px;
+    height: 32px;
 }
-.InnerEXPBar{
+.progressBar{
     margin-left: 2px;
+    height: 28px;
 }
 
-.innerLevelBar{
-    height: 28px;
-    margin-left: 2px;
-    border-radius: 25px;
-}
 .arcaneForceDiv,
 .sacredForceDiv{
     margin-top: 8px;

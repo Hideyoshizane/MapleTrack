@@ -17,11 +17,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     await createCharacterCards();
   
     const serverButtons = document.querySelector('.serverSelector').querySelectorAll('.serverButton');     
-    serverButtons.forEach(serverButton => {
+    for (const serverButton of serverButtons) {
       serverButton.addEventListener('click', async () => {
         await handleServerButtonClick(serverButton, serverButtons, selectedButton, characterCardDiv);
       });
-    });
+    }
 
     setupCardClickListeners();
     
@@ -32,35 +32,34 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 
 async function handleServerButtonClick(serverButton, serverButtons, selectedButton, characterCardDiv) {
-  serverButtons.forEach(button => {
-    if (button !== serverButton) {
+  if(selectedButton.textContent !== serverButton.textContent) {
+    serverButtons.forEach(button => {
       button.classList.add('notSelected');
       button.classList.remove('selected');
-    }
-    cardBody = document.querySelectorAll('.cardBody');
   });
 
   swapContentAndStoreCookie(selectedButton, serverButton);
+
   serverButton.classList.toggle('notSelected');
   serverButton.classList.toggle('selected');
 
   characterCardDiv.innerHTML = '';
+  
   await createCharacterCards();
+
   setupCardClickListeners();
+  }
 }
 
 function setupCardClickListeners() {
   cardBody.forEach((card) => {
-    card.addEventListener('click', cardClickRedirect);
+    card.addEventListener('click', async () =>{
+      const server = document.querySelector('.SelectedButton').querySelector('span').innerText;
+      const character = card.getAttribute('characterclass');
+      var url = `${username}/${server}/${character}`;
+      window.location.href = url;
+    });
   });
-}
-
-function cardClickRedirect(){
-  const server = document.querySelector('.SelectedButton').querySelector('span').innerText;
-  const character = this.getAttribute('characterclass');
-
-  var url = `${username}/${server}/${character}`;
-  window.location.href = url;
 }
 
 const filterButtons = document.querySelectorAll('.filterButton');
@@ -98,11 +97,6 @@ filterButtons.forEach(button => {
     });
 });
 
-async function updateSelectedValuesCookie() {
-    sort(selectedValues, true);
-    const selectedValuesString = selectedValues.join(',');
-    setCookie('filterValues', selectedValuesString, 7);
-}
 
 async function createCharacterCards(){
   const parentDiv = document.querySelector('.characterCards');
@@ -121,8 +115,10 @@ async function createCharacterCards(){
   characterCards.forEach((card) => {
     characterCardFragment.appendChild(card);
   });
+
   parentDiv.appendChild(characterCardFragment);
   filterCharacterCards(selectedValues);
+
   cardBody = document.querySelectorAll('.cardBody');
 }
 
@@ -142,7 +138,7 @@ async function sort(cards, includeBossing = false) {
 
 function filterCharacterCards(selectedValues){
   document.querySelectorAll('.cardBody').forEach((element) => {
-    const jobType = element.getAttribute('job-type');
+    const jobType = element.getAttribute('jobType');
     const hasBossIcon = element.querySelector('.bossIcon');
     if (!selectedValues.includes(jobType))
       element.classList.add('off');
@@ -226,8 +222,8 @@ async function generateCard(characterData){
   
   const cardBody = createDOMElement('div', 'cardBody');
 
-  cardBody.setAttribute('job-type', characterData.jobType);
-  cardBody.setAttribute('characterClass', characterData.code);
+  cardBody.setAttribute('jobType', characterData.jobType);
+  cardBody.setAttribute('characterClass', getCode(characterData));
 
   cardBody.appendChild(upperPart);
   cardBody.appendChild(lowerPart);
@@ -243,16 +239,19 @@ async function createForce(characterData, forceType) {
   try {
     for (const forceArea of forceData) {
       const wrapper = createDOMElement('div', forceType === 'arcane' ? 'arcaneWrapper' : 'sacredWrapper');
+
       const areaName = forceArea.name;
+
       const areaCode = areaName.replace(/\s+/g, '_').toLowerCase();
 
       const forceImgSrc = `../../public/assets/${forceType}force/${areaCode}.webp`;
-      const forceImgAlt = areaName;
+
       const forceImgClassName  = `${forceType === 'arcane' ? 'Arcane' : 'Sacred'}Image`;
 
-      const forceImg = await createImageElement(forceImgSrc,forceImgAlt, forceImgClassName);
+      const forceImg = await createImageElement(forceImgSrc,areaName, forceImgClassName);
 
       var level = await setForceLevel(forceArea, characterData, forceImg, forceType);
+
       const forceLevel = createDOMElement('span', '', level);
 
       wrapper.appendChild(forceImg);
@@ -266,31 +265,24 @@ async function createForce(characterData, forceType) {
   return outerWrapper;
 }
 
-async function setForceLevel(forceArea, characterData, forceImg, forceType){
+async function setForceLevel(forceArea, characterData, forceImg, forceType) {
   let level = forceArea.level;
-      if (characterData.level < forceArea.minLevel) {
-        forceImg.classList.toggle('off');
-        level = 0;
-      }
-      if (level === (forceType === 'arcane' ? 20 : 10)) {
-        level = 'MAX';
-      } else {
-        level = 'Lv. ' + level;
-      }
+
+  if (characterData.level < forceArea.minLevel) {
+    forceImg.classList.toggle('off');
+    level = 0;
+  }
+
+  level = level === (forceType === 'arcane' ? 20 : 10) ? 'MAX' : `Lv. ${level}`;
+
   return level;
 }
 
-async function createCharacterPortrait(characterData){
 
-  const portrait = await createImageElement(`../../public/assets/cards/${characterData.code}.webp`, characterData.class);
-
-  if(characterData.level === 0 && characterData.name === 'Character Name'){
-    portrait.setAttribute('class', 'cardPortrait off');
-  }
-  else{
-    portrait.setAttribute('class', 'cardPortrait');
-  }
-
+async function createCharacterPortrait(characterData) {
+  const portrait = await createImageElement(`../../public/assets/cards/${getCode(characterData)}.webp`, characterData.class);
+  portrait.setAttribute('class', characterData.level === 0 && characterData.name === 'Character Name' ? 'cardPortrait off' : 'cardPortrait');
+  
   return portrait;
 }
 
@@ -299,28 +291,27 @@ async function createLinkSkillContent(characterData){
 
     const linkspan = createDOMElement('span', 'linkLegionTitle', 'Link Skill');
 
-    linkSkillData = await fetch('../../public/data/linkskill.json').then(response => response.json());
-    filteredLink = linkSkillData.find(item => item.name === characterData.linkSkill);
+    const linkSkillData = await fetch('../../public/data/linkskill.json').then(response => response.json());
+    
+    const filteredLink = linkSkillData.find(item => item.name === characterData.linkSkill);
 
     const wrapper = createDOMElement('div', 'linkWrapper');
 
     const linkImg = await createImageElement(filteredLink.image, filteredLink.name, 'linkImg');
 
-    
+
     let LinkLevelText;
-    switch (true) {
-      case characterData.level > 178 && characterData.code === 'zero':
-        LinkLevelText = 'Lv. 5';
-        break;
-      case characterData.level >= 210 && filteredLink.levels.length > 2:
-        LinkLevelText = 'Lv. 3';
-        break;
-      case characterData.level >= 120:
-        LinkLevelText = 'Lv. 2';
-        break;
-      default:
-        LinkLevelText = 'Lv. 1';
+
+    if (characterData.level > 178 && characterData.class === 'Zero') {
+      LinkLevelText = 'Lv. 5';
+    } else if (characterData.level >= 210 && filteredLink.levels.length > 2) {
+      LinkLevelText = 'Lv. 3';
+    } else if (characterData.level >= 120) {
+      LinkLevelText = 'Lv. 2';
+    } else {
+      LinkLevelText = 'Lv. 1';
     }
+    
 
     const linkLevel = createDOMElement('span', 'linkLevel',LinkLevelText);
 
@@ -337,19 +328,12 @@ async function createLegionContent(characterData){
   const legionDiv = createDOMElement('div', 'legionDiv');
 
   const legionspan = createDOMElement('span', 'linkLegionTitle', 'Legion');
-
-  legionData = await fetch('../../public/data/legionsystems.json').then(response => response.json());
-  filterLegion = legionData.find(item => item.name === characterData.legion);
-
-  let legionRank = getRank(characterData);
-  let legionSrc;
-  if(legionRank == 'no_rank'){
-    legionSrc = '../../public/assets/legion/no_rank.webp';
-  }
-  else{
-    legionSrc = `../../public/assets/legion/${characterData.jobType}/rank_${legionRank}.webp`;
-  }
-
+ 
+  const legionRank = getRank(characterData);
+  const legionSrc = (legionRank === 'no_rank')
+    ? '../../public/assets/legion/no_rank.webp'
+    : `../../public/assets/legion/${characterData.jobType}/rank_${legionRank}.webp`;
+  
   const legionImg = await createImageElement(legionSrc, `${characterData.class} legion`, 'legionImg');
 
   legionDiv.appendChild(legionspan);
@@ -360,19 +344,20 @@ async function createLegionContent(characterData){
 
 
 async function createBossIconAndName(characterData) {
-  const bossIconpath = '../../public/assets/icons/menu/boss_slayer.svg';
-  const bossIcon = await loadEditableSVGFile(bossIconpath);
-
-  bossIcon.setAttribute('class', 'bossIcon');
-  const innerSVG = bossIcon.querySelector('svg');
-  innerSVG.setAttribute('width', '38');
-  innerSVG.setAttribute('height', '38');
-
+ 
   const characterName = createDOMElement('span', 'characterName', characterData.name);
 
   const nameAndIcon = createDOMElement('div', 'nameAndIcon');
 
   if (characterData.bossing) {
+    const bossIconpath = '../../public/assets/icons/menu/boss_slayer.svg';
+    const bossIcon = await loadEditableSVGFile(bossIconpath);
+  
+    bossIcon.setAttribute('class', 'bossIcon');
+    const innerSVG = bossIcon.querySelector('svg');
+    innerSVG.setAttribute('width', '38');
+    innerSVG.setAttribute('height', '38');
+
     nameAndIcon.appendChild(bossIcon);
   }
   
@@ -383,7 +368,7 @@ async function createBossIconAndName(characterData) {
 
 async function createLowerPart(characterData){
   const nameAndIcon = await createBossIconAndName(characterData);
-  const job = createDOMElement('span', 'job', characterData.job);
+  const job = createDOMElement('span', 'job', getJob(characterData));
 
   const { color } = characterData.level >= characterData.targetLevel ? characterColors["complete"] : characterColors[characterData.jobType];
 

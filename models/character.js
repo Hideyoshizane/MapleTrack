@@ -18,12 +18,6 @@ const Character = mongoose.model('Character', new mongoose.Schema({
     class: {
       type: String,
     },
-    code: {
-      type: String,
-    },
-    job: {
-      type: String,
-    },
     jobType:{
       type: String,
     },
@@ -79,7 +73,6 @@ const templateCharacter = {
   level: 0,
   targetLevel: 10,
   bossing: false,
-  job: "1st Class",
   ArcaneForce:[
     {
       name: "Vanish Journey",
@@ -320,8 +313,6 @@ async function createCharacter(jsonData, serverName, username){
     level: templateCharacter.level,
     targetLevel: templateCharacter.targetLevel,
     class: jsonData.className,
-    code: jsonData.code,
-    job: templateCharacter.job,
     jobType: jsonData.jobType,
     legion: jsonData.legionType  ,
     linkSkill: jsonData.linkSkill,

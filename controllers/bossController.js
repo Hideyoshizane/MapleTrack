@@ -54,7 +54,7 @@ module.exports = {
       const foundServer = listFound.server.find(servers => servers.name === characterList.name);
 
       for(const character of characterList.characters){
-        const foundCharacter = foundServer.characters.find((serverCharacter) => serverCharacter.code === character.code);
+        const foundCharacter = foundServer.characters.find((serverCharacter) => serverCharacter.class === character.class);
         for(const bossData of character.bosses){
           const existingBossIndex = foundCharacter.bosses.findIndex((existingBoss) =>
             (existingBoss.name == bossData.name) && (existingBoss.reset == bossData.reset)
@@ -74,7 +74,7 @@ module.exports = {
       }
       //Remove bosses that are on character list on database but not on character from the request
       for(const character of foundServer.characters){
-        const foundCharacter = characterList.characters.find((listCharacter) => listCharacter.code === character.code);
+        const foundCharacter = characterList.characters.find((listCharacter) => listCharacter.class === character.class);
         character.bosses = character.bosses.filter(onDatabaseBoss => {
           return foundCharacter.bosses.some(onRequestBoss => (onDatabaseBoss.name === onRequestBoss.name) && (onDatabaseBoss.reset === onRequestBoss.reset))
         })

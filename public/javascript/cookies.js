@@ -20,3 +20,9 @@ function getCookie(name) {
 	}
 	return null;
 }
+
+async function updateSelectedValuesCookie() {
+    sort(selectedValues, true);
+    const selectedValuesString = selectedValues.join(',');
+    setCookie('filterValues', selectedValuesString, 7);
+}

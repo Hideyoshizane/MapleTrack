@@ -51,3 +51,100 @@ async function loadEditableSVGFile(filePath, className) {
 		return null;
 	}
 }
+
+async function createCheckMark(color = '#3D3D3D', width = '40'){
+	const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+	svg.classList.add("checked");
+	svg.setAttribute("width", width);
+	svg.setAttribute("height", width);
+	svg.setAttribute("viewBox", "0 0 40 40");
+	svg.setAttribute("fill", "none");
+  
+	const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+	path.setAttribute("d", "M20 0C8.96 0 0 8.96 0 20C0 31.04 8.96 40 20 40C31.04 40 40 31.04 40 20C40 8.96 31.04 0 20 0ZM16 30L6 20L8.82 17.18L16 24.34L31.18 9.16L34 12L16 30Z");
+	path.setAttribute("fill", color);
+  
+	svg.appendChild(path);
+  
+	return svg;
+  
+  }
+  
+  async function createUncheckMark() {
+	const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+	svg.classList.add("unchecked");
+  
+	svg.setAttribute("width", "40");
+	svg.setAttribute("height", "40");
+	svg.setAttribute("viewBox", "0 0 40 40");
+	svg.setAttribute("fill", "none");
+  
+  
+	const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+	path.setAttribute("d", "M20 0C8.96 0 0 8.96 0 20C0 31.04 8.96 40 20 40C31.04 40 40 31.04 40 20C40 8.96 31.04 0 20 0ZM20 36C11.16 36 4 28.84 4 20C4 11.16 11.16 4 20 4C28.84 4 36 11.16 36 20C36 28.84 28.84 36 20 36Z");
+	path.setAttribute("fill", "#3D3D3D");
+  
+	svg.appendChild(path);
+  
+	return svg;
+  }
+
+  
+async function createArrowSVG(color = "#F6F6F6", width = "30px") {
+	const svgElement = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+	svgElement.setAttribute("id", "icon");
+	svgElement.setAttribute("width", width);
+	svgElement.setAttribute("height", width);
+	svgElement.setAttribute("viewBox", "0 0 1024 1024");
+	svgElement.setAttribute("class", "icon");
+  
+	const pathElement = document.createElementNS("http://www.w3.org/2000/svg", "path");
+	pathElement.setAttribute("d", "M917.333333 364.8L851.2 298.666667 512 637.866667 172.8 298.666667 106.666667 364.8 512 768z");
+	pathElement.setAttribute("fill", color);
+	svgElement.appendChild(pathElement);
+	return svgElement;
+  }
+  
+
+  
+async function createBlockMark(){
+	const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+	svg.setAttribute("width", "20");
+	svg.setAttribute("height", "20");
+	svg.setAttribute("viewBox", "0 0 40 40");
+	svg.setAttribute("fill", "none");
+  
+	const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+	path.setAttribute("d", "M20 0C8.96 0 0 8.96 0 20C0 31.04 8.96 40 20 40C31.04 40 40 31.04 40 20C40 8.96 31.04 0 20 0ZM4 20C4 11.16 11.16 4 20 4C23.7 4 27.1 5.26 29.8 7.38L7.38 29.8C5.26 27.1 4 23.7 4 20ZM20 36C16.3 36 12.9 34.74 10.2 32.62L32.62 10.2C34.74 12.9 36 16.3 36 20C36 28.84 28.84 36 20 36Z");
+	path.setAttribute("fill", '#C33232');
+  
+	svg.appendChild(path);
+  
+	return svg;
+  
+  }
+  async function adjustFontSizeToFit(totalGainValue, boxWidth, originalSize) {
+	const copy = totalGainValue.cloneNode(true);
+	copy.style.width = 'auto';
+    copy.style.fontSize = originalSize + 'px';
+    copy.style.fontFamily = 'Inter';
+    copy.style.whiteSpace = 'pre-line';
+  
+    const container = document.createElement('div');
+    container.style.position = 'absolute';
+    container.style.left = '-9999px';
+  
+    container.appendChild(copy);
+    document.body.appendChild(container);
+  
+    let width = copy.offsetWidth;
+    let fontSize = originalSize;
+    while (width > boxWidth && fontSize > 0) {
+      fontSize -= 1;
+      copy.style.fontSize = fontSize + 'px';
+      width = copy.offsetWidth;
+    }
+    document.body.removeChild(container);
+    return fontSize;
+}
+
