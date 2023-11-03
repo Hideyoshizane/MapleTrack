@@ -9,12 +9,14 @@ const characterCode = segments[3];
 window.CharacterData;
 window.ArcaneTable;
 window.SacredTable;
+window.dailyJson;
 
 
 document.addEventListener('DOMContentLoaded', async () => {
 
   ArcaneTable = await fetch('../../public/data/arcaneforceexp.json').then(response => response.json());
   SacredTable = await fetch('../../public/data/sacredforceexp.json').then(response => response.json());
+  dailyJson = await fetch('../../../public/data/dailyExp.json').then((response) => response.json());
 
   characterData = await fetchCharacterData(username, server, characterCode);
 
@@ -187,8 +189,10 @@ async function loadForce(characterData, isArcane){
     const areaCode = areaName.replace(/\s+/g, '_').toLowerCase();
     let forceLevel = force.level;
 
+    const minLevel = dailyJson.find(json => json.name === force.name).minLevel;
+
     const icon = await createImageElement(`../../public/assets/${forceType.toLowerCase()}/${areaCode}.webp`, areaName, `${forceType}Image`);
-      if (characterData.level < force.minLevel) {
+      if (characterData.level < minLevel) {
           icon.classList.add('off');
           forceLevel = 0;
       }
@@ -203,14 +207,13 @@ async function loadForce(characterData, isArcane){
 
     levelWrapper.appendChild(level);
 
-    if (characterData.level >= force.minLevel) {
+    if (characterData.level >= minLevel) {
       const expContent = createExpText(force, expTable, isArcane);
       levelWrapper.appendChild(expContent);
     }
-
     let expTotal = (isArcane && force.level === 20) || (!isArcane && force.level === 11)
-    ? force.exp
-    : expTable.level[force.level].EXP;
+      ? force.exp
+      : expTable.level[force.level].EXP;
 
     const levelBarData = {
       level: force.exp,
@@ -220,7 +223,7 @@ async function loadForce(characterData, isArcane){
 
     const expBar = await createLeveLBar(levelBarData, 191, 'forceLevelBar');
     
-    if (characterData.level < force.minLevel) {
+    if (characterData.level < minLevel) {
       const innerbar = expBar.querySelector('.progressBar');
       innerbar.style.width = '0px';
   }
@@ -231,7 +234,7 @@ async function loadForce(characterData, isArcane){
     forceDataElement.appendChild(levelWrapper);
     forceDataElement.appendChild(expBar);
     if((isArcane && force.level < 20) || (!isArcane && force.level < 11)){
-      if (characterData.level >= force.minLevel) {
+      if (characterData.level >= minLevel) {
         const daysToMax = await returnDaysToMax(force, characterData, isArcane);
         const wrap = createDOMElement('div');
         wrap.className = 'buttons';
@@ -250,7 +253,7 @@ async function loadForce(characterData, isArcane){
         forceDataElement.appendChild(wrap);
         
       } else {
-        const unlockText = createDOMElement('span','unlockText', `Unlock at Level ${force.minLevel}`);
+        const unlockText = createDOMElement('span','unlockText', `Unlock at Level ${minLevel}`);
         forceDataElement.appendChild(unlockText);
       }
     }
@@ -331,23 +334,27 @@ function createDailyButton(Force, characterData, isArcane = false){
   return dailyButton;
 }
 
-function getDailyValue(Force, characterData, isArcane = false){
-
-  let dailyValue = Force.content[0].expGain;
+function getDailyValue(Force, characterData, isArcane = false, bug = 0){
+  const dailyQuest = Number(dailyJson.find(json => json.name === Force.name).value);
+  let dailyValue = dailyQuest;
 
   if(isArcane){
     if(Force.content[2] && Force.content[2].checked == true){
-      if(characterData.level >= Force.content[2].minLevel){
-        dailyValue *= 2;
+      secondAreaMinLevel = Number(dailyJson.find(json => json.name == Force.content[2].contentType).minLevel);
+      if(characterData.level >= secondAreaMinLevel){
+        const secondArea = Number(dailyJson.find(json => json.name == Force.content[2].contentType).value);
+        dailyValue += secondArea;
       }
     }
   }
       
   if(!isArcane && Force.name === 'Cernium'){
     if(Force.content[1].checked == true){
-      dailyValue += Force.content[1].expGain;
+      const cernium = dailyJson.find(json => json.name == Force.content[1].name).value;
+      dailyValue += cernium;
     }
   }
+
   return dailyValue;
 }
 
@@ -461,36 +468,17 @@ async function increaseWeekly(event, characterData){
   }
 };
 
-async function getExp(characterData, isArcane, forceName){
-  let object = null;
-  let expValue = null;
-  if(isArcane){
-    for(const arcaneforce of characterData.ArcaneForce){
-      if(arcaneforce.name === forceName){
-        object = arcaneforce;
-        break;
-      }
-    }
-  } else{
-    for(const sacredforce of characterData.SacredForce){
-      if(sacredforce.name === forceName){
-        object = sacredforce;
-        break;
-      }
-    }
-  }
-   
+async function getExp(characterData, isArcane, forceName) {
+  const object = characterData.ArcaneForce.find(arcaneforce => arcaneforce.name === forceName);
   const expTable = isArcane ? ArcaneTable : SacredTable;
-  if((isArcane && object.level < 20) || (!isArcane && object.level < 11)){
-    expValue = expTable.level[object.level].EXP;
+
+  if (object.level < (isArcane ? 20 : 11)) {
+    return expTable.level[object.level].EXP;
+  } else {
+    return 'MAX';
   }
-  
-  else{
-    expValue = 'MAX';
-  }
-  
-  return expValue;
 }
+
 
 async function postRequest(postData, URL){
   fetch(URL, {
@@ -542,11 +530,12 @@ async function updateArea(forceName, isArcane){
 async function updateDayToMax(areaData, isArcane, characterData){
   const expTable = isArcane ? ArcaneTable : SacredTable;
 
+  const weeklyValue = Number(dailyJson.find(json => json.name === 'Weekly').value);
   let totalExp = calculateTotalExp(areaData.level, expTable);
-  let dailyExp = getDailyValue(areaData, characterData, isArcane);
-  const weeklyExp = (areaData.content[1] && areaData.content[1].checked && isArcane) ? 45 : 0;
+  let dailyExp = getDailyValue(areaData, characterData, isArcane, 1);
+  const weeklyExp = (areaData.content[2] && areaData.content[2].checked && isArcane) ? (weeklyValue*3) : 0;
   totalExp -= areaData.exp;
-  let daysToReachTotalExp = Math.ceil(totalExp / (dailyExp + (weeklyExp / 7)));
+  const daysToReachTotalExp = Math.ceil(totalExp / (dailyExp + (weeklyExp / 7)));
   return daysToReachTotalExp;
 }
 

@@ -5,9 +5,11 @@ const server = segments[2];
 const characterCode = segments[3];
 
 window.CharacterData;
+window.dailyJson;
 
 document.addEventListener('DOMContentLoaded', async () => {
 	characterData = await fetchCharacterData(username, server, characterCode);
+	dailyJson = await fetch('../../../public/data/dailyExp.json').then((response) => response.json());
 
 	await loadCharacterContent(characterData);
 
@@ -264,10 +266,11 @@ async function loadForce(characterData, isArcane) {
 		const areaName = force.name;
 		const areaCode = areaName.replace(/\s+/g, '_').toLowerCase();
 		let forceLevel = force.level;
+		const minLevel = dailyJson.find(json => json.name === force.name).minLevel;
 
 		const icon = await createImageElement(`../../../public/assets/${forceType.toLowerCase()}/${areaCode}.webp`,	areaName,`${forceType}Image`);
 
-		if (characterData.level < force.minLevel) {
+		if (characterData.level < minLevel) {
 			icon.classList.add('off');
 			forceLevel = 0;
 			forceWrapper.classList.add('off');
@@ -284,7 +287,7 @@ async function loadForce(characterData, isArcane) {
 
 		let checkboxContent = createDOMElement('div', 'checkboxContent');
 
-		if (characterData.level >= force.minLevel) {
+		if (characterData.level >= minLevel) {
 			levelWrapper.appendChild(levelInput);
 			const expContent = createDOMElement('span', 'expContent', 'EXP:');
 			const expInput = createDOMElement('input', 'expInput', `${force.exp}`);
@@ -292,7 +295,8 @@ async function loadForce(characterData, isArcane) {
 			levelWrapper.appendChild(expInput);
 
 			for (forceContent of force.content) {
-				const expGain = forceContent.contentType === 'Reverse City' || forceContent.contentType === 'Yum Yum Island' ? '2x' : forceContent.expGain;
+				const value = forceContent.contentType == 'Daily Quest' ? dailyJson.find(json => json.name === force.name).value : dailyJson.find(json => json.name === "Weekly").value;
+				const expGain = forceContent.contentType === 'Reverse City' || forceContent.contentType === 'Yum Yum Island' ? '2x' : value;
 				const checkbox = createCheckboxWithLabel('forceCheckbox',`${forceContent.contentType}: +${expGain}`,forceContent.checked);
 				checkboxContent.appendChild(checkbox);
 			}
@@ -303,11 +307,11 @@ async function loadForce(characterData, isArcane) {
 		const forceDataElement = createDOMElement('div', `${forceType}Data`);
 		forceDataElement.setAttribute('area', areaName);
 		forceDataElement.appendChild(levelWrapper);
-		if (characterData.level >= force.minLevel) {
+		if (characterData.level >= minLevel) {
 			forceDataElement.appendChild(checkboxContent);
 		}
-		if (characterData.level < force.minLevel) {
-			const unlockText = createDOMElement('span','unlockText',`Unlock at Level ${force.minLevel}`);
+		if (characterData.level < minLevel) {
+			const unlockText = createDOMElement('span','unlockText',`Unlock at Level ${minLevel}`);
 			forceDataElement.appendChild(unlockText);
 		}
 
@@ -361,8 +365,8 @@ async function updateForce(type, levelNumberValue) {
 
 		const levelWrapper = force.querySelector('.levelWrapper');
 		const wrap = createDOMElement('div', 'levelWrapper');
-
-		if (level < areaData[0].minLevel && !force.classList.contains('off')) {
+		const minLevel = dailyJson.find(json => json.name === areaData[0].name).minLevel;
+		if (level < minLevel && !force.classList.contains('off')) {
 			image.classList.add('off');
 			force.classList.add('off');
 			const level = createDOMElement('span', `${type}ForceLevel`, `Level: 0`);
@@ -373,12 +377,12 @@ async function updateForce(type, levelNumberValue) {
 			const unlockText = createDOMElement(
 				'span',
 				'unlockText',
-				`Unlock at Level ${areaData[0].minLevel}`
+				`Unlock at Level ${minLevel}`
 			);
 			checkboxContent.replaceWith(unlockText);
 		}
 
-		if (level >= areaData[0].minLevel && force.classList.contains('off')) {
+		if (level >= minLevel && force.classList.contains('off')) {
 			image.classList.remove('off');
 			force.classList.remove('off');
 			

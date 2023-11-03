@@ -1,0 +1,66 @@
+[
+	{
+		"name": "Vanish Journey",
+        "value": "9",
+        "minLevel": "200"
+	},
+    {
+        "name": "Reverse City",
+        "value": "9",
+        "minLevel": "205"
+    },
+    {
+		"name": "Chu Chu Island",
+        "value": "8",
+        "minLevel": "210"
+	},
+    {
+        "name": "Yum Yum Island",
+        "value": "8",
+        "minLevel": "215"
+    },
+    {
+		"name": "Lachelein",
+        "value": "11",
+        "minLevel": "220"
+	},
+    {
+		"name": "Arcana",
+        "value": "9",
+        "minLevel": "225"
+	},
+    {
+		"name": "Morass",
+        "value": "9",
+        "minLevel": "230"
+	},
+    {
+		"name": "Esfera",
+        "value": "8",
+        "minLevel": "235"
+	},
+    {
+        "name": "Weekly",
+        "value": "15"
+    },
+    {
+		"name": "Cernium",
+        "value": "10",
+        "minLevel": "260"
+	},
+    {
+		"name": "Burning Cernium",
+        "value": "5",
+        "minLevel": "265"
+	},
+    {
+		"name": "Arcus",
+        "value": "5",
+        "minLevel": "270"
+	},
+    {
+		"name": "Odium",
+        "value": "5",
+        "minLevel": "275"
+	}
+]

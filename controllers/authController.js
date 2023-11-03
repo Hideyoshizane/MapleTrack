@@ -27,9 +27,9 @@ module.exports = {
           };
           await searchServersAndCreateMissing(ctx.session.passport.user, ctx.session.passport.user._id);
           await createMissingCharacters(ctx.session.passport.user._id, ctx.session.passport.user.username);
-          await updateCharacters(ctx.session.passport.user._id);
-          await updateCharactersWeekly(ctx.session.passport.user._id);
-          await updateWeeklyBosses(ctx.session.passport.user._id);
+          //await updateCharacters(ctx.session.passport.user._id);
+          //await updateCharactersWeekly(ctx.session.passport.user._id);
+          //await updateWeeklyBosses(ctx.session.passport.user._id);
           await updateLastLogin(ctx.session.passport.user._id);
           ctx.redirect('/home');
         }

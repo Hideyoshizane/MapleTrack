@@ -41,15 +41,12 @@ const Character = mongoose.model('Character', new mongoose.Schema({
         name:     {type: String, required: true},
         level:    {type: Number, required: true},
         exp:      {type: Number, required: true},
-        minLevel: {type: Number, required: true, editable: false},
         content: [{
           contentType: {type: String,required: true, editable: false},
-          expGain:     {type: Number},
           checked:     {type: Boolean},
-          minLevel:    {type: Number},
+          date:        {type: Date},
           tries:       {type: Number},
           maxTries:    {type: Number},
-          date:        {type: Date}
         }]
         
     }],
@@ -57,12 +54,9 @@ const Character = mongoose.model('Character', new mongoose.Schema({
       name:     {type: String, required: true},
       level:    {type: Number, required: true},
       exp:      {type: Number, required: true},
-      minLevel: {type: Number, required: true, editable: false},
       content: [{
         contentType: {type: String,required: true, editable: false},
-        expGain:     {type: Number},
         checked:     {type: Boolean},
-        minLevel:    {type: Number},
         date:        {type: Date}
       }]
   }],
@@ -78,17 +72,14 @@ const templateCharacter = {
       name: "Vanish Journey",
       level: 1,
       exp: 1,
-      minLevel: 200,
       content:[
         {
         contentType: "Daily Quest",
-        expGain: 9,
         checked: false,
         date: null
         },
         {
           contentType: "Erda Spectrum",
-          expGain: 15,
           checked: false,
           tries: 3,
           maxTries: 3,
@@ -97,25 +88,21 @@ const templateCharacter = {
         {
           contentType: "Reverse City",
           checked: false,
-          minLevel: 205
         },
       ]
     },
     {
-      name: "Chu chu Island",
+      name: "Chu Chu Island",
       level: 1,
       exp: 1,
-      minLevel: 210,
       content:[
         {
         contentType: "Daily Quest",
-        expGain: 8,
         checked: false,
         date: null
         },
         {
           contentType: "Hungry Muto",
-          expGain: 15,
           checked: false,
           tries: 3,
           maxTries: 3,
@@ -124,7 +111,6 @@ const templateCharacter = {
         {
           contentType: "Yum Yum Island",
           checked: false,
-          minLevel: 215
         }
       ]
     },
@@ -132,18 +118,15 @@ const templateCharacter = {
       name: "Lachelein",
       level: 1,
       exp: 1,
-      minLevel: 220,
       content:[
         {
         contentType: "Daily Quest",
-        expGain: 11,
         checked: false,
         date: null
         },
         {
           contentType: "Dream Defender",
           checked: false,
-          expGain: 15,
           tries: 3,
           maxTries: 3,
           date: null
@@ -154,17 +137,14 @@ const templateCharacter = {
       name: "Arcana",
       level: 1,
       exp: 1,
-      minLevel: 225,
       content:[
         {
         contentType: "Daily Quest",
-        expGain: 9,
         checked: false,
         date: null
         },
         {
           contentType: "Spirit Savior",
-          expGain: 15,
           checked: false,
           tries: 3,
           maxTries: 3,
@@ -176,17 +156,14 @@ const templateCharacter = {
       name: "Morass",
       level: 1,
       exp: 1,
-      minLevel: 230,
       content:[
         {
         contentType: "Daily Quest",
-        expGain: 8,
         checked: false,
         date: null
         },
         {
           contentType: "Ranheim Defense",
-          expGain: 15,
           checked: false,
           tries: 3,
           maxTries: 3,
@@ -198,17 +175,14 @@ const templateCharacter = {
       name: "Esfera",
       level: 1,
       exp: 1,
-      minLevel: 235,
       content:[
         {
         contentType: "Daily Quest",
-        expGain: 8,
         checked: false,
         date: null
         },
         {
           contentType: "Esfera Guardian",
-          expGain: 15,
           checked: false,
           tries: 3,
           maxTries: 3,
@@ -223,18 +197,14 @@ const templateCharacter = {
     name: "Cernium",
     level: 1,
     exp: 1,
-    minLevel: 260,
       content: [{
           contentType: "Daily Quest",
-          expGain: 10,
           checked: false,
           date: null
         },
         {
           contentType: "Burning Cernium",
-          expGain: 5,
           checked: false,
-          minLevel: 265
         }
       ]
     },
@@ -242,10 +212,8 @@ const templateCharacter = {
       name: "Arcus",
       level: 1,
       exp: 1,
-      minLevel: 270,
         content: [{
             contentType: "Daily Quest",
-            expGain: 5,
             checked: false,
             date: null
           },
@@ -255,10 +223,8 @@ const templateCharacter = {
       name: "Odium",
       level: 1,
       exp: 1,
-      minLevel: 275,
         content: [{
             contentType: "Daily Quest",
-            expGain: 5,
             checked: false,
             date: null
           },
@@ -293,9 +259,9 @@ async function createMissingCharacters(userID, username){
   }).exec();
   
   for(server of userData.servers){
-    const serverCharacterCodes = server.characters.map((character) => character.code);
+    const serverCharacterCodes = server.characters.map((character) => character.class);
     const serverMissingCharacters = jsonData.filter(
-      (character) => !serverCharacterCodes.includes(character.code)
+      (character) => !serverCharacterCodes.includes(character.class)
     );
     for(missingCharacter  of serverMissingCharacters){
       createdCharacter = await createCharacter(missingCharacter , server.name, username);
@@ -389,7 +355,7 @@ async function updateCharactersWeekly(userID) {
   }
 }
 
-
+async function updateBossses(){}
 
 async function updateForceData(updatingCharacter, forceType, templateForce) {
   const templateContentMap = new Map();

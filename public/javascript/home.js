@@ -1,10 +1,16 @@
 window.cardBody;
 window.username;
+window.dailyJson;
+
+
+
 
 document.addEventListener('DOMContentLoaded', async () => {
   try {
 
     username = document.getElementById('userdata').getAttribute('data-username');
+
+    dailyJson = await fetch('../../../public/data/dailyExp.json').then((response) => response.json());
 
     const data = await fetch('/userServer').then(response => response.json());
     const mainContent = document.querySelector('.mainContent');
@@ -267,8 +273,8 @@ async function createForce(characterData, forceType) {
 
 async function setForceLevel(forceArea, characterData, forceImg, forceType) {
   let level = forceArea.level;
-
-  if (characterData.level < forceArea.minLevel) {
+  const minLevel = dailyJson.find(json => json.name === forceArea.name).minLevel;
+  if (characterData.level < minLevel) {
     forceImg.classList.toggle('off');
     level = 0;
   }

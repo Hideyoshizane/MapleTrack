@@ -56,7 +56,6 @@ async function createMissingServer(userID, missingServersData, username) {
   await Character.insertMany(baseCharacters);
 
   try {
-    const tesing = await User.findById(userID);
     const updatedUser = await User.findByIdAndUpdate(
       { _id: userID },
       { $addToSet: { servers: createdServer._id } },
