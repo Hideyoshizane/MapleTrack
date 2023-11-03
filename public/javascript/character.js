@@ -334,7 +334,7 @@ function createDailyButton(Force, characterData, isArcane = false){
   return dailyButton;
 }
 
-function getDailyValue(Force, characterData, isArcane = false, bug = 0){
+function getDailyValue(Force, characterData, isArcane = false){
   const dailyQuest = Number(dailyJson.find(json => json.name === Force.name).value);
   let dailyValue = dailyQuest;
 
@@ -350,7 +350,7 @@ function getDailyValue(Force, characterData, isArcane = false, bug = 0){
       
   if(!isArcane && Force.name === 'Cernium'){
     if(Force.content[1].checked == true){
-      const cernium = dailyJson.find(json => json.name == Force.content[1].name).value;
+      const cernium = Number(dailyJson.find(json => json.name == Force.content[1].contentType).value);
       dailyValue += cernium;
     }
   }
@@ -469,7 +469,10 @@ async function increaseWeekly(event, characterData){
 };
 
 async function getExp(characterData, isArcane, forceName) {
-  const object = characterData.ArcaneForce.find(arcaneforce => arcaneforce.name === forceName);
+  const object = isArcane 
+    ? characterData.ArcaneForce.find(arcaneforce => arcaneforce.name === forceName)
+    : characterData.SacredForce.find(sacredforce => sacredforce.name === forceName);
+    
   const expTable = isArcane ? ArcaneTable : SacredTable;
 
   if (object.level < (isArcane ? 20 : 11)) {
@@ -513,7 +516,7 @@ async function updateArea(forceName, isArcane){
   }
 
   innerExpBar = targetDiv.querySelector('.progressBar');
-  ;
+  
   await updateExpBar(innerExpBar, areaData.exp, nextLevelEXPNumber, 191, characterData.jobType);
 
   const remainDays = await updateDayToMax(areaData, isArcane, characterData);
@@ -532,12 +535,12 @@ async function updateDayToMax(areaData, isArcane, characterData){
 
   const weeklyValue = Number(dailyJson.find(json => json.name === 'Weekly').value);
   let totalExp = calculateTotalExp(areaData.level, expTable);
-  let dailyExp = getDailyValue(areaData, characterData, isArcane, 1);
+  let dailyExp = getDailyValue(areaData, characterData, isArcane);
   const weeklyExp = (areaData.content[2] && areaData.content[2].checked && isArcane) ? (weeklyValue*3) : 0;
   totalExp -= areaData.exp;
-  const daysToReachTotalExp = Math.ceil(totalExp / (dailyExp + (weeklyExp / 7)));
-  return daysToReachTotalExp;
+  return Math.ceil(totalExp / (dailyExp + (weeklyExp / 7)));
 }
+
 
 async function processButtons(dailyButtons, characterData) {
   let currentIndex = 0;

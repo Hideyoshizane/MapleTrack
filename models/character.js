@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const path = require('path');
 const jsonData = require('../public/data/classes.json');
 const { User } = require('./user');
-const { template } = require('lodash');
+const { template, templateSettings } = require('lodash');
 const {DateTime} = require('luxon');
 
 const Character = mongoose.model('Character', new mongoose.Schema({
@@ -227,7 +227,7 @@ const templateCharacter = {
             contentType: "Daily Quest",
             checked: false,
             date: null
-          },
+          }
         ]
     },
     
@@ -264,7 +264,7 @@ async function createMissingCharacters(userID, username){
       (character) => !serverCharacterCodes.includes(character.class)
     );
     for(missingCharacter  of serverMissingCharacters){
-      createdCharacter = await createCharacter(missingCharacter , server.name, username);
+      const createdCharacter = await createCharacter(missingCharacter , server.name, username);
       server.characters.push(createdCharacter._id);
       await createdCharacter.save();
       await server.save();
@@ -355,77 +355,41 @@ async function updateCharactersWeekly(userID) {
   }
 }
 
-async function updateBossses(){}
-
 async function updateForceData(updatingCharacter, forceType, templateForce) {
-  const templateContentMap = new Map();
-  const usedKeys = new Set();
-
-  for (const templateEntry of templateForce) {
-    for (const content of templateEntry.content) {
-      var key = `${templateEntry.name}-${content.contentType}`;
-      templateContentMap.set(key, content);
-    }
-  }
-
-  var updatedForce = [];
   const updatingForce = updatingCharacter[forceType] || [];
+  //Add missing Areas
+  const missingArea = templateForce.filter(newArea => !updatingForce.some(existingArea => existingArea.name === newArea.name));
+  for(area of missingArea) {
+    updatingForce.push(area);
+  }
+  //Remove Areas
+  const areasToDelete = updatingForce.filter(newArea => !templateForce.some(existingArea => existingArea.name === newArea.name));
+  areasToDelete.forEach(areaToRemove => {
+    const index = updatingForce.findIndex(area => area.name === areaToRemove.name);
+    if (index !== -1) {
+      updatingForce.splice(index, 1);
+    }
+  });
 
-  //update Existing contentType within Force objects
-  for (const updatingEntry of updatingForce) {
-    const updatedContent = [];
-    for (const content of updatingEntry.content) {
-      var key = `${updatingEntry.name}-${content.contentType}`;
-      usedKeys.add(key);
-      const templateContent = templateContentMap.get(key);
-      if (templateContent) {
-        const tries = content.tries !== undefined ? content.tries : templateContent.tries;
-        const updatedContentEntry = { ...templateContent, checked: content.checked, date: content.date, tries };
-        updatedContent.push(updatedContentEntry);
+  for (let i = 0; i < updatingForce.length; i++) {
+    const character = updatingForce[i];
+    const template = templateForce[i];
+    //Add new content
+    const missingContent = template.content.filter(newContent => !character.content.some(exisstingContent => exisstingContent.contentType === newContent.contentType));
+    for(content of missingContent){
+      character.content.push(content);
+    }
+    
+    //Delete content
+    const contentToDelete = character.content.filter(newArea => !template.content.some(existingArea => existingArea.contentType === newArea.contentType));
+    contentToDelete.forEach(content => {
+      const index = character.content.findIndex(area => area.contentType === content.contentType);
+      if (index !== -1) {
+        character.content.splice(index, 1);
       }
-    }
-    const updatedEntry = { ...updatingEntry, content: updatedContent };
-    updatedForce.push(updatedEntry);
-  }
-  
-  //Insert missing content of contentType array
-  for (const [key, value] of templateContentMap.entries()) {
-    if (!usedKeys.has(key)) {
-      const [name, contentType] = key.split('-');
-      const missingContent = templateContentMap.get(key);
-      const existingEntryIndex = updatingForce.findIndex((entry) => entry.name === name);
-      if (existingEntryIndex !== -1) { 
-      const updatingEntry = updatingForce[existingEntryIndex];
-      const updatedContent = [...updatingEntry.content, missingContent];
-      updatingEntry.content.push(missingContent);
-      updatedForce[existingEntryIndex] = updatingEntry;
-      }
-    }
-  }
+    });
 
- //Insert missing object from Force array
-  for (const templateEntry of templateForce) {
-    const existingEntry = updatingForce.find((entry) => entry.name === templateEntry.name);
-    if (!existingEntry) {
-      const newEntry = {
-        level: templateEntry.level,
-        exp: templateEntry.exp,
-        minLevel: templateEntry.minLevel,
-        name: templateEntry.name,
-        content: templateEntry.content.map((content) => ({ ...content })),
-      };
-      updatedForce.push(newEntry);
-    }
   }
-
-  //Remove objects from Force array that are not present in the Template
-  const missingEntries = updatingForce.filter((updatingEntry) =>
-    !templateForce.some((templateEntry) => templateEntry.name === updatingEntry.name)
-  );
-  updatingCharacter[forceType] = updatedForce;
-  const missingNames = missingEntries.map((missingEntry) => missingEntry.name);
-  updatingCharacter[forceType] = updatingCharacter[forceType].filter((updatingEntry) => !missingNames.includes(updatingEntry.name));
-
 }
 
 

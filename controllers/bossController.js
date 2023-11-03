@@ -1,4 +1,5 @@
 const {bossList} = require('../models/bossingList');
+const {DateTime} = require('luxon');
 
 module.exports = {
   getList: async (ctx) => {
@@ -27,6 +28,7 @@ module.exports = {
       foundServer.weeklyBosses = checkMark ? foundServer.weeklyBosses + 1 : foundServer.weeklyBosses - 1;
 
       foundBoss.date = checkMark ? date : null;
+      bossList.lastUpdate = date;
 
       await ListFound.save();
       ctx.status = 200;
@@ -79,7 +81,7 @@ module.exports = {
           return foundCharacter.bosses.some(onRequestBoss => (onDatabaseBoss.name === onRequestBoss.name) && (onDatabaseBoss.reset === onRequestBoss.reset))
         })
       }
-      
+      listFound.lastUpdate = DateTime.utc();
       await listFound.save();
       ctx.status = 200;
     } catch (error) {

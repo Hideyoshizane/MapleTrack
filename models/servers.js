@@ -28,7 +28,9 @@ const defaultServers = [
 
 
 async function searchServersAndCreateMissing(userID, username){
-  const userData = await User.findById(userID).populate('servers');
+  const userData = await User.findById(userID)
+  console.log(userData);
+  //.populate('servers');
   var userStoredServers = []
   if(userData !== null){
     userStoredServers = (userData.servers).map(server => server.name);

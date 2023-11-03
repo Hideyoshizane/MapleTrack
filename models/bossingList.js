@@ -4,9 +4,8 @@ const { defaultServers } = require('./servers');
 const {DateTime} = require('luxon');
 
 const bossList = mongoose.model('bossList', new mongoose.Schema({
-    userOrigin:{
-      type: String,
-    },
+    userOrigin:   {type: String,},
+    lastUpdate:   {type: Date},
     server:[{
       name: String,
       weeklyBosses: {type: Number},
@@ -34,6 +33,7 @@ const bossList = mongoose.model('bossList', new mongoose.Schema({
 async function createBossList(username){
   const newBossList = new bossList({
     userOrigin: username,
+    lastUpdate: null,
     server: defaultServers.map(server => ({
       name: server.name,
       weeklyBosses: 0,
@@ -81,5 +81,32 @@ async function removeFromBossList(username, characterID, server){
   } 
 }
 
+async function resetBossList(username){
+    const bossList = await bossList.findOne({userOrigin: username });
+    const timeNow = DateTime.utc();
+    const userLastLogin = DateTime.fromJSDate(bossList.lastUpdate);
 
-module.exports = { bossList, createBossList, insertOnBossList, removeFromBossList};
+    const nextWednesday = userLastLogin.plus({ days: 1 }).set({ weekday: 3, hour: 0, minute: 0, second: 0, millisecond: 0 });
+    const nextDay = userLastLogin.plus({ days: 1 }).set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
+
+    if(timeNow >= nextDay && timeNow <= nextWednesday){
+        //Reset Daily bosses
+        await resetDailyBoss(username);
+    }
+    else{
+        //Reset everything
+        await resetWeeklyBoss(username);
+    }
+
+}
+
+
+async function resetDailyBoss(bossList){
+  
+}
+async function resetWeeklyBoss(bossList){
+
+}
+
+
+module.exports = { bossList, createBossList, insertOnBossList, removeFromBossList, resetBossList};

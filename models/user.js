@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const {DateTime} = require('luxon');
 const passportLocalMongoose = require('passport-local-mongoose');
 
+const LASTVERSION = 0;
+
 const userSchema = new mongoose.Schema({
     username: {
         type: String,
@@ -23,6 +25,9 @@ const userSchema = new mongoose.Schema({
         required: true,
         minlength: 8,
         maxlength: 61
+    },
+    version: {
+        type: Number,
     },
     date: {type: Date},
     servers: [{
@@ -54,26 +59,17 @@ async function updateLastLogin(userID){
     await userData.save();
 }
 
-async function updateWeeklyBosses(userID){
-    const userData = await User.findById(userID);
-    const timeNow = DateTime.utc();
-    const userLastLogin = DateTime.fromJSDate(userData.date);
-    const nextWednesday = userLastLogin.plus({ days: 1 }).set({ weekday: 3, hour: 0, minute: 0, second: 0, millisecond: 0 });
-   // Check if the last login date is before the most recent Wednesday midnight (UTC)
-    if (timeNow >= nextWednesday) {
-        userData.weeklyBosses = Number(0);
-        await userData.save();
-        console.log("Bosses updated.");
-    }
-    else{
-        console.log("Bosses not needed update.");
-    }
-}
 
+async function updateUserVersion(userID){
+    const userData = await User.findById(userID);
+    userData.version = LASTVERSION;
+    await userData.save();
+}
 
 module.exports = {
     User,
     validate,
     updateLastLogin,
-    updateWeeklyBosses
+    LASTVERSION,
+    updateUserVersion
 };

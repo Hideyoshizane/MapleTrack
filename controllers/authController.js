@@ -1,9 +1,8 @@
 const passport = require('koa-passport');
 const { searchServersAndCreateMissing } = require('../models/servers');
-const {createMissingCharacters} = require('../models/character');
-const {updateCharacters} = require('../models/character');
-const {updateCharactersWeekly} = require('../models/character');
-const {updateLastLogin, updateWeeklyBosses} = require('../models/user');
+const {updateCharacters, updateCharactersWeekly, createMissingCharacters} = require('../models/character');
+const {updateLastLogin, LASTVERSION, updateUserVersion} = require('../models/user');
+const {resetBossList} = require('../models/bossingList');
 
 module.exports = {
   login: async (ctx, next) => {
@@ -23,13 +22,18 @@ module.exports = {
             _id: user._id,
             username: user.username,
             email: user.email,
+            version: user.version,
             role: user.role,
           };
-          await searchServersAndCreateMissing(ctx.session.passport.user, ctx.session.passport.user._id);
-          await createMissingCharacters(ctx.session.passport.user._id, ctx.session.passport.user.username);
-          //await updateCharacters(ctx.session.passport.user._id);
-          //await updateCharactersWeekly(ctx.session.passport.user._id);
-          //await updateWeeklyBosses(ctx.session.passport.user._id);
+          if(ctx.session.user.version < LASTVERSION){
+            await searchServersAndCreateMissing(ctx.session.passport.user, ctx.session.passport.user._id);
+            await createMissingCharacters(ctx.session.passport.user._id, ctx.session.passport.user.username);
+            await updateCharacters(ctx.session.passport.user._id);
+            await updateUserVersion(ctx.session.passport.user._id);
+          }
+          
+          await updateCharactersWeekly(ctx.session.passport.user._id);
+          await resetBossList(user.username);
           await updateLastLogin(ctx.session.passport.user._id);
           ctx.redirect('/home');
         }

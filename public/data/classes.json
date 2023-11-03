@@ -3,336 +3,288 @@
    "linkSkill": "Spirit of Freedom",
    "legionType": "INT+",
    "className": "Battle Mage",
-   "code": "battle_mage",
    "jobType": "mage"
   },
   {
     "linkSkill": "Focus Spirit",
     "legionType": "IEDM",
     "className": "Beast Tamer",
-    "code": "beast_tamer",
     "jobType": "mage"
    },
    {
     "linkSkill": "Cygnus Blessing",
     "legionType": "INT+",
     "className": "Blaze Wizard",
-    "code": "blaze_wizard",
     "jobType": "mage"
    },
    {
     "linkSkill": "Rune Persistence",
     "legionType": "RECVRMP",
     "className": "Evan",
-    "code": "evan",
     "jobType": "mage"
    },
    {
     "linkSkill": "Tide of Battle",
     "legionType": "INT+",
     "className": "Illium",
-    "code": "illium",
     "jobType": "mage"
    },
    {
     "linkSkill": "Elementalism",
     "legionType": "BOSSDMGM",
     "className": "Kanna",
-    "code": "kanna",
     "jobType": "mage"
    },
    {
     "linkSkill": "Judgment",
     "legionType": "INT+",
     "className": "Kinesis",
-    "code": "kinesis",
     "jobType": "mage"
    },
    {
     "linkSkill": "Nature's Friend",
     "legionType": "INT+",
     "className": "Lara",
-    "code": "lara",
     "jobType": "mage"
    },
    {
     "linkSkill": "Light Wash",
     "legionType": "INT+",
     "className": "Luminous",
-    "code": "luminous",
     "jobType": "mage"
    },
    {
     "linkSkill": "Empirical Knowledge",
     "legionType": "MAXMP%",
     "className": "Fire & Poison",
-    "code": "fire_poison",
     "jobType": "mage"
    },
    {
     "linkSkill": "Empirical Knowledge",
     "legionType": "INT+",
     "className": "Ice & Lightning",
-    "code": "ice_lightning",
     "jobType": "mage"
    },
    {
     "linkSkill": "Empirical Knowledge",
     "legionType": "INT+",
     "className": "Bishop",
-    "code": "bishop",
     "jobType": "mage"
    },
    {
     "linkSkill": "Thief's Cunning",
     "legionType": "LUK+",
     "className": "Dual Blade",
-    "code": "dual_blade",
     "jobType": "thief"
    },
    {
     "linkSkill": "Cygnus Blessing",
     "legionType": "LUK+",
     "className": "Night Walker",
-    "code": "night_walker",
     "jobType": "thief"
    },
    {
     "linkSkill": "Phantom Instinct",
     "legionType": "MESO%",
     "className": "Phantom",
-    "code": "phantom",
     "jobType": "thief"
    },
    {
     "linkSkill": "Thief's Cunning",
     "legionType": "CRITRTT",
     "className": "Night Lord",
-    "code": "night_lord",
     "jobType": "thief"
    },
    {
     "linkSkill": "Thief's Cunning",
     "legionType": "LUK+",
     "className": "Shadower",
-    "code": "shadower",
     "jobType": "thief"
    },
    {
     "linkSkill": "Hybrid Logic",
     "legionType": "STDELU",
     "className": "Xenon",
-    "code": "xenon",
     "jobType": "xenon"
    },
    {
     "linkSkill": "Unfair Advantage",
     "legionType": "LUK+",
     "className": "Cadena",
-    "code": "cadena",
     "jobType": "thief"
    },
    {
     "linkSkill": "Bravado",
     "legionType": "LUK+",
     "className": "Hoyoung",
-    "code": "hoyoung",
     "jobType": "thief"
    },
    {
     "linkSkill": "Combo Kill Blessing",
     "legionType": "RECVRHP+",
     "className": "Aran",
-    "code": "aran",
     "jobType": "warrior"
    },
    {
     "linkSkill": "Noble Fire",
     "legionType": "STR+",
     "className": "Adele",
-    "code": "adele",
     "jobType": "warrior"
    },
    {
     "linkSkill": "Spirit of Freedom",
     "legionType": "IED+",
     "className": "Blaster",
-    "code": "blaster",
     "jobType": "warrior"
    },
    {
     "linkSkill": "Cygnus Blessing",
     "legionType": "MAXHP+",
     "className": "Dawn Warrior",
-    "code": "dawn_warrior",
     "jobType": "warrior"
    },
    {
     "linkSkill": "Wild Rage",
     "legionType": "BOSSDMG+",
     "className": "Demon Avenger",
-    "code": "demon_avenger",
     "jobType": "warrior"
    },
    {
     "linkSkill": "Fury Unleashed",
     "legionType": "STATRES+",
     "className": "Demon Slayer",
-    "code": "demon_slayer",
     "jobType": "warrior"
    },
    {
     "linkSkill": "Keen Edge",
     "legionType": "CRIT",
     "className": "Hayato",
-    "code": "hayato",
     "jobType": "warrior"
    },
    {
     "linkSkill": "Iron Will",
     "legionType": "STR+",
     "className": "Kaiser",
-    "code": "kaiser",
     "jobType": "warrior"
    },
    {
     "linkSkill": "Knight's Watch",
     "legionType": "MAXHP+",
     "className": "Mihile",
-    "code": "mihile",
     "jobType": "warrior"
    },
    {
     "linkSkill": "Invincible Belief",
     "legionType": "STR+",
     "className": "Hero",
-    "code": "hero",
     "jobType": "warrior"
    },
    {
     "linkSkill": "Invincible Belief",
     "legionType": "STR+",
     "className": "Paladin",
-    "code": "paladin",
     "jobType": "warrior"
    },
    {
     "linkSkill": "Invincible Belief",
     "legionType": "MAXHP%",
     "className": "Dark Knight",
-    "code": "dark_knight",
     "jobType": "warrior"
    },
    {
     "linkSkill": "Rhinne's Blessing",
     "legionType": "EXP",
     "className": "Zero",
-    "code": "zero",
     "jobType": "warrior"
    },
    {
     "linkSkill": "Adventurer's Curiosity",
     "legionType": "DEX+",
     "className": "Bowmaster",
-    "code": "bowmaster",
     "jobType": "bowman"
    },
    {
     "linkSkill": "Adventurer's Curiosity",
     "legionType": "CRITRT",
     "className": "Marksman",
-    "code": "marksman",
     "jobType": "bowman"
    },
    {
     "linkSkill": "Time to Prepare",
     "legionType": "DEX+",
     "className": "Kain",
-    "code": "kain",
     "jobType": "bowman"
    },
    {
     "linkSkill": "Elven Blessing",
     "legionType": "SKILLCD",
     "className": "Mercedes",
-    "code": "mercedes",
     "jobType": "bowman"
    },
    {
     "linkSkill": "Adventurer's Curiosity",
     "legionType": "DEX+",
     "className": "Pathfinder",
-    "code": "pathfinder",
     "jobType": "bowman"
    },
    {
     "linkSkill": "Spirit of Freedom",
     "legionType": "%DMGUP",
     "className": "Wild Hunter",
-    "code": "wild_hunter",
     "jobType": "bowman"
    },
    {
     "linkSkill": "Cygnus Blessing",
     "legionType": "DEX+",
     "className": "Wind Archer",
-    "code": "wind_archer",
     "jobType": "bowman"
    },
    {
     "linkSkill": "Terms and Conditions",
     "legionType": "DEX+P",
     "className": "Angelic Buster",
-    "code": "angelic_buster",
     "jobType": "pirate"
    },
    {
     "linkSkill": "Pirate Blessing",
     "legionType": "STR+P",
     "className": "Cannoneer",
-    "code": "cannoneer",
     "jobType": "pirate"
    },
    {
     "linkSkill": "Spirit of Freedom",
     "legionType": "BUFFDUR",
     "className": "Mechanic",
-    "code": "mechanic",
     "jobType": "pirate"
    },
    {
     "linkSkill": "Pirate Blessing",
     "legionType": "STR+P",
     "className": "Buccaneer",
-    "code": "buccaneer",
     "jobType": "pirate"
    },
    {
     "linkSkill": "Pirate Blessing",
     "legionType": "SUMMND",
     "className": "Corsair",
-    "code": "corsair",
     "jobType": "pirate"
    },
    {
     "linkSkill": "Close Call",
     "legionType": "CRTDMG+",
     "className": "Shade",
-    "code": "shade",
     "jobType": "pirate"
    },
    {
     "linkSkill": "Cygnus Blessing",
     "legionType": "STR+P",
     "className": "Thunder Breaker",
-    "code": "thunder_breaker",
     "jobType": "pirate"
    },
    {
     "linkSkill": "Solus",
     "legionType": "STR+P",
     "className": "Ark",
-    "code": "ark",
     "jobType": "pirate"
    }
 ]

@@ -120,8 +120,7 @@ async function createTotalGain(){
   const totalGainText = createDOMElement('span', 'totalGainText', 'Total Gain');
   const GainValue = `${selectedList.totalGains.toLocaleString('en-US')}`;
   const totalGainValue = createDOMElement('span','totalGoldValue', GainValue);
-  const fontSize = await adjustFontSizeToFit(GainValue, 265, 32);
-  totalGainValue.style.fontSize = fontSize + 'px';
+  totalGainValue.style.fontSize = await adjustFontSizeToFit(totalGainValue, 265, 32) + 'px';
 
   GoldtextDiv.appendChild(totalGainText);
   GoldtextDiv.appendChild(totalGainValue);
@@ -129,31 +128,6 @@ async function createTotalGain(){
   totalGainDiv.appendChild(Gold);
   totalGainDiv.appendChild(GoldtextDiv);
   parentDiv.appendChild(totalGainDiv);
-}
-
-async function adjustFontSizeToFit(totalGainValue, maxWidth, originalFontSize) {
-
-  const copy = document.createElement('span');
-  copy.textContent = totalGainValue;
-  copy.style.fontSize = originalFontSize + 'px';
-  copy.style.fontFamily = 'Inter';
-
-  const container = document.createElement('div');
-  container.style.position = 'absolute';
-  container.style.left = '-9999px';
-
-  container.appendChild(copy);
-  document.body.appendChild(container);
-
-  let width = copy.offsetWidth;
-  let fontSize = originalFontSize;
-  while (width > maxWidth && fontSize > 0) {
-    fontSize -= 1;
-    copy.style.fontSize = fontSize + 'px';
-    width = copy.offsetWidth;
-  }
-  document.body.removeChild(container);
-  return fontSize;
 }
 
 
@@ -179,6 +153,7 @@ async function loadCharacterCards(){
     characterImage = await createImageElement(imgSource, 'character Profile', 'profile');
 
     characterName = createDOMElement('span', 'characterName',`${characters.name}`);
+    characterName.style.fontSize = await adjustFontSizeToFit(characterName, 220, 28) + 'px';
     characterClass = createDOMElement('span', 'characterClass', `${characters.class}`);
 
     characterWrapper = createDOMElement('div', 'characterWrapper');
@@ -240,8 +215,7 @@ async function createBossButton(boss){
   const bossValue = createDOMElement('span', 'BossValue', `${boss.value.toLocaleString('en-us')}`);
   bossValue.setAttribute('value', boss.value);
 
-  const fontSize = await adjustFontSizeToFit(bossInfo.textContent, 268, 32);
-  bossInfo.style.fontSize = fontSize + 'px';
+  bossInfo.style.fontSize = await adjustFontSizeToFit(bossInfo, 268, 32) + 'px';
 
   const checkMark = boss.checked ? await createCheckMark() : await createUncheckMark();
 
@@ -274,8 +248,7 @@ async function updateTopButtons(){
   const totalGoldValue = document.querySelector('.totalGoldValue');
   newGoldValue = `${selectedList.totalGains.toLocaleString('en-US')}`;
 
-  const fontSize = await adjustFontSizeToFit(newGoldValue, 265, 32);
-  totalGoldValue.style.fontSize = fontSize + 'px';
+  totalGoldValue.style.fontSize = await adjustFontSizeToFit(totalGoldValue, 265, 32) + 'px';
   totalGoldValue.textContent = newGoldValue;
 
   const characters = document.querySelector('.characters');

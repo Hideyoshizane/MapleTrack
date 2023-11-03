@@ -1,8 +1,7 @@
 const bcrypt = require('bcrypt');
-const { User, validate } = require('../models/user');
+const { User, validate, LASTVERSION } = require('../models/user');
 const { searchServersAndCreateMissing } = require('../models/servers');
 const { createBossList } = require('../models/bossingList');
-
 module.exports = {
 	signup: async (ctx) => {
 		try {
@@ -17,14 +16,15 @@ module.exports = {
 				return;
 			}
 
-			let sameUser = await User.findOne({ username });
+			const sameUser = await User.findOne({ username });
 			if (sameUser) {
 				ctx.status = 400;
 				ctx.body = 'That user already exists!';
 				return;
 			}
 
-			createdUser = new User({ username, email, password: hashedPassword});
+			createdUser = new User({ username, email, password: hashedPassword, version: LASTVERSION});
+			
 			await createdUser.save();
 			await searchServersAndCreateMissing(createdUser._id, createdUser.username);
 			await createBossList(createdUser.username);
@@ -41,7 +41,6 @@ module.exports = {
 		try {
 			if (ctx.isAuthenticated()) {
 				const { username, _id } = ctx.state.user;
-				const user = await User.findOne({ _id: _id });
 				await ctx.render('home', { username, _id });
 			} else {
 				ctx.redirect('/login');
@@ -54,11 +53,10 @@ module.exports = {
 	},
 	weeklyBoss: async (ctx) => {
 		try {
-      if(ctx.isAuthenticated()){
-        const { username, _id } = ctx.state.user;
-				const user = await User.findOne({ _id: _id });
+			if(ctx.isAuthenticated()){
+				const { username, _id } = ctx.state.user;
 				await ctx.render('weeklyBoss', { username, _id });
-      }
+			}
 		} catch (error) {
 			console.error('Error rendering Weekly Boss page:', error);
 			ctx.status = 500;
@@ -73,7 +71,6 @@ module.exports = {
 			} else{
 				ctx.redirect('/login');
 			}
-
 
 		} catch (error) {
 			console.error('Error signing out', error);
