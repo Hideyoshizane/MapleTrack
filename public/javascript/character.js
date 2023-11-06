@@ -417,7 +417,7 @@ async function increaseDaily(event, characterData){
   isArcane = isArcane.toLowerCase() === 'true';
   const forceName = clickedButton.getAttribute('name');
   const neededExp = await getExp(characterData, isArcane, forceName);
-  let currentDate = DateTime.utc();
+  let currentDate = DateTime.utc().toJSDate();
 
   const postData ={
     forceType: isArcane,
@@ -439,7 +439,7 @@ async function increaseWeekly(event, characterData){
   const clickedButton = event.target;
   const forceName = clickedButton.getAttribute('area');
   const neededExp = await getExp(characterData, true, forceName);
-  let currentDate = DateTime.utc();
+  let currentDate = DateTime.utc().toJSDate();
 
   const postData ={
     forceName: forceName,

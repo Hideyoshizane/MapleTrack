@@ -1,5 +1,6 @@
 const {Character} = require('../models/character');
 const {insertOnBossList, removeFromBossList} = require('../models/bossingList');
+const {DateTime} = require('luxon');
 
 module.exports = {
     redirectCharacter: async (ctx) => {
@@ -147,6 +148,7 @@ module.exports = {
             foundArea.level +=Number(1);
           }
           foundArea.content[0].date = date;
+          console.log(date);
           await foundCharacter.save();
           ctx.status = 200;
         }

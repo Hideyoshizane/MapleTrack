@@ -28,7 +28,7 @@ module.exports = {
       foundServer.weeklyBosses = checkMark ? foundServer.weeklyBosses + 1 : foundServer.weeklyBosses - 1;
 
       foundBoss.date = checkMark ? date : null;
-      bossList.lastUpdate = date;
+      ListFound.lastUpdate = date;
 
       await ListFound.save();
       ctx.status = 200;
@@ -81,7 +81,7 @@ module.exports = {
           return foundCharacter.bosses.some(onRequestBoss => (onDatabaseBoss.name === onRequestBoss.name) && (onDatabaseBoss.reset === onRequestBoss.reset))
         })
       }
-      listFound.lastUpdate = DateTime.utc();
+      listFound.lastUpdate = DateTime.utc().toISO();
       await listFound.save();
       ctx.status = 200;
     } catch (error) {

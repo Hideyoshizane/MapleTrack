@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const path = require('path');
 const { defaultServers } = require('./servers');
 const {DateTime} = require('luxon');
 
@@ -82,29 +81,55 @@ async function removeFromBossList(username, characterID, server){
 }
 
 async function resetBossList(username){
-    const bossList = await bossList.findOne({userOrigin: username });
+    const bossingList = await bossList.findOne({userOrigin: username });
     const timeNow = DateTime.utc();
-    const userLastLogin = DateTime.fromJSDate(bossList.lastUpdate);
-
+    const userLastLogin = DateTime.fromJSDate(bossingList.lastUpdate);
+    
     const nextWednesday = userLastLogin.plus({ days: 1 }).set({ weekday: 3, hour: 0, minute: 0, second: 0, millisecond: 0 });
     const nextDay = userLastLogin.plus({ days: 1 }).set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
-
+    
+  
     if(timeNow >= nextDay && timeNow <= nextWednesday){
         //Reset Daily bosses
-        await resetDailyBoss(username);
+        await resetDailyBoss(bossingList);
     }
-    else{
+    else if(timeNow > nextDay && timeNow > nextWednesday){
         //Reset everything
-        await resetWeeklyBoss(username);
+        await resetWeeklyBoss(bossingList);
     }
 
 }
 
 
-async function resetDailyBoss(bossList){
-  
+async function resetDailyBoss(bossingList){
+  const filteredServers = bossingList.server.filter((server) => server.characters.length > 0);
+
+	filteredServers.forEach((server) => {
+		server.characters.forEach((character) => {
+			character.bosses.forEach((boss) => {
+				if (boss.reset === 'Daily') {
+					boss.checked = false;
+				}
+			});
+		});
+	});
+  bossingList.lastUpdate = DateTime.utc().toJSDate();
+  await bossingList.save();
 }
-async function resetWeeklyBoss(bossList){
+async function resetWeeklyBoss(bossingList){
+  const filteredServers = bossingList.server.filter((server) => server.characters.length > 0);
+
+	filteredServers.forEach((server) => {
+		server.characters.forEach((character) => {
+			character.bosses.forEach((boss) => {
+					boss.checked = false;
+			});
+		});
+    server.weeklyBosses = 0;
+    server.totalGains = 0;
+	});
+  bossingList.lastUpdate = DateTime.utc().toJSDate();
+  await bossingList.save();
 
 }
 

@@ -327,7 +327,7 @@ function setupBossClickEvents() {
 			const difficult = button.querySelector('.BossName').getAttribute('difficult');
 			const value = button.querySelector('.BossValue').getAttribute('value');
 			const characterClass = button.closest('.buttonWrapper').querySelector('.characterClass').innerText;
-			const date = DateTime.utc();
+			const date = DateTime.utc().toJSDate();
 			const checkMark = button.querySelector('.checked') ? true : false;
 			const requestContent = {
 				server: server,
