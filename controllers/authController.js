@@ -15,7 +15,8 @@ module.exports = {
 
         if (!user) {
           ctx.status = 401;
-          ctx.body = { message: info.message };
+          ctx.flash('failed', info.message);
+          ctx.redirect('/login', { flash: ctx.session.flash });
         } else {
           await ctx.login(user);
           ctx.session.user = {

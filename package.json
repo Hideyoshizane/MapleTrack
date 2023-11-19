@@ -16,6 +16,7 @@
     "koa": "^2.14.2",
     "koa-bodyparser": "^4.4.0",
     "koa-cookie": "^1.0.0",
+    "koa-flash-message": "^0.1.6",
     "koa-passport": "^6.0.0",
     "koa-router": "^12.0.0",
     "koa-session": "^6.4.0",

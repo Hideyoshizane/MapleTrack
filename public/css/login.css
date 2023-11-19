@@ -26,38 +26,89 @@ form {
     margin-top: 40px;
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: center;
+    font-family: 'Inter';
 }
   
-.input {
+.username,
+.password{
     margin-top: 16px;
     padding: 5px;
-    width: 300px; /* set the width of the input */
-    height: 40px; /* set the height of the input */
-    font-size: 16px;
+    width: 300px;
+    height: 40px;
+    font-size: 20px;
     border-radius: 10px;
     border: 1px solid #F6F6F6;
+    font-family: 'Inter';
   }
 
-    .input::placeholder {
-        text-align: center;
-    }
-
-
-  .submit {
+.username::placeholder,
+.password::placeholder,
+.login::placeholder {
+    text-align: center;
+    font-family: 'Inter';
+    font-size: 20px;
+}
+.login{
     margin-top: 8px;
-    width: 312px; /* set the width of the input */
-    height: 40px; /* set the height of the input */
-    font-size: 16px;
+    width: 312px;
+    height: 52px;
+    font-size: 20px;
     border-radius: 10px;
     border: 1px solid #F6F6F6;
-  }
+    font-family: 'Inter';
+}
 
 
+.submit {
+    margin-top: 8px;
+    width: 312px;    
+    height: 40px;
+    font-size: 20px;
+    border-radius: 10px;
+    border: 1px solid #F6F6F6;
+    font-family: 'Inter';
+}
 
-.Text{
-    margin: 8px;
+
+a {
+    margin-top: 16px;
+    margin-bottom: 8px;
+    text-decoration: none;
+    text-align: right;
+}
+
+.forgotPassword{
+    margin: 0;
     font-size: 16px;
     color: #F6F6F6;
+    font-family: 'Inter';
+}
+.noAccount{
+    margin-top: 16px;
+    color: #F6F6F6;
+    font-family: 'Inter';
+    font-size: 16px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.message.failed{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
+    
+    height: 45px;
+    width:  312px;
+
+    margin-top: 8px;
+    margin-bottom: 8px;
+
+    background-color: #f8d7da;
+    color: #5F0C10;
+    border-radius: 10px;
+    font-family: 'Inter';
+    font-size: 16px;
 }

@@ -11,21 +11,31 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
+   
     <div class = "logo">
         <img src="assets/logo/logo.webp"id ="logo">
         <form action="/login" method="post">
-            <input id="username" class="input" type="text" placeholder="Username" name="username">
-            <input id="password" class="input" type="password" placeholder="Password" name ="password">
+            <% if (flash && flash.type == 'success') { %>
+                <div class="message <%= flash.type %>">
+                  <%= flash.message %>
+                </div>
+              <% } %>
+            <input id="username" class="username" type="text" placeholder="Username" name="username" required>
+            <input id="password" class="password" type="password" placeholder="Password" name ="password" required>
             <a href = "home.ejs">
-                <p class= "Text">Forgot password?</p>
+                <p class= "forgotPassword">Forgot password?</p>
             </a>
-            <input class ="input" type="submit" value="Login">
+            <% if (flash && flash.type == 'failed') { %>
+                <div class="message <%= flash.type %>">
+                  <%= flash.message %>
+                </div>
+              <% } %>
+            <input class ="login" type="submit" value="Login">
         </form>
-        <p class="Text">
-            Don't have a account?
-        </p>
-        <button onclick="location.href='/signup'">Click me</button>
-    </div>
         
+        <button onclick="location.href='/signup'" class="noAccount">Don't have an account? Register!</button>
+    </div>
+   
+      
 </body>
 </html>
