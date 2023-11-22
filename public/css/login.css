@@ -94,7 +94,7 @@ a {
     cursor: pointer;
 }
 
-.message.failed{
+.message{
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -111,4 +111,14 @@ a {
     border-radius: 10px;
     font-family: 'Inter';
     font-size: 16px;
+}
+
+.failed{
+    background-color: #f8d7da;
+    color: #5F0C10;
+}
+
+.success{
+    background-color: #D4EDDA;
+    color: #0E3918;
 }

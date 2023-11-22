@@ -14,15 +14,22 @@
     <div class = "logo">
         <img src="assets/logo/logo.webp"id ='logo'>
 
-        <form  action ="/signup" method="post">
+        <% if (flash && flash.type == 'failed') { %>
+            <div class="message <%= flash.type %>">
+              <%= flash.message %>
+            </div>
+          <% } %>
+
+        <form class="signup" action ="/signup" method="post">
+            
             <input id="email" class="input" type="text" placeholder="Email Address" name = "email" required>
         
             <input id="username" class="input" type="text" placeholder="Username" name = "username" required>
-            
-        
+
             <input id="password" class="input" type="password" placeholder="Password" name ="password" required>
 
-            <input id="check-password" class="input" type="password" placeholder="Confirm Password" name = "check-password" required>
+            <input id="checkPassword" class="input" type="password" placeholder="Confirm Password" name = "checkPassword" required>
+            
             <input type="submit" />
         </form>
     </div>

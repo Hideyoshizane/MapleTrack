@@ -208,14 +208,15 @@ async function createBossButton(boss){
   const bossImgPath = bossData.img;
   const bossImage = await createImageElement(bossImgPath, `${boss.name}`, 'bossImg');
 
-  const bossInfo = createDOMElement('span', 'BossName', `${boss.difficulty} ${boss.name}`);
+  const bossInfo = createDOMElement('span', 'BossName', `${boss.difficulty} ${boss.name.replace(/\n/g, ' ')}`);
+  bossInfo.style.fontSize = await adjustFontSizeToFit(bossInfo, 286, 32) + 'px';
   bossInfo.setAttribute('name', boss.name);
   bossInfo.setAttribute('difficult', boss.difficulty);
 
   const bossValue = createDOMElement('span', 'BossValue', `${boss.value.toLocaleString('en-us')}`);
   bossValue.setAttribute('value', boss.value);
 
-  bossInfo.style.fontSize = await adjustFontSizeToFit(bossInfo, 268, 32) + 'px';
+ 
 
   const checkMark = boss.checked ? await createCheckMark() : await createUncheckMark();
 

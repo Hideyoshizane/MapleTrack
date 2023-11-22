@@ -10,16 +10,11 @@ module.exports = {
 			const salt = await bcrypt.genSalt(10);
 			const hashedPassword = await bcrypt.hash(password, salt);
 
-			if (validationError) {
-				ctx.status = 400;
-				ctx.body = 'Validation Error' + validationError;
-				return;
-			}
-
 			const sameUser = await User.findOne({ username });
 			if (sameUser) {
+				ctx.flash('failed', 'That user already exists!');
 				ctx.status = 400;
-				ctx.body = 'That user already exists!';
+				ctx.redirect('/signup', { flash: ctx.session.flash });
 				return;
 			}
 
@@ -30,7 +25,8 @@ module.exports = {
 			await createBossList(createdUser.username);
 			await createdUser.save();
 			ctx.status = 200;
-			ctx.redirect('/login');
+			ctx.flash('success', 'User created successfully!');
+			ctx.redirect('/login', { flash: ctx.session.flash });
 		} catch (err) {
 			ctx.status = 500;
 			ctx.body = err.message;

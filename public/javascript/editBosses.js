@@ -313,10 +313,10 @@ async function loadBosses(){
         if(!LevelRequirmentOK){
           await updateButtonToBlock(difficultButton);
         }
-
+  
         if(difficult.reset === 'Daily' && LevelRequirmentOK){
           const dailyTotal = difficultyFound[0] !== undefined ? difficultyFound[0].DailyTotal : 0;
-          totalIncoming += Number(difficult.value) * Number(dailyTotal);
+          totalIncoming += Number(value) * Number(dailyTotal);  
           await insertDropdownOnButton(difficultButton, dailyTotal);
         }
 
@@ -326,7 +326,7 @@ async function loadBosses(){
               const color = bossesButtonColors[difficult.name].color;
               const checkMark = await createCheckMark(color, 20);
               difficultButton.appendChild(checkMark);
-              totalIncoming += difficultyFound[0].value;
+              totalIncoming += value;
             }   
           }
         }
@@ -342,6 +342,7 @@ async function loadBosses(){
 
       if(totalIncoming > 0){
         totalBossIncome.style.display = 'block';
+        totalBossIncome.style.fontSize = await adjustFontSizeToFit(totalBossIncome, 103, 16) + 'px';
         bossBox.classList.add('open');
       }
 
@@ -911,8 +912,6 @@ async function setupTopButtonsEvent(){
   discardButton.addEventListener('click', () => {
     window.location.href = '/weeklyBoss';
   });
-
-
 
   const saveButton = document.querySelector('.saveButton');
   saveButton.addEventListener('click', async () => {

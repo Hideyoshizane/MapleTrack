@@ -58,14 +58,19 @@ module.exports = {
       for(const character of characterList.characters){
         const foundCharacter = foundServer.characters.find((serverCharacter) => serverCharacter.class === character.class);
         for(const bossData of character.bosses){
-          const existingBossIndex = foundCharacter.bosses.findIndex((existingBoss) =>
-            (existingBoss.name == bossData.name) && (existingBoss.reset == bossData.reset)
-          );
+          const existingBossIndex = foundCharacter.bosses.findIndex((existingBoss) => (existingBoss.name == bossData.name) && (existingBoss.reset == bossData.reset));
           if(existingBossIndex !== -1){
             const existingBoss = foundCharacter.bosses[existingBossIndex];
             if(bossData.reset === 'Daily'){
               existingBoss.DailyTotal = bossData.DailyTotal;
             }
+            if ((existingBoss.reset === 'Weekly' || existingBoss.reset === 'Monthly') && existingBoss.difficulty !== bossData.difficulty) {
+              existingBoss.difficulty = bossData.difficulty;
+              existingBoss.value = bossData.value;
+              existingBoss.checked = false;
+              existingBoss.date = null;
+          }          
+          
           } 
           else{
             foundCharacter.bosses.push(bossData);
