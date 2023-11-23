@@ -153,7 +153,7 @@ async function loadCharacterCards(){
     characterImage = await createImageElement(imgSource, 'character Profile', 'profile');
 
     characterName = createDOMElement('span', 'characterName',`${characters.name}`);
-    characterName.style.fontSize = await adjustFontSizeToFit(characterName, 220, 28) + 'px';
+    characterName.style.fontSize = await adjustFontSizeToFit(characterName, 182, 28) + 'px';
     characterClass = createDOMElement('span', 'characterClass', `${characters.class}`);
 
     characterWrapper = createDOMElement('div', 'characterWrapper');
