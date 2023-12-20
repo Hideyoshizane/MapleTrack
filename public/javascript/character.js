@@ -11,7 +11,6 @@ window.ArcaneTable;
 window.SacredTable;
 window.dailyJson;
 
-
 document.addEventListener('DOMContentLoaded', async () => {
 
   ArcaneTable = await fetch('../../public/data/arcaneforceexp.json').then(response => response.json());
@@ -23,6 +22,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   await loadCharacterContent(characterData);
   await loadButtonsEvents();
 
+  await loadFlashMessage();
   
 });
 
@@ -313,7 +313,7 @@ function createDailyButton(Force, characterData, isArcane = false){
 
   const lastDate = DateTime.fromISO(Force.content[0].date);
 
-  const duration = currentDate.diff(lastDate, 'days').days;
+  const duration = timeConditionChecker(currentDate, lastDate);
 
   const dailyButton = createDOMElement('button','dailyButton');
   if (duration >= 1 || isNaN(duration)){
@@ -559,4 +559,24 @@ async function processButtons(dailyButtons, characterData) {
   }
 
   await processNextButton(); // Start processing buttons
+}
+
+async function loadFlashMessage() {
+  const type = getCookie('type');
+  if(type){
+    const center = document.querySelector('.center-container');
+    const message = getCookie('message');
+    const div = createDOMElement('div', 'flash', message);
+    div.classList.add(type);
+    div.classList.add('notVisible');
+    center.appendChild(div);
+    
+    setTimeout(() => {
+      div.classList.add('visible');
+    }, 500);
+
+    setTimeout(() => {
+      div.classList.toggle('visible');
+    }, 1500);
+  }
 }

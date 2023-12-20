@@ -1,6 +1,7 @@
 window.bossList;
 window.bossJson;
 window.server;
+window.serverType;
 window.selectedList;
 window.Character;
 window.username;
@@ -37,7 +38,7 @@ async function fetchBossList(){
   
       selectedList = bossList.server;
       selectedList = selectedList.find(servers => servers.name === server);
-
+      serverType = selectedList.type;
     } catch (error) {
       console.error('Error fetching character data:', error);
     }
@@ -300,7 +301,7 @@ async function loadBosses(){
 
         const difficultButton = createDOMElement('button',  `${tag}`);
         const difficultButtonText = createDOMElement('span', 'buttonText',`${difficult.name}`);
-        const value = server == 'Reboot' ? difficult.value * 5 : difficult.value;
+        const value = serverType == 'Reboot' ? difficult.value * 5 : difficult.value;
 
         difficultButton.appendChild(difficultButtonText);
         difficultButton.setAttribute('value', value);
@@ -474,25 +475,26 @@ async function setupCharacterButtonsEvent(){
 
 async function handleCharacterButtonClick(characterButton, characterButtons) {
   const selectedCharacterButton = document.querySelector('.SelectedCharacterButton');
-  characterButtons.forEach(button => {
-    const checkSVG = button.querySelector('svg');
-    if (button !== characterButton) {
+  if (characterButton.querySelector('.characterName').innerText !== selectedCharacterButton.querySelector('.characterName').innerText) {
+    characterButtons.forEach(button => {
+      const checkSVG = button.querySelector('svg');
       button.classList.add('notSelected');
       button.classList.remove('selected');
-    }
-    if(checkSVG){
-      button.removeChild(checkSVG);
-    }
-  });
-  
-  swapContent(selectedCharacterButton, characterButton);
-  characterButton.classList.toggle('notSelected');
-  characterButton.classList.toggle('selected');
+      if (checkSVG) {
+        button.removeChild(checkSVG);
+      }
+    });
 
-  checkSVG = await createCheckSVG();
-  characterButton.appendChild(checkSVG);
-  await changeCharacterIncome();
-  await updateBosses();
+    swapContent(selectedCharacterButton, characterButton);
+    characterButton.classList.toggle('notSelected');
+    characterButton.classList.toggle('selected');
+
+    const checkSVG = await createCheckSVG();
+    characterButton.appendChild(checkSVG);
+
+    await changeCharacterIncome();
+    await updateBosses();
+  }
 }
 
 async function setupBossesButtonEvent() {
@@ -673,13 +675,11 @@ async function updateBossValue(newValue, dropdown, characterChange = false){
 
     
     const totalIncomeSpan = bossBox.querySelector('.totalBossIncome');
+
     if (oldValue !== newValue) {
       let change = (oldValue > newValue ? -1 : 1) * Number(button.getAttribute('value')) * Math.abs(oldValue - newValue);
       await updateBossIncomeSpan(change, bossBox, 1, totalIncomeSpan);
-    } else {
-      let change = Number(button.getAttribute('value')) * newValue;
-      await updateBossIncomeSpan(change, bossBox, 1, totalIncomeSpan);
-    }
+    } 
     
     dropdown.parentNode.setAttribute('oldValue', newValue);
 
@@ -875,8 +875,8 @@ async function updateBosses(){
           const color = bossesButtonColors[difficult].color;
           const checkMark = await createCheckMark(color, 20);
           button.appendChild(checkMark);
-          }
           await updateBossIncomeSpan(value, bossBox, 1, totalIncomeSpan);
+          }
         }
       } else{
 
@@ -916,13 +916,18 @@ async function setupTopButtonsEvent(){
   const saveButton = document.querySelector('.saveButton');
   saveButton.addEventListener('click', async () => {
     selectedList['userOrigin'] = username;
-    await fetch('/saveBossChange', {
+    const response = await fetch('/saveBossChange', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(selectedList),
     });
+    const success = response.ok;
+		const type = success ? 'success' : 'failed';
+		const message = success ? 'Boss list updated sucessfully' : 'There was an error updating';
+		setCookieFlash('type', type,  50);
+		setCookieFlash('message', message, 50);
     window.location.href = '/weeklyBoss';
   });
 }

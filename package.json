@@ -12,7 +12,7 @@
   "dependencies": {
     "assert": "^2.0.0",
     "bcrypt": "^5.1.0",
-    "joi": "^17.9.2",
+    "dotenv": "^16.3.1",
     "koa": "^2.14.2",
     "koa-bodyparser": "^4.4.0",
     "koa-cookie": "^1.0.0",

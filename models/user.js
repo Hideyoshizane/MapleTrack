@@ -1,6 +1,6 @@
-const Joi = require('joi');
 const mongoose = require('mongoose');
 const {DateTime} = require('luxon');
+const bcrypt = require('bcrypt');
 const passportLocalMongoose = require('passport-local-mongoose');
 
 const LASTVERSION = 0;
@@ -17,7 +17,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
         minlength: 7,
-        maxlength: 25,
+        maxlength: 256,
         unique: true
     },
     password: {
@@ -42,16 +42,6 @@ userSchema.plugin(passportLocalMongoose);
 
 const User = mongoose.model('User', userSchema);
 
-function validate(user) {
-    const schema = Joi.object({
-        username: Joi.string().min(5).max(50).required(),
-        email: Joi.string().min(7).max(25).required(),
-        password: Joi.string().min(8).max(61).required(),
-    });
-    
-    return schema.validate(user);
-}
-
 async function updateLastLogin(userID){
     const userData = await User.findById(userID);
     const luxonDate = DateTime.utc();
@@ -66,10 +56,18 @@ async function updateUserVersion(userID){
     await userData.save();
 }
 
+async function resetPasswordEmptyUser(username){
+    const userData = await User.findOne({username});
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash('123456', salt);
+    userData.password = hashedPassword;
+    await userData.save();
+}
+
 module.exports = {
-    User,
-    validate,
+    User,   
     updateLastLogin,
     LASTVERSION,
-    updateUserVersion
+    updateUserVersion,
+    resetPasswordEmptyUser
 };

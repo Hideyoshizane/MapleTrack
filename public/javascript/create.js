@@ -21,13 +21,23 @@ function createDOMElement(tag, className = '', content = '', type = '') {
 }
 
 async function createImageElement(src, alt, className = '') {
-	const image = createDOMElement('img', className);
-	image.src = src;
-	image.alt = alt;
+	let image;
+	for (let attempt = 1; attempt <= 5; attempt++) {
+	  try {
+		image = createDOMElement('img', className);
+		image.src = src;
+		image.alt = alt;
+  
+		await image.decode();
+		break;
+	  } catch (error) {
+		console.error(`Error decoding image (attempt ${attempt}):`, error);
+		image = null;
+	  }
+	}
 
-	await image.decode();
 	return image;
-}
+  }
 
 async function loadEditableSVGFile(filePath, className) {
 	try {

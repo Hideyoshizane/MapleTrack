@@ -21,9 +21,10 @@ body{
     position: relative;
 }
 
-.portraitImage{
+.portraitImage {
     height: calc(100vh - 116px);
 }
+
 
 .characterData{
     display: flex;
@@ -298,4 +299,39 @@ body{
 .weeklyButton:disabled{
     color: #888;
     background-color: #ccc;
+}
+
+.flash{
+    font-family: 'Inter';
+    font-size: 32px;
+    position: absolute;
+    z-index: 10;
+    width: 500px;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 25px;
+    box-shadow: 0px 1px 5px 1px #8F8F8F;
+    top: 260px;
+
+}
+.notVisible{
+    filter: opacity(1%);
+    transition: 0.5s ease-in;
+}
+
+.visible{
+    filter:opacity(100%);
+    top: 220px;
+}
+
+.success{
+    background-color: #96E4A5;
+    color: #000000;
+}
+
+.failed{
+    background-color: #C33232;
+    color: #EDEDED;
 }

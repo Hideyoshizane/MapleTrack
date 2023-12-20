@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const path = require('path');
 const jsonData = require('../public/data/classes.json');
 const { User } = require('./user');
-const { template, templateSettings } = require('lodash');
+const {timeConditionChecker, getWeeklyResetDate} = require('../public/javascript/weeklyReset');
 const {DateTime} = require('luxon');
 
 const Character = mongoose.model('Character', new mongoose.Schema({
@@ -330,12 +330,12 @@ async function updateCharactersWeekly(userID) {
         },
       })
       .exec();
-
     const timeNow = DateTime.utc();
     const userLastLogin = DateTime.fromJSDate(userData.date);
-    const nextMonday = userLastLogin.plus({ days: 1 }).set({ weekday: 2, hour: 0, minute: 0, second: 0, millisecond: 0 });
+    const nextMonday = getWeeklyResetDate(userLastLogin, 1); 
+    const MondayPassed = timeConditionChecker(nextMonday, timeNow);
     // Check if the last login date is before the most recent Monday midnight (UTC)
-    if (timeNow >= nextMonday) {
+    if (MondayPassed) {
       for (const server of userData.servers) {
         for (const character of server.characters) {
           for (const force of character.ArcaneForce) {

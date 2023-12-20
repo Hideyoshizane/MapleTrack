@@ -4,7 +4,7 @@ const username = segments[1];
 const server = segments[2];
 const characterCode = segments[3];
 
-window.CharacterData;
+window.characterData;
 window.dailyJson;
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -24,8 +24,20 @@ document.addEventListener('DOMContentLoaded', async () => {
 		window.location.href = url;
 	});
 
+	saveButton = document.querySelector('.saveButton');
+	saveButton.addEventListener('click', async (event) => {
+		await saveDataAndPost();
+	});
+
+	const characterName = document.querySelector('.characterName');
 	const levelNumber = document.querySelector('.levelNumber');
 	const levelTarget = document.querySelector('.levelTarget');
+
+	characterName.addEventListener('input', async() => {
+		const valid = isValidCharacterName(characterName.value);
+		characterName.style.color = valid ? "#000000" : "#C33232";
+		saveButton.disabled = !	valid;
+	})
 
 	levelNumber.addEventListener('input', async () => {
 		const levelNumberValue = levelNumber.value;
@@ -56,12 +68,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 		await updateClass(levelNumberValue);
 	});
 
-	saveButton = document.querySelector('.saveButton');
-	saveButton.addEventListener('click', async (event) => {
-		await saveDataAndPost();
-		var url = `/${username}/${server}/${characterCode}`;
-		window.location.href = url;
-	});
+
 });
 
 async function fetchCharacterData(username, server, characterCode) {
@@ -82,7 +89,7 @@ async function loadCharacterContent(characterData) {
 async function loadCharacterImage(characterData) {
 	const parentDiv = document.querySelector('.classImage');
 
-	const image = await createImageElement(`../../public/assets/profile/${characterCode}.webp`,`${characterData.class} profile picture`,`portraitImage`);
+	const image = await createImageElement(`/../../public/assets/profile/${characterCode}.webp`,`${characterData.class} profile picture`,`portraitImage`);
 	parentDiv.appendChild(image);
 }
 
@@ -126,6 +133,8 @@ async function loadTopButtons() {
 
 	const discardButton = createDOMElement('button', 'discardButton', 'Discard Changes');
 	const saveButton = createDOMElement('button', 'saveButton', 'Save Changes');
+	if(characterData.name == 'Character Name')
+		saveButton.disabled = true;
 
 	blockDiv.appendChild(discardButton);
 	blockDiv.appendChild(saveButton);
@@ -137,7 +146,7 @@ async function loadCharacterNameDiv(characterData) {
 
 	const characterInfo = createDOMElement('div','nameLinkLegion');
 
-	const bossIconPath = characterData.bossing ? '../../../public/assets/icons/menu/boss_slayer.svg' : '../../../public/assets/icons/menu/boss_slayer_off.svg';
+	const bossIconPath = characterData.bossing ? '/../../../public/assets/icons/menu/boss_slayer.svg' : '/../../../public/assets/icons/menu/boss_slayer_off.svg';
 
 	const bossIcon = await loadEditableSVGFile(bossIconPath, 'bossIcon');
 
@@ -184,7 +193,7 @@ async function loadCharacterNameDiv(characterData) {
 async function loadLinkSkillDiv(characterData) {
 	const linkspan = createDOMElement('span', 'linkLegionTitle', 'Link Skill');
 
-	const linkSkillData = await fetch('../../../public/data/linkskill.json').then((response) => response.json());
+	const linkSkillData = await fetch('/../../../public/data/linkskill.json').then((response) => response.json());
 
 	const filteredLink = linkSkillData.find((item) => item.name === characterData.linkSkill);
 
@@ -205,8 +214,8 @@ async function loadLegionDiv(characterData) {
 	const legionRank = getRank(characterData);
 	const legionImgSrc =
 		legionRank === 'no_rank'
-			? '../../../public/assets/legion/no_rank.webp'
-			: `../../../public/assets/legion/${characterData.jobType}/rank_${legionRank}.webp`;
+			? '/../../../public/assets/legion/no_rank.webp'
+			: `/../../../public/assets/legion/${characterData.jobType}/rank_${legionRank}.webp`;
 
 	const legionImg = await createImageElement(legionImgSrc,`${characterData.class} legion`,'legionImg');
 
@@ -412,15 +421,25 @@ async function updateForce(type, levelNumberValue) {
 }
 
 async function saveDataAndPost() {
-	const characterName = document.querySelector('.characterName').value || document.querySelector('.characterName').placeholder;
+	const characterName =
+		document.querySelector('.characterName').value ||
+		document.querySelector('.characterName').placeholder;
 
-	const bossSwitch = document.querySelector('.bossSwitch input[type="checkbox"]').checked;
+	const bossSwitch = document.querySelector(
+		'.bossSwitch input[type="checkbox"]'
+	).checked;
 
 	let level = Number(document.querySelector('.levelNumber').value);
-	level = (level <= 0) ? Number(document.querySelector('.levelNumber').placeholder) : Math.min(level, 300);
-	
+	level =
+		level <= 0
+			? Number(document.querySelector('.levelNumber').placeholder)
+			: Math.min(level, 300);
+
 	let targetLevel = Number(document.querySelector('.levelTarget').value);
-	targetLevel = (targetLevel <= 0) ? Number(document.querySelector('.levelTarget').placeholder) : Math.min(targetLevel, 300);
+	targetLevel =
+		targetLevel <= 0
+			? Number(document.querySelector('.levelTarget').placeholder)
+			: Math.min(targetLevel, 300);
 
 	const arcaneForceArray = returnForceArray('Arcane');
 	const sacredForceArray = returnForceArray('Sacred');
@@ -433,17 +452,31 @@ async function saveDataAndPost() {
 		bossing: bossSwitch,
 		ArcaneForce: arcaneForceArray,
 		SacredForce: sacredForceArray,
-		server: server
+		server: server,
+		username: username,
+		characterCode: characterCode,
 	};
-	fetch('/updateCharacter', {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify(characterToUpdate),
-	}).catch((error) => {
+	try {
+		const response = await fetch('/updateCharacter', {
+			method: 'POST',
+			headers: {
+			  'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(characterToUpdate),
+		  });
+		  
+		const success = response.ok;
+		const type = success ? 'success' : 'failed';
+		const message = success ? 'Character updated sucessfully' : 'There was an error updating';
+		setCookieFlash('type', type,  50);
+		setCookieFlash('message', message, 50);
+		
+		var url = `/${username}/${server}/${characterCode}`;
+		window.location.href = url;
+
+	} catch (error) {
 		console.error('Error:', error);
-	});
+	}
 }
 
 function returnForceArray(forceType) {
@@ -489,4 +522,15 @@ function returnForceArray(forceType) {
 	}
 
 	return ForceArray;
+}
+
+
+
+function isValidCharacterName(characterName) {
+    const minLength = 5;
+    const maxLength = 20;
+    const alphanumericRegex = /^[a-zA-Z0-9]+$/;
+    
+    return characterName.length >= minLength && characterName.length <= maxLength && alphanumericRegex.test(characterName);
+
 }

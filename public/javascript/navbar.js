@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
       var url = `/${username}/${server}/${characterCode}`;
     if(server !== null)
-          window.location.href = url; 
+      window.location.href = url; 
     }
   });
 
@@ -126,9 +126,9 @@ async function createSearchResults(characters, parentDiv){
     for(const characterData of characters){
       const resultDiv = createDOMElement('div',"result");
       resultDiv.setAttribute("data-server", characterData.server);
-      resultDiv.setAttribute("data-code", characterData.code);
+      resultDiv.setAttribute("data-code", getCode(characterData));
 
-      const img = await createImageElement(`../../assets/icons/servers/${characterData.server}.webp`);
+      const img = await createImageElement(`/../../assets/icons/servers/${characterData.server}.webp`);
       const detailsSpan = createDOMElement('span', '', `\u00A0\u00A0${characterData.server}: ${characterData.name} - ${characterData.class} - Level ${characterData.level}`);
       
       resultDiv.appendChild(img);

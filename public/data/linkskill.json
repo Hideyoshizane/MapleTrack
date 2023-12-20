@@ -1,6 +1,6 @@
 [{
   "name": "Invincible Belief",
-  "image": "../../public/assets/link_skill/warrior.webp",
+  "image": "/../../public/assets/link_skill/warrior.webp",
   "levels": [
     {
       "level": 1,
@@ -14,7 +14,7 @@
 },
 {
   "name": "Empirical Knowledge",
-  "image": "../../public/assets/link_skill/mage.webp",
+  "image": "/../../public/assets/link_skill/mage.webp",
   "levels": [
     {
       "level": 1,
@@ -28,7 +28,7 @@
 },
 {
   "name": "Adventurer's Curiosity",
-  "image": "../../public/assets/link_skill/bowman.webp",
+  "image": "/../../public/assets/link_skill/bowman.webp",
   "levels": [
     {
       "level": 1,
@@ -42,7 +42,7 @@
 },
 {
   "name": "Thief's Cunning",
-  "image": "../../public/assets/link_skill/thief.webp",
+  "image": "/../../public/assets/link_skill/thief.webp",
   "levels": [
     {
       "level": 1,
@@ -56,7 +56,7 @@
 },
 {
   "name": "Pirate Blessing",
-  "image": "../../public/assets/link_skill/pirate.webp",
+  "image": "/../../public/assets/link_skill/pirate.webp",
   "levels": [
     {
       "level": 1,
@@ -70,7 +70,7 @@
 },
 {
   "name": "Cygnus Blessing",
-  "image": "../../public/assets/link_skill/cygnus.webp",
+  "image": "/../../public/assets/link_skill/cygnus.webp",
   "levels": [
     {
       "level": 1,
@@ -84,7 +84,7 @@
 },
 {
   "name": "Knight's Watch",
-  "image": "../../public/assets/link_skill/mihile.webp",
+  "image": "/../../public/assets/link_skill/mihile.webp",
   "levels": [
     {
       "level": 1,
@@ -102,7 +102,7 @@
 },
 {
   "name": "Combo Kill Blessing",
-  "image": "../../public/assets/link_skill/aran.webp",
+  "image": "/../../public/assets/link_skill/aran.webp",
   "levels": [
     {
       "level": 1,
@@ -120,7 +120,7 @@
 },
 {
   "name": "Rune Persistence",
-  "image": "../../public/assets/link_skill/evan.webp",
+  "image": "/../../public/assets/link_skill/evan.webp",
   "levels": [
     {
       "level": 1,
@@ -138,7 +138,7 @@
 },
 {
   "name": "Elven Blessing",
-  "image": "../../public/assets/link_skill/mercedes.webp",
+  "image": "/../../public/assets/link_skill/mercedes.webp",
   "levels": [
     {
       "level": 1,
@@ -156,7 +156,7 @@
 },
 {
   "name": "Phantom Instinct",
-  "image": "../../public/assets/link_skill/phantom.webp",
+  "image": "/../../public/assets/link_skill/phantom.webp",
   "levels": [
     {
       "level": 1,
@@ -174,7 +174,7 @@
 },
 {
   "name": "Light Wash",
-  "image": "../../public/assets/link_skill/luminous.webp",
+  "image": "/../../public/assets/link_skill/luminous.webp",
   "levels": [
     {
       "level": 1,
@@ -192,7 +192,7 @@
 },
 {
   "name": "Close Call",
-  "image": "../../public/assets/link_skill/shade.webp",
+  "image": "/../../public/assets/link_skill/shade.webp",
   "levels": [
     {
       "level": 1,
@@ -206,7 +206,7 @@
 },
 {
   "name": "Spirit of Freedom",
-  "image": "../../public/assets/link_skill/resistance.webp",
+  "image": "/../../public/assets/link_skill/resistance.webp",
   "levels": [
     {
       "level": 1,
@@ -220,7 +220,7 @@
 },
 {
   "name": "Wild Rage",
-  "image": "../../public/assets/link_skill/demon_avenger.webp",
+  "image": "/../../public/assets/link_skill/demon_avenger.webp",
   "levels": [
     {
       "level": 1,
@@ -238,7 +238,7 @@
 },
 {
   "name": "Fury Unleashed",
-  "image": "../../public/assets/link_skill/demon_slayer.webp",
+  "image": "/../../public/assets/link_skill/demon_slayer.webp",
   "levels": [
     {
       "level": 1,
@@ -256,7 +256,7 @@
 },
 {
   "name": "Hybrid Logic",
-  "image": "../../public/assets/link_skill/xenon.webp",
+  "image": "/../../public/assets/link_skill/xenon.webp",
   "levels": [
     {
       "level": 1,
@@ -270,7 +270,7 @@
 },
 {
   "name": "Iron Will",
-  "image": "../../public/assets/link_skill/kaiser.webp",
+  "image": "/../../public/assets/link_skill/kaiser.webp",
   "levels": [
     {
       "level": 1,
@@ -288,7 +288,7 @@
 },
 {
   "name": "Time to Prepare",
-  "image": "../../public/assets/link_skill/kain.webp",
+  "image": "/../../public/assets/link_skill/kain.webp",
   "levels": [
     {
       "level": 1,
@@ -302,7 +302,7 @@
 },
 {
   "name": "Unfair Advantage",
-  "image": "../../public/assets/link_skill/cadena.webp",
+  "image": "/../../public/assets/link_skill/cadena.webp",
   "levels": [
     {
       "level": 1,
@@ -316,7 +316,7 @@
 },
 {
   "name": "Terms and Conditions",
-  "image": "../../public/assets/link_skill/angelic_buster.webp",
+  "image": "/../../public/assets/link_skill/angelic_buster.webp",
   "levels": [
     {
       "level": 1,
@@ -334,7 +334,7 @@
 },
 {
   "name": "Noble Fire",
-  "image": "../../public/assets/link_skill/adele.webp",
+  "image": "/../../public/assets/link_skill/adele.webp",
   "levels": [
     {
       "level": 1,
@@ -348,7 +348,7 @@
 },
 {
   "name": "Tide of Battle",
-  "image": "../../public/assets/link_skill/illium.webp",
+  "image": "/../../public/assets/link_skill/illium.webp",
   "levels": [
     {
       "level": 1,
@@ -362,7 +362,7 @@
 },
 {
   "name": "Solus",
-  "image": "../../public/assets/link_skill/ark.webp",
+  "image": "/../../public/assets/link_skill/ark.webp",
   "levels": [
     {
       "level": 1,
@@ -380,7 +380,7 @@
 },
 {
   "name": "Keen Edge",
-  "image": "../../public/assets/link_skill/hayato.webp",
+  "image": "/../../public/assets/link_skill/hayato.webp",
   "levels": [
     {
       "level": 1,
@@ -394,7 +394,7 @@
 },
 {
   "name": "Elementalism",
-  "image": "../../public/assets/link_skill/kanna.webp",
+  "image": "/../../public/assets/link_skill/kanna.webp",
   "levels": [
     {
       "level": 1,
@@ -408,7 +408,7 @@
 },
 {
   "name": "Nature's Friend",
-  "image": "../../public/assets/link_skill/lara.webp",
+  "image": "/../../public/assets/link_skill/lara.webp",
   "levels": [
     {
       "level": 1,
@@ -422,7 +422,7 @@
 },
 {
   "name": "Bravado",
-  "image": "../../public/assets/link_skill/hoyoung.webp",
+  "image": "/../../public/assets/link_skill/hoyoung.webp",
   "levels": [
     {
       "level": 1,
@@ -436,7 +436,7 @@
 },
 {
   "name": "Focus Spirit",
-  "image": "../../public/assets/link_skill/beast_tamer.webp",
+  "image": "/../../public/assets/link_skill/beast_tamer.webp",
   "levels": [
     {
       "level": 1,
@@ -454,7 +454,7 @@
 },
 {
   "name": "Rhinne's Blessing",
-  "image": "../../public/assets/link_skill/zero.webp",
+  "image": "/../../public/assets/link_skill/zero.webp",
   "levels": [
     {
       "level": 1,
@@ -480,7 +480,7 @@
 },
 {
   "name": "Judgment",
-  "image": "../../public/assets/link_skill/kinesis.webp",
+  "image": "/../../public/assets/link_skill/kinesis.webp",
   "levels": [
     {
       "level": 1,

@@ -225,13 +225,13 @@
   "img": "../../assets/boss/arkarium.webp",
   "difficulties": [
     {
-      "name": "Normal",
+      "name": "Easy",
       "value": 1152000,
       "reset": "Daily",
       "minLevel": 140
     },
     {
-      "name": "Hard",
+      "name": "Normal",
       "value": 2520500,
       "reset": "Daily",
       "minLevel": 140

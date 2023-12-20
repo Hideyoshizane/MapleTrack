@@ -86,7 +86,7 @@ module.exports = {
           return foundCharacter.bosses.some(onRequestBoss => (onDatabaseBoss.name === onRequestBoss.name) && (onDatabaseBoss.reset === onRequestBoss.reset))
         })
       }
-      listFound.lastUpdate = DateTime.utc().toISO();
+      listFound.lastUpdate = DateTime.utc().toJSDate();
       await listFound.save();
       ctx.status = 200;
     } catch (error) {

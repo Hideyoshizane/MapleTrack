@@ -15,21 +15,16 @@
     <div class = "logo">
         <img src="assets/logo/logo.webp"id ="logo">
         <form action="/login" method="post">
-            <% if (flash && flash.type == 'success') { %>
-                <div class="message <%= flash.type %>">
+            <% if (flash && flash.message) { %>
+              <div class="message <%= flash.type %>">
                   <%= flash.message %>
-                </div>
-              <% } %>
+              </div>
+             <% } %>
             <input id="username" class="username" type="text" placeholder="Username" name="username" required>
             <input id="password" class="password" type="password" placeholder="Password" name ="password" required>
-            <a href = "home.ejs">
+            <a href = "/forgot">
                 <p class= "forgotPassword">Forgot password?</p>
             </a>
-            <% if (flash && flash.type == 'failed') { %>
-                <div class="message <%= flash.type %>">
-                  <%= flash.message %>
-                </div>
-              <% } %>
             <input class ="login" type="submit" value="Login">
         </form>
         

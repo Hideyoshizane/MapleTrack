@@ -13,24 +13,26 @@ const serverSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  type:{
+    type: String,
+    required: true
+  },
   usernameSource: [{type: mongoose.Schema.Types.ObjectID, ref: 'User'}],
   characters: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Character' }]
 }, { strictPopulate: false });
 
 
 const defaultServers = [
-  { name: 'Scania' ,img:  '../../assets/icons/servers/scania'  },
-  { name: 'Bera'   ,img:  '../../assets/icons/servers/bera'    },
-  { name: 'Aurora' ,img:  '../../assets/icons/servers/aurora'  },
-  { name: 'Elysium',img:  '../../assets/icons/servers/elysium' },
-  { name: 'Reboot' ,img:  '../../assets/icons/servers/reboot'  },
+  { name: 'Scania' ,img:  '../../assets/icons/servers/scania'  , type: 'Regular'},
+  { name: 'Bera'   ,img:  '../../assets/icons/servers/bera'    , type: 'Regular'},
+  { name: 'Aurora' ,img:  '../../assets/icons/servers/aurora'  , type: 'Regular'},
+  { name: 'Elysium',img:  '../../assets/icons/servers/elysium' , type: 'Regular'},
+  { name: 'Reboot' ,img:  '../../assets/icons/servers/reboot'  , type: 'Reboot'},
 ];
 
 
 async function searchServersAndCreateMissing(userID, username){
   const userData = await User.findById(userID)
-  console.log(userData);
-  //.populate('servers');
   var userStoredServers = []
   if(userData !== null){
     userStoredServers = (userData.servers).map(server => server.name);
@@ -51,6 +53,7 @@ async function createMissingServer(userID, missingServersData, username) {
   const createdServer = new Server({
     name: missingServersData.name,
     img: missingServersData.img,
+    type: missingServersData.type,
     usernameSource: userID,
     characters: baseCharacters.map((char) => char._id),
   });
@@ -75,8 +78,62 @@ async function createMissingServer(userID, missingServersData, username) {
   }
 }
 
+async function getServerWithHighestLevel(userID) {
+  try {
+    const user = await User.findById(userID).populate('servers').exec();
+    let maxLevel = 0;
+    let serverWithHighestLevel = null;
+
+    for (const server of user.servers) {
+      // Populate the characters for the current server
+      const populatedServer = await Server.findById(server._id).populate('characters').exec();
+
+      for (const character of populatedServer.characters) {
+        if (character.level > maxLevel) {
+          maxLevel = character.level;
+          serverWithHighestLevel = populatedServer;
+        }
+      }
+    }
+
+    return maxLevel > 0 ? serverWithHighestLevel.name : null;
+  } catch (error) {
+    console.error('Error:', error);
+    throw error;
+  }
+}
+
+async function getHighestLevelCharacter(userID) {
+  try {
+    const user = await User.findById(userID).populate('servers').exec();
+    let highestLevel = 0;
+    let highestLevelCharacter = null;
+
+    for (const server of user.servers) {
+      // Populate the characters for the current server
+      const populatedServer = await Server.findById(server._id).populate('characters').exec();
+
+      for (const character of populatedServer.characters) {
+        if (character.level > highestLevel) {
+          highestLevel = character.level;
+          highestLevelCharacter = {
+            characterName: character.name,
+            highestLevel: character.level
+          };
+        }
+      }
+    }
+
+    return highestLevel > 0 ? highestLevelCharacter : null;
+  } catch (error) {
+    console.error('Error:', error);
+    throw error;
+  }
+}
+
+
 
 
 const Server = mongoose.model('Server', serverSchema);
-module.exports = {Server, serverSchema , searchServersAndCreateMissing, createMissingServer, defaultServers};
+module.exports = {Server, serverSchema , searchServersAndCreateMissing, createMissingServer, defaultServers, getServerWithHighestLevel, getHighestLevelCharacter};
 

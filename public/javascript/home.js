@@ -1,20 +1,26 @@
 window.cardBody;
 window.username;
 window.dailyJson;
-
+window.SymbolsImages;
 
 
 
 document.addEventListener('DOMContentLoaded', async () => {
   try {
+    await loadSymbolsImage();
 
     username = document.getElementById('userdata').getAttribute('data-username');
 
     dailyJson = await fetch('../../../public/data/dailyExp.json').then((response) => response.json());
 
     const data = await fetch('/userServer').then(response => response.json());
+
     const mainContent = document.querySelector('.mainContent');
+
     await loadServerButtons(data, mainContent);
+    const dropdown = document.querySelector('.dropdown');
+
+    mainContent.insertBefore(dropdown, mainContent.firstChild);
 
     setupDropdownToggle();
   
@@ -103,6 +109,19 @@ filterButtons.forEach(button => {
     });
 });
 
+async function loadSymbolsImage(){
+  SymbolsImages = {
+    vanish_journey: await createImageElement('../../public/assets/arcaneforce/vanish_journey.webp', 'Vanish Journey', 'ArcaneImage'),
+    chu_chu_island: await createImageElement('../../public/assets/arcaneforce/chu_chu_island.webp', 'Chu Chu Island', 'ArcaneImage'),
+    lachelein:      await createImageElement('../../public/assets/arcaneforce/lachelein.webp', 'Lachelein', 'ArcaneImage'),
+    arcana:         await createImageElement('../../public/assets/arcaneforce/arcana.webp', 'Arcana', 'ArcaneImage'),
+    morass:         await createImageElement('../../public/assets/arcaneforce/morass.webp', 'Morass', 'ArcaneImage'),
+    esfera:         await createImageElement('../../public/assets/arcaneforce/esfera.webp', 'Esfera', 'ArcaneImage'),
+    cernium:        await createImageElement('../../public/assets/sacredforce/cernium.webp', 'Cernium', 'SacredImage'),
+    arcus:          await createImageElement('../../public/assets/sacredforce/arcus.webp', 'Arcus', 'SacredImage'),
+    odium:          await createImageElement('../../public/assets/sacredforce/odium.webp', 'Odium', 'SacredImage')
+  };
+}
 
 async function createCharacterCards(){
   const parentDiv = document.querySelector('.characterCards');
@@ -167,7 +186,7 @@ async function generateCard(characterData){
 
   const spanArcaneForce = createDOMElement('span', 'Title','Arcane Force');
   arcaneForce.appendChild(spanArcaneForce);
-
+  
   const arcaneForceContent = await createForce(characterData, 'arcane');
   arcaneForce.appendChild(arcaneForceContent);
 
@@ -246,20 +265,14 @@ async function createForce(characterData, forceType) {
     for (const forceArea of forceData) {
       const wrapper = createDOMElement('div', forceType === 'arcane' ? 'arcaneWrapper' : 'sacredWrapper');
 
-      const areaName = forceArea.name;
-
-      const areaCode = areaName.replace(/\s+/g, '_').toLowerCase();
-
-      const forceImgSrc = `../../public/assets/${forceType}force/${areaCode}.webp`;
-
-      const forceImgClassName  = `${forceType === 'arcane' ? 'Arcane' : 'Sacred'}Image`;
-
-      const forceImg = await createImageElement(forceImgSrc,areaName, forceImgClassName);
-
+      const areaCode = forceArea.name.replace(/\s+/g, '_').toLowerCase();
+          
+      const forceImg = SymbolsImages[areaCode].cloneNode(true);
+      
       var level = await setForceLevel(forceArea, characterData, forceImg, forceType);
 
       const forceLevel = createDOMElement('span', '', level);
-
+      
       wrapper.appendChild(forceImg);
       wrapper.appendChild(forceLevel);
       outerWrapper.appendChild(wrapper);

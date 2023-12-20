@@ -26,3 +26,14 @@ async function updateSelectedValuesCookie() {
     const selectedValuesString = selectedValues.join(',');
     setCookie('filterValues', selectedValuesString, 7);
 }
+
+
+function setCookieFlash(name, value, seconds) {
+	const expires = new Date();
+	expires.setTime(expires.getTime() + seconds * 1000);
+  
+	// Check if the cookie is 'selectedServerContent'
+	const path = name === 'selectedServerContent' ? '/' : '';
+  
+	document.cookie = `${name}=${encodeURIComponent(value)};expires=${expires.toUTCString()};path=${path}`;
+  }

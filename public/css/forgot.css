@@ -1,0 +1,109 @@
+body {
+    background-color: #424242;
+    padding: 0;
+    margin: 0;
+}
+
+
+
+.logo{
+    flex-direction: column;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+#logo{
+    padding-top: 2%;
+    width: 25%;
+    height: 25%;
+    object-fit: contain; 
+}
+
+.center{
+    margin-top: 32px;
+    border-radius: 25px;
+    width: 600px;
+    height: 620px;
+    background-color: #BEBFC6;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    align-items: center;
+    font-family: 'Inter';
+    color: #141414;
+}
+
+.lock{
+    margin-top: 32px;
+}
+
+.title{
+    font-size: 32px;
+    font-weight: 500;
+    margin-top: 16px;
+}
+
+.subtitle{
+    width: 440px;
+    font-size: 24px;
+    font-weight: 300;
+    margin-top: 16px;
+    text-align: center;
+}
+
+.usernameSpan{
+    width: 425px;
+    font-size: 20px;
+    font-weight: 500;
+    margin-top: 32px;
+}
+
+.username{
+    border-radius: 10px;
+    margin-top: 8px;
+    width: 433px;
+    height: 60px;
+    font-size: 26px;
+    border: none;
+    background-color: #E9EAEC;
+    color: #141414;
+    box-sizing: border-box;
+    padding-left: 8px;
+}
+
+.username::placeholder{
+    font-family: 'Inter';
+    font-size: 26px;
+    color: #B8B8B8;
+}
+
+.username:focus{
+    outline: 0;
+}
+
+.sendButton{
+    border-radius: 10px;
+    margin-top: 64px;
+    width: 300px;
+    height: 60px;
+    font-size: 26px;
+    border: none; 
+    background-color: #7BD96D;
+    color: #141414;
+    cursor: pointer;
+    transition: 0.2s ease-in;
+}
+
+.sendButton:disabled{
+    background-color: #A3A3A3;
+    cursor: not-allowed;
+}
+
+.error{
+    font-size: 20px;
+    margin-top: 8px;
+    width: 430px;
+    color: #9F0606;
+}

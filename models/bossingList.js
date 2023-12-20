@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const { defaultServers } = require('./servers');
 const {DateTime} = require('luxon');
+const weeklyReset = require('../public/javascript/weeklyReset');
 
 const bossList = mongoose.model('bossList', new mongoose.Schema({
     userOrigin:   {type: String,},
@@ -9,6 +10,7 @@ const bossList = mongoose.model('bossList', new mongoose.Schema({
       name: String,
       weeklyBosses: {type: Number},
       totalGains:   {type: Number},
+      type:         {type: String},
       characters: [{
         id:       {type: String},
         name:     {type: String},
@@ -37,6 +39,7 @@ async function createBossList(username){
       name: server.name,
       weeklyBosses: 0,
       totalGains: 0,
+      type: server.type,
       characters: [],
     })),
   });
@@ -83,26 +86,30 @@ async function removeFromBossList(username, characterID, server){
 async function resetBossList(username){
     const bossingList = await bossList.findOne({userOrigin: username });
     const timeNow = DateTime.utc();
-    const userLastLogin = DateTime.fromJSDate(bossingList.lastUpdate);
-    
-    const nextWednesday = userLastLogin.plus({ days: 1 }).set({ weekday: 3, hour: 0, minute: 0, second: 0, millisecond: 0 });
+    const userLastLogin = DateTime.fromJSDate(bossingList.lastUpdate, { zone: 'utc' });
+
+    const nextWednesday = weeklyReset.getWeeklyResetDate(userLastLogin, 4); 
     const nextDay = userLastLogin.plus({ days: 1 }).set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
+
+    const dailyCheck = weeklyReset.timeConditionChecker(nextDay, timeNow);
+    const weeklyCheck = weeklyReset.timeConditionChecker(nextWednesday, timeNow);
     
-  
-    if(timeNow >= nextDay && timeNow <= nextWednesday){
+    if(dailyCheck && !weeklyCheck){
         //Reset Daily bosses
         await resetDailyBoss(bossingList);
+        console.log("Reset Daily");
     }
-    else if(timeNow > nextDay && timeNow > nextWednesday){
+    else if(dailyCheck && weeklyCheck){
         //Reset everything
         await resetWeeklyBoss(bossingList);
+        console.log("Reset Weekly");
     }
 
 }
 
 
 async function resetDailyBoss(bossingList){
-  const filteredServers = bossingList.server.filter((server) => server.characters.length > 0);
+  const filteredServers = bossingList.server;
 
 	filteredServers.forEach((server) => {
 		server.characters.forEach((character) => {
@@ -117,7 +124,7 @@ async function resetDailyBoss(bossingList){
   await bossingList.save();
 }
 async function resetWeeklyBoss(bossingList){
-  const filteredServers = bossingList.server.filter((server) => server.characters.length > 0);
+  const filteredServers = bossingList.server;
 
 	filteredServers.forEach((server) => {
 		server.characters.forEach((character) => {

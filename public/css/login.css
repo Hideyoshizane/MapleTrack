@@ -40,6 +40,8 @@ form {
     border-radius: 10px;
     border: 1px solid #F6F6F6;
     font-family: 'Inter';
+    outline: 0;
+
   }
 
 .username::placeholder,
@@ -55,9 +57,13 @@ form {
     height: 52px;
     font-size: 20px;
     border-radius: 10px;
-    border: 1px solid #F6F6F6;
+    border: 1px solid #7BD96D;
+    background-color: #7BD96D;
+    color: #000000;
     font-family: 'Inter';
+    cursor: pointer;
 }
+
 
 
 .submit {

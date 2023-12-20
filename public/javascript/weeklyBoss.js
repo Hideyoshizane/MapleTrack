@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     var url = `/editBosses`;
     window.location.href = url;
   });
-
+  await loadFlashMessage();
 })
 
 async function fetchBossList(){
@@ -166,7 +166,8 @@ async function loadCharacterCards(){
 
     let totalChecks = 0;
     if(characters.bosses.length > 0){
-      for(bosses of characters.bosses){
+      const sortedBossList = sortBossList(characters.bosses);
+      for(bosses of sortedBossList){
         const bossButton = await createBossButton(bosses);
         bossDiv.appendChild(bossButton);
         if(bosses.checked == true){
@@ -386,4 +387,39 @@ async function updateCharacterButton(button, checkMark) {
   checks.setAttribute("total", total);
   button.style.backgroundColor = checkMark ? "#9EE493": "#D7D7D7";
 
+}
+
+
+async function loadFlashMessage() {
+  const type = getCookie('type');
+  if(type){
+    const center = document.querySelector('.center-container');
+    const message = getCookie('message');
+    const div = createDOMElement('div', 'flash', message);
+    div.classList.add(type);
+    div.classList.add('notVisible');
+    center.appendChild(div);
+    
+    setTimeout(() => {
+      div.classList.add('visible');
+    }, 500);
+
+    setTimeout(() => {
+      div.classList.toggle('visible');
+    }, 1500);
+  }
+}
+
+function sortBossList(bossList) {
+  return bossList.sort((a, b) => {
+      const resetOrder = { "Daily": 0, "Weekly": 1 };
+      const resetComparison = resetOrder[a.reset] - resetOrder[b.reset];
+      if (resetComparison !== 0) {
+          return resetComparison;
+      }
+
+      const nameA = a.name.toLowerCase();
+      const nameB = b.name.toLowerCase();
+      return nameA.localeCompare(nameB);
+  });
 }

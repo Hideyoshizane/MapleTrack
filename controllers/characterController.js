@@ -1,4 +1,4 @@
-const {Character} = require('../models/character');
+const {Character, updateCharactersWeekly} = require('../models/character');
 const {insertOnBossList, removeFromBossList} = require('../models/bossingList');
 const {DateTime} = require('luxon');
 
@@ -7,6 +7,7 @@ module.exports = {
       try {
         const { username, server, characterClass } = ctx.params;
         const { _id } = ctx.state.user;
+        updateCharactersWeekly(_id);
         await ctx.render('character', {
           username: username,
           server: server,
@@ -19,7 +20,7 @@ module.exports = {
         ctx.body = { error: 'An error occurred while rendering character page' };
       }
     },
-
+    
     editCharacter: async (ctx) => {
       try {
         const { username, server, characterClass } = ctx.params;
@@ -45,7 +46,9 @@ module.exports = {
                 bossing,
                 ArcaneForce, 
                 SacredForce,
-                server } = ctx.request.body;
+                server,
+                username,
+                characterCode } = ctx.request.body;
         const character = await Character.findById(_id);
         character.name = name;
         character.level = level;
@@ -90,12 +93,13 @@ module.exports = {
         }
 
         await character.save();
-    
+
+        ctx.status = 200;
       } catch (error) {
         console.error('Error updating character:', error);
-        ctx.status = 500;
-        ctx.body = { error: 'An error occurred while updating character' };
+        ctx.flash('failed', 'Error updating character');
       }
+      
     },
 
     getCharacterData: async (ctx) => {

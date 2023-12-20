@@ -1,5 +1,5 @@
 async function loadServerButtons(data, parentDiv){
-
+  
   const dropdownToggle = createDOMElement('button', 'dropdownToggle');
   dropdownToggle.id = 'dropdownToggle';
 
@@ -59,7 +59,6 @@ async function loadServerButtons(data, parentDiv){
     }catch (error) {
         console.error('Error fetching server name:', error);
       }
-
 
       dropdownToggle.appendChild(selectedServer);
       dropdownToggle.appendChild(serverSelector);
