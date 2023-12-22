@@ -13,7 +13,7 @@ const bossController = require('../controllers/bossController');
 const router = new Router();
 
 router.get('/', async (ctx, next) => {
-    await ctx.render('login');
+    await ctx.render('landing');
 });
 
 router.get('/login', async (ctx, next) => {
