@@ -13,10 +13,6 @@
 }
 
 
-
-
-
-
 body{
     background-color: #E8E8E8;
     padding: 0;
@@ -35,7 +31,7 @@ body{
     margin: 0px;
     padding: 0px;
     width: 1596px;
-    min-height: 800px;
+    min-height: 833px;
 
     background-color: #EDEDED;
     box-sizing: border-box;

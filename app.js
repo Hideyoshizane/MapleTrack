@@ -24,7 +24,7 @@ app.use(passport.session());
 app.use(flash());
 
 
-mongoose.connect(DB_URL, {
+mongoose.connect("mongodb://localhost:27017", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 });

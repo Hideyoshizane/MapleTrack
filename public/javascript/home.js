@@ -129,13 +129,11 @@ async function createCharacterCards(){
 
 
   const characters = await fetch(`/${username}/${selectedServer}`).then(response => response.json());
-
   const characterCards = await Promise.all(characters.map(generateCard));
 
   const characterCardFragment = document.createDocumentFragment();
 
-
-  await sort(characterCards, false);
+  await sort(characterCards);
   
   characterCards.forEach((card) => {
     characterCardFragment.appendChild(card);
@@ -147,19 +145,34 @@ async function createCharacterCards(){
   cardBody = document.querySelectorAll('.cardBody');
 }
 
-async function sort(cards, includeBossing = false) {
-  const customOrder = ['mage', 'thief', 'warrior', 'bowman', 'pirate', 'bossing'];
+async function sort(cards) {
+  const customOrder = ['mage', 'thief', 'xenon', 'warrior', 'bowman', 'pirate', 'bossing'];
 
   cards.sort((a, b) => {
-    if (includeBossing || (a.jobType !== 'bossing' && b.jobType !== 'bossing')) {
-      const indexA = customOrder.indexOf(a.jobType);
-      const indexB = customOrder.indexOf(b.jobType);
+    const jobTypeA = a.getAttribute('jobtype');
+    const jobTypeB = b.getAttribute('jobtype');
+    const characterCardA = a.getAttribute('characterclass');
+    const characterCardB = b.getAttribute('characterclass');
 
-      return indexA - indexB;
+    if (jobTypeA && jobTypeB && characterCardA && characterCardB) {
+      if (jobTypeA !== 'bossing' && jobTypeB !== 'bossing') {
+        const indexA = customOrder.indexOf(jobTypeA);
+        const indexB = customOrder.indexOf(jobTypeB);
+
+        if (indexA !== -1 && indexB !== -1) {
+          const orderByCustomOrder = indexA - indexB;
+          if (orderByCustomOrder !== 0) {
+            return orderByCustomOrder;
+          }
+          return characterCardA.localeCompare(characterCardB);
+        }
+      }
     }
+
     return 0;
   });
 }
+
 
 function filterCharacterCards(selectedValues){
   document.querySelectorAll('.cardBody').forEach((element) => {
