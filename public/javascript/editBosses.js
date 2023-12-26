@@ -278,6 +278,8 @@ async function loadBosses(){
 
     const bossGrid = createDOMElement('div', 'bossGrid');
     for(const boss of bossJson){
+      const morethan4 = boss.difficulties.length > 3;
+
       let totalIncoming = 0;
       const checkedBoss = Character.bosses.filter((obj) => obj.name === boss.name);
 
@@ -294,13 +296,16 @@ async function loadBosses(){
       const buttonDiv = createDOMElement('div', 'buttonDiv');
 
       for(difficult of boss.difficulties){
-
+  
         const difficultyFound = checkedBoss.filter((obj) => obj.difficulty === difficult.name);
 
         const {tag} = classTag[difficult.name];
 
         const difficultButton = createDOMElement('button',  `${tag}`);
         const difficultButtonText = createDOMElement('span', 'buttonText',`${difficult.name}`);
+        if(morethan4){
+          difficultButtonText.style.fontSize = '13px';
+        }
         const value = serverType == 'Reboot' ? difficult.value * 5 : difficult.value;
 
         difficultButton.appendChild(difficultButtonText);
@@ -343,7 +348,7 @@ async function loadBosses(){
 
       if(totalIncoming > 0){
         totalBossIncome.style.display = 'block';
-        totalBossIncome.style.fontSize = await adjustFontSizeToFit(totalBossIncome, 103, 16) + 'px';
+        totalBossIncome.style.fontSize = await adjustFontSizeToFit(totalBossIncome, 118, 16) + 'px';
         bossBox.classList.add('open');
       }
 
@@ -640,7 +645,7 @@ async function updateBossIncomeSpan(value, bossBox, Add, totalIncomeSpan){
   bossBox.setAttribute('totalIncome', bossBoxValue);
 
   totalIncomeSpan.innerText = bossBoxValue.toLocaleString('en-us');
-  totalIncomeSpan.style.fontSize = await adjustFontSizeToFit(totalIncomeSpan, 103, 16) + 'px';
+  totalIncomeSpan.style.fontSize = await adjustFontSizeToFit(totalIncomeSpan, 118, 16) + 'px';
 
   if (bossBoxValue > 0) {
     bossBox.classList.add('open');

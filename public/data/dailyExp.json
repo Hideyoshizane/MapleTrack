@@ -1,42 +1,42 @@
 [
 	{
 		"name": "Vanish Journey",
-        "value": "9",
+        "value": "10",
         "minLevel": "200"
 	},
     {
         "name": "Reverse City",
-        "value": "9",
+        "value": "10",
         "minLevel": "205"
     },
     {
 		"name": "Chu Chu Island",
-        "value": "8",
+        "value": "10",
         "minLevel": "210"
 	},
     {
         "name": "Yum Yum Island",
-        "value": "8",
+        "value": "10",
         "minLevel": "215"
     },
     {
 		"name": "Lachelein",
-        "value": "11",
+        "value": "20",
         "minLevel": "220"
 	},
     {
 		"name": "Arcana",
-        "value": "9",
+        "value": "20",
         "minLevel": "225"
 	},
     {
 		"name": "Morass",
-        "value": "9",
+        "value": "20",
         "minLevel": "230"
 	},
     {
 		"name": "Esfera",
-        "value": "8",
+        "value": "20",
         "minLevel": "235"
 	},
     {
@@ -45,22 +45,32 @@
     },
     {
 		"name": "Cernium",
-        "value": "10",
+        "value": "20",
         "minLevel": "260"
 	},
     {
-		"name": "Burning Cernium",
-        "value": "5",
+		"name": "Arcus",
+        "value": "10",
         "minLevel": "265"
 	},
     {
-		"name": "Arcus",
-        "value": "5",
+		"name": "Odium",
+        "value": "10",
         "minLevel": "270"
 	},
     {
-		"name": "Odium",
-        "value": "5",
+		"name": "Shangri-La",
+        "value": "10",
         "minLevel": "275"
+	},
+    {
+		"name": "Arteria",
+        "value": "10",
+        "minLevel": "280"
+	},
+    {
+		"name": "Carcion",
+        "value": "10",
+        "minLevel": "285"
 	}
 ]

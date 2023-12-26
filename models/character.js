@@ -75,7 +75,7 @@ const templateCharacter = {
       content:[
         {
         contentType: "Daily Quest",
-        checked: false,
+        checked: true,
         date: null
         },
         {
@@ -98,7 +98,7 @@ const templateCharacter = {
       content:[
         {
         contentType: "Daily Quest",
-        checked: false,
+        checked: true,
         date: null
         },
         {
@@ -121,11 +121,11 @@ const templateCharacter = {
       content:[
         {
         contentType: "Daily Quest",
-        checked: false,
+        checked: true,
         date: null
         },
         {
-          contentType: "Dream Defender",
+          contentType: "Midnight Chaser",
           checked: false,
           tries: 3,
           maxTries: 3,
@@ -140,7 +140,7 @@ const templateCharacter = {
       content:[
         {
         contentType: "Daily Quest",
-        checked: false,
+        checked: true,
         date: null
         },
         {
@@ -159,7 +159,7 @@ const templateCharacter = {
       content:[
         {
         contentType: "Daily Quest",
-        checked: false,
+        checked: true,
         date: null
         },
         {
@@ -178,7 +178,7 @@ const templateCharacter = {
       content:[
         {
         contentType: "Daily Quest",
-        checked: false,
+        checked: true,
         date: null
         },
         {
@@ -199,12 +199,8 @@ const templateCharacter = {
     exp: 1,
       content: [{
           contentType: "Daily Quest",
-          checked: false,
+          checked: true,
           date: null
-        },
-        {
-          contentType: "Burning Cernium",
-          checked: false,
         }
       ]
     },
@@ -214,7 +210,7 @@ const templateCharacter = {
       exp: 1,
         content: [{
             contentType: "Daily Quest",
-            checked: false,
+            checked: true,
             date: null
           },
         ]
@@ -225,7 +221,40 @@ const templateCharacter = {
       exp: 1,
         content: [{
             contentType: "Daily Quest",
-            checked: false,
+            checked: true,
+            date: null
+          }
+        ]
+    },
+    {
+      name: "Shangri-La",
+      level: 1,
+      exp: 1,
+        content: [{
+            contentType: "Daily Quest",
+            checked: true,
+            date: null
+          }
+        ]
+    },
+    {
+      name: "Arteria",
+      level: 1,
+      exp: 1,
+        content: [{
+            contentType: "Daily Quest",
+            checked: true,
+            date: null
+          }
+        ]
+    },
+    {
+      name: "Carcion",
+      level: 1,
+      exp: 1,
+        content: [{
+            contentType: "Daily Quest",
+            checked: true,
             date: null
           }
         ]

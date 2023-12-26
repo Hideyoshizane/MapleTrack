@@ -352,6 +352,7 @@ body{
 }
 .buttonDiv{
     display: flex;
+    width: 367px;
     gap: 8px;
 }
 .easyButton,
@@ -402,7 +403,6 @@ body{
     font-size: 16px;
     margin-left: auto;
     margin-right: 8px;
-    width: 103px;
 }
 
 .warningDiv{

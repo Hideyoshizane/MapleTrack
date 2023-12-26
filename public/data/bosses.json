@@ -239,7 +239,7 @@
   ]
 },
 {
-  "name": "Pink\nBeam",
+  "name": "Pink\nBean",
   "img": "../../assets/boss/pink_bean.webp",
   "difficulties": [
     {
@@ -474,19 +474,19 @@
       "name": "Normal",
       "value": 133687500,
       "reset": "Weekly",
-      "minLevel": 265
+      "minLevel": 260
     },
     {
       "name": "Hard",
       "value": 151250000,
       "reset": "Weekly",
-      "minLevel": 265
+      "minLevel": 260
     },
     {
       "name": "Extreme",
       "value": 605000000,
       "reset": "Weekly",
-      "minLevel": 265
+      "minLevel": 260
     }
   ]
 },
@@ -495,10 +495,58 @@
   "img": "../../assets/boss/kalos.webp",
   "difficulties": [
     {
-      "name": "Chaos",
+      "name": "Easy",
+      "value": 150000000,
+      "reset": "Weekly",
+      "minLevel": 265
+    },
+    {
+      "name": "Normal",
       "value": 200000000,
       "reset": "Weekly",
-      "minLevel": 270
+      "minLevel": 265
+    },
+    {
+      "name": "Chaos",
+      "value": 400000000,
+      "reset": "Weekly",
+      "minLevel": 265
+    },
+    {
+      "name": "Extreme",
+      "value": 800000000,
+      "reset": "Weekly",
+      "minLevel": 265
+    }
+  ]
+},
+{
+  "name": "Kaling",
+  "img": "../../assets/boss/kaling.webp",
+  "difficulties": [
+    {
+      "name": "Easy",
+      "value": 165000000,
+      "reset": "Weekly",
+      "minLevel": 275
+    },
+    {
+      "name": "Normal",
+      "value": 230000000,
+      "reset": "Weekly",
+      "minLevel": 275
+    },
+    {
+      "name": "Hard",
+      "value": 460000000,
+      "reset": "Weekly",
+      "minLevel": 275
+    },
+    {
+      "name": "Extreme",
+      "value": 920000000,
+      "reset": "Weekly",
+      "minLevel": 275
     }
   ]
 },

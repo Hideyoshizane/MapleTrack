@@ -109,19 +109,23 @@ filterButtons.forEach(button => {
     });
 });
 
-async function loadSymbolsImage(){
+async function loadSymbolsImage() {
   SymbolsImages = {
-    vanish_journey: await createImageElement('../../public/assets/arcaneforce/vanish_journey.webp', 'Vanish Journey', 'ArcaneImage'),
-    chu_chu_island: await createImageElement('../../public/assets/arcaneforce/chu_chu_island.webp', 'Chu Chu Island', 'ArcaneImage'),
-    lachelein:      await createImageElement('../../public/assets/arcaneforce/lachelein.webp', 'Lachelein', 'ArcaneImage'),
-    arcana:         await createImageElement('../../public/assets/arcaneforce/arcana.webp', 'Arcana', 'ArcaneImage'),
-    morass:         await createImageElement('../../public/assets/arcaneforce/morass.webp', 'Morass', 'ArcaneImage'),
-    esfera:         await createImageElement('../../public/assets/arcaneforce/esfera.webp', 'Esfera', 'ArcaneImage'),
-    cernium:        await createImageElement('../../public/assets/sacredforce/cernium.webp', 'Cernium', 'SacredImage'),
-    arcus:          await createImageElement('../../public/assets/sacredforce/arcus.webp', 'Arcus', 'SacredImage'),
-    odium:          await createImageElement('../../public/assets/sacredforce/odium.webp', 'Odium', 'SacredImage')
+    'vanish_journey': await createImageElement('../../public/assets/arcaneforce/vanish_journey.webp', 'Vanish Journey', 'ArcaneImage'),
+    'chu_chu_island': await createImageElement('../../public/assets/arcaneforce/chu_chu_island.webp', 'Chu Chu Island', 'ArcaneImage'),
+    'lachelein': await createImageElement('../../public/assets/arcaneforce/lachelein.webp', 'Lachelein', 'ArcaneImage'),
+    'arcana': await createImageElement('../../public/assets/arcaneforce/arcana.webp', 'Arcana', 'ArcaneImage'),
+    'morass': await createImageElement('../../public/assets/arcaneforce/morass.webp', 'Morass', 'ArcaneImage'),
+    'esfera': await createImageElement('../../public/assets/arcaneforce/esfera.webp', 'Esfera', 'ArcaneImage'),
+    'cernium': await createImageElement('../../public/assets/sacredforce/cernium.webp', 'Cernium', 'SacredImage'),
+    'arcus': await createImageElement('../../public/assets/sacredforce/arcus.webp', 'Arcus', 'SacredImage'),
+    'odium': await createImageElement('../../public/assets/sacredforce/odium.webp', 'Odium', 'SacredImage'),
+    'shangri-la': await createImageElement('../../public/assets/sacredforce/shangri-la.webp', 'Shangri-la', 'SacredImage'),
+    'arteria': await createImageElement('../../public/assets/sacredforce/arteria.webp', 'Arteria', 'SacredImage'),
+    'carcion': await createImageElement('../../public/assets/sacredforce/carcion.webp', 'Carcion', 'SacredImage')
   };
 }
+
 
 async function createCharacterCards(){
   const parentDiv = document.querySelector('.characterCards');

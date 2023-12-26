@@ -91,7 +91,7 @@ async function loadCharacterNameDiv(){
   const legion = await loadLegionDiv();
 
   const JobType = createDOMElement('span','classType', CharacterData.class);
-  JobType.style.fontSize = await adjustFontSizeToFit(JobType, 367, 56) + 'px';
+  JobType.style.fontSize = await adjustFontSizeToFit(JobType, 367, 48) + 'px';
 
   const JobLevel = createDOMElement('span','jobLevel', getJob(CharacterData));
 
@@ -349,13 +349,6 @@ function getDailyValue(Force, isArcane = false){
     }
   }
       
-  if(!isArcane && Force.name === 'Cernium'){
-    if(Force.content[1].checked == true){
-      const cernium = Number(dailyJson.find(json => json.name == Force.content[1].contentType).value);
-      dailyValue += cernium;
-    }
-  }
-
   return dailyValue;
 }
 

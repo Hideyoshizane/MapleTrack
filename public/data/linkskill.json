@@ -491,4 +491,18 @@
       "description": "Critical Damage: +4%."
     }
   ]
+},
+{
+  "name": "Innate Gift",
+  "image": "/../../public/assets/link_skill/khali.webp",
+  "levels": [
+    {
+      "level": 1,
+      "description": "Damage: +3%. Upon attacking, Recovery Chance: 100%, Recovery: 1% of Max HP/MP per sec, Duration: 5 sec. Cooldown: 30 sec"
+    },
+    {
+      "level": 2,
+      "description": "Damage: +5%. Upon attacking, Recovery Chance: 100%, Recovery: 2% of Max HP/MP per sec, Duration: 5 sec. Cooldown: 30 sec"
+    }
+  ]
 }]

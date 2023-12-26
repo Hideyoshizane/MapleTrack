@@ -120,6 +120,12 @@
     "jobType": "thief"
    },
    {
+    "linkSkill": "Innate Gift",
+    "legionType": "LUK+",
+    "className": "Khali",
+    "jobType": "thief"
+   },
+   {
     "linkSkill": "Combo Kill Blessing",
     "legionType": "RECVRHP+",
     "className": "Aran",

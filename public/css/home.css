@@ -67,7 +67,7 @@ body{
 .dropdownToggle.open{
     margin: 0px;
     display: block;
-    height: 336px;
+    height: 392px;
     transition: all 0.3s ease-in-out;
     cursor: pointer;
     z-index: 2;

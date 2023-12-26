@@ -37,7 +37,7 @@ body{
 }
 .buttonWrapper{
     width: 100%;
-    height: 88px;
+    height: 72px;
     display: flex;
     justify-content: flex-end;
     align-items: flex-end;
@@ -70,8 +70,6 @@ body{
 .nameLinkLegion{
     display: flex;
     width: 724px;
-    height: 221px;
-    margin-top: 16px;
     flex-direction: column;
     align-items: flex-end;
 }
@@ -99,8 +97,6 @@ body{
 
 .linkLegionClassJob{
     display: flex;
-    right: 0;
-    height: 127px;
     width: 600px;
     justify-content: space-between;
     align-items: flex-start;
@@ -141,15 +137,14 @@ body{
 }
 
 .classType{
-    font-size: 56px;
+    font-size: 48px;
     font-family: 'Inter';
-    height: 68px;
     width: 367px;
     text-align: right;
 }
 
 .jobLevel{
-    font-size: 40px;
+    font-size: 32px;
     font-family: 'Inter';
 }
 
@@ -169,7 +164,7 @@ body{
 .levelNumber{
     font-family: 'Inter';
     font-weight: 400;
-    font-size: 48px;
+    font-size: 44px;
 }
 
 .characterLevelBar{
@@ -200,15 +195,11 @@ body{
     border-radius: 25px;
 }
 
-.arcaneForceDiv,
-.sacredForceDiv{
-    margin-top: 8px;
-}
 .ArcaneForce,
 .SacredForce{
     font-family: 'Inter';
     font-weight: 500;
-    font-size: 48px;
+    font-size: 42px;
 }
 .ArcaneForceGrid,
 .SacredForceGrid{

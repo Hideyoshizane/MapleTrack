@@ -27,7 +27,8 @@ const defaultServers = [
   { name: 'Bera'   ,img:  '../../assets/icons/servers/bera'    , type: 'Regular'},
   { name: 'Aurora' ,img:  '../../assets/icons/servers/aurora'  , type: 'Regular'},
   { name: 'Elysium',img:  '../../assets/icons/servers/elysium' , type: 'Regular'},
-  { name: 'Reboot' ,img:  '../../assets/icons/servers/reboot'  , type: 'Reboot'},
+  { name: 'Kronos' ,img:  '../../assets/icons/servers/kronos'  , type: 'Reboot'},
+  { name: 'Hyperion' ,img:  '../../assets/icons/servers/hyperion'  , type: 'Reboot'}
 ];
 
 

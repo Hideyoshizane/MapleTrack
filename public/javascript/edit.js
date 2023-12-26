@@ -165,7 +165,7 @@ async function loadCharacterNameDiv(characterData) {
 	const legion = await loadLegionDiv(characterData);
 
 	const JobType = createDOMElement('span', 'classType', characterData.class);
-	JobType.style.fontSize = await adjustFontSizeToFit(JobType, 367, 56) + 'px';
+	JobType.style.fontSize = await adjustFontSizeToFit(JobType, 367, 48) + 'px';
 
 	const JobLevel = createDOMElement('span', 'jobLevel', getJob(characterData));
 
