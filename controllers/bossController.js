@@ -2,21 +2,20 @@ const {bossList} = require('../models/bossingList');
 const {DateTime} = require('luxon');
 
 module.exports = {
-  getList: async (ctx) => {
+  getList: async (req, res) => {
     try {
-      const username = ctx.params.username;
+      const username = req.params.username;
       const bossListFetch = await bossList.findOne({userOrigin: username});
 
-      ctx.body = bossListFetch;
+      res.status(200).json(bossListFetch);
     } catch (error) {
       console.error('Error in getList:', error);
-      ctx.status = 500;
-      console.error('Error in getList:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
     }
   },
-  increaseBoss: async (ctx) => {
+  increaseBoss: async (req, res) => {
     try{
-      const { server, username, characterClass, bossName, difficult, value, date, checkMark} = ctx.request.body;
+      const { server, username, characterClass, bossName, difficult, value, date, checkMark} = req.body;
       const ListFound = await bossList.findOne({userOrigin: username});
       const foundServer = ListFound.server.find(servers => servers.name === server);
       const foundCharacter = foundServer.characters.find(character => character.class === characterClass);
@@ -31,27 +30,26 @@ module.exports = {
       ListFound.lastUpdate = date;
 
       await ListFound.save();
-      ctx.status = 200;
+      res.status(200).send('Boss checked successfully.');
     } catch (error) {
       console.error('Error checking boss:', error);
-      ctx.status = 500;
-      console.error('Error checking boss:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
     };
   },
-  editBosses: async (ctx) =>{
+  editBosses: async (req, res) => {
     try{
-      if(ctx.isAuthenticated()){
-        const { username, _id } = ctx.state.user;
-				await ctx.render('editBosses', { username, _id });
+      if(req.isAuthenticated()){
+        const { username, _id } = req.user;
+        res.render('editBosses', { username, _id });
       }
     } catch (error) {
-      ctx.status = 500;
+      res.status(500).json({ error: 'Internal Server Error' });
       console.error('Error loading page:', error);
     }
   },
-  saveBossChange: async (ctx) =>{
+  saveBossChange: async (req, res) => {
     try{
-      const characterList = ctx.request.body;
+      const characterList = req.body;
       const listFound = await bossList.findOne({userOrigin: characterList.userOrigin});
       const foundServer = listFound.server.find(servers => servers.name === characterList.name);
 
@@ -88,9 +86,9 @@ module.exports = {
       }
       listFound.lastUpdate = DateTime.utc().toJSDate();
       await listFound.save();
-      ctx.status = 200;
+      res.status(200).send('Boss changes saved successfully.');
     } catch (error) {
-      ctx.status = 500;
+      res.status(500).json({ error: 'Internal Server Error' });
       console.error('Error saving Boss:', error);
     }
   }

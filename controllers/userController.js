@@ -4,18 +4,17 @@ const { searchServersAndCreateMissing, getServerWithHighestLevel, getHighestLeve
 const { createBossList, resetBossList } = require('../models/bossingList');
 
 module.exports = {
-	signup: async (ctx) => {
+	signup: async (req, res) => {
 		try {
-			const { username, email, password } = ctx.request.body;
+			const { username, email, password } = req.body;
 			const salt = await bcrypt.genSalt(10);
 			const hashedPassword = await bcrypt.hash(password, salt);
 
 			const sameUser = await User.findOne({ username });
 			if (sameUser) {
-				ctx.flash('failed', 'That user already exists!');
-				ctx.status = 400;
-				ctx.redirect('/signup', { flash: ctx.session.flash });
-				return;
+				req.flash('failed', 'That user already exists!');
+        		res.status(400);
+        		return res.redirect('/signup');
 			}
 
 			createdUser = new User({ username, email, password: hashedPassword, version: LASTVERSION});
@@ -24,128 +23,121 @@ module.exports = {
 			await searchServersAndCreateMissing(createdUser._id, createdUser.username);
 			await createBossList(createdUser.username);
 			await createdUser.save();
-			ctx.status = 200;
-			ctx.flash('success', 'User created successfully!');
-			ctx.redirect('/login', { flash: ctx.session.flash });
+			req.flash('message', 'User created successfully!');
+          	req.flash('type', 'success');
+			res.status(200);
+			return res.redirect('/login');
 		} catch (err) {
-			ctx.status = 500;
-			ctx.body = err.message;
+			console.error('Error during signup:', err);
+			res.status(500).json({ error: 'An error occurred during signup' });
 		}
 	},
 
-	home: async (ctx) => {
+	home: async (req, res) => {
 		try {
-			if (ctx.isAuthenticated()) {
-				const { username, _id } = ctx.state.user;
-				await ctx.render('home', { username, _id });
+			if (req.isAuthenticated()) {
+				const { username, _id } = req.user;
+				return res.render('home', { username, _id });
 			} else {
-				ctx.redirect('/login');
+				return res.redirect('/login');
 			}
 		} catch (error) {
 			console.error('Error rendering home page:', error);
-			ctx.status = 500;
-			ctx.body = { error: 'An error occurred while rendering home page' };
+			res.status(500).json({ error: 'An error occurred while rendering home page' });
 		}
 	},
-	weeklyBoss: async (ctx) => {
+	weeklyBoss: async (req, res) => {
 		try {
-			if(ctx.isAuthenticated()){
-				const { username, _id } = ctx.state.user;
+			if(req.isAuthenticated()){
+				const { username, _id } = req.user;
 				resetBossList(username);
-				await ctx.render('weeklyBoss', { username, _id });
+				await res.render('weeklyBoss', { username, _id });
 			}
 		} catch (error) {
 			console.error('Error rendering Weekly Boss page:', error);
-			ctx.status = 500;
-			ctx.body = { error: 'An error occurred while rendering Weekly Boss page' };
+			res.status(500).json({ error: 'An error occurred while rendering Weekly Boss page' });
 		}
 	},
-	signout: async(ctx) =>{
+	signout: async(req, res) =>{
 		try{
-			if(ctx.isAuthenticated()){
-				ctx.logout();
-				ctx.redirect('/');
+			if(req.isAuthenticated()){
+				req.logout();
+				res.redirect('/');
 			} else{
-				ctx.redirect('/login');
+				res.redirect('/login');
 			}
 
 		} catch (error) {
 			console.error('Error signing out', error);
-			ctx.status = 500;
-			ctx.body = { error: 'An error occurred while signing out'};
+			res.status(500).json({ error: 'An error occurred while signing out' });
 		}
 	},
-	account: async(ctx) =>{
+	account: async(req, res) =>{
 		try{
-			if(ctx.isAuthenticated()){
-				const { username, _id } = ctx.state.user;
-				await ctx.render('account', { username, _id });
+			if(req.isAuthenticated()){
+				const { username, _id } = req.user;
+				await res.render('account', { username, _id });
 			}
 
 		} catch (error) {
 			console.error('Error', error);
-			ctx.status = 500;
-		}
+     		res.status(500).json({ error: 'An error occurred' });
+   		}
 	},
-	forgotUsername: async(ctx) =>{
+	forgotUsername: async (req, res) => {
 		try{
-			const { username} = ctx.request.body;
+			const { username } = req.body;
 			const foundUser = await User.findOne({ username });
 			if(!foundUser){
-				ctx.body = {userFound: null};
-				return;
+				return res.json({ userFound: null });
 			}
 			const serverName = await getServerWithHighestLevel(foundUser._id);
 
-			ctx.body = {
+			res.json({
 				userFound: !!foundUser,
-				serverName: serverName
-			  };
+				serverName: serverName,
+			  });
 		} catch (error) {
 			console.error('Error finding username', error);
-			ctx.status = 500;
-			ctx.body = { error: 'An error occurred.'};
-		}
+			res.status(500).json({ error: 'An error occurred.' });
+		  }
 	},
-	forgotPasswordLevel: async(ctx) =>{
+	forgotPasswordLevel: async (req, res) => {
 		try{
-			const {username, level} = ctx.request.body;
+			const {username, level} = req.body;
 			const foundUser = await User.findOne({ username });
 			const characterData = await getHighestLevelCharacter(foundUser._id);
 			if(level == characterData.highestLevel){
 				const salt = await bcrypt.genSalt(10);
-				console.log(salt);
 				const hashedPassword = await bcrypt.hash(characterData.characterName, salt);
 
 				foundUser.password = hashedPassword;
 				await foundUser.save();
-				ctx.body = true;
+				return res.json(true);
 			} else{
-				ctx.body = false;
+				return res.json(false);
 			}
 
 		} catch (error) {
 			console.error('Error', error);
-			ctx.status = 500;
-		}
+     		res.status(500).json({ error: 'An error occurred.' });
+    	}
 	},
 
-	resetEmptyAccount: async(ctx) =>{
+	resetEmptyAccount: async (req, res) => {
 		try{
-			const { username} = ctx.request.body;
+			const { username } = req.body;
 			resetPasswordEmptyUser(username);
-			ctx.status = 200;
-			console.log('password reseted successfully');
-		} catch (error){
+   		   res.status(200).send('Password reset successfully');
+		} catch (error) {
 			console.error('Error finding username', error);
-			ctx.status = 500;
-			ctx.body = { error: 'An error occurred.'};
+			res.status(500).json({ error: 'An error occurred.' });
 		}
 	},
-	updatePassword: async(ctx) =>{
-		if(ctx.isAuthenticated()){
-			const { username } = ctx.state.user;
-			const { oldPassword, newPassword} = ctx.request.body;
+	updatePassword: async (req, res) => {
+		if(req.isAuthenticated()){
+			const { username } = req.user;
+			const { oldPassword, newPassword } = req.body;
 
 			const foundUser = await User.findOne({ username });
 			const passwordMatch = await bcrypt.compare(oldPassword, foundUser.password);
@@ -154,10 +146,10 @@ module.exports = {
 				const newHashedPassword = await bcrypt.hash(newPassword, salt);
 				foundUser.password = newHashedPassword;
 				await foundUser.save();
-				ctx.body = true;
+				res.json(true);
 			}
 			else{
-				ctx.body = false;
+				res.json(false);
 			}
 
 		}

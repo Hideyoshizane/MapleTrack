@@ -1,4 +1,5 @@
-const Router = require('koa-router');
+const express = require('express');
+const router = express.Router();
 
 const authenticate = require('../middleware/passport');
 
@@ -8,25 +9,23 @@ const searchController = require('../controllers/searchController');
 const characterController = require('../controllers/characterController');
 const bossController = require('../controllers/bossController');
 
-
-
-const router = new Router();
-
-router.get('/', async (ctx, next) => {
-    await ctx.render('landing');
+router.get('/', async (req, res) => {
+    res.render('landing');
 });
 
-router.get('/login', async (ctx, next) => {
-    await ctx.render('login');
+router.get('/login', async (req, res) => {
+    res.render('login', { flash: req.flash() });
 });
 
-router.get('/signup', async (ctx, next) => {
-    await ctx.render('signup');
+
+router.get('/signup', async (req, res) => {
+    res.render('signup', { flash: req.flash() });
 });
 
-router.get('/forgot', async (ctx, next) => {
-    await ctx.render('forgot');
+router.get('/forgot', async (req, res) => {
+    res.render('forgot');
 });
+
 
 router.get('/search', authenticate.ensureAuthenticated, searchController.search);
 router.get('/weeklyBoss', authenticate.ensureAuthenticated, userController.weeklyBoss);

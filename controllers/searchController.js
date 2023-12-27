@@ -5,9 +5,9 @@ const {Server} = require('../models/servers');
 
 
 module.exports = {
-  search: async (ctx) => {
+  search: async (req, res) => {
     try {
-      const { query, username } = ctx.request.query;
+      const { query, username } = req.query;
 
       const characters = await Character.find({
         userOrigin: username,
@@ -17,45 +17,40 @@ module.exports = {
         ],
       }).limit(5);
 
-      ctx.status = 200;
-      ctx.body = characters;
+      res.status(200).json(characters);
 
     } catch (error) {
       console.error('Error performing search:', error);
-      ctx.status = 500;
-      ctx.body = { error: 'An error occurred during the search' };
+      res.status(500).json({ error: 'An error occurred during the search' });
     }
   },
 
-  userServer: async(ctx) => {
+  userServer: async (req, res) => {
     try{
-      const username = ctx.state.user.username;
+      const username = req.user.username;
       const user = await User.findOne({ username: username});
-      ctx.body = user.servers;
-      
+      res.json(user.servers);
+
     } catch(error){
       console.error('Error finding user', error);
-      ctx.status = 500;
-      ctx.body = {error: 'An error ocurred during the search'};
+      res.status(500).json({ error: 'An error occurred during the search' });
     }
   },
 
-  serverName: async(ctx) => {
+  serverName: async (req, res) => {
     try{
-      const serverID = ctx.params.serverID;
+      const serverID = req.params.serverID;
       const serverData = await Server.findOne({_id: serverID});
       if(!serverData) {
-        ctx.status = 404;
-        ctx.body = { error: 'Server not found' };
+        res.status(404).json({ error: 'Server not found' });
       }
       else {
-        ctx.body = { name: serverData.name, img: serverData.img };
+        res.json({ name: serverData.name, img: serverData.img });
       }
       
     } catch(error){
       console.error('Error finding server', error);
-      ctx.status = 500;
-      ctx.body = {error: 'An error ocurred during the search'};
+      res.status(500).json({ error: 'An error occurred during the search' });
     }
   },
   

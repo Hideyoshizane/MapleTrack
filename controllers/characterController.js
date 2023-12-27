@@ -1,14 +1,13 @@
 const {Character, updateCharactersWeekly} = require('../models/character');
 const {insertOnBossList, removeFromBossList} = require('../models/bossingList');
-const {DateTime} = require('luxon');
 
 module.exports = {
-    redirectCharacter: async (ctx) => {
+    redirectCharacter: async (req, res) => {
       try {
-        const { username, server, characterClass } = ctx.params;
-        const { _id } = ctx.state.user;
+        const { username, server, characterClass } = req.params;
+        const { _id } = req.user;
         updateCharactersWeekly(_id);
-        await ctx.render('character', {
+        res.render('character', {
           username: username,
           server: server,
           characterClass: characterClass,
@@ -16,16 +15,15 @@ module.exports = {
         });
       } catch (error) {
         console.error('Error rendering character page:', error);
-        ctx.status = 500;
-        ctx.body = { error: 'An error occurred while rendering character page' };
+        res.status(500).json({ error: 'Internal Server Error' });
       }
     },
     
-    editCharacter: async (ctx) => {
+    editCharacter:async (req, res) => {
       try {
-        const { username, server, characterClass } = ctx.params;
-        const { _id } = ctx.state.user;
-        await ctx.render('edit', {
+        const { username, server, characterClass } = req.params;
+        const { _id } = req.user;
+        res.render('edit', {
           username: username,
           server: server,
           characterClass: characterClass,
@@ -33,11 +31,10 @@ module.exports = {
         });
       } catch (error) {
         console.error('Error rendering edit page:', error);
-        ctx.status = 500;
-        ctx.body = { error: 'An error occurred while rendering edit page' };
+        res.status(500).json({ error: 'Internal Server Error' });
       }
     },
-    updateCharacter: async (ctx) =>{
+    updateCharacter: async (req, res) => {
       try{
         const { _id,
                 name,
@@ -48,12 +45,12 @@ module.exports = {
                 SacredForce,
                 server,
                 username,
-                characterCode } = ctx.request.body;
+                characterCode } = req.body;
         const character = await Character.findById(_id);
         character.name = name;
         character.level = level;
         character.targetLevel = targetLevel;
-        character.bossing =bossing;
+        character.bossing = bossing;
     
         for (const updatedForce of ArcaneForce) {
           const forceToUpdate = character.ArcaneForce.find(force => force.name === updatedForce.name);
@@ -94,17 +91,17 @@ module.exports = {
 
         await character.save();
 
-        ctx.status = 200;
+        res.status(200).send('Character updated successfully.');
       } catch (error) {
         console.error('Error updating character:', error);
-        ctx.flash('failed', 'Error updating character');
+        res.status(500).send({ error: 'Internal Server Error' });
       }
       
     },
 
-    getCharacterData: async (ctx) => {
+    getCharacterData: async (req, res) => {
       try {
-        const { username, server, characterClass } = ctx.params;
+        const { username, server, characterClass } = req.params;
         let query = {
           userOrigin: username,
           server: server,
@@ -112,30 +109,28 @@ module.exports = {
         };
         const character = await Character.findOne(query);
 
-        ctx.body = character;
+        res.status(200).json(character);
       } catch (error) {
         console.error('Error retrieving character Data:', error);
-        ctx.status = 500;
-        ctx.body = { error: 'An error occurred while getting character data' };
+        res.status(500).json({ error: 'Internal Server Error' });
       }
     },
 
-    fullCharacter: async (ctx) => {
+    fullCharacter: async (req, res) => {
       try{
-        const { username, server} = ctx.params;
+        const { username, server} = req.params;
         const characters = await Character.find({userOrigin: username, server: server});
-        ctx.body = characters;
+        res.status(200).json(characters);
 
       } catch (error) {
-        console.log('Error rtrieving characters Data:', error);
-        ctx.status = 500;
-        ctx.body = { error: 'An error occurred while getting characters data' };
+        console.log('Error retrieving characters Data:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
       }
     },
 
-    increaseDaily: async (ctx) =>{
+    increaseDaily:  async (req, res) => {
       try{
-        const {forceType, forceName, value, characterData, necessaryExp, date} = ctx.request.body;
+        const {forceType, forceName, value, characterData, necessaryExp, date} = req.body;
         const foundCharacter = await Character.findById(characterData._id);
         let AreaData;
         if (forceType) {
@@ -152,20 +147,18 @@ module.exports = {
             foundArea.level +=Number(1);
           }
           foundArea.content[0].date = date;
-          console.log(date);
           await foundCharacter.save();
-          ctx.status = 200;
+          res.status(200).send('Value updated successfully.');
         }
 
       }catch(error){
         console.log('Error updating value', error);
-        ctx.status = 500;
-        ctx.body = {error: 'Error updating value'};
+        res.status(500).json({ error: 'Internal Server Error' });
       }
     },
-    increaseWeekly: async (ctx) =>{
+    increaseWeekly: async (req, res) => {
       try{
-        const {forceName, value, characterData, necessaryExp, date} = ctx.request.body;
+        const {forceName, value, characterData, necessaryExp, date} = req.body;
         const foundCharacter = await Character.findById(characterData._id);
         let AreaData = foundCharacter.ArcaneForce;
         const foundArea = AreaData.find((obj) => obj.name === forceName);
@@ -181,13 +174,12 @@ module.exports = {
             foundArea.content[1].tries -=Number(1);
           }
           await foundCharacter.save();
-          ctx.status = 200;
+          res.status(200).send('Value updated successfully.');
         }
 
       }catch(error){
         console.log('Error updating value', error);
-        ctx.status = 500;
-        ctx.body = {error: 'Error updating value'};
+        res.status(500).json({ error: 'Internal Server Error' });
       }
   }
 };

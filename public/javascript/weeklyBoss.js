@@ -315,7 +315,7 @@ async function handleServerButtonClick(serverButton, serverButtons) {
 
 		serverButton.classList.toggle('notSelected');
 		serverButton.classList.toggle('selected');
-		updateTopButtons();
+		await updateTopButtons();
 	}
 }
 
@@ -342,7 +342,7 @@ function setupBossClickEvents() {
 				checkMark: !checkMark,
 			};
 
-			fetch('/checkBoss', {
+			await fetch('/checkBoss', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
@@ -360,7 +360,7 @@ function setupBossClickEvents() {
 				: await createCheckMark();
 			checkSVG.replaceWith(newSVG);
 			await updateCharacterButton(button, !checkMark);
-			updateTopButtons();
+			await updateTopButtons();
 		}
 	});
 }
