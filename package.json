@@ -1,14 +1,14 @@
 {
   "name": "maplestory-tracker",
-  "version": "0.1.6",
-  "main": "index.js",
+  "version": "1.0.0",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "start": "node app.js"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Hideki Yoshizane",
+  "license": "MIT",
   "dependencies": {
     "assert": "^2.0.0",
     "bcrypt": "^5.1.0",
