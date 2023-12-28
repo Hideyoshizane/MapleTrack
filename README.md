@@ -69,19 +69,6 @@
   </ul>
 </a>
 
-<a name="technologies">
-  <h2>Used technologies</h2>
-  <h3>Builded using the following tools:</h3>
-  <ul>
-    <li> <a href="https://expressjs.com/">Express</a></li>
-    <li> <a href="https://nodejs.org/">Node.js</a></li>
-    <li> <a href="https://www.npmjs.com/package/bcrypt">Bcrypt</a></li>
-    <li> <a href="https://www.passportjs.org/">Passport</a></li>
-    <li> <a href="https://mongoosejs.com/">Mongoose</a></li>
-    <li> <a href="https://moment.github.io/luxon/#/">Luxon</a></li>
-  </ul>
-</a>
-
 <a name="author">
   <h2>Author</h1>
   <h3>Crafted by a fellow Mapler for Maplers.</h3>
