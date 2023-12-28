@@ -17,7 +17,7 @@
  <a href="#features">Features</a> • 
  <a href="#running">Running</a> • 
  <a href="#technologies">Used technologies</a> • 
- <a href="#author">Author</a>
+ <a href="#author">Author</a> • 
    <a href="#license">License</a>
 </p>
 
