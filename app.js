@@ -11,11 +11,11 @@ const router = require('./routes');
 
 require('dotenv').config();
 
-const DB_URL = process.env.DB_URL;
+const DB_URL = process.env.DB_URL || 'mongodb://localhost:27017';
 const app = express();
 
 app.use(expressSession({
-  secret: process.env.SECRET,
+  secret: process.env.SECRET || 'random',
   resave: true,
   saveUninitialized: true
 }));
