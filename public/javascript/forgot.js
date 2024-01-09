@@ -141,3 +141,10 @@ function updateInputListener(oldfunction, newFunction) {
     username.removeEventListener('input', oldfunction);
     username.addEventListener('input', newFunction);
 }
+
+
+const logo = document.querySelector('#logo');
+
+logo.addEventListener('click', () => {
+    window.location.href = '/login';
+});

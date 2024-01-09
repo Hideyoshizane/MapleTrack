@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const {DateTime} = require('luxon');
 const bcrypt = require('bcrypt');
-const passportLocalMongoose = require('passport-local-mongoose');
 
 const LASTVERSION = 0;
 
@@ -35,9 +34,6 @@ const userSchema = new mongoose.Schema({
         ref: 'Server'
     }]
 }, { strictPopulate: false });
-
-userSchema.plugin(passportLocalMongoose);
-
 
 
 const User = mongoose.model('User', userSchema);

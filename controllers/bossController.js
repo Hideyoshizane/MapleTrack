@@ -8,6 +8,7 @@ module.exports = {
       const bossListFetch = await bossList.findOne({userOrigin: username});
 
       res.status(200).json(bossListFetch);
+
     } catch (error) {
       console.error('Error in getList:', error);
       res.status(500).json({ error: 'Internal Server Error' });
@@ -38,10 +39,8 @@ module.exports = {
   },
   editBosses: async (req, res) => {
     try{
-      if(req.isAuthenticated()){
-        const { username, _id } = req.user;
+        const { username, _id } = res.locals;
         res.render('editBosses', { username, _id });
-      }
     } catch (error) {
       res.status(500).json({ error: 'Internal Server Error' });
       console.error('Error loading page:', error);

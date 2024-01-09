@@ -27,9 +27,9 @@ module.exports = {
 
   userServer: async (req, res) => {
     try{
-      const username = req.user.username;
+      const username = res.locals.username;
       const user = await User.findOne({ username: username});
-      res.json(user.servers);
+      res.status(200).json(user.servers);
 
     } catch(error){
       console.error('Error finding user', error);

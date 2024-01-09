@@ -146,15 +146,6 @@ function getText(name) {
     }
 }
 
-async function createBlockedTooltip(buttonRect, minLevel) {
-    const text = `Required Level:\n${minLevel}`;
-    const tooltip = createDOMElement('div', 'blockedTooltip', text);
-    tooltip.style.top = `${buttonRect.top + window.scrollY - 65}px`;
-    tooltip.style.left = `${buttonRect.left + window.scrollX - 5}px`;
-
-    return tooltip;
-}
-
 function createCheck() {
     const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     svg.setAttribute("width", "30");
@@ -186,3 +177,10 @@ function updateSubmitButtonState() {
     submitButton.disabled = !isFormValid();
     submitButton.value = 'Sign Up';
 }
+
+
+const logo = document.querySelector('#logo');
+
+logo.addEventListener('click', () => {
+    window.location.href = '/login';
+});

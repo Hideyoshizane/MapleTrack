@@ -12,7 +12,8 @@ module.exports = {
 
 			const sameUser = await User.findOne({ username });
 			if (sameUser) {
-				req.flash('failed', 'That user already exists!');
+				req.flash('type', 'failed');
+				req.flash('message', 'That user already exists!');
         		res.status(400);
         		return res.redirect('/signup');
 			}
@@ -35,12 +36,8 @@ module.exports = {
 
 	home: async (req, res) => {
 		try {
-			if (req.isAuthenticated()) {
-				const { username, _id } = req.user;
-				return res.render('home', { username, _id });
-			} else {
-				return res.redirect('/login');
-			}
+			const { username, _id } = res.locals;
+			return res.render('home', { username, _id });
 		} catch (error) {
 			console.error('Error rendering home page:', error);
 			res.status(500).json({ error: 'An error occurred while rendering home page' });
@@ -48,11 +45,10 @@ module.exports = {
 	},
 	weeklyBoss: async (req, res) => {
 		try {
-			if(req.isAuthenticated()){
-				const { username, _id } = req.user;
+				const { username, _id } = res.locals;
 				resetBossList(username);
 				await res.render('weeklyBoss', { username, _id });
-			}
+
 		} catch (error) {
 			console.error('Error rendering Weekly Boss page:', error);
 			res.status(500).json({ error: 'An error occurred while rendering Weekly Boss page' });
@@ -60,13 +56,9 @@ module.exports = {
 	},
 	signout: async(req, res) =>{
 		try{
-			if(req.isAuthenticated()){
-				req.logout();
-				res.redirect('/');
-			} else{
-				res.redirect('/login');
-			}
-
+			res.clearCookie('token');
+			res.redirect('/');
+			
 		} catch (error) {
 			console.error('Error signing out', error);
 			res.status(500).json({ error: 'An error occurred while signing out' });
@@ -74,10 +66,8 @@ module.exports = {
 	},
 	account: async(req, res) =>{
 		try{
-			if(req.isAuthenticated()){
-				const { username, _id } = req.user;
-				await res.render('account', { username, _id });
-			}
+			const { username, _id } = res.locals;
+			await res.render('account', { username, _id });
 
 		} catch (error) {
 			console.error('Error', error);
@@ -135,8 +125,7 @@ module.exports = {
 		}
 	},
 	updatePassword: async (req, res) => {
-		if(req.isAuthenticated()){
-			const { username } = req.user;
+			const username  = res.locals.username;
 			const { oldPassword, newPassword } = req.body;
 
 			const foundUser = await User.findOne({ username });
@@ -152,7 +141,6 @@ module.exports = {
 				res.json(false);
 			}
 
-		}
 	}	
 
 };

@@ -6,10 +6,15 @@ const characterCode = segments[3];
 
 window.characterData;
 window.dailyJson;
+window.linkSkillData;
+window.legionData;
 
 document.addEventListener('DOMContentLoaded', async () => {
 	characterData = await fetchCharacterData(username, server, characterCode);
+
+	linkSkillData = await fetch('/../../../public/data/linkskill.json').then((response) => response.json());
 	dailyJson = await fetch('../../../public/data/dailyExp.json').then((response) => response.json());
+	legionData = await fetch('../../../public/data/legionsystems.json').then((response) => response.json());
 
 	await loadCharacterContent(characterData);
 
@@ -18,17 +23,27 @@ document.addEventListener('DOMContentLoaded', async () => {
 		changebossIcon(bossSwitch.checked);
 	});
 
-	discardButton = document.querySelector('.discardButton');
+	const discardButton = document.querySelector('.discardButton');
 	discardButton.addEventListener('click', () => {
 		var url = `/${username}/${server}/${characterCode}`;
 		window.location.href = url;
 	});
 
-	saveButton = document.querySelector('.saveButton');
+	let saveButton = document.querySelector('.saveButton');
 	saveButton.addEventListener('click', async (event) => {
 		await saveDataAndPost();
 	});
-
+	if(saveButton.disabled){
+		saveButton.addEventListener('mouseover', async () => {
+		if (saveButton.disabled) {
+			handleHover(saveButton);
+		}
+		});
+		saveButton.addEventListener('mouseout', async () => {
+			handleMouseOut();
+	}); 
+	}
+	
 	const characterName = document.querySelector('.characterName');
 	const levelNumber = document.querySelector('.levelNumber');
 	const levelTarget = document.querySelector('.levelTarget');
@@ -36,12 +51,22 @@ document.addEventListener('DOMContentLoaded', async () => {
 	characterName.addEventListener('input', async() => {
 		const valid = isValidCharacterName(characterName.value);
 		characterName.style.color = valid ? "#000000" : "#C33232";
-		saveButton.disabled = !	valid;
+		saveButton.disabled = !valid;
+		if(saveButton.disabled){
+			saveButton.addEventListener('mouseover', async () => {
+			if (saveButton.disabled) {
+				handleHover(saveButton);
+			}
+			});
+			saveButton.addEventListener('mouseout', async () => {
+				handleMouseOut();
+		});
+	} 
 	})
 
 	levelNumber.addEventListener('input', async () => {
 		const levelNumberValue = levelNumber.value;
-		const levelTargetValue = levelTarget.value;
+		const levelTargetValue = levelTarget.value || levelTarget.placeholder;
 
 		const jobType = document.querySelector('.characterLevelBar').getAttribute('jobType');
 		const progressBar = document.querySelector('.progressBar');
@@ -66,6 +91,22 @@ document.addEventListener('DOMContentLoaded', async () => {
 		await updateExpBar(progressBar, levelNumberValue, levelTargetValue, 796, jobType);
 
 		await updateClass(levelNumberValue);
+	});
+
+	const linkImg = document.querySelector('.linkImg');
+	linkImg.addEventListener('mouseover', () => {
+		handleLinkImgMouseOver(linkImg);
+	});
+	linkImg.addEventListener('mouseout', () => {
+		handleMouseOut(); 
+	});
+
+	const legionImg = document.querySelector('.legionImg');
+	legionImg.addEventListener('mouseover', () => {
+		handleLegionImgMouseOver(legionImg);
+	});
+	legionImg.addEventListener('mouseout', () => {
+		handleMouseOut(); 
 	});
 
 
@@ -192,8 +233,6 @@ async function loadCharacterNameDiv(characterData) {
 
 async function loadLinkSkillDiv(characterData) {
 	const linkspan = createDOMElement('span', 'linkLegionTitle', 'Link Skill');
-
-	const linkSkillData = await fetch('/../../../public/data/linkskill.json').then((response) => response.json());
 
 	const filteredLink = linkSkillData.find((item) => item.name === characterData.linkSkill);
 
@@ -353,10 +392,9 @@ async function updateLegion(levelNumberValue) {
 	const data = { level, class: codeToClass(characterCode) };
 	const rank = getRank(data);
 	targetImage = document.querySelector('.legionImg');
-	targetImage.src =
-		rank === 'no_rank'
-			? '../../../public/assets/legion/no_rank.webp'
-			: `../../../public/assets/legion/${characterData.jobType}/rank_${rank}.webp`;
+	targetImage.src = rank === 'no_rank'
+								? '../../../public/assets/legion/no_rank.webp'
+								: `../../../public/assets/legion/${characterData.jobType}/rank_${rank}.webp`;
 }
 
 async function updateForce(type, levelNumberValue) {
@@ -368,9 +406,7 @@ async function updateForce(type, levelNumberValue) {
 		const areaName = areaDiv.getAttribute('area');
 		const image = force.querySelector(`.${type}ForceImage`);
 		
-		const areaData = characterData[`${type}Force`].filter(
-			(force) => force.name === areaName
-		);
+		const areaData = characterData[`${type}Force`].filter((force) => force.name === areaName);
 
 		const levelWrapper = force.querySelector('.levelWrapper');
 		const wrap = createDOMElement('div', 'levelWrapper');
@@ -383,11 +419,7 @@ async function updateForce(type, levelNumberValue) {
 			levelWrapper.replaceWith(wrap);
 
 			const checkboxContent = force.querySelector('.checkboxContent');
-			const unlockText = createDOMElement(
-				'span',
-				'unlockText',
-				`Unlock at Level ${minLevel}`
-			);
+			const unlockText = createDOMElement('span','unlockText',`Unlock at Level ${minLevel}`);
 			checkboxContent.replaceWith(unlockText);
 		}
 
@@ -408,11 +440,20 @@ async function updateForce(type, levelNumberValue) {
 			const unlockText = areaDiv.querySelector('.unlockText');
 			let checkboxContent = createDOMElement('div', 'checkboxContent');
 			for (const forceContent of areaData[0].content) {
-				const checkbox = createCheckboxWithLabel(
-					'forceCheckbox',
-					`${forceContent.contentType}`,
-					forceContent.checked
-				);
+				const matchingContent = dailyJson.find(contentName => contentName.name === forceContent.contentType);
+				let contentValue = 0;
+
+				if (matchingContent) {
+					contentValue = matchingContent.value;
+				} else {
+					contentValue = dailyJson.find(contentName => contentName.name === 'Weekly').value;
+				}
+
+			    if (forceContent.contentType === 'Daily Quest') {
+					contentValue = dailyJson.find(contentName => contentName.name === areaData[0].name).value;
+				}
+
+				const checkbox = createCheckboxWithLabel('forceCheckbox',`${forceContent.contentType}: +${contentValue}`,forceContent.checked);
 				checkboxContent.appendChild(checkbox);
 			}
 			unlockText.replaceWith(checkboxContent);
@@ -524,8 +565,6 @@ function returnForceArray(forceType) {
 	return ForceArray;
 }
 
-
-
 function isValidCharacterName(characterName) {
     const minLength = 5;
     const maxLength = 20;
@@ -533,4 +572,104 @@ function isValidCharacterName(characterName) {
     
     return characterName.length >= minLength && characterName.length <= maxLength && alphanumericRegex.test(characterName);
 
+}
+
+function handleHover(saveButton) {
+
+	const saveButtonCenter = getCenterPosition(saveButton);
+
+    const text = 'Please set a valid character name.';
+
+	const tempTooltip = createDOMElement('div', 'infoTooltip', text);
+
+	document.body.appendChild(tempTooltip);
+	const tempTooltipCenter = getCenterPosition(tempTooltip);
+	document.body.removeChild(tempTooltip);
+
+	const offsetX = saveButtonCenter.x - tempTooltipCenter.x;
+
+    const tooltip = createDOMElement('div', 'infoTooltip', text);
+    tooltip.style.top = `${saveButtonCenter.y + 60}px`;
+    tooltip.style.left = `${offsetX}px`;
+    document.body.appendChild(tooltip);
+}
+
+function handleMouseOut() {
+    const tooltip = document.querySelector('.infoTooltip') || document.querySelector('.linkSkillToolTip') || document.querySelector('.LegionImgTooltip');
+    if (tooltip) {
+        tooltip.remove();
+    }
+}
+
+function handleLinkImgMouseOver(linkImg){
+
+	const filteredLink = linkSkillData.find((item) => item.name === characterData.linkSkill).levels;
+	const levelNumber = Number(document.querySelector('.levelNumber').value);
+
+	let text;
+
+	if (levelNumber < 120) {
+		text = filteredLink[0].description;
+	} else if (levelNumber >= 120 && filteredLink.length >= 2) {
+		text = filteredLink[1].description;
+	
+		if (filteredLink.length === 3) {
+			text = filteredLink[2].description;
+		}
+	}
+
+	const tempTooltip = createDOMElement('div', 'linkSkillToolTip', text);
+
+	document.body.appendChild(tempTooltip);
+	const tempTooltipCenter = getCenterPosition(tempTooltip);
+	document.body.removeChild(tempTooltip);
+
+	const linkImgCenter = getCenterPosition(linkImg);
+
+	const tooltip = createDOMElement('div', 'linkSkillToolTip', text);
+
+	const offsetX = linkImgCenter.x - tempTooltipCenter.x;
+
+    tooltip.style.top = `${linkImgCenter.y + 59}px`;
+    tooltip.style.left = `${offsetX}px`;
+    document.body.appendChild(tooltip);
+
+}
+
+function handleLegionImgMouseOver(legionImg){	
+	const levelNumber = Number(document.querySelector('.levelNumber').value);
+	const characterDataPlaceholder = {
+		class: characterData.class,
+		level: levelNumber,
+	}
+
+	const legionInfo = legionData.find((item) => item.name === characterData.legion).ranking;
+	const characterRank = getRank(characterDataPlaceholder);
+	let text = '';
+
+	for (legion of legionInfo) {
+		if (characterRank === legion.rank.toLowerCase()) {
+			text += `<strong>Rank ${legion.rank}: ${legion.description}</strong> <br>`;
+		} else {
+			text += `Rank ${legion.rank}: ${legion.description}<br>`;
+		}
+	}
+
+	const tempTooltip = createDOMElement('div', 'LegionImgTooltip');
+    tempTooltip.innerHTML = `<div>${text}</div>`;
+
+	document.body.appendChild(tempTooltip);
+	const tempTooltipCenter = getCenterPosition(tempTooltip);
+	document.body.removeChild(tempTooltip);
+
+	const legionImgCenter = getCenterPosition(legionImg);
+
+	const tooltip = createDOMElement('div', 'LegionImgTooltip');
+	tooltip.innerHTML = `<div>${text}</div>`;
+
+    const offsetX = legionImgCenter.x - tempTooltipCenter.x;
+    
+    tooltip.style.top = `${legionImgCenter.y + 59}px`;
+	tooltip.style.left = `${offsetX}px`;
+    document.body.appendChild(tooltip);
 }

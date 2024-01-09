@@ -24,12 +24,19 @@ async function createImageElement(src, alt, className = '') {
 	let image;
 	for (let attempt = 1; attempt <= 5; attempt++) {
 	  try {
-		image = createDOMElement('img', className);
-		image.src = src;
-		image.alt = alt;
-  
-		await image.decode();
-		break;
+		const response = await fetch(src, {
+			cache: 'force-cache',
+			headers: {
+			  'x-force-cache': 'true',
+			},
+		  });
+		if (response.ok) {
+		  const image = new Image();
+		  image.src = src;
+		  image.alt = alt;
+		  image.className = className;
+		  return image;
+		}
 	  } catch (error) {
 		console.error(`Error decoding image (attempt ${attempt}):`, error);
 		image = null;
@@ -158,3 +165,11 @@ async function createBlockMark(){
     return fontSize;
 }
 
+function getCenterPosition(element) {
+    const rect = element.getBoundingClientRect();
+
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+
+    return { x: centerX, y: centerY };
+}

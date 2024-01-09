@@ -15,10 +15,10 @@ function getWeeklyResetDate(currentDate, targetDayOfWeek) {
 }
 
 function timeConditionChecker(nextDay, timeNow) {
+
 	if (timeNow.diff(nextDay, 'days').days >= 1) {
 		return true;
 	}
-
 	if (timeNow.hasSame(nextDay, 'day')) {
 		return (timeNow.hour > nextDay.hour ||(timeNow.hour === nextDay.hour && timeNow.minute > nextDay.minute));
 	}

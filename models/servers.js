@@ -23,12 +23,12 @@ const serverSchema = new mongoose.Schema({
 
 
 const defaultServers = [
-  { name: 'Scania' ,img:  '../../assets/icons/servers/scania'  , type: 'Regular'},
-  { name: 'Bera'   ,img:  '../../assets/icons/servers/bera'    , type: 'Regular'},
-  { name: 'Aurora' ,img:  '../../assets/icons/servers/aurora'  , type: 'Regular'},
-  { name: 'Elysium',img:  '../../assets/icons/servers/elysium' , type: 'Regular'},
-  { name: 'Kronos' ,img:  '../../assets/icons/servers/kronos'  , type: 'Reboot'},
-  { name: 'Hyperion' ,img:  '../../assets/icons/servers/hyperion'  , type: 'Reboot'}
+  { name: 'Scania' ,  img:   '/../../assets/icons/servers/scania'   , type: 'Regular'},
+  { name: 'Bera'   ,  img:   '/../../assets/icons/servers/bera'     , type: 'Regular'},
+  { name: 'Aurora' ,  img:   '/../../assets/icons/servers/aurora'   , type: 'Regular'},
+  { name: 'Elysium',  img:   '/../../assets/icons/servers/elysium'  , type: 'Regular'},
+  { name: 'Kronos' ,  img:   '/../../assets/icons/servers/kronos'   , type: 'Reboot'},
+  { name: 'Hyperion' ,img:   '/../../assets/icons/servers/hyperion' , type: 'Reboot'}
 ];
 
 

@@ -5,7 +5,7 @@ module.exports = {
     redirectCharacter: async (req, res) => {
       try {
         const { username, server, characterClass } = req.params;
-        const { _id } = req.user;
+        const  _id  = res.locals._id;
         updateCharactersWeekly(_id);
         res.render('character', {
           username: username,
@@ -22,7 +22,7 @@ module.exports = {
     editCharacter:async (req, res) => {
       try {
         const { username, server, characterClass } = req.params;
-        const { _id } = req.user;
+        const { _id } = res.locals._id;
         res.render('edit', {
           username: username,
           server: server,
@@ -43,9 +43,8 @@ module.exports = {
                 bossing,
                 ArcaneForce, 
                 SacredForce,
-                server,
-                username,
-                characterCode } = req.body;
+                server
+              } = req.body;
         const character = await Character.findById(_id);
         character.name = name;
         character.level = level;
@@ -146,7 +145,9 @@ module.exports = {
             foundArea.exp = Number(foundArea.exp - necessaryExp);
             foundArea.level +=Number(1);
           }
-          foundArea.content[0].date = date;
+  
+          const jsDate = new Date(date);
+          foundArea.content[0].date = jsDate;
           await foundCharacter.save();
           res.status(200).send('Value updated successfully.');
         }

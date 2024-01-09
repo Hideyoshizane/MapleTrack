@@ -142,7 +142,7 @@ function swapContentAndStoreCookie(selectedButton, serverButton) {
   selectedImage.src = serverImage.src;
   selectedName.textContent = serverNameSpan.textContent;
 
-  setCookie('selectedServerContent', serverNameSpan.textContent);
+  setCookie('selectedServerContent', serverNameSpan.textContent.toLowerCase()), 7;
 
 }
 
@@ -152,6 +152,6 @@ function updateToCookie(selectedServer, savedServerContent){
   const newImgSrc = currentImgSrc.replace(/[^/]*\.webp$/, `${savedServerContent}.webp`);
   selectedServerImg.src = newImgSrc;
   selectedServerImg.setAttribute('alt', savedServerContent);
-  selectedServer.querySelector('span').textContent = savedServerContent;
+  selectedServer.querySelector('span').textContent = savedServerContent.charAt(0).toUpperCase() + savedServerContent.slice(1);
 
 }

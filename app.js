@@ -1,10 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 const expressSession = require('express-session');
 const flash = require('express-flash');
-
-const passport = require('passport');
-
 const mongoose = require('mongoose');
 const path = require('path');
 const router = require('./routes');
@@ -21,8 +19,7 @@ app.use(expressSession({
 }));
 
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(passport.initialize());
-app.use(passport.session());
+app.use(cookieParser());
 app.use(flash());
 app.use(express.json()); 
 
@@ -41,7 +38,21 @@ app.use(express.static(path.join(__dirname)));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+
 app.use(express.static(path.join(__dirname, 'public')));
+app.use((req, res, next) => {
+  // Check if the client is requesting a forced cache based on a custom header
+  if (req.headers['x-force-cache'] === 'true') {
+    // Apply the specific Cache-Control header for forced cache
+    res.setHeader('Cache-Control', 'public, max-age=604800');
+  }
+  // Continue to the next middleware
+  next();
+});
+
+
+app.use(express.static(path.join(__dirname, 'public'), { maxAge: 604800000 }));
+
 
 app.use('/', router);
 

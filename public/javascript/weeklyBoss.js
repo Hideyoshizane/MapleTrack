@@ -7,7 +7,7 @@ window.username;
 document.addEventListener('DOMContentLoaded', async () => {
     server = getCookie('selectedServerContent');
     if(server == undefined) {
-      server = 'Scania';
+      server = 'scania';
       setCookie('selectedServerContent', server, 7);
     }
     await fetchBossList();
@@ -37,15 +37,12 @@ async function fetchBossList(){
   try {
     username = document.getElementById("userdata").getAttribute('data-username');
   
-    const response =  await fetch(`/bossList/${username}`);
-    bossList = await response.json();
+    const bossList = await (await fetch(`/bossList/${username}`)).json();
 
-    const jsonPath = '../../../public/data/bosses.json';
-    bossJson = await fetch(jsonPath).then((response) => response.json());
-
+    bossJson = await fetch('../../../public/data/bosses.json').then(response => response.json());
 
     selectedList = bossList.server;
-    selectedList = selectedList.find(servers => servers.name === server);
+    selectedList = selectedList.find(servers => servers.name === server.charAt(0).toUpperCase() + server.slice(1));
   } catch (error) {
     console.error('Error fetching character data:', error);
   }
@@ -332,7 +329,7 @@ function setupBossClickEvents() {
 			const date = DateTime.utc().toJSDate();
 			const checkMark = button.querySelector('.checked') ? true : false;
 			const requestContent = {
-				server: server,
+				server: server.charAt(0).toUpperCase() + server.slice(1),
 				username: username,
 				characterClass: characterClass,
 				bossName: bossName,

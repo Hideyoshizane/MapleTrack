@@ -2,6 +2,7 @@ window.cardBody;
 window.username;
 window.dailyJson;
 window.SymbolsImages;
+window.linkSkillData;
 
 
 
@@ -11,8 +12,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     username = document.getElementById('userdata').getAttribute('data-username');
 
-    dailyJson = await fetch('../../../public/data/dailyExp.json').then((response) => response.json());
-
+    dailyJson = await fetch('/../../../public/data/dailyExp.json').then((response) => response.json());
+    linkSkillData = await fetch('../../public/data/linkskill.json').then(response => response.json());
+    
     const data = await fetch('/userServer').then(response => response.json());
 
     const mainContent = document.querySelector('.mainContent');
@@ -182,7 +184,11 @@ function filterCharacterCards(selectedValues){
   document.querySelectorAll('.cardBody').forEach((element) => {
     const jobType = element.getAttribute('jobType');
     const hasBossIcon = element.querySelector('.bossIcon');
-    if (!selectedValues.includes(jobType))
+
+    const isThiefOrPirate = selectedValues.includes('thief') || selectedValues.includes('pirate');
+
+    
+    if (!selectedValues.includes(jobType) && !(isThiefOrPirate && jobType === 'xenon'))
       element.classList.add('off');
      else 
       element.classList.remove('off');
@@ -326,8 +332,6 @@ async function createLinkSkillContent(characterData){
     const linkImageLevelDiv = createDOMElement('div', 'linkImageLevel');
 
     const linkspan = createDOMElement('span', 'linkLegionTitle', 'Link Skill');
-
-    const linkSkillData = await fetch('../../public/data/linkskill.json').then(response => response.json());
     
     const filteredLink = linkSkillData.find(item => item.name === characterData.linkSkill);
 

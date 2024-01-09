@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     server = getCookie('selectedServerContent'); 
     if(server == undefined) {
-      server = 'Scania';
+      server = 'scania';
       setCookie('selectedServerContent', server, 7);
     }
 
@@ -37,7 +37,7 @@ async function fetchBossList(){
       bossList = await fetch(`/bossList/${username}`).then(response => response.json());
   
       selectedList = bossList.server;
-      selectedList = selectedList.find(servers => servers.name === server);
+      selectedList = selectedList.find(servers => servers.name === server.charAt(0).toUpperCase() + server.slice(1));
       serverType = selectedList.type;
     } catch (error) {
       console.error('Error fetching character data:', error);
@@ -306,6 +306,7 @@ async function loadBosses(){
         if(morethan4){
           difficultButtonText.style.fontSize = '13px';
         }
+    
         const value = serverType == 'Reboot' ? difficult.value * 5 : difficult.value;
 
         difficultButton.appendChild(difficultButtonText);
@@ -314,7 +315,7 @@ async function loadBosses(){
         difficultButton.setAttribute('name',  `${difficult.name}`);
         difficultButton.setAttribute('minLevel', `${difficult.minLevel}`);
 
-        const LevelRequirmentOK = (Character.level > difficult.minLevel);
+        const LevelRequirmentOK = (Character.level >= difficult.minLevel);
 
         if(!LevelRequirmentOK){
           await updateButtonToBlock(difficultButton);
@@ -590,8 +591,12 @@ function dropdownExpand(dropdown, expand = false){
 async function createBlockedTooltip(buttonRect, minLevel){
   const text = `Required Level: \n${minLevel}`;
   const tooltip = createDOMElement('div', 'blockedTooltip', text);
-  tooltip.style.top = `${buttonRect.top + window.scrollY - 65}px`;
-  tooltip.style.left = `${buttonRect.left + window.scrollX - 5}px` ;
+
+  const centerX = buttonRect.left + buttonRect.width / 2;
+  const centerY = buttonRect.top + buttonRect.height / 2;
+
+  tooltip.style.top = `${centerY + window.scrollY - 80}px`;
+  tooltip.style.left = `${centerX + window.scrollX - 64}px`;
 
   return tooltip;
 }
@@ -604,7 +609,7 @@ async function buttonClickedFunctional(button) {
 
   const totalIncomeSpan = bossBox.querySelector('.totalBossIncome');
   const value = Number(button.getAttribute('value'));
-
+  console.log(value);
   const svgInsideButton = button.querySelector('svg');
 
   let newValue = 0;
@@ -706,7 +711,7 @@ async function insertBossOnList(boss, data){
   const bossData = boss[0];
   const bossName = bossData.name;
   const difficultData = bossData.difficulties.find((difficulty) => difficulty.name === data.difficult);
-  const value = server === 'Reboot' ? difficultData.value * 5 : difficultData.value;
+  const value = serverType === 'Reboot' ? difficultData.value * 5 : difficultData.value;
 
   const foundBosses = Character.bosses.filter((searchBoss) => searchBoss.name === bossData.name);
   const foundBossIndex = Character.bosses.findIndex((searchBoss) => searchBoss.name === bossData.name && searchBoss.difficulty === data.difficult);
@@ -807,7 +812,7 @@ async function resetOtherDropdown(dropdown){
 async function updateCharacterTotalIncome(){
   let totalIncome = 0;
   for (const newBoss of Character.bosses) {
-    let value = newBoss.reset == 'Daily' ? Number(newBoss.value) * newBoss.DailyTotal : Number(newBoss.value);
+    const value = newBoss.reset == 'Daily' ? Number(newBoss.value) * newBoss.DailyTotal : Number(newBoss.value);
     totalIncome += value;
   }
   Character.totalIncome = totalIncome;
@@ -838,6 +843,8 @@ async function updateBosses(){
 
     const bossBox = button.parentElement.parentElement;
     const totalIncomeSpan = bossBox.querySelector('.totalBossIncome');
+    const buttonDiv = bossBox.querySelector('.buttonDiv');
+    const totalDificulties = buttonDiv.querySelectorAll('button');
     const value = Number(button.getAttribute('value'));
     const minLevel = button.getAttribute('minLevel');
     const reset = button.getAttribute('reset');
@@ -854,6 +861,9 @@ async function updateBosses(){
         const blockedIcon = button.querySelector('svg');
         button.removeChild(blockedIcon);
         buttonText = createDOMElement('span', 'buttonText', `${button.getAttribute('name')}`);
+        if(totalDificulties.length == 4){
+          buttonText.style.fontSize = '13px';
+        }
         button.appendChild(buttonText);
       }
 

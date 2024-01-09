@@ -6,24 +6,45 @@ const username = segments[1];
 const server = segments[2];
 const characterCode = segments[3];
 
-window.CharacterData;
+window.characterData;
 window.ArcaneTable;
 window.SacredTable;
 window.dailyJson;
+window.linkSkillData;
+window.legionData;
 
 document.addEventListener('DOMContentLoaded', async () => {
 
   ArcaneTable = await fetch('../../public/data/arcaneforceexp.json').then(response => response.json());
   SacredTable = await fetch('../../public/data/sacredforceexp.json').then(response => response.json());
-  dailyJson = await fetch('../../../public/data/dailyExp.json').then((response) => response.json());
+  dailyJson   = await fetch('../../../public/data/dailyExp.json').then((response) => response.json());
+  linkSkillData = await fetch('/../../../public/data/linkskill.json').then((response) => response.json());
+  legionData = await fetch('../../../public/data/legionsystems.json').then((response) => response.json());
 
-  CharacterData = await fetchCharacterData(username, server, characterCode);
+  characterData = await fetchCharacterData(username, server, characterCode);
 
   await loadCharacterContent();
   await loadButtonsEvents();
 
   await loadFlashMessage();
   
+	const linkImg = document.querySelector('.linkImg');
+	linkImg.addEventListener('mouseover', () => {
+		handleLinkImgMouseOver(linkImg);
+	});
+	linkImg.addEventListener('mouseout', () => {
+		handleMouseOut(); 
+	});
+
+	const legionImg = document.querySelector('.legionImg');
+	legionImg.addEventListener('mouseover', () => {
+		handleLegionImgMouseOver(legionImg);
+	});
+	legionImg.addEventListener('mouseout', () => {
+		handleMouseOut(); 
+	});
+
+
 });
 
 const fetchCharacterData = async (username, server, characterCode) => {
@@ -46,7 +67,7 @@ async function loadCharacterContent() {
 async function loadCharacterImage() {
   const parentDiv = document.querySelector('.classImage');
 
-  const image = await createImageElement(`../../public/assets/profile/${characterCode}.webp`, `${CharacterData.class} profile picture`, `portraitImage`);
+  const image = await createImageElement(`../../public/assets/profile/${characterCode}.webp`, `${characterData.class} profile picture`, `portraitImage`);
 
   parentDiv.appendChild(image);
 };
@@ -71,11 +92,11 @@ async function loadCharacterNameDiv(){
 
   const characterInfo = createDOMElement('div','nameLinkLegion');
   
-  const characterName = createDOMElement('span', 'characterName', CharacterData.name);
+  const characterName = createDOMElement('span', 'characterName', characterData.name);
   
   const characterIconDiv = createDOMElement('div','characterIconDiv');
 
-  if(CharacterData.bossing == true){
+  if(characterData.bossing == true){
     const bossIconpath = '../../public/assets/icons/menu/boss_slayer.svg';
     const bossIcon = await loadEditableSVGFile(bossIconpath, 'bossIcon');
     characterIconDiv.appendChild(bossIcon);
@@ -90,10 +111,10 @@ async function loadCharacterNameDiv(){
   const linkSkill = await loadLinkSkillDiv();
   const legion = await loadLegionDiv();
 
-  const JobType = createDOMElement('span','classType', CharacterData.class);
+  const JobType = createDOMElement('span','classType', characterData.class);
   JobType.style.fontSize = await adjustFontSizeToFit(JobType, 367, 48) + 'px';
 
-  const JobLevel = createDOMElement('span','jobLevel', getJob(CharacterData));
+  const JobLevel = createDOMElement('span','jobLevel', getJob(characterData));
 
   const JobDiv = createDOMElement('div','jobDiv');
 
@@ -113,7 +134,7 @@ async function loadLinkSkillDiv(){
   const linkspan = createDOMElement('span', 'linkLegionTitle', 'Link Skill');
 
   const linkSkillData = await fetch('../../public/data/linkskill.json').then(response => response.json());
-  const filteredLink = linkSkillData.find(item => item.name === CharacterData.linkSkill);
+  const filteredLink = linkSkillData.find(item => item.name === characterData.linkSkill);
 
   const linkImg = await createImageElement(filteredLink.image, filteredLink.name, `linkImg`);
  
@@ -130,12 +151,12 @@ async function loadLegionDiv() {
 
   const legionspan = createDOMElement('span','linkLegionTitle', 'Legion');
 
-  let legionRank = getRank(CharacterData);
+  let legionRank = getRank(characterData);
   const legionImgSrc = legionRank === 'no_rank'
   ? '../../public/assets/legion/no_rank.webp'
-  : `../../public/assets/legion/${CharacterData.jobType}/rank_${legionRank}.webp`;
+  : `../../public/assets/legion/${characterData.jobType}/rank_${legionRank}.webp`;
 
-  const legionImg = await createImageElement(legionImgSrc, `${CharacterData.class} legion`, 'legionImg');
+  const legionImg = await createImageElement(legionImgSrc, `${characterData.class} legion`, 'legionImg');
 
   const legionBlock = createDOMElement('div','legionBlock');
 
@@ -150,14 +171,14 @@ async function loadLevelAndLevelBar(){
 
   const level = createDOMElement('span','level', 'Level');
 
-  const levelNumber = createDOMElement('span', 'levelNumber',`${CharacterData.level}/${CharacterData.targetLevel}`);
+  const levelNumber = createDOMElement('span', 'levelNumber',`${characterData.level}/${characterData.targetLevel}`);
 
   const levelDiv = createDOMElement('div','levelDiv');
 
   const levelBarData = {
-    level: CharacterData.level,
-    targetLevel: CharacterData.targetLevel,
-    jobType: CharacterData.jobType,
+    level: characterData.level,
+    targetLevel: characterData.targetLevel,
+    jobType: characterData.jobType,
   }
 
   const levelBar = await createLeveLBar(levelBarData, 796, 'characterLevelBar');
@@ -173,7 +194,7 @@ async function loadForce(isArcane){
   const parentDiv = document.querySelector('.characterData');
 
   const forceType = isArcane ? 'ArcaneForce' : 'SacredForce';
-  const forceData = CharacterData[forceType];
+  const forceData = characterData[forceType];
 
   const Title = createDOMElement('span', forceType, isArcane ? 'Arcane Force' : 'Sacred Force');
 
@@ -192,7 +213,7 @@ async function loadForce(isArcane){
     const minLevel = dailyJson.find(json => json.name === force.name).minLevel;
 
     const icon = await createImageElement(`../../public/assets/${forceType.toLowerCase()}/${areaCode}.webp`, areaName, `${forceType}Image`);
-      if (CharacterData.level < minLevel) {
+      if (characterData.level < minLevel) {
           icon.classList.add('off');
           forceLevel = 0;
       }
@@ -207,7 +228,7 @@ async function loadForce(isArcane){
 
     levelWrapper.appendChild(level);
 
-    if (CharacterData.level >= minLevel) {
+    if (characterData.level >= minLevel) {
       const expContent = createExpText(force, expTable, isArcane);
       levelWrapper.appendChild(expContent);
     }
@@ -218,12 +239,12 @@ async function loadForce(isArcane){
     const levelBarData = {
       level: force.exp,
       targetLevel: expTotal,
-      jobType: CharacterData.jobType,
+      jobType: characterData.jobType,
     }
 
     const expBar = await createLeveLBar(levelBarData, 191, 'forceLevelBar');
     
-    if (CharacterData.level < minLevel) {
+    if (characterData.level < minLevel) {
       const innerbar = expBar.querySelector('.progressBar');
       innerbar.style.width = '0px';
   }
@@ -235,7 +256,7 @@ async function loadForce(isArcane){
     forceDataElement.appendChild(expBar);
 
     if((isArcane && force.level < 20) || (!isArcane && force.level < 11)){
-      if (CharacterData.level >= minLevel) {
+      if (characterData.level >= minLevel) {
         const daysToMax = await returnDaysToMax(force, isArcane);
         const wrap = createDOMElement('div');
         wrap.className = 'buttons';
@@ -311,13 +332,14 @@ function createDailyButton(Force, isArcane = false){
   const dailyValue = getDailyValue(Force, isArcane);
 
   const currentDate = DateTime.utc();
+  const lastDate = Force.content[0].date ? DateTime.fromISO(Force.content[0].date,  { zone: 'utc' }) : null;
 
-  const lastDate = Force.content[0].date ? DateTime.fromJSDate(Force.content[0].date, { zone: 'utc' }) : null;
+  const nextMidnight = lastDate ? lastDate.plus({ days: 1 }).set({ hour: 0, minute: 0, second: 0, millisecond: 0 }) : null;
 
-  const duration =  Force.content[0].date ? timeConditionChecker(currentDate, lastDate) : null;
+  const duration =  Force.content[0].date ? timeConditionChecker(nextMidnight, currentDate) : null;
 
   const dailyButton = createDOMElement('button','dailyButton');
-  if (duration >= 1 || duration == null){
+  if (duration || duration == null){
     dailyButton.textContent = `Daily: + ${dailyValue}`;
   }
   else{
@@ -342,7 +364,7 @@ function getDailyValue(Force, isArcane = false){
   if(isArcane){
     if(Force.content[2] && Force.content[2].checked == true){
       secondAreaMinLevel = Number(dailyJson.find(json => json.name == Force.content[2].contentType).minLevel);
-      if(CharacterData.level >= secondAreaMinLevel){
+      if(characterData.level >= secondAreaMinLevel){
         const secondArea = Number(dailyJson.find(json => json.name == Force.content[2].contentType).value);
         dailyValue += secondArea;
       }
@@ -411,13 +433,13 @@ async function increaseDaily(event){
   isArcane = isArcane.toLowerCase() === 'true';
   const forceName = clickedButton.getAttribute('name');
   const neededExp = await getExp(isArcane, forceName);
-  let currentDate = DateTime.utc().toJSDate();
+  const currentDate = DateTime.utc();
 
   const postData ={
     forceType: isArcane,
     forceName: forceName,
     value: dailyValue,
-    characterData: CharacterData, 
+    characterData: characterData, 
     necessaryExp: neededExp,
     date: currentDate
   }
@@ -438,7 +460,7 @@ async function increaseWeekly(event){
   const postData ={
     forceName: forceName,
     value: 15,
-    characterData: CharacterData, 
+    characterData: characterData, 
     necessaryExp: neededExp,
     date: currentDate
   }
@@ -464,8 +486,8 @@ async function increaseWeekly(event){
 
 async function getExp(isArcane, forceName) {
   const object = isArcane 
-    ? CharacterData.ArcaneForce.find(arcaneforce => arcaneforce.name === forceName)
-    : CharacterData.SacredForce.find(sacredforce => sacredforce.name === forceName);
+    ? characterData.ArcaneForce.find(arcaneforce => arcaneforce.name === forceName)
+    : characterData.SacredForce.find(sacredforce => sacredforce.name === forceName);
     
   const expTable = isArcane ? ArcaneTable : SacredTable;
 
@@ -490,8 +512,8 @@ async function postRequest(postData, URL){
 
 
 async function updateArea(forceName, isArcane){
-  CharacterData = await fetchCharacterData(username, server, characterCode);
-  const forceArray = isArcane ? CharacterData.ArcaneForce : CharacterData.SacredForce;
+  characterData = await fetchCharacterData(username, server, characterCode);
+  const forceArray = isArcane ? characterData.ArcaneForce : characterData.SacredForce;
   const areaProperty = isArcane ? 'ArcaneForceLevel' : 'SacredForceLevel';
   const areaData = forceArray.find((force) => force.name === forceName);
 
@@ -510,7 +532,7 @@ async function updateArea(forceName, isArcane){
 
   innerExpBar = targetDiv.querySelector('.progressBar');
   
-  await updateExpBar(innerExpBar, areaData.exp, nextLevelEXPNumber, 191, CharacterData.jobType);
+  await updateExpBar(innerExpBar, areaData.exp, nextLevelEXPNumber, 191, characterData.jobType);
 
   const remainDays = await updateDayToMax(areaData, isArcane);
 
@@ -572,4 +594,95 @@ async function loadFlashMessage() {
       div.classList.toggle('visible');
     }, 1500);
   }
+}
+
+
+function handleMouseOut() {
+  const tooltip = document.querySelector('.infoTooltip') || document.querySelector('.linkSkillToolTip') || document.querySelector('.LegionImgTooltip');
+  if (tooltip) {
+      tooltip.remove();
+  }
+}
+
+function handleLinkImgMouseOver(linkImg){
+
+const filteredLink = linkSkillData.find((item) => item.name === characterData.linkSkill).levels;
+const levelNumber = Number(document.querySelector('.levelNumber').textContent.split('/')[0].trim());
+
+let text;
+if (levelNumber < 120) {
+  text = filteredLink[0].description;
+} else if (levelNumber >= 120 && filteredLink.length >= 2) {
+  text = filteredLink[1].description;
+
+  if (filteredLink.length === 3) {
+    text = filteredLink[2].description;
+  }
+}
+
+const tempTooltip = createDOMElement('div', 'linkSkillToolTip', text);
+
+document.body.appendChild(tempTooltip);
+const tempTooltipCenter = getCenterPosition(tempTooltip);
+document.body.removeChild(tempTooltip);
+
+const linkImgCenter = getCenterPosition(linkImg);
+
+const tooltip = createDOMElement('div', 'linkSkillToolTip', text);
+
+const offsetX = linkImgCenter.x - tempTooltipCenter.x;
+
+  tooltip.style.top = `${linkImgCenter.y + 59}px`;
+  tooltip.style.left = `${offsetX}px`;
+  document.body.appendChild(tooltip);
+
+}
+
+function handleLegionImgMouseOver(legionImg){	
+const levelNumber = Number(document.querySelector('.levelNumber').textContent.split('/')[0].trim());  
+
+const characterDataPlaceholder = {
+  class: characterData.class,
+  level: levelNumber,
+}
+
+const legionInfo = legionData.find((item) => item.name === characterData.legion).ranking;
+const characterRank = getRank(characterDataPlaceholder);
+let text = '';
+
+for (legion of legionInfo) {
+  if (characterRank === legion.rank.toLowerCase()) {
+    text += `<strong>Rank ${legion.rank}: ${legion.description}</strong> <br>`;
+  } else {
+    text += `Rank ${legion.rank}: ${legion.description}<br>`;
+  }
+}
+
+const tempTooltip = createDOMElement('div', 'LegionImgTooltip');
+  tempTooltip.innerHTML = `<div>${text}</div>`;
+
+document.body.appendChild(tempTooltip);
+const tempTooltipCenter = getCenterPosition(tempTooltip);
+document.body.removeChild(tempTooltip);
+
+const legionImgCenter = getCenterPosition(legionImg);
+
+const tooltip = createDOMElement('div', 'LegionImgTooltip');
+tooltip.innerHTML = `<div>${text}</div>`;
+
+  const offsetX = legionImgCenter.x - tempTooltipCenter.x;
+  
+  tooltip.style.top = `${legionImgCenter.y + 59}px`;
+  tooltip.style.left = `${offsetX}px`;
+  document.body.appendChild(tooltip);
+}
+
+
+function getCenterPosition(element) {
+  const rect = element.getBoundingClientRect();
+
+  const centerX = rect.left + rect.width / 2;
+  const centerY = rect.top + rect.height / 2;
+
+  return { x: centerX, y: centerY };
 }

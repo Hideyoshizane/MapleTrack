@@ -37,3 +37,13 @@ function setCookieFlash(name, value, seconds) {
   
 	document.cookie = `${name}=${encodeURIComponent(value)};expires=${expires.toUTCString()};path=${path}`;
   }
+
+// Set cache control headers for an HTML element
+function setCacheControlHeaders(element) {
+    const millisecondsInDay = 24 * 60 * 60 * 1000;
+    const maxAge = 7 * millisecondsInDay;
+
+    // Set cache control headers on the provided element
+    element.setAttribute('expires', new Date(Date.now() + maxAge).toUTCString());
+    element.setAttribute('cache-control', `max-age=${maxAge / 1000}`);
+}

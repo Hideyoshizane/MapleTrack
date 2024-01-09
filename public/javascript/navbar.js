@@ -123,12 +123,12 @@ async function createSearchResults(characters, parentDiv){
     parentDiv.appendChild(createDOMElement('div', 'result', 'No result found.'));
   }
   else {
+    parentDiv.innerHTML = "";
     for(const characterData of characters){
       const resultDiv = createDOMElement('div',"result");
       resultDiv.setAttribute("data-server", characterData.server);
       resultDiv.setAttribute("data-code", getCode(characterData));
-
-      const img = await createImageElement(`/../../assets/icons/servers/${characterData.server}.webp`);
+      const img = await createImageElement(`/../../assets/icons/servers/${characterData.server.toLowerCase()}.webp`);
       const detailsSpan = createDOMElement('span', '', `\u00A0\u00A0${characterData.server}: ${characterData.name} - ${characterData.class} - Level ${characterData.level}`);
       
       resultDiv.appendChild(img);
@@ -164,3 +164,8 @@ usernameBlock.addEventListener('click', function() {
     isOpen = !isOpen;
 });
 
+const logo = document.querySelector('.logo');
+
+logo.addEventListener('click', () => {
+    window.location.href = '/home';
+});
