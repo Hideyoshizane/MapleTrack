@@ -25,13 +25,14 @@
 <a name="status">
   <h2>Status</h1>
   <h3>Updated up to New Age update.</h3>
-  <a href="https://mapletrack.vercel.app/">Demo site</a>
+
   <br>
 </a>
 
 <a name="demo">
   <h2>Demo Site</h1>
   <h3>You can test the project in the following link:</h3>
+    <a href="https://mapletrack.vercel.app/">Demo site</a>
   <br>
 </a>
 
