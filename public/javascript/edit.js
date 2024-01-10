@@ -344,7 +344,7 @@ async function loadForce(characterData, isArcane) {
 
 			for (forceContent of force.content) {
 				const value = forceContent.contentType == 'Daily Quest' ? dailyJson.find(json => json.name === force.name).value : dailyJson.find(json => json.name === "Weekly").value;
-				const expGain = forceContent.contentType === 'Reverse City' || forceContent.contentType === 'Yum Yum Island' ? '2x' : value;
+				const expGain = forceContent.contentType === 'Reverse City' || forceContent.contentType === 'Yum Yum Island' ? '10' : value;
 				const checkbox = createCheckboxWithLabel('forceCheckbox',`${forceContent.contentType}: +${expGain}`,forceContent.checked);
 				checkboxContent.appendChild(checkbox);
 			}
