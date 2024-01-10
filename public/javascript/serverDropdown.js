@@ -142,7 +142,7 @@ function swapContentAndStoreCookie(selectedButton, serverButton) {
   selectedImage.src = serverImage.src;
   selectedName.textContent = serverNameSpan.textContent;
 
-  setCookie('selectedServerContent', serverNameSpan.textContent.toLowerCase()), 7;
+  setCookie('selectedServerContent', serverNameSpan.textContent.toLowerCase(), 7);
 
 }
 
