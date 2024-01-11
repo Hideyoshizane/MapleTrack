@@ -316,10 +316,14 @@ async function handleServerButtonClick(serverButton, serverButtons) {
 	}
 }
 
-
+let isEventProcessing = false;
 function setupBossClickEvents() {
 	document.body.addEventListener('click', async (event) => {
+    if (isEventProcessing) {
+      return;
+    }
 		if (event.target.closest('.BossButton')) {
+      isEventProcessing = true;
 			const button = event.target.closest('.BossButton');
 
 			const bossName = button.querySelector('.BossName').getAttribute('name');
@@ -359,6 +363,7 @@ function setupBossClickEvents() {
 			await updateCharacterButton(button, !checkMark);
 			await updateTopButtons();
 		}
+    isEventProcessing = false;
 	});
 }
 
