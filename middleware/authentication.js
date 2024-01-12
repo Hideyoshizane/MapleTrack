@@ -19,6 +19,16 @@ const extractUserInfo = (req, res, next) => {
   });
 };
 
+const redirectHome = (req,res, next) =>{
+  const token = req.cookies.token;
+  if(!token){
+    next();
+  } else{
+    res.redirect('/home');
+  }
+
+};
+
 const ensureAuthentication = (req, res, next) => {
   const searchUsername = req.body.username || req.params.username;
   const loggedUsername = res.locals.username;
@@ -38,5 +48,6 @@ const ensureAuthentication = (req, res, next) => {
 
 module.exports = {
   extractUserInfo,
-  ensureAuthentication
+  ensureAuthentication,
+  redirectHome
 };

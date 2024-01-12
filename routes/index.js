@@ -9,20 +9,20 @@ const searchController = require('../controllers/searchController');
 const characterController = require('../controllers/characterController');
 const bossController = require('../controllers/bossController');
 
-router.get('/', async (req, res) => {
+router.get('/', authentication.redirectHome, async (req, res) => {
     res.render('landing');
 });
 
-router.get('/login', async (req, res) => {
+router.get('/login', authentication.redirectHome, async (req, res) => {
     res.render('login', { flash: req.flash() });
 });
 
 
-router.get('/signup', async (req, res) => {
+router.get('/signup', authentication.redirectHome, async (req, res) => {
     res.render('signup', { flash: req.flash() });
 });
 
-router.get('/forgot', async (req, res) => {
+router.get('/forgot', authentication.redirectHome, async (req, res) => {
     res.render('forgot');
 });
 
