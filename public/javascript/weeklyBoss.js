@@ -269,16 +269,18 @@ async function setupCharactersDropdownToggle() {
         button.classList.toggle('closed');
         svgIcon.classList.toggle('rotate');
         const toggle = button.classList.contains('open') ? true : false;
-          await updateGrid(event.target, toggle);
+        await updateGrid(event.target, toggle);
     }
   });
   
 }
 async function updateGrid(buttonWrapper, toggle){
-  const characterDropdown = document.querySelector('.characterDropdown');
-  const grid =  characterDropdown.parentElement;
+  const characterDropdown = document.querySelectorAll('.characterDropdown');
+  const mainContent = document.querySelector('.mainContent');
+  const grid =  characterDropdown[0].parentElement;
   const quantity = characterDropdown.length;
   const numRows = Math.ceil(quantity/ 3);
+
   if(toggle){
     for (let i = 0; i < characterDropdown.length; i++) {
       if (characterDropdown[i].contains(buttonWrapper)) {
