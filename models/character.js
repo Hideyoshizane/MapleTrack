@@ -360,7 +360,7 @@ async function updateCharactersWeekly(userID) {
       })
       .exec();
     const timeNow = DateTime.utc();
-    const userLastLogin = DateTime.fromJSDate(userData.date);
+    const userLastLogin = DateTime.fromJSDate(userData.date, { zone: 'utc' });
     const nextMonday = getWeeklyResetDate(userLastLogin, 1); 
     const MondayPassed = timeConditionChecker(nextMonday, timeNow);
     // Check if the last login date is before the most recent Monday midnight (UTC)
