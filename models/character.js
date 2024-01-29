@@ -3,7 +3,9 @@ const path = require('path');
 const jsonData = require('../public/data/classes.json');
 const { User } = require('./user');
 const {timeConditionChecker, getWeeklyResetDate} = require('../public/javascript/weeklyReset');
+const { codeToClass } = require('../public/javascript/characterData');
 const {DateTime} = require('luxon');
+
 
 const Character = mongoose.model('Character', new mongoose.Schema({
     name: {
@@ -36,6 +38,9 @@ const Character = mongoose.model('Character', new mongoose.Schema({
     },
     userOrigin:{
       type: String,
+    },
+    lastUpdate:{
+      type: Date,
     },
     ArcaneForce: [{
         name:     {type: String, required: true},
@@ -345,35 +350,22 @@ async function updateCharacters(userID) {
   }
 }
 
-async function updateCharactersWeekly(userID) {
+async function updateCharacterWeekly(username, server, characterClass) {
   try {
-    const userData = await User.findById(userID)
-      .populate({
-        path: 'servers',
-        populate: {
-          path: 'characters',
-          model: Character,
-          populate: [
-            { path: 'ArcaneForce' },
-          ],
-        },
-      })
-      .exec();
+    const formattedClass = codeToClass(characterClass);
+    const userData = await Character.findOne({userOrigin: username, server: server, class: formattedClass});
+
     const timeNow = DateTime.utc();
-    const userLastLogin = DateTime.fromJSDate(userData.date, { zone: 'utc' });
-    const nextMonday = getWeeklyResetDate(userLastLogin, 1); 
-    const MondayPassed = timeConditionChecker(nextMonday, timeNow);
+    const userLastLogin = DateTime.fromJSDate(userData.lastUpdate, { zone: 'utc' });
+    const nextMonday = getWeeklyResetDate(userLastLogin, 1);
+
+    const MondayPassed = timeConditionChecker(nextMonday, userLastLogin);
     // Check if the last login date is before the most recent Monday midnight (UTC)
     if (MondayPassed) {
-      for (const server of userData.servers) {
-        for (const character of server.characters) {
-          for (const force of character.ArcaneForce) {
+          for (const force of userData.ArcaneForce) {
             force.content[1].tries = Number(3);
           }
-          await character.save();
-        }   
-      }
-      userData.date = timeNow;
+      userData.lastUpdate = null;
       await userData.save();
       console.log('Weekly update performed.');
     } else {
@@ -422,4 +414,4 @@ async function updateForceData(updatingCharacter, forceType, templateForce) {
 }
 
 
-module.exports = { Character, createDefaultCharacters, createMissingCharacters, updateCharacters, updateCharactersWeekly };
+module.exports = { Character, createDefaultCharacters, createMissingCharacters, updateCharacters, updateCharacterWeekly };

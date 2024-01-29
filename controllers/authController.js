@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
 const { searchServersAndCreateMissing } = require('../models/servers');
-const { updateCharacters, updateCharactersWeekly, createMissingCharacters } = require('../models/character');
+const { updateCharacters, createMissingCharacters } = require('../models/character');
 const { updateLastLogin, LASTVERSION, updateUserVersion, User } = require('../models/user');
 const { resetBossList } = require('../models/bossingList');
 
@@ -29,7 +29,7 @@ module.exports = {
           await updateUserVersion(user._id);
         }
 
-        await updateCharactersWeekly(user._id);
+        await updateLastLogin(user._id);
         await resetBossList(user.username);
         const token = jwt.sign({ _id: user._id, username: user.username }, process.env.SECRET, { expiresIn: '7d' });
         res.cookie('token', token, { httpOnly: true, maxAge: 604800000 });

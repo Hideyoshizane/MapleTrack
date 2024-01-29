@@ -10,13 +10,11 @@ function getWeeklyResetDate(currentDate, targetDayOfWeek) {
       millisecond: 0,
     })
     .plus({ days: daysUntilNextDayOfWeek === 0 ? 7 : daysUntilNextDayOfWeek });
-
   return nextDayOfWeek;
 }
 
 function timeConditionChecker(nextDay, timeNow) {
-
-	if (timeNow.diff(nextDay, 'days').days >= 1) {
+	if (timeNow == null || timeNow.diff(nextDay, 'days').days >= 1) {
 		return true;
 	}
 	if (timeNow.hasSame(nextDay, 'day')) {

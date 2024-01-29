@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt');
-const { User, LASTVERSION, resetPasswordEmptyUser } = require('../models/user');
+const { User, LASTVERSION, resetPasswordEmptyUser} = require('../models/user');
 const { searchServersAndCreateMissing, getServerWithHighestLevel, getHighestLevelCharacter} = require('../models/servers');
 const { createBossList, resetBossList } = require('../models/bossingList');
 
@@ -141,6 +141,5 @@ module.exports = {
 				res.json(false);
 			}
 
-	}	
-
+	}
 };

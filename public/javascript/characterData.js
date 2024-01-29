@@ -44,4 +44,8 @@ function codeToClass(code) {
 		return formattedCode.replace(/_/g, ' ');
 	}
 }
-  
+
+
+module.exports = {
+    codeToClass
+};

@@ -1,4 +1,4 @@
-const {Character, updateCharactersWeekly} = require('../models/character');
+const {Character, updateCharacterWeekly} = require('../models/character');
 const {insertOnBossList, removeFromBossList} = require('../models/bossingList');
 
 module.exports = {
@@ -6,7 +6,7 @@ module.exports = {
       try {
         const { username, server, characterClass } = req.params;
         const  _id  = res.locals._id;
-        updateCharactersWeekly(_id);
+        updateCharacterWeekly(username, server, characterClass);
         res.render('character', {
           username: username,
           server: server,
