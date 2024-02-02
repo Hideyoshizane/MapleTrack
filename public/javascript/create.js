@@ -22,28 +22,54 @@ function createDOMElement(tag, className = '', content = '', type = '') {
 
 async function createImageElement(src, alt, className = '') {
 	let image = null;
+  
 	while (!image) {
-		try {
+
+	  try {
+		const cache = await caches.open('images-cache');
+		const cachedResponse = await cache.match(src);
+  
+		if (cachedResponse) {
+		  image = new Image();
+		  image.src = src;
+		  image.alt = alt;
+		  image.className = className;
+
+		} else {
 		  const response = await fetch(src, {
 			cache: 'force-cache',
 			headers: {
 			  'x-force-cache': 'true',
 			},
 		  });
+  
 		  if (response.ok) {
 			image = new Image();
 			image.src = src;
 			image.alt = alt;
 			image.className = className;
+  
+			await cache.put(src, response.clone());
+  
+			await new Promise((resolve, reject) => {
+			  image.onload = resolve;
+			  image.onerror = reject;
+			});
 		  } else {
 			console.error(`Failed to fetch image from ${src}`);
+			await new Promise(resolve => setTimeout(resolve, 1000));
 		  }
-		} catch (error) {
-		  console.error('Error fetching image:', error);
 		}
+	  } catch (error) {
+		console.error('Error fetching image:', error);
+		await new Promise(resolve => setTimeout(resolve, 1000));
+	  }
 	}
+  
 	return image;
   }
+  
+  
 
 async function loadEditableSVGFile(filePath, className) {
 	try {
