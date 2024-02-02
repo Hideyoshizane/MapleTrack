@@ -21,28 +21,27 @@ function createDOMElement(tag, className = '', content = '', type = '') {
 }
 
 async function createImageElement(src, alt, className = '') {
-	let image;
-	for (let attempt = 1; attempt <= 5; attempt++) {
-	  try {
-		const response = await fetch(src, {
+	let image = null;
+	while (!image) {
+		try {
+		  const response = await fetch(src, {
 			cache: 'force-cache',
 			headers: {
 			  'x-force-cache': 'true',
 			},
 		  });
-		if (response.ok) {
-		  const image = new Image();
-		  image.src = src;
-		  image.alt = alt;
-		  image.className = className;
-		  return image;
+		  if (response.ok) {
+			image = new Image();
+			image.src = src;
+			image.alt = alt;
+			image.className = className;
+		  } else {
+			console.error(`Failed to fetch image from ${src}`);
+		  }
+		} catch (error) {
+		  console.error('Error fetching image:', error);
 		}
-	  } catch (error) {
-		console.error(`Error decoding image (attempt ${attempt}):`, error);
-		image = null;
-	  }
 	}
-
 	return image;
   }
 

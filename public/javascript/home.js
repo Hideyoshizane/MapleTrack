@@ -382,27 +382,32 @@ async function createLegionContent(characterData){
   return legionDiv;
 }
 
+let bossIcon;
+
+async function loadBossIcon(){
+  const bossIconpath = '../../public/assets/icons/menu/boss_slayer.svg';
+  bossIcon = await loadEditableSVGFile(bossIconpath);
+  bossIcon.setAttribute('class', 'bossIcon');
+  const innerSVG = bossIcon.querySelector('svg');
+  innerSVG.setAttribute('width', '38');
+  innerSVG.setAttribute('height', '38');
+
+}
 
 async function createBossIconAndName(characterData) {
  
   const characterName = createDOMElement('span', 'characterName', characterData.name);
-
   const nameAndIcon = createDOMElement('div', 'nameAndIcon');
 
-  if (characterData.bossing) {
-    const bossIconpath = '../../public/assets/icons/menu/boss_slayer.svg';
-    const bossIcon = await loadEditableSVGFile(bossIconpath);
-  
-    bossIcon.setAttribute('class', 'bossIcon');
-    const innerSVG = bossIcon.querySelector('svg');
-    innerSVG.setAttribute('width', '38');
-    innerSVG.setAttribute('height', '38');
+  if (!bossIcon) {
+    await loadBossIcon();
+  }
 
-    nameAndIcon.appendChild(bossIcon);
+  if (characterData.bossing) {
+    nameAndIcon.appendChild(bossIcon.cloneNode(true));
   }
   
   nameAndIcon.appendChild(characterName);
-
   return nameAndIcon;
 }
 
