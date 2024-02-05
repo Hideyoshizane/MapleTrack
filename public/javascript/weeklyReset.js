@@ -14,7 +14,8 @@ function getWeeklyResetDate(currentDate, targetDayOfWeek) {
 }
 
 function timeConditionChecker(nextDay, timeNow) {
-	if (timeNow == null || timeNow.diff(nextDay, 'days').days >= 1) {
+
+	if (!timeNow.isValid || !nextDay.isValid || timeNow.diff(nextDay, 'days').days >= 1) {
 		return true;
 	}
 	if (timeNow.hasSame(nextDay, 'day')) {

@@ -359,13 +359,13 @@ async function updateCharacterWeekly(username, server, characterClass) {
     const userLastLogin = DateTime.fromJSDate(userData.lastUpdate, { zone: 'utc' });
     const nextMonday = getWeeklyResetDate(userLastLogin, 1);
 
-    const MondayPassed = timeConditionChecker(nextMonday, userLastLogin);
+    const MondayPassed = timeConditionChecker(nextMonday, timeNow);
     // Check if the last login date is before the most recent Monday midnight (UTC)
     if (MondayPassed) {
           for (const force of userData.ArcaneForce) {
             force.content[1].tries = Number(3);
           }
-      userData.lastUpdate = null;
+      userData.lastUpdate = DateTime.now();
       await userData.save();
       console.log('Weekly update performed.');
     } else {
