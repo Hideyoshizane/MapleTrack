@@ -1,6 +1,6 @@
 {
   "name": "mapletrack",
-  "version": "1.1.9",
+  "version": "1.2.0",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -10,29 +10,29 @@
   "author": "Hideki Yoshizane",
   "license": "MIT",
   "dependencies": {
-    "assert": "^2.0.0",
-    "bcrypt": "^5.1.0",
+    "assert": "^2.1.0",
+    "bcrypt": "^5.1.1",
     "body-parser": "^1.20.2",
     "cookie-parser": "^1.4.6",
-    "dotenv": "^16.3.1",
+    "dotenv": "^16.4.4",
     "ejs": "^3.1.9",
     "express": "^4.18.2",
     "express-flash": "^0.0.2",
-    "express-session": "^1.17.3",
+    "express-session": "^1.18.0",
     "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
-    "luxon": "^3.3.0",
-    "mongoose": "^7.4.2",
-    "node": "^20.1.0",
+    "luxon": "^3.4.4",
+    "mongoose": "^8.1.2",
+    "node": "^21.6.1",
     "path": "^0.12.7"
   },
   "devDependencies": {
-    "babel-loader": "^9.1.2",
-    "css-loader": "^6.7.3",
-    "html-webpack-plugin": "^5.5.1",
-    "style-loader": "^3.3.2",
-    "webpack": "^5.82.0",
-    "webpack-cli": "^5.0.2"
+    "babel-loader": "^9.1.3",
+    "css-loader": "^6.10.0",
+    "html-webpack-plugin": "^5.6.0",
+    "style-loader": "^3.3.4",
+    "webpack": "^5.90.1",
+    "webpack-cli": "^5.1.4"
   },
   "browser": {
     "async_hooks": false,

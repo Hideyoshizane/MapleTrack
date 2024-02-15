@@ -23,10 +23,7 @@ app.use(cookieParser());
 app.use(flash());
 app.use(express.json()); 
 
-mongoose.connect(DB_URL, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+mongoose.connect(DB_URL);
 
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error:"));
