@@ -8,18 +8,18 @@
   <img src="https://img.shields.io/static/v1?label=npm&message=10.2.3&color=blue&style=for-the-badge&logo=npm"/>
   <img src="https://img.shields.io/static/v1?label=express&message=4.18.2&color=blue&style=for-the-badge&logo=express"/>
   <img src="https://img.shields.io/static/v1?label=node.JS&message=20.1.0&color=blue&style=for-the-badge&logo=nodedotjs"/>
-  <img src="https://img.shields.io/static/v1?label=release&message=1.2.0&color=darkgreen&style=for-the-badge"/>
+  <img src="https://img.shields.io/static/v1?label=release&message=1.2.1&color=darkgreen&style=for-the-badge"/>
 </div>
 <br>
 
 <p align="center">
- <a href="#status">Status</a> •
+  <a href="#status">Status</a> •
   <a href="#demo">Demo</a> •
- <a href="#features">Features</a> • 
- <a href="#running">Running</a> • 
- <a href="#technologies">Used technologies</a> • 
- <a href="#author">Author</a> • 
-   <a href="#license">License</a>
+  <a href="#features">Features</a> • 
+  <a href="#running">Running</a> • 
+  <a href="#technologies">Used technologies</a> • 
+  <a href="#author">Author</a> • 
+  <a href="#license">License</a>
 </p>
 
 <a name="status">

@@ -551,7 +551,7 @@ async function updateDayToMax(areaData, isArcane){
   const weeklyValue = Number(dailyJson.find(json => json.name === 'Weekly').value);
   let totalExp = calculateTotalExp(areaData.level, expTable);
   let dailyExp = getDailyValue(areaData, isArcane);
-  const weeklyExp = (areaData.content[2] && areaData.content[2].checked && isArcane) ? (weeklyValue*3) : 0;
+  const weeklyExp = (areaData.content[1] && areaData.content[1].checked && isArcane) ? (weeklyValue*3) : 0;
   totalExp -= areaData.exp;
   return Math.ceil(totalExp / (dailyExp + (weeklyExp / 7)));
 }

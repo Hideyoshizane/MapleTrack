@@ -28,7 +28,7 @@ async function createImageElement(src, alt, className = '') {
 	  try {
 		const cache = await caches.open('images-cache');
 		const cachedResponse = await cache.match(src);
-  
+		
 		if (cachedResponse) {
 		  image = new Image();
 		  image.src = src;
@@ -67,7 +67,7 @@ async function createImageElement(src, alt, className = '') {
 	}
   
 	return image;
-  }
+}
   
   
 
