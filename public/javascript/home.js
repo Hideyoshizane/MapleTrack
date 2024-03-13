@@ -315,7 +315,7 @@ async function setForceLevel(forceArea, characterData, forceImg, forceType) {
     level = 0;
   }
 
-  level = level === (forceType === 'arcane' ? 20 : 10) ? 'MAX' : `Lv. ${level}`;
+  level = level === (forceType === 'arcane' ? 20 : 11) ? 'MAX' : `Lv. ${level}`;
 
   return level;
 }
