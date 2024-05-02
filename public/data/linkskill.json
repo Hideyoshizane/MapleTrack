@@ -435,8 +435,8 @@
   ]
 },
 {
-  "name": "Focus Spirit",
-  "image": "/../../public/assets/link_skill/beast_tamer.webp",
+  "name": "Spirit Guide Blessing",
+  "image": "/../../public/assets/link_skill/lynn.webp",
   "levels": [
     {
       "level": 1,
