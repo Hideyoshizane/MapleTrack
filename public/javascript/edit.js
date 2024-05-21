@@ -66,12 +66,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 	levelNumber.addEventListener('input', async () => {
 		const levelNumberValue = levelNumber.value;
-		const levelTargetValue = levelTarget.value || levelTarget.placeholder;
 
-		const jobType = document.querySelector('.characterLevelBar').getAttribute('jobType');
-		const progressBar = document.querySelector('.progressBar');
-		await updateExpBar(progressBar, levelNumberValue, levelTargetValue, 796, jobType);
-		
 		await updateClass(levelNumberValue);
 		await updateLegion(levelNumberValue);
 	});
@@ -80,18 +75,30 @@ document.addEventListener('DOMContentLoaded', async () => {
 		const level = levelNumber.value;
 		await updateForce('Arcane', level);
 		await updateForce('Sacred', level);
+
+		const levelNumberValue = levelNumber.value;
+		const levelTargetValue = levelTarget.value || levelTarget.placeholder;
+		const jobType = document.querySelector('.characterLevelBar').getAttribute('jobType');
+		const progressBar = document.querySelector('.progressBar');
+
+		await updateExpBar(progressBar, levelNumberValue, levelTargetValue, 796, jobType);
+
 	});
 
 	levelTarget.addEventListener('input', async () => {
 		const levelNumberValue = levelNumber.value;
+		
+		await updateClass(levelNumberValue);
+	});
+
+	levelTarget.addEventListener('blur', async function(){
+		const levelNumberValue = levelNumber.value;
 		const levelTargetValue = levelTarget.value;
 		const jobType = document.querySelector('.characterLevelBar').getAttribute('jobType');
 		const progressBar = document.querySelector('.progressBar');
-		
-		await updateExpBar(progressBar, levelNumberValue, levelTargetValue, 796, jobType);
 
-		await updateClass(levelNumberValue);
-	});
+		await updateExpBar(progressBar, levelNumberValue, levelTargetValue, 796, jobType);
+	})
 
 	const linkImg = document.querySelector('.linkImg');
 	linkImg.addEventListener('mouseover', () => {
