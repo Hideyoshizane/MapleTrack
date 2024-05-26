@@ -1,41 +1,38 @@
 function createDOMElement(tag, className = '', content = '', type = '') {
 	const element = document.createElement(tag);
 
-	if (className) {
+	if(className)
 		element.classList.add(className);
-	}
 
-	if (content !== '') {
+	if(content !== '')
 		element.textContent = content;
-	}
 
-	if (tag == 'input') {
+	if(tag == 'input')
 		element.placeholder = content;
-	}
 
-	if (type !== '') {
+	if(type !== '')
 		element.type = type;
-	}
 
 	return element;
 }
 
-async function createImageElement(src, alt, className = '') {
+async function createImageElement(src, alt, className = ''){
 	let image = null;
   
-	while (!image) {
+	while(!image){
 
 	  try {
 		const cache = await caches.open('images-cache');
 		const cachedResponse = await cache.match(src);
 		
-		if (cachedResponse) {
+		if (cachedResponse){
 		  image = new Image();
 		  image.src = src;
 		  image.alt = alt;
 		  image.className = className;
 
-		} else {
+		} 
+		else{
 		  const response = await fetch(src, {
 			cache: 'force-cache',
 			headers: {
@@ -43,7 +40,7 @@ async function createImageElement(src, alt, className = '') {
 			},
 		  });
   
-		  if (response.ok) {
+		  if(response.ok){
 			image = new Image();
 			image.src = src;
 			image.alt = alt;
@@ -55,7 +52,8 @@ async function createImageElement(src, alt, className = '') {
 			  image.onload = resolve;
 			  image.onerror = reject;
 			});
-		  } else {
+		  } 
+		  else {
 			console.error(`Failed to fetch image from ${src}`);
 			await new Promise(resolve => setTimeout(resolve, 1000));
 		  }

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const { defaultServers } = require('./servers');
 const {DateTime} = require('luxon');
-const weeklyReset = require('../public/javascript/weeklyReset');
+const weeklyReset = require('../public/javascript/utils/weeklyReset');
 
 const bossList = mongoose.model('bossList', new mongoose.Schema({
     userOrigin:   {type: String,},

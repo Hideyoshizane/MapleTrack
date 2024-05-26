@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/navbar.css">
     <link rel="stylesheet" href="/css/character.css">
+    <link rel="stylesheet" href="/css/loader.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="shortcut icon" type="image/x-icon" href="/icon.ico">
@@ -16,18 +17,26 @@
     <%- include('navbar') %>
     <div class="center-container">
         <div class="mainContent">
-            <div class="classImage"></div>
-            <div class="characterData"></div>
+            <div class="classImage">
+                <img src="/public/assets/profile/<%- characterClass %>.webp" alt="Lara profile picture" class="portraitImage">
+            </div>
+            <div class="characterData">
+                <div class="buttonWrapper">
+                    <button class="increaseAllButton">Increase all</button>
+                    <button class="editButton">Edit Character</button>
+                </div>
+            </div>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/luxon@3.4.3/build/global/luxon.min.js"></script>
-    <script src="/../public/javascript/weeklyReset.js"></script>
-    <script src="/../public/javascript/navbar.js"></script>
-    <script src="/../public/javascript/create.js"></script>
-    <script src="/../public/javascript/cookies.js"></script>
-    <script src="/../public/javascript/characterData.js"></script>
-    <script src="/../public/javascript/progressBar.js"></script>
-    <script src="/../public/javascript/character.js"></script>
+    <script src="/../public/javascript/utils/weeklyReset.js"></script>
+    <script src="/../public/javascript/utils/navbar.js"></script>
+    <script src="/../public/javascript/utils/create.js"></script>
+    <script src="/../public/javascript/utils/cookies.js"></script>
+    <script src="/../public/javascript/utils/characterData.js"></script>
+    <script src="/../public/javascript/utils/progressBar.js"></script>
+    <script src="/../public/javascript/character/character_load.js"></script>
+    <script src="/../public/javascript/character/character_logic.js"></script>
     
     <script id="userdata" data-username="<%- username %>" data-username-id="<%- _id %>"></script>
 </body>

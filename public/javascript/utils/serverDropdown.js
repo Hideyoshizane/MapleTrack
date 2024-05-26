@@ -5,7 +5,6 @@ async function loadServerButtons(data, parentDiv){
 
   const serverSelector = createDOMElement('div', 'serverSelector');
   const selectedServer = createDOMElement('div', 'selectedServer');
-  const dropdown = createDOMElement('div', 'dropdown');
 
   const arrowSVG = await createArrowSVG();
   const savedServerContent = getCookie('selectedServerContent');
@@ -62,8 +61,7 @@ async function loadServerButtons(data, parentDiv){
 
       dropdownToggle.appendChild(selectedServer);
       dropdownToggle.appendChild(serverSelector);
-      dropdown.appendChild(dropdownToggle);
-      parentDiv.appendChild(dropdown);
+      parentDiv.appendChild(dropdownToggle);
   }
   
 

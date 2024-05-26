@@ -4,111 +4,30 @@ window.dailyJson;
 window.SymbolsImages;
 window.linkSkillData;
 
-
-
 document.addEventListener('DOMContentLoaded', async () => {
   try {
-    await loadSymbolsImage();
 
     username = document.getElementById('userdata').getAttribute('data-username');
 
     dailyJson = await fetch('/../../../public/data/dailyExp.json').then((response) => response.json());
+
+    await loadSymbolsImage();
+
     linkSkillData = await fetch('../../public/data/linkskill.json').then(response => response.json());
     
     const data = await fetch('/userServer').then(response => response.json());
 
-    const mainContent = document.querySelector('.mainContent');
-
-    await loadServerButtons(data, mainContent);
     const dropdown = document.querySelector('.dropdown');
-
-    mainContent.insertBefore(dropdown, mainContent.firstChild);
-
-    setupDropdownToggle();
-  
-    const characterCardDiv = document.querySelector('.characterCards');
-    const selectedButton = dropdownToggle.querySelector('.SelectedButton');
-    await createCharacterCards();
-  
-    const serverButtons = document.querySelector('.serverSelector').querySelectorAll('.serverButton');     
-    for (const serverButton of serverButtons) {
-      serverButton.addEventListener('click', async () => {
-        await handleServerButtonClick(serverButton, serverButtons, selectedButton, characterCardDiv);
-      });
-    }
-
-    setupCardClickListeners();
+    await loadServerButtons(data, dropdown);
     
+    startLoader();
+    await createCharacterCards();
+
+    document.dispatchEvent(new Event('PageLoaded'));
+
   } catch (error) {
     console.error('Error fetching user data:', error);
   }
-});
-
-
-async function handleServerButtonClick(serverButton, serverButtons, selectedButton, characterCardDiv) {
-  if(selectedButton.textContent !== serverButton.textContent) {
-    serverButtons.forEach(button => {
-      button.classList.add('notSelected');
-      button.classList.remove('selected');
-  });
-
-  swapContentAndStoreCookie(selectedButton, serverButton);
-
-  serverButton.classList.toggle('notSelected');
-  serverButton.classList.toggle('selected');
-
-  characterCardDiv.innerHTML = '';
-  
-  await createCharacterCards();
-
-  setupCardClickListeners();
-  }
-}
-
-function setupCardClickListeners() {
-  cardBody.forEach((card) => {
-    card.addEventListener('click', async () =>{
-      const server = document.querySelector('.SelectedButton').querySelector('span').innerText;
-      const character = card.getAttribute('characterclass');
-      var url = `${username}/${server}/${character}`;
-      window.location.href = url;
-    });
-  });
-}
-
-const filterButtons = document.querySelectorAll('.filterButton');
-const savedFilterValues = getCookie('filterValues');
-const filterCookies = savedFilterValues ? savedFilterValues.split(',') : [];
-
-// Load filter values from cookies
-
-filterButtons.forEach(button => {
-    const dataValue = button.getAttribute('data-value');
-    if (filterCookies.includes(dataValue))
-        button.classList.add('selected');
-});
-
-// Filter Button logic
-const selectedValues = filterCookies.slice();
-
-filterButtons.forEach(button => {
-    button.addEventListener('click', () => {
-        button.classList.toggle('selected');
-        
-        const dataValue = button.getAttribute('data-value');
-        if (button.classList.contains('selected')) {
-            if (!selectedValues.includes(dataValue)) {
-                selectedValues.push(dataValue);
-            }
-        } else {
-            const dataIndex = selectedValues.indexOf(dataValue);
-            if (dataIndex !== -1) {
-                selectedValues.splice(dataIndex, 1);
-            }
-        }
-        filterCharacterCards(selectedValues);
-        updateSelectedValuesCookie();
-    });
 });
 
 async function loadSymbolsImage() {
@@ -128,6 +47,12 @@ async function loadSymbolsImage() {
   };
 }
 
+function startLoader(){
+  const parentDiv = document.querySelector('.characterCards');
+  const loader = createDOMElement('span', 'loader');
+  loader.style.marginTop = '250px'; 
+  parentDiv.appendChild(loader);
+}
 
 async function createCharacterCards(){
   const parentDiv = document.querySelector('.characterCards');
@@ -144,6 +69,10 @@ async function createCharacterCards(){
   characterCards.forEach((card) => {
     characterCardFragment.appendChild(card);
   });
+
+  const loaderSpan = parentDiv.querySelector('.loader');
+  if(loaderSpan)
+    parentDiv.removeChild(loaderSpan);
 
   parentDiv.appendChild(characterCardFragment);
   filterCharacterCards(selectedValues);

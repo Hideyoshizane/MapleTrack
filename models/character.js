@@ -2,8 +2,8 @@ const mongoose = require('mongoose');
 const path = require('path');
 const jsonData = require('../public/data/classes.json');
 const { User } = require('./user');
-const {timeConditionChecker, getWeeklyResetDate} = require('../public/javascript/weeklyReset');
-const { codeToClass } = require('../public/javascript/characterData');
+const {timeConditionChecker, getWeeklyResetDate} = require('../public/javascript/utils/weeklyReset');
+const { codeToClass } = require('../public/javascript/utils/characterData');
 const {DateTime} = require('luxon');
 
 

@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/navbar.css">
     <link rel="stylesheet" href="css/home.css">
+    <link rel="stylesheet" href="css/loader.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="shortcut icon" type="image/x-icon" href="/icon.ico">
@@ -16,6 +17,7 @@
     <%- include('navbar') %>
     <div class="center-container">
         <div class="mainContent">
+            <div class="dropdown"></div>
             <div class= "filterButtons">
                 <p>Class Filter</p>
                 <div class ="buttonWrap">
@@ -38,12 +40,13 @@
         </div>
     </div>
     <script id="userdata" data-username="<%- username %>" data-username-id="<%- _id %>"></script>
-    <script src="/../public/javascript/progressBar.js"></script>
-    <script src="/../public/javascript/navbar.js"></script>
-    <script src="/../public/javascript/create.js"></script>
-    <script src="/../public/javascript/serverDropdown.js"></script>
-    <script src="/../public/javascript/cookies.js"></script>
-    <script src="/../public/javascript/characterData.js"></script>
-    <script src="/../public/javascript/home.js"></script>
+    <script src="/../public/javascript/utils/progressBar.js"></script>
+    <script src="/../public/javascript/utils/navbar.js"></script>
+    <script src="/../public/javascript/utils/create.js"></script>
+    <script src="/../public/javascript/utils/serverDropdown.js"></script>
+    <script src="/../public/javascript/utils/cookies.js"></script>
+    <script src="/../public/javascript/utils/characterData.js"></script>
+    <script src="/../public/javascript/home/home_load.js"></script>
+    <script src="/../public/javascript/home/home_logic.js"></script>
 </body>
 </html>
