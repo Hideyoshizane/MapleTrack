@@ -64,7 +64,7 @@ document.addEventListener('PageLoaded', async () => {
         }
       }
     }else{
-      grid.style.transition = 'min-height 0.3s ease';
+      grid.style.transition = 'min-height 0.3s ease-in-out';
       grid.style.minHeight =  '250px';
     }
   }

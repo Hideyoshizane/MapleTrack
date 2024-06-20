@@ -8,40 +8,20 @@ const {DateTime} = require('luxon');
 
 
 const Character = mongoose.model('Character', new mongoose.Schema({
-    name: {
-        type: String,
-    },
-    level:{
-        type: Number,
-    },
-    targetLevel:{
-      type: Number,
-    },
-    class: {
-      type: String,
-    },
-    jobType:{
-      type: String,
-    },
-    legion: {
-      type: String,
-    },
-    linkSkill: { 
-      type: String 
-    },
+    name: {type: String},
+    level:{type: Number},
+    targetLevel:{type: Number},
+    class: {type: String},
+    jobType:{type: String},
+    legion: {type: String},
+    linkSkill: {type: String},
     bossing: {
       type: Boolean,
       default: false
     },
-    server:{
-      type: String,
-    },
-    userOrigin:{
-      type: String,
-    },
-    lastUpdate:{
-      type: Date,
-    },
+    server:{type: String},
+    userOrigin:{type: String},
+    lastUpdate:{type: Date},
     ArcaneForce: [{
         name:     {type: String, required: true},
         level:    {type: Number, required: true},
@@ -294,9 +274,7 @@ async function createMissingCharacters(userID, username){
   
   for(server of userData.servers){
     const serverCharacterCodes = server.characters.map((character) => character.class);
-    const serverMissingCharacters = jsonData.filter(
-      (character) => !serverCharacterCodes.includes(character.class)
-    );
+    const serverMissingCharacters = jsonData.filter((character) => !serverCharacterCodes.includes(character.class));
     for(missingCharacter  of serverMissingCharacters){
       const createdCharacter = await createCharacter(missingCharacter , server.name, username);
       server.characters.push(createdCharacter._id);
@@ -307,21 +285,16 @@ async function createMissingCharacters(userID, username){
   }
 }
 
-async function createCharacter(jsonData, serverName, username){
-  var character = {
-    name: templateCharacter.name,
-    level: templateCharacter.level,
-    targetLevel: templateCharacter.targetLevel,
-    class: jsonData.className,
-    jobType: jsonData.jobType,
-    legion: jsonData.legionType  ,
-    linkSkill: jsonData.linkSkill,
-    bossing: templateCharacter.bossing,
+async function createCharacter(data, serverName, username){
+  const character = {
+    ...templateCharacter,
+    class: data.className,
+    jobType: data.jobType,
+    legion: data.legionType,
+    linkSkill: data.linkSkill,
     server: serverName,
-    userOrigin: username,
-    ArcaneForce: [...templateCharacter.ArcaneForce],
-    SacredForce: [...templateCharacter.SacredForce],
-  }
+    userOrigin: username
+  };
   return new Character(character);
 }
 
