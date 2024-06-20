@@ -14,8 +14,8 @@ const DB_URL = process.env.DB_URL || 'mongodb://localhost:27017';
 const app = express();
 
 const mongoOptions = {
-  serverSelectionTimeoutMS: 5000, 
-  socketTimeoutMS: 45000
+  serverSelectionTimeoutMS: 10000, 
+  socketTimeoutMS: 20000
 };
 
 // MongoDB connection
@@ -33,7 +33,7 @@ app.use(expressSession({
   secret: process.env.SECRET || 'random',
   resave: false, 
   saveUninitialized: false, 
-  store: MongoStore.create({ mongoUrl: DB_URL, mongoOptions })
+  store: MongoStore.create({ mongoUrl: DB_URL, mongoOptions,  mongooseConnection: mongoose.connection })
 }));
 
 app.use(bodyParser.urlencoded({ extended: true }));
