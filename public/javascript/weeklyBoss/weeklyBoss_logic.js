@@ -57,7 +57,6 @@ document.addEventListener('PageLoaded', async () => {
           if(i >= startIndexOfLastRow && i <= endIndexOfLastRow && characterDropdown[i].querySelector('.BossButton')){
             const height = (numRows * 144) + 288;
             grid.style.minHeight = height + 'px';
-            body.style.overflowY = 'visible';
           }
   
           break;
