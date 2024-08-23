@@ -211,7 +211,7 @@ async function updateTopButtons(){
   const totalProgress = document.querySelector('.totalProgress');
   totalProgress.textContent = `${selectedList.weeklyBosses}/180`;
 
-  await updateExpBar(document.querySelector('.progressBar'), selectedList.weeklyBosses, 9.375, 11.615, 'default');
+  await updateExpBar(document.querySelector('.progressBar'), selectedList.weeklyBosses, 180, 11.615, 'default');
 
   const totalGoldValue = document.querySelector('.totalGoldValue');
   newGoldValue = `${selectedList.totalGains.toLocaleString('en-US')}`;
