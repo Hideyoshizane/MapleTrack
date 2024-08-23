@@ -163,10 +163,17 @@ async function createBlockMark(){
 	return svg;
   
   }
-  async function adjustFontSizeToFit(totalGainValue, boxWidth, originalSize) {
-	const copy = totalGainValue.cloneNode(true);
-	copy.style.width = 'auto';
-    copy.style.fontSize = originalSize + 'px';
+  async function adjustFontSizeToFit(totalGainValue, boxWidthVW, originalSizeRem) {
+    // Convert boxWidth from vw to px
+    const boxWidthPx = (boxWidthVW / 100) * window.innerWidth;
+
+    // Convert originalSize from rem to px
+    const rootFontSize = parseFloat(getComputedStyle(document.documentElement).fontSize);
+    let fontSizePx = originalSizeRem * rootFontSize;
+
+    const copy = totalGainValue.cloneNode(true);
+    copy.style.width = 'auto';
+    copy.style.fontSize = fontSizePx + 'px';
     copy.style.fontFamily = 'Inter';
     copy.style.whiteSpace = 'pre-line';
   
@@ -178,15 +185,19 @@ async function createBlockMark(){
     document.body.appendChild(container);
   
     let width = copy.offsetWidth;
-    let fontSize = originalSize;
-    while (width > boxWidth && fontSize > 0) {
-      fontSize -= 1;
-      copy.style.fontSize = fontSize + 'px';
-      width = copy.offsetWidth;
+    while (width > boxWidthPx && fontSizePx > 0) {
+        fontSizePx -= 1;
+        copy.style.fontSize = fontSizePx + 'px';
+        width = copy.offsetWidth;
     }
+
     document.body.removeChild(container);
-    return fontSize;
+
+    // Convert the adjusted fontSize from px to rem
+    const fontSizeRem = fontSizePx / rootFontSize;
+    return fontSizeRem;
 }
+
 
 function getCenterPosition(element) {
     const rect = element.getBoundingClientRect();

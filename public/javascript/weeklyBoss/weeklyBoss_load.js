@@ -73,7 +73,7 @@ async function createWeekProgress(){
       targetLevel: 180,
       jobType: 'default',
     }
-    const progressBar = await createLeveLBar(levelBarData, 223, "WeeklyProgress");    
+    const progressBar = await createLeveLBar(levelBarData, 11.615, "WeeklyProgress");    
 
     textDiv.appendChild(totalProgress);
     textDiv.appendChild(progressBar);
@@ -84,7 +84,7 @@ async function createTotalGain(){
 
   const GainValue = `${selectedList.totalGains.toLocaleString('en-US')}`;
   const totalGainValue = createDOMElement('span','totalGoldValue', GainValue);
-  totalGainValue.style.fontSize = await adjustFontSizeToFit(totalGainValue, 265, 32) + 'px';
+  totalGainValue.style.fontSize = await adjustFontSizeToFit(totalGainValue, 13.802, 2) + 'rem';
 
   parentDiv.appendChild(totalGainValue);
 }
@@ -112,7 +112,7 @@ async function loadCharacterCards(){
     characterImage = await createImageElement(imgSource, 'character Profile', 'profile');
 
     characterName = createDOMElement('span', 'characterName', `${characters.name}`);
-    characterName.style.fontSize = await adjustFontSizeToFit(characterName, 182, 28) + 'px';
+    characterName.style.fontSize = await adjustFontSizeToFit(characterName, 9.479, 1.75) + 'rem';
     characterClass = createDOMElement('span', 'characterClass', `${characters.class}`);
 
     characterWrapper = createDOMElement('div', 'characterWrapper');
@@ -176,7 +176,7 @@ async function createBossButton(boss){
   const bossImage = await createImageElement(bossImgPath, `${boss.name}`, 'bossImg');
 
   const bossInfo = createDOMElement('span', 'BossName', `${boss.difficulty} ${boss.name.replace(/\n/g, ' ')}`);
-  bossInfo.style.fontSize = await adjustFontSizeToFit(bossInfo, 286, 32) + 'px';
+  bossInfo.style.fontSize = await adjustFontSizeToFit(bossInfo, 14.896, 2) + 'rem';
   bossInfo.setAttribute('name', boss.name);
   bossInfo.setAttribute('difficult', boss.difficulty);
 
@@ -211,12 +211,12 @@ async function updateTopButtons(){
   const totalProgress = document.querySelector('.totalProgress');
   totalProgress.textContent = `${selectedList.weeklyBosses}/180`;
 
-  await updateExpBar(document.querySelector('.progressBar'), selectedList.weeklyBosses, 180, 223, 'default');
+  await updateExpBar(document.querySelector('.progressBar'), selectedList.weeklyBosses, 9.375, 11.615, 'default');
 
   const totalGoldValue = document.querySelector('.totalGoldValue');
   newGoldValue = `${selectedList.totalGains.toLocaleString('en-US')}`;
 
-  totalGoldValue.style.fontSize = await adjustFontSizeToFit(totalGoldValue, 265, 32) + 'px';
+  totalGoldValue.style.fontSize = await adjustFontSizeToFit(totalGoldValue, 13.802, 2) + 'rem';
   totalGoldValue.textContent = newGoldValue;
 
   const characters = document.querySelector('.characters');

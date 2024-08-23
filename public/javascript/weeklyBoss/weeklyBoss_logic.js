@@ -43,28 +43,39 @@ document.addEventListener('PageLoaded', async () => {
     
   }
   async function updateGrid(buttonWrapper, toggle){
-    const body = document.querySelector('body');
+    const viewportHeight = window.innerHeight
     const characterDropdown = document.querySelectorAll('.characterDropdown');
     const grid =  characterDropdown[0].parentElement;
     const quantity = characterDropdown.length;
     const numRows = Math.ceil(quantity/ 3);
   
-    if(toggle){
+    if (toggle) {
       for (let i = 0; i < characterDropdown.length; i++) {
         if (characterDropdown[i].contains(buttonWrapper)) {
           const startIndexOfLastRow = (numRows - 1) * 3;
+          const startIndexOfPenultimateRow = (numRows - 2) * 3;
           const endIndexOfLastRow = quantity - 1;
-          if(i >= startIndexOfLastRow && i <= endIndexOfLastRow && characterDropdown[i].querySelector('.BossButton')){
-            const height = (numRows * 144) + 288;
-            grid.style.minHeight = height + 'px';
+    
+          // Verifica se o índice está na penúltima linha
+          if (i >= startIndexOfPenultimateRow && i < startIndexOfLastRow && characterDropdown[i].querySelector('.BossButton')) {
+            const height = (numRows * 144) + 144; // Ajuste para a penúltima linha
+            const heightInVh = (height / viewportHeight) * 100;
+            grid.style.minHeight = heightInVh + 'vh';
           }
-  
+    
+          // Verifica se o índice está na última linha
+          if (i >= startIndexOfLastRow && i <= endIndexOfLastRow && characterDropdown[i].querySelector('.BossButton')) {
+            const height = (numRows * 144) + 288; // Ajuste para a última linha
+            const heightInVh = (height / viewportHeight) * 100;
+            grid.style.minHeight = heightInVh + 'vh';
+          }
+    
           break;
         }
       }
     }else{
       grid.style.transition = 'min-height 0.3s ease-in-out';
-      grid.style.minHeight =  '250px';
+      grid.style.minHeight =  '27.442vh';
     }
   }
   

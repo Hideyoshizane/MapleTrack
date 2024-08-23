@@ -108,7 +108,7 @@ async function loadCharacterNameDiv(characterData) {
 	const legion = await loadLegionDiv(characterData);
 
 	const JobType = createDOMElement('span', 'classType', characterData.class);
-	JobType.style.fontSize = await adjustFontSizeToFit(JobType, 367, 48) + 'px';
+	JobType.style.fontSize = await adjustFontSizeToFit(JobType, 19.115, 3) + 'rem';
 
 	const JobLevel = createDOMElement('span', 'jobLevel', getJob(characterData));
 
@@ -185,7 +185,7 @@ async function loadLevelAndLevelBar(characterData) {
 		jobType: characterData.jobType,
 	  }
 
-	const levelBar = await createLeveLBar(levelBarData, 796, 'characterLevelBar');
+	const levelBar = await createLeveLBar(levelBarData, 41.458, 'characterLevelBar');
 	levelBar.setAttribute('jobType', characterData.jobType);
 	
 	levelDiv.appendChild(level);

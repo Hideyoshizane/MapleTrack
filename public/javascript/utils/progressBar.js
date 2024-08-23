@@ -34,7 +34,7 @@ async function updateExpBar(progressBar, level, targetLevel, maxWidth, jobType) 
   if (barSize > maxWidth) {
     barSize = maxWidth;
   }
-  progressBar.style.width = barSize + 'px';
+  progressBar.style.width = barSize + 'vw';
   const { color } = Number(level) >= Number(targetLevel) ? characterColors["complete"] : characterColors[jobType];
   progressBar.style.backgroundColor = color;
 }

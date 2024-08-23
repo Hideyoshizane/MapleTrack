@@ -113,7 +113,7 @@ async function createTotalIncome(){
     const totalIncome = Character ? await calculateTotalIncome() : 0;
 
     const totalIncomeSpan = createDOMElement('span', 'TotalIncome', totalIncome);
-    totalIncomeSpan.style.fontSize = await adjustFontSizeToFit(totalIncomeSpan, 224, 32) + 'px';
+    totalIncomeSpan.style.fontSize = await adjustFontSizeToFit(totalIncomeSpan, 11.667, 2) + 'rem';
 
     IncomeTextDiv.appendChild(totalIncomeSpan);
     parentDiv.appendChild(IncomeTextDiv);
@@ -179,7 +179,7 @@ async function loadCharacterIncome(){
   const totalIncome = Character.totalIncome.toLocaleString('en-US');
 
   const totalIncomeSpan = createDOMElement('span', 'characterTotalIncome', `${totalIncome}`);
-  totalIncomeSpan.style.fontSize = await adjustFontSizeToFit(totalIncomeSpan, 224, 32) + 'px';
+  totalIncomeSpan.style.fontSize = await adjustFontSizeToFit(totalIncomeSpan, 11.667, 2) + 'rem';
 
   IncomeTextDiv.appendChild(totalIncomeSpan);
 
@@ -255,7 +255,7 @@ async function loadBosses(){
 
       const image = await createImageElement(boss.img, `${boss.name}` ,'bossPicture');
       const name = createDOMElement('span', 'bossName', boss.name);
-      name.style.fontSize = await adjustFontSizeToFit(name, 124, 32) + 'px';
+      name.style.fontSize = await adjustFontSizeToFit(name, 6.458, 2) + 'rem';
       
       bossBox.appendChild(image);
       bossBox.appendChild(name);
@@ -271,7 +271,7 @@ async function loadBosses(){
         const difficultButton = createDOMElement('button',  `${tag}`);
         const difficultButtonText = createDOMElement('span', 'buttonText',`${difficult.name}`);
         if(morethan4){
-          difficultButtonText.style.fontSize = '13px';
+          difficultButtonText.style.fontSize = '0.813rem';
         }
     
         const value = serverType == 'Reboot' ? difficult.value * 5 : difficult.value;
@@ -316,7 +316,7 @@ async function loadBosses(){
 
       if(totalIncoming > 0){
         totalBossIncome.style.display = 'block';
-        totalBossIncome.style.fontSize = await adjustFontSizeToFit(totalBossIncome, 118, 16) + 'px';
+        totalBossIncome.style.fontSize = await adjustFontSizeToFit(totalBossIncome, 6.146, 1) + 'rem';
         bossBox.classList.add('open');
       }
 

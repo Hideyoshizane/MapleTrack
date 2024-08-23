@@ -59,12 +59,12 @@ document.addEventListener('PageLoaded', async () => {
             await updateForce('Arcane', level);
             await updateForce('Sacred', level);
 
-            const levelNumberValue = levelNumber.value;
+            const levelNumberValue = levelNumber.value || levelNumber.placeholder;
             const levelTargetValue = levelTarget.value || levelTarget.placeholder;
             const jobType = document.querySelector('.characterLevelBar').getAttribute('jobType');
             const progressBar = document.querySelector('.progressBar');
 
-            await updateExpBar(progressBar, levelNumberValue, levelTargetValue, 796, jobType);
+            await updateExpBar(progressBar, levelNumberValue, levelTargetValue, 41.458, jobType);
 
         });
 
@@ -75,12 +75,12 @@ document.addEventListener('PageLoaded', async () => {
         });
 
         levelTarget.addEventListener('blur', async function(){
-            const levelNumberValue = levelNumber.value;
-            const levelTargetValue = levelTarget.value;
+			const levelNumberValue = levelNumber.value || levelNumber.placeholder;
+            const levelTargetValue = levelTarget.value || levelTarget.placeholder;
             const jobType = document.querySelector('.characterLevelBar').getAttribute('jobType');
             const progressBar = document.querySelector('.progressBar');
 
-            await updateExpBar(progressBar, levelNumberValue, levelTargetValue, 796, jobType);
+            await updateExpBar(progressBar, levelNumberValue, levelTargetValue, 41.458, jobType);
         })
 
         const linkImg = document.querySelector('.linkImg');
@@ -355,11 +355,17 @@ function handleLinkImgMouseOver(linkImg){
 		}
 	}
 
+	mainContent = document.querySelector('.mainContent');
+
 	const tempTooltip = createDOMElement('div', 'linkSkillToolTip', text);
 
-	document.body.appendChild(tempTooltip);
+	tempTooltip.style.position = 'absolute';
+	tempTooltip.style.visibility = 'hidden';
+
+	mainContent.appendChild(tempTooltip);
+
 	const tempTooltipCenter = getCenterPosition(tempTooltip);
-	document.body.removeChild(tempTooltip);
+	mainContent.removeChild(tempTooltip);
 
 	const linkImgCenter = getCenterPosition(linkImg);
 
@@ -368,7 +374,7 @@ function handleLinkImgMouseOver(linkImg){
 	const offsetX = linkImgCenter.x - tempTooltipCenter.x;
 
     tooltip.style.top = `${linkImgCenter.y + 59}px`;
-    tooltip.style.left = `${offsetX}px`;
+    tooltip.style.left = `${offsetX + 164}px`;
     document.body.appendChild(tooltip);
 
 }
@@ -392,12 +398,17 @@ function handleLegionImgMouseOver(legionImg){
 		}
 	}
 
+	mainContent = document.querySelector('.mainContent');
+
 	const tempTooltip = createDOMElement('div', 'LegionImgTooltip');
     tempTooltip.innerHTML = `<div>${text}</div>`;
 
-	document.body.appendChild(tempTooltip);
+	tempTooltip.style.position = 'absolute';
+	tempTooltip.style.visibility = 'hidden';
+
+	mainContent.appendChild(tempTooltip);
 	const tempTooltipCenter = getCenterPosition(tempTooltip);
-	document.body.removeChild(tempTooltip);
+	mainContent.removeChild(tempTooltip);
 
 	const legionImgCenter = getCenterPosition(legionImg);
 
@@ -407,6 +418,6 @@ function handleLegionImgMouseOver(legionImg){
     const offsetX = legionImgCenter.x - tempTooltipCenter.x;
     
     tooltip.style.top = `${legionImgCenter.y + 59}px`;
-	tooltip.style.left = `${offsetX}px`;
+	tooltip.style.left = `${offsetX + 164}px`;
     document.body.appendChild(tooltip);
 }

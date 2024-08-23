@@ -85,7 +85,7 @@ async function loadCharacterNameDiv(){
   const legion = await loadLegionDiv();
 
   const JobType = createDOMElement('span','classType', characterData.class);
-  JobType.style.fontSize = await adjustFontSizeToFit(JobType, 367, 48) + 'px';
+  JobType.style.fontSize = await adjustFontSizeToFit(JobType, 19.115, 3) + 'rem';
 
   const JobLevel = createDOMElement('span','jobLevel', getJob(characterData));
 
@@ -154,7 +154,7 @@ async function loadLevelAndLevelBar(){
     jobType: characterData.jobType,
   }
 
-  const levelBar = await createLeveLBar(levelBarData, 796, 'characterLevelBar');
+  const levelBar = await createLeveLBar(levelBarData, 41.458, 'characterLevelBar');
 
   levelDiv.appendChild(level);
   levelDiv.appendChild(levelNumber);
@@ -215,7 +215,7 @@ async function loadForce(isArcane){
       jobType: characterData.jobType,
     }
 
-    const expBar = await createLeveLBar(levelBarData, 191, 'forceLevelBar');
+    const expBar = await createLeveLBar(levelBarData, 9.948, 'forceLevelBar');
     
     if (characterData.level < minLevel) {
       const innerbar = expBar.querySelector('.progressBar');

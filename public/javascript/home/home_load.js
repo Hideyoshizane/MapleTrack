@@ -193,7 +193,7 @@ async function generateCard(characterData){
     jobType: characterData.jobType,
   }
   const levelBarWrapper = createDOMElement('div', 'levelBarWrapper');
-  const levelBar = await createLeveLBar(levelBarData, 480, 'levelBar');
+  const levelBar = await createLeveLBar(levelBarData, 25, 'levelBar');
 
   levelBarWrapper.appendChild(levelBar);
   

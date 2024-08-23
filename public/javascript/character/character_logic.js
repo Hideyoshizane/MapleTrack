@@ -86,7 +86,7 @@ document.addEventListener('PageLoaded', async () => {
     }
   }
   
-  function handleLinkImgMouseOver(linkImg){
+function handleLinkImgMouseOver(linkImg){
   
   const filteredLink = linkSkillData.find((item) => item.name === characterData.linkSkill).levels;
   const levelNumber = Number(document.querySelector('.levelNumber').textContent.split('/')[0].trim());
@@ -101,12 +101,17 @@ document.addEventListener('PageLoaded', async () => {
       text = filteredLink[2].description;
     }
   }
-  
+  mainContent = document.querySelector('.mainContent');
+
   const tempTooltip = createDOMElement('div', 'linkSkillToolTip', text);
-  
-  document.body.appendChild(tempTooltip);
+
+  tempTooltip.style.position = 'absolute';
+  tempTooltip.style.visibility = 'hidden';
+
+  mainContent.appendChild(tempTooltip);
+
   const tempTooltipCenter = getCenterPosition(tempTooltip);
-  document.body.removeChild(tempTooltip);
+  mainContent.removeChild(tempTooltip);
   
   const linkImgCenter = getCenterPosition(linkImg);
   
@@ -114,11 +119,11 @@ document.addEventListener('PageLoaded', async () => {
   
   const offsetX = linkImgCenter.x - tempTooltipCenter.x;
   
-    tooltip.style.top = `${linkImgCenter.y + 59}px`;
-    tooltip.style.left = `${offsetX}px`;
-    document.body.appendChild(tooltip);
+  tooltip.style.top = `${linkImgCenter.y + 59}px`;
+  tooltip.style.left = `${offsetX + 164}px`;
+  document.body.appendChild(tooltip);
   
-  }
+}
   
   function handleLegionImgMouseOver(legionImg){	
   const levelNumber = Number(document.querySelector('.levelNumber').textContent.split('/')[0].trim());  
@@ -140,12 +145,17 @@ document.addEventListener('PageLoaded', async () => {
     }
   }
   
+  mainContent = document.querySelector('.mainContent');
+
   const tempTooltip = createDOMElement('div', 'LegionImgTooltip');
-    tempTooltip.innerHTML = `<div>${text}</div>`;
+  tempTooltip.innerHTML = `<div>${text}</div>`;
+
+  tempTooltip.style.position = 'absolute';
+  tempTooltip.style.visibility = 'hidden';
   
-  document.body.appendChild(tempTooltip);
+  mainContent.appendChild(tempTooltip);
   const tempTooltipCenter = getCenterPosition(tempTooltip);
-  document.body.removeChild(tempTooltip);
+  mainContent.removeChild(tempTooltip);
   
   const legionImgCenter = getCenterPosition(legionImg);
   
@@ -155,7 +165,7 @@ document.addEventListener('PageLoaded', async () => {
     const offsetX = legionImgCenter.x - tempTooltipCenter.x;
     
     tooltip.style.top = `${legionImgCenter.y + 59}px`;
-    tooltip.style.left = `${offsetX}px`;
+    tooltip.style.left = `${offsetX + 164}px`;
     document.body.appendChild(tooltip);
   }
   
@@ -277,7 +287,7 @@ async function updateArea(forceName, isArcane){
 
   innerExpBar = targetDiv.querySelector('.progressBar');
   
-  await updateExpBar(innerExpBar, areaData.exp, nextLevelEXPNumber, 191, characterData.jobType);
+  await updateExpBar(innerExpBar, areaData.exp, nextLevelEXPNumber, 9.948, characterData.jobType);
 
   const remainDays = await updateDayToMax(areaData, isArcane);
 

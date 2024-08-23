@@ -142,15 +142,15 @@ function dropdownExpand(dropdown, expand = false){
   button = parentdiv.parentNode;
   buttonText = button.querySelector('.buttonText');
   buttonText.style.display = expand === true ? 'none' : 'block';
-  dropdown.style.width = expand === true ? '117px' : '18px';
-  dropdown.style.height = expand === true ? 'auto' : '25px';
+  dropdown.style.width = expand === true ? '6.094vw' : '0.938vw';
+  dropdown.style.height = expand === true ? 'auto' : '2.744vh';
   dropdown.style.zIndex = expand === true ? '9' : '1';
   dropdown.style.display = expand === true ? 'block' : 'none';
 
   parentdiv.style.overflow = expand === true ? 'hidden' : '';
-  parentdiv.style.marginTop = expand === true ? '3px' : '0';
-  parentdiv.style.width = expand === true ? '117px' : 'auto';
-  parentdiv.style.height = expand === true ? '200px' : '25px';
+  parentdiv.style.marginTop = expand === true ? '0.188rem' : '0';
+  parentdiv.style.width = expand === true ? '6.094vw' : 'auto';
+  parentdiv.style.height = expand === true ? '200px' : '2.744vh';
   button.style.alignItems = expand === true ? 'flex-start' : 'center';
 }
 
@@ -216,7 +216,9 @@ async function updateBossIncomeSpan(value, bossBox, Add, totalIncomeSpan){
   bossBox.setAttribute('totalIncome', bossBoxValue);
 
   totalIncomeSpan.innerText = bossBoxValue.toLocaleString('en-us');
-  totalIncomeSpan.style.fontSize = await adjustFontSizeToFit(totalIncomeSpan, 118, 16) + 'px';
+  totalIncomeSpan.style.fontSize = await adjustFontSizeToFit(totalIncomeSpan, 4.896, 1) + 'rem';
+
+  console.log(totalIncomeSpan.style.fontSize);
 
   if (bossBoxValue > 0) {
     bossBox.classList.add('open');
@@ -392,9 +394,7 @@ async function changeCharacterIncome(){
   const totalIncomeValue = Character.totalIncome.toLocaleString('en-us');
   const TotalIncome = document.querySelector('.characterTotalIncome');
   TotalIncome.textContent = totalIncomeValue;
-  const fontSize = await adjustFontSizeToFit(TotalIncome, 224, 32);
-
-  TotalIncome.style.fontSize = fontSize + 'px';
+  TotalIncome.style.fontSize = await adjustFontSizeToFit(TotalIncome, 4.896, 1) + 'rem';
 }
 
 async function updateTotalCharactersIncome(){

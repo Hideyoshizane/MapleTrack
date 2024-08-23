@@ -23,10 +23,10 @@ body {
 }
 
 .center{
-    margin-top: 32px;
+    margin-top: 2rem;
     border-radius: 25px;
-    width: 600px;
-    height: 620px;
+    width: 31.25vw;
+    height: 68.057vh;
     background-color: #BEBFC6;
     display: flex;
     justify-content: flex-start;
@@ -37,46 +37,46 @@ body {
 }
 
 .lock{
-    margin-top: 32px;
+    margin-top: 2rem;
 }
 
 .title{
-    font-size: 32px;
+    font-size: 2rem;
     font-weight: 500;
-    margin-top: 16px;
+    margin-top: 1rem;
 }
 
 .subtitle{
-    width: 440px;
-    font-size: 24px;
+    width: 22.917vw;
+    font-size: 1.5rem;
     font-weight: 300;
-    margin-top: 16px;
+    margin-top: 1rem;
     text-align: center;
 }
 
 .usernameSpan{
-    width: 425px;
-    font-size: 20px;
+    width: 22.135vw;
+    font-size: 1.25rem;
     font-weight: 500;
-    margin-top: 32px;
+    margin-top: 2rem;
 }
 
 .username{
-    border-radius: 10px;
-    margin-top: 8px;
-    width: 433px;
-    height: 60px;
-    font-size: 26px;
+    border-radius: 0.625rem;
+    margin-top: 0.5rem;
+    width: 22.552vw;
+    height: 6.586vh;
+    font-size: 1.625rem;
     border: none;
     background-color: #E9EAEC;
     color: #141414;
     box-sizing: border-box;
-    padding-left: 8px;
+    padding-left: 0.5rem;
 }
 
 .username::placeholder{
     font-family: 'Inter';
-    font-size: 26px;
+    font-size: 1.625rem;
     color: #B8B8B8;
 }
 
@@ -85,11 +85,11 @@ body {
 }
 
 .sendButton{
-    border-radius: 10px;
-    margin-top: 64px;
-    width: 300px;
-    height: 60px;
-    font-size: 26px;
+    border-radius: 0.625rem;
+    margin-top: 4rem;
+    width: 15.625vw;
+    height: 6.586vh;
+    font-size: 1.625rem;
     border: none; 
     background-color: #7BD96D;
     color: #141414;
@@ -103,8 +103,8 @@ body {
 }
 
 .error{
-    font-size: 20px;
-    margin-top: 8px;
-    width: 430px;
+    font-size: 1.25rem;
+    margin-top: 0.5rem;
+    width: 22.396vw;
     color: #9F0606;
 }

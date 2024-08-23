@@ -1,17 +1,19 @@
 ::-webkit-scrollbar-track{
-	border-radius: 10px;
+	border-radius: 0.625rem;
 	background-color: #F5F5F5;
+
 }
 
 ::-webkit-scrollbar{
-	width: 2px;
+	width: 0.125rem;
 	background-color: #F5F5F5;
+    z-index: 6;
 }
 ::-webkit-scrollbar-thumb{
-	border-radius: 10px;
-	background-color: #8F8F8F;
+	border-radius: 0.625rem;
+	background-color: #3D3D3D;
+    width: 0.125rem;
 }
-
 
 body{
     background-color: #FFFFFF;
@@ -31,42 +33,42 @@ body{
 
 .gradient{
     position: fixed;
-    height: 197px;
-    width: 1920px;
+    height: 21.625vh;
+    width: 100vw;
     background: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, 0.51) 55.08%, rgba(0, 0, 0, 0.00) 85.07%);
 }
 
 #logo{
     position: fixed;
-    width: 337px;
-    height: 135px;
-    margin-top: 16px;
-    margin-left: 48px;
+    width: 17.552vw;
+    height: 14.819vh;
+    margin-top: 1rem;
+    margin-left: 3rem;
 }
 .signin{
     font-family: Inter;
-    font-size: 48px;
+    font-size: 3rem;
     font-weight: 400;
     background-color: transparent;
     color: #FFF;
-    height: 58px;
+    height: 6.367vh;
     border: none;
-    margin-top: 56px;
-    margin-right: 48px;
+    margin-top: 3.5rem;
+    margin-right: 3rem;
     cursor: pointer;
     position: fixed;
-    right: 344px;
+    right: 17.917vw;
 }
 
 .signup{
     color: #000;
     font-family: Inter;
-    font-size: 48px;
+    font-size: 3rem;
     font-weight: 700;
-    width: 296px;
-    height: 85px;
-    margin-top: 40px;
-    margin-right: 48px;
+    width: 15.417vw;
+    height: 9.33vh;
+    margin-top: 2.5rem;
+    margin-right: 3rem;
     border-radius: 50px;
     background: #00D7A3;
     position: fixed;
@@ -77,8 +79,8 @@ body{
 
 .first {
     position: relative;
-    width: 2871.111px;
-    height: 1615px;
+    width: 149.537vw;
+    height: 177.278vh;
     overflow: hidden; /* Hides the overflowing content */
 }
 
@@ -86,28 +88,28 @@ body{
     font-family: Inter;
     color: #FFFFFF;
     position: absolute;
-    top: 198px;
-    left: 900px;
+    top: 12.375rem;
+    left: 46.875vw;
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 1.5rem;
     z-index: 2;
 }
 
 #character {
     position: absolute;
-    top: 138px;
-    left: -550px;
-    width: 1379px;
-    height: 1194px;
+    top: 15.148vh;
+    left: -28.646vw;
+    width: 71.823vw;
+    height: 131.065vh;
     z-index: 2;
 }
 
 .second{
-    margin-left: 40px;
+    margin-left: 2.5rem;
     font-family: Inter;
     color: #000000;
-    margin-top: 132px;
+    margin-top: 14.49vh;
     align-items: center;
     display: flex;
     justify-content: space-between;
@@ -117,21 +119,21 @@ body{
 #pic2,
 #pic3,
 #pic4{
-    width: 1135px;
-    height: 579px;
+    width: 59.115vw;
+    height: 63.557vh;
     box-shadow: 0px 0px 15px 5px rgba(66, 66, 66, 0.80);
 }
 
 .right{
-    margin-right: 40px;
+    margin-right: 2.5rem;
 }
 .left{
-    margin-left: 40px;
+    margin-left: 2.5rem;
 }
 
 .third,
 .fourth{
-    margin-top: 352px;
+    margin-top: 38.639vh;
     align-items: center;
     display: flex;
     justify-content: space-between;
@@ -141,31 +143,31 @@ body{
     display: flex;
     flex-direction: column;
     text-align: justify;
-    gap: 16px;
+    gap: 1rem;
     font-family: Inter;
-    font-size: 48px;
+    font-size: 3rem;
     color: #000000;
 }
 .pic3Text{
     display: flex;
     flex-direction: column;
     text-align: justify;
-    gap: 16px;
+    gap: 1rem;
     font-family: Inter;
-    font-size: 40px;
+    font-size: 2.5rem;
     color: #000000;
 }
 
 .create{
-    margin-top: 80px;
-    margin-bottom: 80px;
+    margin-top: 8.782vh;
+    margin-bottom: 8.782vh;
     font-family: 'Inter';
     color: #000000;
-    font-size: 48px;
+    font-size: 3rem;
     font-weight: 700;
     background-color: transparent;
-    width: 506px;
-    height: 94px;
+    width: 26.354vw;
+    height: 10.318vh;
     border-radius: 50px;
     border: 5px solid #000;
     cursor: pointer;

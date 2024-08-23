@@ -1,15 +1,15 @@
 
 .topnav{
-    position:sticky;
+    position: sticky;
     top: 0;
     background-color: #424242;
     width: 100vw;
-    height: 112px;
+    height: 12.3vh;
     display: flex;
     align-items: center;
     justify-content: space-between;
     align-self: center;
-    font-size: 24px;
+    font-size: 1.5rem;
     font-family: Inter;
     color: #F6F6F6;
     z-index: 10;
@@ -18,23 +18,23 @@
 .logo{
     padding: 0;
     margin: 0;
-    margin-left: 40px;
-    height: 80px;
+    margin-left: 2.083vw;
+    height: 8.78vh;
     cursor: pointer;
 }
 .searchSection {
     position: relative;
     display: flex;
     align-items: center;
-    width: 624px;
-    height: 56px;
+    width: 32.5vw;
+    height: 6.147vh;
     border: 0;
     color: #585858;
     border-color: #f6f6f6;
     background-color: #f6f6f6;
-    padding-left: 16px;
-    padding-right: 8px;
-    border-radius: 15px;
+    padding-left: 1rem;
+    padding-right: 0.5rem;
+    border-radius: 0.938rem;
     transition: all 0.65s ease;
   }
   #daily,
@@ -64,7 +64,7 @@
   
   .result {
     display: flex;
-    min-width: 628px;
+    min-width: 32.708vw;
     padding: 10px;
     margin: 0;
     margin-top: 0px;
@@ -73,8 +73,8 @@
   }
   
   .result img{
-    width: 32px;
-    height: 32px;
+    width: 3.513vh;
+    height: 1.667vw;
     margin-left: 8px;
     vertical-align: center;
   }
@@ -90,7 +90,7 @@
 #search {
     color: #585858;
     font-size: 28px;
-    width: 458px;
+    width: 23.854vw;
     margin-left: 25px;
     border: none;
     background-color: #F6F6F6;
@@ -112,7 +112,7 @@
     justify-content: space-between;
     align-items: center;
     padding-right: 16px;
-    width: 292px;
+    width: 15.208vw;
     font-size: 32px;
     font-weight: 300;
     font-family: Inter;
@@ -182,7 +182,7 @@
   align-items: center;
   justify-content: space-between;
   font-size: 32px;
-  width: 308px;
+  width: 16.042vw;
   font-weight: 300;
   font-family: Inter;
   color: #F6F6F6;

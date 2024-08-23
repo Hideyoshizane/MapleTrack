@@ -14,11 +14,11 @@ body{
     display: flex;
     margin: 0px;
     padding: 0px;
-    width: 1596px;
-    min-height: 799px;
+    width: 83.125vw;
+    min-height: 87.706vh;
     background-color: #EDEDED;
     box-sizing: border-box;
-    box-shadow: 0px 3px 250px 0px rgba(0, 0, 0, 0.25);
+    box-shadow: 0px 0.188rem 15.625rem 0px rgba(0, 0, 0, 0.25);
     position: relative;
 }
 
@@ -33,28 +33,28 @@ body{
     flex-wrap: wrap;
     align-items: flex-end;
     width: calc(100vw - 659px);
-    height: 799px;
-    margin-right: 32px;
+    height: 87.706vh;
+    margin-right: 1.667vw;
 }
 .buttonWrapper{
     width: 100%;
-    height: 72px;
+    height: 7.903vh;
     display: flex;
     justify-content: flex-end;
     align-items: flex-end;
-    gap:24px;
+    gap: 1.5rem;
 }
 
 .increaseAllButton,
 .editButton{
     font-family: 'Inter';
-    font-size: 28px;
+    font-size: 1.75rem;
     font-weight: 600;
-    height: 56px;
-    width: 284px;
+    height: 6.147vh;
+    width: 14.792vw;
     color: #3D3D3D;
     border: none;
-    border-radius: 25px;
+    border-radius: 1.563rem;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -70,7 +70,7 @@ body{
 
 .nameLinkLegion{
     display: flex;
-    width: 724px;
+    width: 37.708vw;
     flex-direction: column;
     align-items: flex-end;
 }
@@ -81,43 +81,43 @@ body{
 }
 
 .bossIcon{
-    width: 77px;
-    margin-right: 16px;
-    height: 94px;
+    width: 4.01vw;
+    margin-right: 1rem;
+    height: 10.318vh;
 }
 
 .characterName{
     display: inline;
     font-family: 'Inter';
     font-weight: 500;
-    font-size: 72px;
+    font-size: 4.5rem;
     color: black;
-    width: 631px;
+    width: 32.865vw;
     height: fit-content;
 }
 
 .linkLegionClassJob{
     display: flex;
-    width: 600px;
+    width: 31.25vw;
     justify-content: space-between;
     align-items: flex-start;
 }
 
 .linkSkillBlock,
 .legionBlock{
-    margin-top: 8px;
+    margin-top: 0.5rem;
     align-items: center;
     display: flex;
     flex-direction: column;
-    width: 86px;
-    height: 13px;
-    gap: 8px;
+    width: 4.479vw;
+    height: 1.427vh;
+    gap: 0.5rem;
 }
 
 .linkSkillBlock span,
 .legionBlock span{
     font-family: 'Montserrat';
-    font-size: 16px;
+    font-size: 1rem;
 }
 
 .linkLegionTitle{
@@ -126,8 +126,8 @@ body{
 
 .linkImg,
 .legionImg{
-    width: 64px;
-    height: 64px;
+    width: 4rem;
+    height: 4rem;
 }
 
 .jobDiv{
@@ -138,14 +138,14 @@ body{
 }
 
 .classType{
-    font-size: 48px;
+    font-size: 3rem;
     font-family: 'Inter';
-    width: 367px;
+    width: 19.115vw;
     text-align: right;
 }
 
 .jobLevel{
-    font-size: 32px;
+    font-size: 2rem;
     font-family: 'Inter';
 }
 
@@ -154,10 +154,10 @@ body{
     flex-direction: row;
     text-align: end;
     align-items: flex-end;
-    gap: 8px;
+    gap: 0.5rem;
 }
 .level{
-    font-size: 32px;
+    font-size: 2rem;
     font-family: 'Inter';
     font-weight: 200;
 }
@@ -165,47 +165,47 @@ body{
 .levelNumber{
     font-family: 'Inter';
     font-weight: 400;
-    font-size: 44px;
+    font-size: 2.75rem;
 }
 
 .characterLevelBar{
     display: flex;
     align-items: center;
     background-color: black;
-    height: 32px;
-    width: 800px;
-    border-radius: 25px;
+    height: 3.513vh;
+    width: 41.667vw;
+    border-radius: 1.563rem;
 }
 .characterLevelBar .progressBar{
-    margin-left: 2px;
-    height: 28px;
-    border-radius: 25px;
+    margin-left: 0.22vh;
+    height: 3.074vh;
+    border-radius: 1.563rem;
 }
 
 .forceLevelBar{
     display: flex;
     align-items: center;
     background-color: black;
-    height: 8px;
-    width: 195px;
-    border-radius: 25px;
+    height: 0.5rem;
+    width: 10.156vw;
+    border-radius: 1.563rem;
 }
 .forceLevelBar .progressBar{
-    margin-left: 2px;
-    height: 4px;
-    border-radius: 25px;
+    margin-left: 0.22vh;
+    height: 0.208vw;
+    border-radius: 1.563rem;
 }
 
 .ArcaneForce,
 .SacredForce{
     font-family: 'Inter';
     font-weight: 500;
-    font-size: 42px;
+    font-size: 2.625rem;
 }
 .ArcaneForceGrid,
 .SacredForceGrid{
     display: flex;
-    width: 794px;
+    width: 41.354vw;
     flex-direction: row;
     flex-wrap: wrap;
     align-content: flex-start;
@@ -213,8 +213,8 @@ body{
 .ArcaneForceWrapper,
 .SacredForceWrapper {
     display: flex;
-    height: 82px;
-    width: 256px;
+    height: 9.001vh;
+    width: 13.333vw;
     align-items: center;
 }
 
@@ -226,8 +226,8 @@ body{
 
 .ArcaneForceImage,
 .SacredForceImage{
-    width: 60px;
-    height: 60px;
+    width: 3.75rem;
+    height: 3.75rem;
 }
 
 .ArcaneForceImage.off,
@@ -239,7 +239,7 @@ body{
 .SacredForceLevel{
     font-family: 'Inter';
     font-weight: 300;
-    font-size: 20px;
+    font-size: 1.25rem;
 }
 .levelWrapper{
     display: flex;
@@ -249,38 +249,30 @@ body{
 .exp{
     font-family: 'Inter';
     font-weight: 200;
-    font-size: 14px;
+    font-size: 0.875rem;
 }
 
-.expNumber{
+.expNumber, .daysToMax{
     font-family: 'Inter';
     font-weight: 300;
-    font-size: 16px;
-}
-
-
-
-.daysToMax{
-    font-family: 'Inter';
-    font-weight: 300;
-    font-size: 16px;
+    font-size: 1rem;
 }
 
 .unlockText{
     font-family: 'Inter';
     font-weight: 700;
-    font-size: 16px;
+    font-size: 1rem;
 }
 
 .dailyButton,
 .weeklyButton{
     font-family: 'Inter';
-    font-size: 14px;
+    font-size: 0.875rem;
     background-color: #96E4A5;
-    border-radius: 25px;
+    border-radius: 1.563rem;
     border: none;
-    width: 96px;
-    height: 24px;
+    width: 4.948vw;
+    height: 2.634vh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -295,16 +287,16 @@ body{
 
 .flash{
     font-family: 'Inter';
-    font-size: 32px;
+    font-size: 2rem;
     position: absolute;
     z-index: 10;
-    width: 500px;
-    height: 80px;
+    width: 26.042vw;
+    height: 8.782vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 25px;
-    box-shadow: 0px 1px 5px 1px #8F8F8F;
+    border-radius: 1.563rem;
+    box-shadow: 0px 1px 0.313rem 1px #8F8F8F;
     top: 260px;
 
 }
@@ -315,7 +307,7 @@ body{
 
 .visible{
     filter:opacity(100%);
-    top: 220px;
+    top: 24.149vh;
 }
 
 .success{
@@ -333,56 +325,56 @@ body{
 content: '';
 position: absolute;
 border-style: solid;
-border-width: 0 18px 23px;
+border-width: 0 1.125rem 1.438rem;
 border-color: #424242 transparent;
 display: block;
 width: 0;
 z-index: 0;
-margin-left: -18px;
-top: -27px;
+margin-left: -0.938vw;
+top: -2.964vh;
 left: 50%;
 }
 
 
 .linkSkillToolTip {
     font-family: 'Inter';
-    font-size: 16px;
+    font-size: 1rem;
     font-weight: 200;
 
     position: absolute;
     width: auto;
-    max-width: 380px;
+    max-width: 19.792vw;
     height: auto;
-    padding: 10px;
+    padding: 0.625rem;
     display: flex;
     text-align: center;
     align-items: center;
     color: #FFFFFF;
     background: #424242;
-    border: 4px solid #424242;
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
-    border-radius: 10px;
+    border: 0.25rem solid #424242;
+    -webkit-border-radius: 0.625rem;
+    -moz-border-radius: 0.625rem;
+    border-radius: 0.625rem;
     z-index: 10;
 }
 
 .LegionImgTooltip{
     font-family: 'Inter';
-    font-size: 16px;
+    font-size: 1rem;
     font-weight: 200;
 
     position: absolute;
     width: auto;
     height: auto;
-    padding: 10px;
+    padding: 0.625rem;
     display: flex;
     text-align: left;
     align-items: center;
     color: #FFFFFF;
     background: #424242;
-    border: 4px solid #424242;
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
-    border-radius: 10px;
+    border: 0.25rem solid #424242;
+    -webkit-border-radius: 0.625rem;
+    -moz-border-radius: 0.625rem;
+    border-radius: 0.625rem;
     z-index: 10;
 }

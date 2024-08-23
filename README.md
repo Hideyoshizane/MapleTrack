@@ -8,7 +8,7 @@
   <img src="https://img.shields.io/static/v1?label=npm&message=10.8.1&color=blue&style=for-the-badge&logo=npm"/>
   <img src="https://img.shields.io/static/v1?label=express&message=4.19.2&color=blue&style=for-the-badge&logo=express"/>
   <img src="https://img.shields.io/static/v1?label=node.JS&message=22.3.0&color=blue&style=for-the-badge&logo=nodedotjs"/>
-  <img src="https://img.shields.io/static/v1?label=release&message=1.5.2&color=darkgreen&style=for-the-badge"/>
+  <img src="https://img.shields.io/static/v1?label=release&message=1.6.0&color=darkgreen&style=for-the-badge"/>
 </div>
 <br>
 
@@ -24,7 +24,7 @@
 
 <a name="status">
   <h2>Status</h1>
-  <h3>Updated up to New Age update.</h3>
+  <h3>Updated up to Go West! update.</h3>
 
   <br>
 </a>
