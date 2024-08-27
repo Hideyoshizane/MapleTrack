@@ -3,6 +3,7 @@ window.bossJson;
 window.server;
 window.selectedList;
 window.username;
+window.serverType;
 
 document.addEventListener('DOMContentLoaded', async () => {
   server = getCookie('selectedServerContent');
@@ -26,6 +27,7 @@ async function fetchBossList(){
 
     selectedList = bossList.server;
     selectedList = selectedList.find(servers => servers.name === server.charAt(0).toUpperCase() + server.slice(1));
+    serverType = selectedList.type;
   } catch (error) {
     console.error('Error fetching character data:', error);
   }
@@ -171,7 +173,6 @@ async function loadCharacterCards(){
 
 async function createBossButton(boss){
   const bossData = bossJson.find(bossData => bossData.name == boss.name);
-
   const bossImgPath = bossData.img;
   const bossImage = await createImageElement(bossImgPath, `${boss.name}`, 'bossImg');
 
@@ -179,8 +180,8 @@ async function createBossButton(boss){
   bossInfo.style.fontSize = await adjustFontSizeToFit(bossInfo, 14.896, 2) + 'rem';
   bossInfo.setAttribute('name', boss.name);
   bossInfo.setAttribute('difficult', boss.difficulty);
-
-  const bossValue = createDOMElement('span', 'BossValue', `${boss.value.toLocaleString('en-us')}`);
+  
+  const bossValue = createDOMElement('span', 'BossValue', `${getValueByNameAndDifficulty(boss.name, boss.difficulty).toLocaleString('en-us')}`);
   bossValue.setAttribute('value', boss.value);
 
  
@@ -238,4 +239,19 @@ function sortBossList(bossList) {
       const nameB = b.name.toLowerCase();
       return nameA.localeCompare(nameB);
   });
+}
+
+
+function getValueByNameAndDifficulty(bossName, difficultyName) {
+  // Find the boss by name
+  const boss = bossJson.find(b => b.name === bossName);
+  if (boss) {
+    // Find the difficulty by name within the selected boss
+    const difficulty = boss.difficulties.find(d => d.name === difficultyName);
+    if (difficulty) {
+      // Calculate the value based on the server type without modifying the original value
+      return serverType === 'Reboot' ? difficulty.value * 5 : difficulty.value;
+    }
+  }
+  return null; // Return null if the boss or difficulty is not found
 }

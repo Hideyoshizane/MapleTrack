@@ -175,7 +175,6 @@ async function buttonClickedFunctional(button) {
 
   const totalIncomeSpan = bossBox.querySelector('.totalBossIncome');
   const value = Number(button.getAttribute('value'));
-  console.log(value);
   const svgInsideButton = button.querySelector('svg');
 
   let newValue = 0;
@@ -217,8 +216,6 @@ async function updateBossIncomeSpan(value, bossBox, Add, totalIncomeSpan){
 
   totalIncomeSpan.innerText = bossBoxValue.toLocaleString('en-us');
   totalIncomeSpan.style.fontSize = await adjustFontSizeToFit(totalIncomeSpan, 4.896, 1) + 'rem';
-
-  console.log(totalIncomeSpan.style.fontSize);
 
   if (bossBoxValue > 0) {
     bossBox.classList.add('open');
@@ -307,7 +304,7 @@ async function insertBossOnList(boss, data){
       //Add daily boss
       if(difficultData.reset == 'Daily'){
         //Add Daily boss
-        const bossToAdd = await createBossToAdd(bossName, data.difficult, value, difficultData.reset, data.newValue);    
+        const bossToAdd = await createBossToAdd(bossName, data.difficult, difficultData.reset, data.newValue);    
         Character.bosses.push(bossToAdd);
       }else{
         //Case difficult is not daiy.
@@ -316,7 +313,7 @@ async function insertBossOnList(boss, data){
           //if there is same reset type of boss, remove it.
           Character.bosses.splice(weeklyIndex, 1);
         }
-        const bossToAdd = await createBossToAdd(bossName, data.difficult, value, difficultData.reset, data.newValue);
+        const bossToAdd = await createBossToAdd(bossName, data.difficult, difficultData.reset, data.newValue);
         Character.bosses.push(bossToAdd);
       }
     }
@@ -325,12 +322,12 @@ async function insertBossOnList(boss, data){
   } else{ //If boss Name not found.
       if(difficultData.reset == 'Daily'){
         //Add Daily boss
-        const bossToAdd = await createBossToAdd(bossName, data.difficult, value, difficultData.reset, data.newValue);
+        const bossToAdd = await createBossToAdd(bossName, data.difficult, difficultData.reset, data.newValue);
         Character.bosses.push(bossToAdd);
       }
       else{
         //Add Not Daily boss
-        const bossToAdd = await createBossToAdd(bossName, data.difficult, value, difficultData.reset, data.newValue);
+        const bossToAdd = await createBossToAdd(bossName, data.difficult,  difficultData.reset, data.newValue);
         Character.bosses.push(bossToAdd);
       }
     }
@@ -340,12 +337,11 @@ async function insertBossOnList(boss, data){
   await updateTotalSelected();
 }
 
-async function createBossToAdd(name, difficulty, value, difficultData, newValue) {
+async function createBossToAdd(name, difficulty, difficultData, newValue) {
   const isDailyReset = difficultData === 'Daily';
   const bossToAdd = {
     name,
     difficulty,
-    value,
     reset: difficultData,
     checked: false,
     date: null,
@@ -379,9 +375,11 @@ async function resetOtherDropdown(dropdown){
 }
 async function updateCharacterTotalIncome(){
   let totalIncome = 0;
+  let value = 0;
   for (const newBoss of Character.bosses) {
-    const value = newBoss.reset == 'Daily' ? Number(newBoss.value) * newBoss.DailyTotal : Number(newBoss.value);
-    totalIncome += value;
+    value = getValueByNameAndDifficulty(newBoss.name, newBoss.difficulty);
+    let updatedValue = newBoss.reset == 'Daily' ? value * newBoss.DailyTotal : value;
+    totalIncome += updatedValue;
   }
   Character.totalIncome = totalIncome;
   await changeCharacterIncome();
@@ -394,7 +392,7 @@ async function changeCharacterIncome(){
   const totalIncomeValue = Character.totalIncome.toLocaleString('en-us');
   const TotalIncome = document.querySelector('.characterTotalIncome');
   TotalIncome.textContent = totalIncomeValue;
-  TotalIncome.style.fontSize = await adjustFontSizeToFit(TotalIncome, 4.896, 1) + 'rem';
+  TotalIncome.style.fontSize = await adjustFontSizeToFit(TotalIncome, 11.615, 2) + 'rem';
 }
 
 async function updateTotalCharactersIncome(){
@@ -607,4 +605,17 @@ async function updateButtonToBlock(difficultButton){
   }
   
   
+  function getValueByNameAndDifficulty(bossName, difficultyName) {
+    // Find the boss by name
+    const boss = bossJson.find(b => b.name === bossName);
+    if (boss) {
+      // Find the difficulty by name within the selected boss
+      const difficulty = boss.difficulties.find(d => d.name === difficultyName);
+      if (difficulty) {
+        // Calculate the value based on the server type without modifying the original value
+        return serverType === 'Reboot' ? difficulty.value * 5 : difficulty.value;
+      }
+    }
+    return null; // Return null if the boss or difficulty is not found
+  }
   
