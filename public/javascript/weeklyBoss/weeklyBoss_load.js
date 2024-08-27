@@ -182,7 +182,7 @@ async function createBossButton(boss){
   bossInfo.setAttribute('difficult', boss.difficulty);
   
   const bossValue = createDOMElement('span', 'BossValue', `${getValueByNameAndDifficulty(boss.name, boss.difficulty).toLocaleString('en-us')}`);
-  bossValue.setAttribute('value', boss.value);
+  bossValue.setAttribute('value', getValueByNameAndDifficulty(boss.name, boss.difficulty));
 
  
 
