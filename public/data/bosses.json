@@ -298,19 +298,19 @@
   "difficulties": [
     {
       "name": "Normal",
-      "value": 31400000,
+      "value": 32512500,
       "reset": "Weekly",
       "minLevel": 190
     },
     {
       "name": "Hard",
-      "value": 119000000,
+      "value": 70312500,
       "reset": "Weekly",
       "minLevel": 190
     },
     {
       "name": "Extreme",
-      "value": 392000000,
+      "value": 215000000,
       "reset": "Weekly",
       "minLevel": 190
     }
