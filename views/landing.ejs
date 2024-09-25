@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,73 +9,78 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="shortcut icon" type="image/x-icon" href="/icon.ico">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800&display=swap" as="font" rel="stylesheet" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800&display=swap"
+        as="font" rel="stylesheet" crossorigin="anonymous">
 </head>
+
 <body>
-   
-    <div class = "topbar"> 
+
+    <div class="topbar">
         <div class="gradient">
             <img src="assets/logo/logo.webp" id="logo">
             <button class="signin" onclick="login()">Sign in</button>
             <button class="signup" onclick="signup()">Sign up</button>
         </div>
     </div>
-   <div class="first">
-    <div>
-        <div class="WelcomeBlock">
-            <span style = "font-size: 96px; font-weight: 700;">Welcome!<br></span>
-            <span style="text-align: justify;font-size: 64px;font-weight: 500;">Your ultimate companion<br>in <b>Progression</b> and <b>Triumph</b>.<br></span>
-            <span style="font-size: 56px;">Track your character's growth.<br></span>
-            <span style="font-size: 56px;">Strategize, Optimize, and Record<br>your weekly Boss triumphs.<br></span>
-            <span style="font-size: 48px; margin-top: 24px; font-weight: 200;">Crafted by a fellow Mapler for Maplers.</span>
+    <div class="first">
+        <div>
+            <div class="WelcomeBlock">
+                <span style="font-size: 96px; font-weight: 700;">Welcome!<br></span>
+                <span style="text-align: justify;font-size: 64px;font-weight: 500;">Your ultimate companion<br>in
+                    <b>Progression</b> and <b>Triumph</b>.<br></span>
+                <span style="font-size: 56px;">Track your character's growth.<br></span>
+                <span style="font-size: 56px;">Strategize, Optimize, and Record<br>your weekly Boss triumphs.<br></span>
+                <span style="font-size: 48px; margin-top: 24px; font-weight: 200;">Crafted by a fellow Mapler for
+                    Maplers.</span>
+            </div>
+            <img src="assets/landing/Ice_Lightning.webp" id="character">
         </div>
-        <img src="assets/landing/Ice_Lightning.webp" id="character">   
-    </div>
         <img src="assets/landing/background.webp" id="background">
-   </div>
-   <div class="second">
+    </div>
+    <div class="second">
         <span style="text-align: center;font-size: 56px;">All your character data<br>in <b>One</b> place.</span>
         <img class="right" src="assets/landing/pic1.webp" id="pic1">
-   </div>
-   <div class="third">
-    <img class="left" src="assets/landing/pic2.webp" id="pic2">
-    <div class="pic2Text right">
-        <span style="font-size: 56px"><b>Daily Symbol Tracker</b><br></span>
-        <span>Symbol estimate time until<br>Max Level<br></span>
-        <span>Link Skill description<br></span>
-        <span>Legion block checker<br></span>
     </div>
-</div>
-<div class="fourth right">
-    <div class="pic3Text left">
-        <span style="font-size: 48px;"><b>Boss Planner </b><br></span>
-        <span>Plan your weekly Boss Crystal <br>income<br></span>
-        <span>Total weekly income per world<br></span>
-        <span>Total character weekly income<br></span>
+    <div class="third">
+        <img class="left" src="assets/landing/pic2.webp" id="pic2">
+        <div class="pic2Text right">
+            <span style="font-size: 56px"><b>Daily Symbol Tracker</b><br></span>
+            <span>Symbol estimate time until<br>Max Level<br></span>
+            <span>Link Skill description<br></span>
+            <span>Legion block checker<br></span>
+        </div>
     </div>
-    <img src="assets/landing/pic3.webp" id="pic3">
-</div>
+    <div class="fourth right">
+        <div class="pic3Text left">
+            <span style="font-size: 48px;"><b>Boss Planner </b><br></span>
+            <span>Plan your weekly Boss Crystal <br>income<br></span>
+            <span>Total weekly income per world<br></span>
+            <span>Total character weekly income<br></span>
+        </div>
+        <img src="assets/landing/pic3.webp" id="pic3">
+    </div>
 
-<div class="fourth left">
-    <img src="assets/landing/pic4.webp" id="pic4">
-    <div class="pic3Text right">
-        <span style="font-size: 48px;"><b>Boss Tracker  </b><br></span>
-        <span>Track your weekly Boss Count<br></span>
-        <span>Total income progress<br></span>
-        <span>Track multiple characters boss<br> counter in one page<br></span>
+    <div class="fourth left">
+        <img src="assets/landing/pic4.webp" id="pic4">
+        <div class="pic3Text right">
+            <span style="font-size: 48px;"><b>Boss Tracker </b><br></span>
+            <span>Track your weekly Boss Count<br></span>
+            <span>Total income progress<br></span>
+            <span>Track multiple characters boss<br> counter in one page<br></span>
+        </div>
     </div>
-</div>
-<div style="display: flex; justify-content: center;">
-    <button class="create" onclick="signup()">Create account</button>
-</div>
-    
-<script>
-    function signup() {
-        window.location.href = 'signup';
-    }
-    function login() {
-        window.location.href = 'login';
-    }
-</script>
+    <div style="display: flex; justify-content: center;">
+        <button class="create" onclick="signup()">Create account</button>
+    </div>
+
+    <script>
+        function signup() {
+            window.location.href = 'signup';
+        }
+        function login() {
+            window.location.href = 'login';
+        }
+    </script>
 </body>
+
 </html>

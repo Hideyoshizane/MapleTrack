@@ -6,7 +6,7 @@ body {
 
 
 
-.logo{
+.logo {
     flex-direction: column;
     display: flex;
     justify-content: center;
@@ -15,14 +15,14 @@ body {
 }
 
 
-#logo{
+#logo {
     padding-top: 2%;
     width: 25%;
     height: 25%;
-    object-fit: contain; 
+    object-fit: contain;
 }
 
-.center{
+.center {
     margin-top: 2rem;
     border-radius: 25px;
     width: 31.25vw;
@@ -36,17 +36,17 @@ body {
     color: #141414;
 }
 
-.lock{
+.lock {
     margin-top: 2rem;
 }
 
-.title{
+.title {
     font-size: 2rem;
     font-weight: 500;
     margin-top: 1rem;
 }
 
-.subtitle{
+.subtitle {
     width: 22.917vw;
     font-size: 1.5rem;
     font-weight: 300;
@@ -54,14 +54,14 @@ body {
     text-align: center;
 }
 
-.usernameSpan{
+.usernameSpan {
     width: 22.135vw;
     font-size: 1.25rem;
     font-weight: 500;
     margin-top: 2rem;
 }
 
-.username{
+.username {
     border-radius: 0.625rem;
     margin-top: 0.5rem;
     width: 22.552vw;
@@ -74,35 +74,35 @@ body {
     padding-left: 0.5rem;
 }
 
-.username::placeholder{
+.username::placeholder {
     font-family: 'Inter';
     font-size: 1.625rem;
     color: #B8B8B8;
 }
 
-.username:focus{
+.username:focus {
     outline: 0;
 }
 
-.sendButton{
+.sendButton {
     border-radius: 0.625rem;
     margin-top: 4rem;
     width: 15.625vw;
     height: 6.586vh;
     font-size: 1.625rem;
-    border: none; 
+    border: none;
     background-color: #7BD96D;
     color: #141414;
     cursor: pointer;
     transition: 0.2s ease-in;
 }
 
-.sendButton:disabled{
+.sendButton:disabled {
     background-color: #A3A3A3;
     cursor: not-allowed;
 }
 
-.error{
+.error {
     font-size: 1.25rem;
     margin-top: 0.5rem;
     width: 22.396vw;

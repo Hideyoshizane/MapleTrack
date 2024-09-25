@@ -253,13 +253,15 @@ body {
     cursor: pointer;
 }
 
-.serverButton img, .SelectedButton img {
+.serverButton img,
+.SelectedButton img {
     width: 2rem;
     height: 2rem;
     margin-right: 0.25rem;
 }
 
-.serverButton span, .SelectedButton span {
+.serverButton span,
+.SelectedButton span {
     padding-left: 1rem;
     padding-right: 1rem;
 }

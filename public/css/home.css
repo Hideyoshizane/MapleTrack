@@ -1,22 +1,23 @@
-::-webkit-scrollbar-track{
-	border-radius: 0.625rem;
-	background-color: #F5F5F5;
+::-webkit-scrollbar-track {
+    border-radius: 0.625rem;
+    background-color: #F5F5F5;
 
 }
 
-::-webkit-scrollbar{
-	width: 0.125rem;
-	background-color: #F5F5F5;
+::-webkit-scrollbar {
+    width: 0.125rem;
+    background-color: #F5F5F5;
     z-index: 6;
 }
-::-webkit-scrollbar-thumb{
-	border-radius: 0.625rem;
-	background-color: #3D3D3D;
+
+::-webkit-scrollbar-thumb {
+    border-radius: 0.625rem;
+    background-color: #3D3D3D;
     width: 0.125rem;
 }
 
 
-body{
+body {
     background-color: #E8E8E8;
     padding: 0;
     margin: 0;
@@ -31,7 +32,7 @@ body{
     flex: 1;
 }
 
-.mainContent{
+.mainContent {
     margin: 0px;
     padding: 0px;
     width: 83.125vw;
@@ -42,12 +43,14 @@ body{
     box-shadow: 0px 0.188rem 15.625rem 0px rgba(0, 0, 0, 0.25);
     position: relative;
 }
-.dropdown{
+
+.dropdown {
     display: flexbox;
     height: 7.903vh;
     z-index: 2;
 }
-.dropdownToggle{
+
+.dropdownToggle {
     position: absolute;
     top: 1.756vh;
     right: 1.875vw;
@@ -66,7 +69,7 @@ body{
 
 }
 
-.dropdownToggle.open{
+.dropdownToggle.open {
     margin: 0px;
     display: block;
     height: 20.417vw;
@@ -75,20 +78,20 @@ body{
     z-index: 2;
 }
 
-.dropdownContent:nth-child(2){
+.dropdownContent:nth-child(2) {
     border-top: 1px solid #2F5275;
 }
 
 
-.closed{
+.closed {
     display: block;
     transition: all 0.3s ease-in-out;
 }
 
-.rotate{
+.rotate {
     transform: rotate(180deg);
     transition: 0.3s ease-in-out;
-  }  
+}
 
 
 
@@ -108,12 +111,12 @@ body{
     cursor: pointer;
 }
 
-.serverButton:hover{
+.serverButton:hover {
     background-color: #345C83;
     cursor: pointer;
 }
 
-.SelectedButton{
+.SelectedButton {
     width: 9.74vw;
     height: 6.147vh;
     background-color: #3C6997;
@@ -126,40 +129,42 @@ body{
     cursor: pointer;
 }
 
-.serverButton img, .SelectedButton img{
+.serverButton img,
+.SelectedButton img {
     width: 2rem;
     height: 2rem;
     margin-right: 0.25rem;
 }
 
 
-.serverButton span, .SelectedButton span{
-    padding-left:  1rem;
+.serverButton span,
+.SelectedButton span {
+    padding-left: 1rem;
     padding-right: 1rem;
 }
 
 
-.selectedServer{
+.selectedServer {
     display: flex;
     width: 12.135vw;
     align-items: center;
-    
+
 }
 
-.serverButton svg{
+.serverButton svg {
     margin-left: auto;
     padding-right: 0.25rem;
 }
 
-.serverButton.notSelected svg{
+.serverButton.notSelected svg {
     opacity: 0%;
 }
 
-.serverButton.selected svg{
+.serverButton.selected svg {
     opacity: 100%;
 }
 
-.filterButtons{
+.filterButtons {
     display: flex;
     color: #3D3D3D;
     font-size: 1.75rem;
@@ -168,7 +173,7 @@ body{
     align-items: center;
 }
 
-.filterButtons p{
+.filterButtons p {
     padding-left: 1.625rem;
     padding-right: 1rem;
 }
@@ -182,7 +187,7 @@ body{
     overflow: hidden;
 }
 
-.filterButton{
+.filterButton {
     border: none;
     color: #3D3D3D;
     font-size: 1.75rem;
@@ -192,20 +197,21 @@ body{
     cursor: pointer;
     width: 9.167vw;
 }
-.filterButton:hover{
+
+.filterButton:hover {
     background-color: #DFE5F7;
     transition: 0.3s ease-in-out;
 }
 
-.filterButton.selected{
+.filterButton.selected {
     background-color: #92A7E3;
 }
 
-.vl{
+.vl {
     border-left: 1.5px solid #3D3D3D;
 }
 
-.characterCards{
+.characterCards {
     margin-top: 0.5rem;
     display: grid;
     grid-template-columns: repeat(3, 0fr);
@@ -215,7 +221,8 @@ body{
     z-index: 1;
 
 }
-.cardBody{
+
+.cardBody {
     width: 26.25vw;
     height: 38.749vh;
     background-color: #3E3E3E;
@@ -224,18 +231,19 @@ body{
     margin: 0px;
     cursor: pointer;
 }
-.cardBody.off{
-    display:none;
+
+.cardBody.off {
+    display: none;
 }
 
-.upperPart{
+.upperPart {
     margin: 0px;
     margin-top: 0.5rem;
     padding: 0px;
     display: flex;
 }
 
-.forceDiv{
+.forceDiv {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -248,8 +256,8 @@ body{
     gap: 0.25rem;
 }
 
-.arcaneForce , 
-.sacredForce{
+.arcaneForce,
+.sacredForce {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -259,7 +267,7 @@ body{
     gap: 0.25rem;
 }
 
-.Title{
+.Title {
     display: block;
     font-size: 1rem;
     font-weight: 500;
@@ -270,7 +278,7 @@ body{
 }
 
 .arcaneWrapper,
-.sacredWrapper{
+.sacredWrapper {
     display: inline-block;
     vertical-align: middle;
     padding: 0px;
@@ -279,7 +287,7 @@ body{
 }
 
 .arcaneWrapper span,
-.sacredWrapper span{
+.sacredWrapper span {
     font-size: 0.75rem;
     font-weight: 500;
     padding: 0px;
@@ -296,34 +304,34 @@ body{
 }
 
 .ArcaneImage,
-.SacredImage{
+.SacredImage {
     width: 1.563rem;
     height: 1.563rem;
 }
 
 .ArcaneImage.off,
-.SacredImage.off{
+.SacredImage.off {
     filter: brightness(12%) saturate(0%);
 }
 
-.cardPortrait{
+.cardPortrait {
     height: 23.71vh;
     width: 18.49vw;
     border-radius: 25px;
 }
 
-.cardPortrait.off{
+.cardPortrait.off {
     filter: saturate(0%);
 }
 
 
-.lowerPart{
+.lowerPart {
     display: flex;
     width: 26.25vw;
     height: 11.416vh;
 }
 
-.linkLegionContainer{
+.linkLegionContainer {
     height: 11.416vh;
     width: 11.406vw;
     display: flex;
@@ -331,20 +339,20 @@ body{
     align-items: center;
 }
 
-.linkImageLevel{
+.linkImageLevel {
     display: flex;
     flex-direction: column;
     width: 3.854vw;
     gap: 0.25rem;
 }
 
-.linkWrapper{
+.linkWrapper {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.linkLegionTitle{
+.linkLegionTitle {
     font-weight: 600;
     font-size: 1rem;
     font-family: 'Montserrat', sans-serif;
@@ -352,18 +360,19 @@ body{
 }
 
 .linkImg,
-.legionImg{
+.legionImg {
     height: 2.125rem;
     width: 2.125rem;
 }
-.linkLevel{
+
+.linkLevel {
     font-size: 0.875rem;
     font-weight: 500;
     font-family: 'Montserrat', sans-serif;
     color: #FFFFFF;
 }
 
-.legionDiv{
+.legionDiv {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -371,7 +380,7 @@ body{
 }
 
 
-.nameAndLevel{
+.nameAndLevel {
     height: 11.416vh;
     width: 14.844vw;
     display: flex;
@@ -380,7 +389,7 @@ body{
     align-items: flex-end;
 }
 
-.nameAndIcon{
+.nameAndIcon {
     display: flex;
     align-items: center;
     margin-top: 0.5rem;
@@ -388,24 +397,25 @@ body{
     justify-content: flex-end;
 }
 
-.bossIcon{
+.bossIcon {
     width: 2.25rem;
     height: 2.25rem;
 }
 
-.bossIcon path{
+.bossIcon path {
     fill: white;
 }
 
 
-.characterName{
+.characterName {
     font-size: 1.75rem;
     font-family: 'Montserrat', sans-serif;
     font-weight: 400;
     margin-right: 0.625rem;
     color: #FFFFFF;
 }
-.job{
+
+.job {
     font-size: 1rem;
     font-weight: 300;
     font-family: 'Montserrat', sans-serif;
@@ -413,21 +423,21 @@ body{
     padding-right: 0.625rem;
 }
 
-.level{
+.level {
     font-size: 1.75rem;
     font-weight: 500;
     font-family: 'Montserrat', sans-serif;
     padding-right: 0.625rem;
 }
 
-.levelBarWrapper{
+.levelBarWrapper {
     display: flex;
     height: 2.744vh;
     width: 26.25vw;
     justify-content: center;
 }
 
-.levelBar{
+.levelBar {
     display: flex;
     width: 25.208vw;
     height: 1.976vh;
@@ -436,10 +446,9 @@ body{
     align-items: center;
 }
 
-.progressBar{
+.progressBar {
     height: 1.537vh;
     border-radius: 25px;
     box-sizing: content-box;
     margin-left: 0.125rem;
 }
-

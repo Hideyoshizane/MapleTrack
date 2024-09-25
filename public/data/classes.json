@@ -1,297 +1,296 @@
 [
-  {
-   "linkSkill": "Spirit of Freedom",
-   "legionType": "INT+",
-   "className": "Battle Mage",
-   "jobType": "mage"
-  },
-  {
-    "linkSkill": "Spirit Guide Blessing",
-    "legionType": "IEDM",
-    "className": "Lynn",
-    "jobType": "mage"
-   },
-   {
-    "linkSkill": "Cygnus Blessing",
-    "legionType": "INT+",
-    "className": "Blaze Wizard",
-    "jobType": "mage"
-   },
-   {
-    "linkSkill": "Rune Persistence",
-    "legionType": "RECVRMP",
-    "className": "Evan",
-    "jobType": "mage"
-   },
-   {
-    "linkSkill": "Tide of Battle",
-    "legionType": "INT+",
-    "className": "Illium",
-    "jobType": "mage"
-   },
-   {
-    "linkSkill": "Elementalism",
-    "legionType": "BOSSDMGM",
-    "className": "Kanna",
-    "jobType": "mage"
-   },
-   {
-    "linkSkill": "Judgment",
-    "legionType": "INT+",
-    "className": "Kinesis",
-    "jobType": "mage"
-   },
-   {
-    "linkSkill": "Nature's Friend",
-    "legionType": "INT+",
-    "className": "Lara",
-    "jobType": "mage"
-   },
-   {
-    "linkSkill": "Light Wash",
-    "legionType": "INT+",
-    "className": "Luminous",
-    "jobType": "mage"
-   },
-   {
-    "linkSkill": "Empirical Knowledge",
-    "legionType": "MAXMP%",
-    "className": "Fire & Poison",
-    "jobType": "mage"
-   },
-   {
-    "linkSkill": "Empirical Knowledge",
-    "legionType": "INT+",
-    "className": "Ice & Lightning",
-    "jobType": "mage"
-   },
-   {
-    "linkSkill": "Empirical Knowledge",
-    "legionType": "INT+",
-    "className": "Bishop",
-    "jobType": "mage"
-   },
-   {
-    "linkSkill": "Thief's Cunning",
-    "legionType": "LUK+",
-    "className": "Dual Blade",
-    "jobType": "thief"
-   },
-   {
-    "linkSkill": "Cygnus Blessing",
-    "legionType": "LUK+",
-    "className": "Night Walker",
-    "jobType": "thief"
-   },
-   {
-    "linkSkill": "Phantom Instinct",
-    "legionType": "MESO%",
-    "className": "Phantom",
-    "jobType": "thief"
-   },
-   {
-    "linkSkill": "Thief's Cunning",
-    "legionType": "CRITRTT",
-    "className": "Night Lord",
-    "jobType": "thief"
-   },
-   {
-    "linkSkill": "Thief's Cunning",
-    "legionType": "LUK+",
-    "className": "Shadower",
-    "jobType": "thief"
-   },
-   {
-    "linkSkill": "Hybrid Logic",
-    "legionType": "STDELU",
-    "className": "Xenon",
-    "jobType": "xenon"
-   },
-   {
-    "linkSkill": "Unfair Advantage",
-    "legionType": "LUK+",
-    "className": "Cadena",
-    "jobType": "thief"
-   },
-   {
-    "linkSkill": "Bravado",
-    "legionType": "LUK+",
-    "className": "Hoyoung",
-    "jobType": "thief"
-   },
-   {
-    "linkSkill": "Innate Gift",
-    "legionType": "LUK+",
-    "className": "Khali",
-    "jobType": "thief"
-   },
-   {
-    "linkSkill": "Combo Kill Blessing",
-    "legionType": "RECVRHP+",
-    "className": "Aran",
-    "jobType": "warrior"
-   },
-   {
-    "linkSkill": "Noble Fire",
-    "legionType": "STR+",
-    "className": "Adele",
-    "jobType": "warrior"
-   },
-   {
-    "linkSkill": "Spirit of Freedom",
-    "legionType": "IED+",
-    "className": "Blaster",
-    "jobType": "warrior"
-   },
-   {
-    "linkSkill": "Cygnus Blessing",
-    "legionType": "MAXHP+",
-    "className": "Dawn Warrior",
-    "jobType": "warrior"
-   },
-   {
-    "linkSkill": "Wild Rage",
-    "legionType": "BOSSDMG+",
-    "className": "Demon Avenger",
-    "jobType": "warrior"
-   },
-   {
-    "linkSkill": "Fury Unleashed",
-    "legionType": "STATRES+",
-    "className": "Demon Slayer",
-    "jobType": "warrior"
-   },
-   {
-    "linkSkill": "Keen Edge",
-    "legionType": "CRIT",
-    "className": "Hayato",
-    "jobType": "warrior"
-   },
-   {
-    "linkSkill": "Iron Will",
-    "legionType": "STR+",
-    "className": "Kaiser",
-    "jobType": "warrior"
-   },
-   {
-    "linkSkill": "Knight's Watch",
-    "legionType": "MAXHP+",
-    "className": "Mihile",
-    "jobType": "warrior"
-   },
-   {
-    "linkSkill": "Invincible Belief",
-    "legionType": "STR+",
-    "className": "Hero",
-    "jobType": "warrior"
-   },
-   {
-    "linkSkill": "Invincible Belief",
-    "legionType": "STR+",
-    "className": "Paladin",
-    "jobType": "warrior"
-   },
-   {
-    "linkSkill": "Invincible Belief",
-    "legionType": "MAXHP%",
-    "className": "Dark Knight",
-    "jobType": "warrior"
-   },
-   {
-    "linkSkill": "Rhinne's Blessing",
-    "legionType": "EXP",
-    "className": "Zero",
-    "jobType": "warrior"
-   },
-   {
-    "linkSkill": "Adventurer's Curiosity",
-    "legionType": "DEX+",
-    "className": "Bowmaster",
-    "jobType": "bowman"
-   },
-   {
-    "linkSkill": "Adventurer's Curiosity",
-    "legionType": "CRITRT",
-    "className": "Marksman",
-    "jobType": "bowman"
-   },
-   {
-    "linkSkill": "Time to Prepare",
-    "legionType": "DEX+",
-    "className": "Kain",
-    "jobType": "bowman"
-   },
-   {
-    "linkSkill": "Elven Blessing",
-    "legionType": "SKILLCD",
-    "className": "Mercedes",
-    "jobType": "bowman"
-   },
-   {
-    "linkSkill": "Adventurer's Curiosity",
-    "legionType": "DEX+",
-    "className": "Pathfinder",
-    "jobType": "bowman"
-   },
-   {
-    "linkSkill": "Spirit of Freedom",
-    "legionType": "%DMGUP",
-    "className": "Wild Hunter",
-    "jobType": "bowman"
-   },
-   {
-    "linkSkill": "Cygnus Blessing",
-    "legionType": "DEX+",
-    "className": "Wind Archer",
-    "jobType": "bowman"
-   },
-   {
-    "linkSkill": "Terms and Conditions",
-    "legionType": "DEX+P",
-    "className": "Angelic Buster",
-    "jobType": "pirate"
-   },
-   {
-    "linkSkill": "Pirate Blessing",
-    "legionType": "STR+P",
-    "className": "Cannoneer",
-    "jobType": "pirate"
-   },
-   {
-    "linkSkill": "Spirit of Freedom",
-    "legionType": "BUFFDUR",
-    "className": "Mechanic",
-    "jobType": "pirate"
-   },
-   {
-    "linkSkill": "Pirate Blessing",
-    "legionType": "STR+P",
-    "className": "Buccaneer",
-    "jobType": "pirate"
-   },
-   {
-    "linkSkill": "Pirate Blessing",
-    "legionType": "SUMMND",
-    "className": "Corsair",
-    "jobType": "pirate"
-   },
-   {
-    "linkSkill": "Close Call",
-    "legionType": "CRTDMG+",
-    "className": "Shade",
-    "jobType": "pirate"
-   },
-   {
-    "linkSkill": "Cygnus Blessing",
-    "legionType": "STR+P",
-    "className": "Thunder Breaker",
-    "jobType": "pirate"
-   },
-   {
-    "linkSkill": "Solus",
-    "legionType": "STR+P",
-    "className": "Ark",
-    "jobType": "pirate"
-   }
+	{
+		"linkSkill": "Spirit of Freedom",
+		"legionType": "INT+",
+		"className": "Battle Mage",
+		"jobType": "mage"
+	},
+	{
+		"linkSkill": "Spirit Guide Blessing",
+		"legionType": "IEDM",
+		"className": "Lynn",
+		"jobType": "mage"
+	},
+	{
+		"linkSkill": "Cygnus Blessing",
+		"legionType": "INT+",
+		"className": "Blaze Wizard",
+		"jobType": "mage"
+	},
+	{
+		"linkSkill": "Rune Persistence",
+		"legionType": "RECVRMP",
+		"className": "Evan",
+		"jobType": "mage"
+	},
+	{
+		"linkSkill": "Tide of Battle",
+		"legionType": "INT+",
+		"className": "Illium",
+		"jobType": "mage"
+	},
+	{
+		"linkSkill": "Elementalism",
+		"legionType": "BOSSDMGM",
+		"className": "Kanna",
+		"jobType": "mage"
+	},
+	{
+		"linkSkill": "Judgment",
+		"legionType": "INT+",
+		"className": "Kinesis",
+		"jobType": "mage"
+	},
+	{
+		"linkSkill": "Nature's Friend",
+		"legionType": "INT+",
+		"className": "Lara",
+		"jobType": "mage"
+	},
+	{
+		"linkSkill": "Light Wash",
+		"legionType": "INT+",
+		"className": "Luminous",
+		"jobType": "mage"
+	},
+	{
+		"linkSkill": "Empirical Knowledge",
+		"legionType": "MAXMP%",
+		"className": "Fire & Poison",
+		"jobType": "mage"
+	},
+	{
+		"linkSkill": "Empirical Knowledge",
+		"legionType": "INT+",
+		"className": "Ice & Lightning",
+		"jobType": "mage"
+	},
+	{
+		"linkSkill": "Empirical Knowledge",
+		"legionType": "INT+",
+		"className": "Bishop",
+		"jobType": "mage"
+	},
+	{
+		"linkSkill": "Thief's Cunning",
+		"legionType": "LUK+",
+		"className": "Dual Blade",
+		"jobType": "thief"
+	},
+	{
+		"linkSkill": "Cygnus Blessing",
+		"legionType": "LUK+",
+		"className": "Night Walker",
+		"jobType": "thief"
+	},
+	{
+		"linkSkill": "Phantom Instinct",
+		"legionType": "MESO%",
+		"className": "Phantom",
+		"jobType": "thief"
+	},
+	{
+		"linkSkill": "Thief's Cunning",
+		"legionType": "CRITRTT",
+		"className": "Night Lord",
+		"jobType": "thief"
+	},
+	{
+		"linkSkill": "Thief's Cunning",
+		"legionType": "LUK+",
+		"className": "Shadower",
+		"jobType": "thief"
+	},
+	{
+		"linkSkill": "Hybrid Logic",
+		"legionType": "STDELU",
+		"className": "Xenon",
+		"jobType": "xenon"
+	},
+	{
+		"linkSkill": "Unfair Advantage",
+		"legionType": "LUK+",
+		"className": "Cadena",
+		"jobType": "thief"
+	},
+	{
+		"linkSkill": "Bravado",
+		"legionType": "LUK+",
+		"className": "Hoyoung",
+		"jobType": "thief"
+	},
+	{
+		"linkSkill": "Innate Gift",
+		"legionType": "LUK+",
+		"className": "Khali",
+		"jobType": "thief"
+	},
+	{
+		"linkSkill": "Combo Kill Blessing",
+		"legionType": "RECVRHP+",
+		"className": "Aran",
+		"jobType": "warrior"
+	},
+	{
+		"linkSkill": "Noble Fire",
+		"legionType": "STR+",
+		"className": "Adele",
+		"jobType": "warrior"
+	},
+	{
+		"linkSkill": "Spirit of Freedom",
+		"legionType": "IED+",
+		"className": "Blaster",
+		"jobType": "warrior"
+	},
+	{
+		"linkSkill": "Cygnus Blessing",
+		"legionType": "MAXHP+",
+		"className": "Dawn Warrior",
+		"jobType": "warrior"
+	},
+	{
+		"linkSkill": "Wild Rage",
+		"legionType": "BOSSDMG+",
+		"className": "Demon Avenger",
+		"jobType": "warrior"
+	},
+	{
+		"linkSkill": "Fury Unleashed",
+		"legionType": "STATRES+",
+		"className": "Demon Slayer",
+		"jobType": "warrior"
+	},
+	{
+		"linkSkill": "Keen Edge",
+		"legionType": "CRIT",
+		"className": "Hayato",
+		"jobType": "warrior"
+	},
+	{
+		"linkSkill": "Iron Will",
+		"legionType": "STR+",
+		"className": "Kaiser",
+		"jobType": "warrior"
+	},
+	{
+		"linkSkill": "Knight's Watch",
+		"legionType": "MAXHP+",
+		"className": "Mihile",
+		"jobType": "warrior"
+	},
+	{
+		"linkSkill": "Invincible Belief",
+		"legionType": "STR+",
+		"className": "Hero",
+		"jobType": "warrior"
+	},
+	{
+		"linkSkill": "Invincible Belief",
+		"legionType": "STR+",
+		"className": "Paladin",
+		"jobType": "warrior"
+	},
+	{
+		"linkSkill": "Invincible Belief",
+		"legionType": "MAXHP%",
+		"className": "Dark Knight",
+		"jobType": "warrior"
+	},
+	{
+		"linkSkill": "Rhinne's Blessing",
+		"legionType": "EXP",
+		"className": "Zero",
+		"jobType": "warrior"
+	},
+	{
+		"linkSkill": "Adventurer's Curiosity",
+		"legionType": "DEX+",
+		"className": "Bowmaster",
+		"jobType": "bowman"
+	},
+	{
+		"linkSkill": "Adventurer's Curiosity",
+		"legionType": "CRITRT",
+		"className": "Marksman",
+		"jobType": "bowman"
+	},
+	{
+		"linkSkill": "Time to Prepare",
+		"legionType": "DEX+",
+		"className": "Kain",
+		"jobType": "bowman"
+	},
+	{
+		"linkSkill": "Elven Blessing",
+		"legionType": "SKILLCD",
+		"className": "Mercedes",
+		"jobType": "bowman"
+	},
+	{
+		"linkSkill": "Adventurer's Curiosity",
+		"legionType": "DEX+",
+		"className": "Pathfinder",
+		"jobType": "bowman"
+	},
+	{
+		"linkSkill": "Spirit of Freedom",
+		"legionType": "%DMGUP",
+		"className": "Wild Hunter",
+		"jobType": "bowman"
+	},
+	{
+		"linkSkill": "Cygnus Blessing",
+		"legionType": "DEX+",
+		"className": "Wind Archer",
+		"jobType": "bowman"
+	},
+	{
+		"linkSkill": "Terms and Conditions",
+		"legionType": "DEX+P",
+		"className": "Angelic Buster",
+		"jobType": "pirate"
+	},
+	{
+		"linkSkill": "Pirate Blessing",
+		"legionType": "STR+P",
+		"className": "Cannoneer",
+		"jobType": "pirate"
+	},
+	{
+		"linkSkill": "Spirit of Freedom",
+		"legionType": "BUFFDUR",
+		"className": "Mechanic",
+		"jobType": "pirate"
+	},
+	{
+		"linkSkill": "Pirate Blessing",
+		"legionType": "STR+P",
+		"className": "Buccaneer",
+		"jobType": "pirate"
+	},
+	{
+		"linkSkill": "Pirate Blessing",
+		"legionType": "SUMMND",
+		"className": "Corsair",
+		"jobType": "pirate"
+	},
+	{
+		"linkSkill": "Close Call",
+		"legionType": "CRTDMG+",
+		"className": "Shade",
+		"jobType": "pirate"
+	},
+	{
+		"linkSkill": "Cygnus Blessing",
+		"legionType": "STR+P",
+		"className": "Thunder Breaker",
+		"jobType": "pirate"
+	},
+	{
+		"linkSkill": "Solus",
+		"legionType": "STR+P",
+		"className": "Ark",
+		"jobType": "pirate"
+	}
 ]
-

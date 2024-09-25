@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,29 +9,33 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="shortcut icon" type="image/x-icon" href="/icon.ico">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800&display=swap" as="font" rel="stylesheet" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800&display=swap"
+        as="font" rel="stylesheet" crossorigin="anonymous">
 </head>
+
 <body>
-   
-    <div class = "logo">
-        <img src="assets/logo/logo.webp"id ="logo">
+
+    <div class="logo">
+        <img src="assets/logo/logo.webp" id="logo">
         <form action="/login" method="post">
             <% if (flash && flash.message) { %>
-              <div class="message <%= flash.type %>">
-                  <%= flash.message %>
-              </div>
-             <% } %>
-            <input id="username" class="username" type="text" placeholder="Username" name="username" required>
-            <input id="password" class="password" type="password" placeholder="Password" name ="password" required>
-            <a href = "/forgot">
-                <p class= "forgotPassword">Forgot password?</p>
-            </a>
-            <input class ="login" type="submit" value="Login">
+                <div class="message <%= flash.type %>">
+                    <%= flash.message %>
+                </div>
+                <% } %>
+                    <input id="username" class="username" type="text" placeholder="Username" name="username" required>
+                    <input id="password" class="password" type="password" placeholder="Password" name="password"
+                        required>
+                    <a href="/forgot">
+                        <p class="forgotPassword">Forgot password?</p>
+                    </a>
+                    <input class="login" type="submit" value="Login">
         </form>
-        
+
         <button onclick="location.href='/signup'" class="noAccount">Don't have an account? Register!</button>
     </div>
-   
-      
+
+
 </body>
+
 </html>

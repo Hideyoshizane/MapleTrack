@@ -1,6 +1,10 @@
 const bcrypt = require('bcrypt');
-const { User, LASTVERSION, resetPasswordEmptyUser} = require('../models/user');
-const { searchServersAndCreateMissing, getServerWithHighestLevel, getHighestLevelCharacter} = require('../models/servers');
+const { User, LASTVERSION, resetPasswordEmptyUser } = require('../models/user');
+const {
+	searchServersAndCreateMissing,
+	getServerWithHighestLevel,
+	getHighestLevelCharacter,
+} = require('../models/servers');
 const { createBossList, resetBossList } = require('../models/bossingList');
 
 module.exports = {
@@ -14,18 +18,26 @@ module.exports = {
 			if (sameUser) {
 				req.flash('type', 'failed');
 				req.flash('message', 'That user already exists!');
-        		res.status(400);
-        		return res.redirect('/signup');
+				res.status(400);
+				return res.redirect('/signup');
 			}
 
-			createdUser = new User({ username, email, password: hashedPassword, version: LASTVERSION});
-			
+			createdUser = new User({
+				username,
+				email,
+				password: hashedPassword,
+				version: LASTVERSION,
+			});
+
 			await createdUser.save();
-			await searchServersAndCreateMissing(createdUser._id, createdUser.username);
+			await searchServersAndCreateMissing(
+				createdUser._id,
+				createdUser.username,
+			);
 			await createBossList(createdUser.username);
 			await createdUser.save();
 			req.flash('message', 'User created successfully!');
-          	req.flash('type', 'success');
+			req.flash('type', 'success');
 			res.status(200);
 			return res.redirect('/login');
 		} catch (err) {
@@ -40,45 +52,48 @@ module.exports = {
 			return res.render('home', { username, _id });
 		} catch (error) {
 			console.error('Error rendering home page:', error);
-			res.status(500).json({ error: 'An error occurred while rendering home page' });
+			res.status(500).json({
+				error: 'An error occurred while rendering home page',
+			});
 		}
 	},
 	weeklyBoss: async (req, res) => {
 		try {
-				const { username, _id } = res.locals;
-				resetBossList(username);
-				await res.render('weeklyBoss', { username, _id });
-
+			const { username, _id } = res.locals;
+			resetBossList(username);
+			await res.render('weeklyBoss', { username, _id });
 		} catch (error) {
 			console.error('Error rendering Weekly Boss page:', error);
-			res.status(500).json({ error: 'An error occurred while rendering Weekly Boss page' });
+			res.status(500).json({
+				error: 'An error occurred while rendering Weekly Boss page',
+			});
 		}
 	},
-	signout: async(req, res) =>{
-		try{
+	signout: async (req, res) => {
+		try {
 			res.clearCookie('token');
 			res.redirect('/');
-			
 		} catch (error) {
 			console.error('Error signing out', error);
-			res.status(500).json({ error: 'An error occurred while signing out' });
+			res.status(500).json({
+				error: 'An error occurred while signing out',
+			});
 		}
 	},
-	account: async(req, res) =>{
-		try{
+	account: async (req, res) => {
+		try {
 			const { username, _id } = res.locals;
 			await res.render('account', { username, _id });
-
 		} catch (error) {
 			console.error('Error', error);
-     		res.status(500).json({ error: 'An error occurred' });
-   		}
+			res.status(500).json({ error: 'An error occurred' });
+		}
 	},
 	forgotUsername: async (req, res) => {
-		try{
+		try {
 			const { username } = req.body;
 			const foundUser = await User.findOne({ username });
-			if(!foundUser){
+			if (!foundUser) {
 				return res.json({ userFound: null });
 			}
 			const serverName = await getServerWithHighestLevel(foundUser._id);
@@ -86,60 +101,63 @@ module.exports = {
 			res.json({
 				userFound: !!foundUser,
 				serverName: serverName,
-			  });
+			});
 		} catch (error) {
 			console.error('Error finding username', error);
 			res.status(500).json({ error: 'An error occurred.' });
-		  }
+		}
 	},
 	forgotPasswordLevel: async (req, res) => {
-		try{
-			const {username, level} = req.body;
+		try {
+			const { username, level } = req.body;
 			const foundUser = await User.findOne({ username });
 			const characterData = await getHighestLevelCharacter(foundUser._id);
-			if(level == characterData.highestLevel){
+			if (level == characterData.highestLevel) {
 				const salt = await bcrypt.genSalt(10);
-				const hashedPassword = await bcrypt.hash(characterData.characterName, salt);
+				const hashedPassword = await bcrypt.hash(
+					characterData.characterName,
+					salt,
+				);
 
 				foundUser.password = hashedPassword;
 				await foundUser.save();
 				return res.json(true);
-			} else{
+			} else {
 				return res.json(false);
 			}
-
 		} catch (error) {
 			console.error('Error', error);
-     		res.status(500).json({ error: 'An error occurred.' });
-    	}
+			res.status(500).json({ error: 'An error occurred.' });
+		}
 	},
 
 	resetEmptyAccount: async (req, res) => {
-		try{
+		try {
 			const { username } = req.body;
 			resetPasswordEmptyUser(username);
-   		   res.status(200).send('Password reset successfully');
+			res.status(200).send('Password reset successfully');
 		} catch (error) {
 			console.error('Error finding username', error);
 			res.status(500).json({ error: 'An error occurred.' });
 		}
 	},
 	updatePassword: async (req, res) => {
-			const username  = res.locals.username;
-			const { oldPassword, newPassword } = req.body;
+		const username = res.locals.username;
+		const { oldPassword, newPassword } = req.body;
 
-			const foundUser = await User.findOne({ username });
-			const passwordMatch = await bcrypt.compare(oldPassword, foundUser.password);
-			if(passwordMatch){			
-				const salt = await bcrypt.genSalt(10);
-				const newHashedPassword = await bcrypt.hash(newPassword, salt);
-				foundUser.password = newHashedPassword;
-				await foundUser.save();
-				res.json(true);
-			}
-			else{
-				res.json(false);
-			}
-
-	}
+		const foundUser = await User.findOne({ username });
+		const passwordMatch = await bcrypt.compare(
+			oldPassword,
+			foundUser.password,
+		);
+		if (passwordMatch) {
+			const salt = await bcrypt.genSalt(10);
+			const newHashedPassword = await bcrypt.hash(newPassword, salt);
+			foundUser.password = newHashedPassword;
+			await foundUser.save();
+			res.json(true);
+		} else {
+			res.json(false);
+		}
+	},
 };

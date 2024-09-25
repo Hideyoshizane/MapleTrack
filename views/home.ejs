@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>MapleTrack</title>
     <meta charset="UTF-8">
@@ -10,43 +11,47 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="shortcut icon" type="image/x-icon" href="/icon.ico">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800&display=swap" as="font" rel="stylesheet" crossorigin="anonymous">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;500;600;700;800;900&display=swap" as="font" rel="stylesheet" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800&display=swap"
+        as="font" rel="stylesheet" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;500;600;700;800;900&display=swap"
+        as="font" rel="stylesheet" crossorigin="anonymous">
 </head>
+
 <body>
     <%- include('navbar') %>
-    <div class="center-container">
-        <div class="mainContent">
-            <div class="dropdown"></div>
-            <div class= "filterButtons">
-                <p>Class Filter</p>
-                <div class ="buttonWrap">
-                    <button class="filterButton" data-value="mage">  Mage    </button>
-                    <div class ="vl"></div>
-                    <button class="filterButton" data-value="thief"> Thief   </button>
-                    <div class ="vl"></div>
-                    <button class="filterButton" data-value="warrior">Warrior</button>
-                    <div class ="vl"></div>
-                    <button class="filterButton" data-value="bowman"> Bowman </button>
-                    <div class ="vl"></div>
-                    <button class="filterButton" data-value="pirate"> Pirate </button>
-                    <div class ="vl"></div>
-                    <button class="filterButton" data-value="bossing">Bossing</button>
+        <div class="center-container">
+            <div class="mainContent">
+                <div class="dropdown"></div>
+                <div class="filterButtons">
+                    <p>Class Filter</p>
+                    <div class="buttonWrap">
+                        <button class="filterButton" data-value="mage"> Mage </button>
+                        <div class="vl"></div>
+                        <button class="filterButton" data-value="thief"> Thief </button>
+                        <div class="vl"></div>
+                        <button class="filterButton" data-value="warrior">Warrior</button>
+                        <div class="vl"></div>
+                        <button class="filterButton" data-value="bowman"> Bowman </button>
+                        <div class="vl"></div>
+                        <button class="filterButton" data-value="pirate"> Pirate </button>
+                        <div class="vl"></div>
+                        <button class="filterButton" data-value="bossing">Bossing</button>
+                    </div>
+                </div>
+                <div class="characterCards">
+
                 </div>
             </div>
-            <div class= "characterCards">
-
-            </div>
         </div>
-    </div>
-    <script id="userdata" data-username="<%- username %>" data-username-id="<%- _id %>"></script>
-    <script src="/../public/javascript/utils/progressBar.js"></script>
-    <script src="/../public/javascript/utils/navbar.js"></script>
-    <script src="/../public/javascript/utils/create.js"></script>
-    <script src="/../public/javascript/utils/serverDropdown.js"></script>
-    <script src="/../public/javascript/utils/cookies.js"></script>
-    <script src="/../public/javascript/utils/characterData.js"></script>
-    <script src="/../public/javascript/home/home_load.js"></script>
-    <script src="/../public/javascript/home/home_logic.js"></script>
+        <script id="userdata" data-username="<%- username %>" data-username-id="<%- _id %>"></script>
+        <script src="/../public/javascript/utils/progressBar.js"></script>
+        <script src="/../public/javascript/utils/navbar.js"></script>
+        <script src="/../public/javascript/utils/create.js"></script>
+        <script src="/../public/javascript/utils/serverDropdown.js"></script>
+        <script src="/../public/javascript/utils/cookies.js"></script>
+        <script src="/../public/javascript/utils/characterData.js"></script>
+        <script src="/../public/javascript/home/home_load.js"></script>
+        <script src="/../public/javascript/home/home_logic.js"></script>
 </body>
+
 </html>

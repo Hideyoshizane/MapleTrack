@@ -1,126 +1,132 @@
-
-.topnav{
-    position: sticky;
-    top: 0;
-    background-color: #424242;
-    width: 100vw;
-    height: 12.3vh;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    align-self: center;
-    font-size: 1.5rem;
-    font-family: Inter;
-    color: #F6F6F6;
-    z-index: 10;
+.topnav {
+  position: sticky;
+  top: 0;
+  background-color: #424242;
+  width: 100vw;
+  height: 12.3vh;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  align-self: center;
+  font-size: 1.5rem;
+  font-family: Inter;
+  color: #F6F6F6;
+  z-index: 10;
 }
 
-.logo{
-    padding: 0;
-    margin: 0;
-    margin-left: 2.083vw;
-    height: 8.78vh;
-    cursor: pointer;
+.logo {
+  padding: 0;
+  margin: 0;
+  margin-left: 2.083vw;
+  height: 8.78vh;
+  cursor: pointer;
 }
+
 .searchSection {
-    position: relative;
-    display: flex;
-    align-items: center;
-    width: 32.5vw;
-    height: 6.147vh;
-    border: 0;
-    color: #585858;
-    border-color: #f6f6f6;
-    background-color: #f6f6f6;
-    padding-left: 1rem;
-    padding-right: 0.5rem;
-    border-radius: 0.938rem;
-    transition: all 0.65s ease;
-  }
-  #daily,
-  #weekly{
-    text-align: center;
-  }
-  
-  .searchSection.expanded {
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-  }
-  
-  #searchResults {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    background-color: #f6f6f6;
-    border-radius: 0 0 15px 15px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    z-index: 1;
-    display: none;
-  }
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 32.5vw;
+  height: 6.147vh;
+  border: 0;
+  color: #585858;
+  border-color: #f6f6f6;
+  background-color: #f6f6f6;
+  padding-left: 1rem;
+  padding-right: 0.5rem;
+  border-radius: 0.938rem;
+  transition: all 0.65s ease;
+}
 
-  #searchResults.show {
-    display: block;
-  }
-  
-  .result {
-    display: flex;
-    min-width: 32.708vw;
-    padding: 10px;
-    margin: 0;
-    margin-top: 0px;
-    margin-bottom: 10px;
-    align-items: center;
-  }
-  
-  .result img{
-    width: 3.513vh;
-    height: 1.667vw;
-    margin-left: 8px;
-    vertical-align: center;
-  }
-  .result:last-child {
-    margin-bottom: 0;
-    border-radius: inherit;
-  }
-  
-  .result:hover {
-    background-color: #E0E0E0;
-    cursor: pointer;
-  }
+#daily,
+#weekly {
+  text-align: center;
+}
+
+.searchSection.expanded {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+#searchResults {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #f6f6f6;
+  border-radius: 0 0 15px 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 1;
+  display: none;
+}
+
+#searchResults.show {
+  display: block;
+}
+
+.result {
+  display: flex;
+  min-width: 32.708vw;
+  padding: 10px;
+  margin: 0;
+  margin-top: 0px;
+  margin-bottom: 10px;
+  align-items: center;
+}
+
+.result img {
+  width: 3.513vh;
+  height: 1.667vw;
+  margin-left: 8px;
+  vertical-align: center;
+}
+
+.result:last-child {
+  margin-bottom: 0;
+  border-radius: inherit;
+}
+
+.result:hover {
+  background-color: #E0E0E0;
+  cursor: pointer;
+}
+
 #search {
-    color: #585858;
-    font-size: 28px;
-    width: 23.854vw;
-    margin-left: 25px;
-    border: none;
-    background-color: #F6F6F6;
+  color: #585858;
+  font-size: 28px;
+  width: 23.854vw;
+  margin-left: 25px;
+  border: none;
+  background-color: #F6F6F6;
 }
+
 #search:focus {
-    outline: none;
+  outline: none;
 }
 
 
-#daily, #weekly{
-    margin: 0px;
-    padding: 0%;
-    font-size: 24px;
-    font-family: Inter;
-    font-weight: regular;
-}
-#usernameBlock{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-right: 16px;
-    width: 15.208vw;
-    font-size: 32px;
-    font-weight: 300;
-    font-family: Inter;
-    cursor: pointer;
+#daily,
+#weekly {
+  margin: 0px;
+  padding: 0%;
+  font-size: 24px;
+  font-family: Inter;
+  font-weight: regular;
 }
 
-#usernameBlock p{
-    padding-left: 4px;
+#usernameBlock {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-right: 16px;
+  width: 15.208vw;
+  font-size: 32px;
+  font-weight: 300;
+  font-family: Inter;
+  cursor: pointer;
+}
+
+#usernameBlock p {
+  padding-left: 4px;
 }
 
 #usernameBlock.icon-wrapper {
@@ -152,9 +158,11 @@
   0% {
     transform: scaleY(0);
   }
+
   80% {
     transform: scaleY(1.1);
   }
+
   100% {
     transform: scaleY(1);
   }
@@ -164,6 +172,7 @@
   0% {
     transform: scaleY(1);
   }
+
   100% {
     transform: scaleY(0);
   }
@@ -190,7 +199,7 @@
   cursor: pointer;
 }
 
-.rotate{
+.rotate {
   transform: rotate(180deg);
   transition: 0.3s ease-in-out;
 }

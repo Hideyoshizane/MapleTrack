@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>MapleTrack</title>
     <meta charset="UTF-8">
@@ -10,50 +11,55 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="shortcut icon" type="image/x-icon" href="/icon.ico">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800&display=swap" as="font" rel="stylesheet" crossorigin="anonymous">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;500;600;700;800;900&display=swap" as="font" rel="stylesheet" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800&display=swap"
+        as="font" rel="stylesheet" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;500;600;700;800;900&display=swap"
+        as="font" rel="stylesheet" crossorigin="anonymous">
 </head>
+
 <body>
     <%- include('navbar') %>
-    <div class="center-container">
-        <div class="mainContent">
-            <div class ="topButtons">
-                <div class="bossDiv"></div>
-                <div class="totalSelectedDiv">
-                    <img src="../../public/assets/icons/menu/crystal.webp" alt="Boss Crystal Icon" class="crystalIcon">
-                    <div class="WeekTextDiv">
-                        <span class="selectedTotal">Selected Boss Total</span>
+        <div class="center-container">
+            <div class="mainContent">
+                <div class="topButtons">
+                    <div class="bossDiv"></div>
+                    <div class="totalSelectedDiv">
+                        <img src="../../public/assets/icons/menu/crystal.webp" alt="Boss Crystal Icon"
+                            class="crystalIcon">
+                        <div class="WeekTextDiv">
+                            <span class="selectedTotal">Selected Boss Total</span>
+                        </div>
+                    </div>
+                    <div class="totalIncomedDiv">
+                        <img src="../../public/assets/icons/menu/stash.webp" alt="Gold Icon" class="stashIcon">
+                        <div class="IncomeTextDiv">
+                            <span class="totalIncomeText">All Characters Income</span>
+                        </div>
+                    </div>
+                    <button class="discardButton">Discard Changes</button>
+                    <button class="saveButton">Save Changes</button>
+                </div>
+                <div class="characterInfo">
+                    <div class="characterSelector"></div>
+                    <div class="characterIncomeDiv">
+                        <img src="../../public/assets/icons/menu/gold.webp" alt="Gold Icon" class="goldIcon">
+                        <div class="IncomeTextDiv">
+                            <span class="totalIncomeText">Character Total Income</span>
+                        </div>
                     </div>
                 </div>
-                <div class="totalIncomedDiv">
-                    <img src="../../public/assets/icons/menu/stash.webp" alt="Gold Icon" class="stashIcon">
-                    <div class="IncomeTextDiv">
-                        <span class="totalIncomeText">All Characters Income</span>
-                    </div>
-                </div>
-                <button class="discardButton">Discard Changes</button>
-                <button class="saveButton">Save Changes</button>
+                <div class="bosses"></div>
             </div>
-            <div class ="characterInfo">
-                <div class ="characterSelector"></div>
-                <div class="characterIncomeDiv">
-                    <img src="../../public/assets/icons/menu/gold.webp" alt="Gold Icon" class="goldIcon">
-                    <div class="IncomeTextDiv">
-                        <span class="totalIncomeText">Character Total Income</span>
-                    </div>
-                </div>
-            </div>
-            <div class ="bosses"></div>
         </div>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/luxon@3.4.3/build/global/luxon.min.js"></script>
-    <script src="/public/javascript/utils/create.js"></script>
-    <script src="/public/javascript/utils/navbar.js"></script>
-    <script src="/public/javascript/utils/cookies.js"></script>
-    <script src="/public/javascript/utils/characterData.js"></script>
-    <script src="/public/javascript/editBosses/editBosses_load.js"></script>
-    <script src="/public/javascript/editBosses/editBosses_logic.js"></script>
-    
-    <script id="userdata" data-username="<%- username %>" data-username-id="<%- _id %>"></script>
+        <script src="https://cdn.jsdelivr.net/npm/luxon@3.4.3/build/global/luxon.min.js"></script>
+        <script src="/public/javascript/utils/create.js"></script>
+        <script src="/public/javascript/utils/navbar.js"></script>
+        <script src="/public/javascript/utils/cookies.js"></script>
+        <script src="/public/javascript/utils/characterData.js"></script>
+        <script src="/public/javascript/editBosses/editBosses_load.js"></script>
+        <script src="/public/javascript/editBosses/editBosses_logic.js"></script>
+
+        <script id="userdata" data-username="<%- username %>" data-username-id="<%- _id %>"></script>
 </body>
+
 </html>

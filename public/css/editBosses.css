@@ -1,26 +1,28 @@
-::-webkit-scrollbar-track{
-	border-radius: 0.625rem;
-	background-color: #F5F5F5;
+::-webkit-scrollbar-track {
+    border-radius: 0.625rem;
+    background-color: #F5F5F5;
 
 }
 
-::-webkit-scrollbar{
-	width: 0.125rem;
-	background-color: #F5F5F5;
+::-webkit-scrollbar {
+    width: 0.125rem;
+    background-color: #F5F5F5;
     z-index: 6;
 }
-::-webkit-scrollbar-thumb{
-	border-radius: 0.625rem;
-	background-color: #3D3D3D;
+
+::-webkit-scrollbar-thumb {
+    border-radius: 0.625rem;
+    background-color: #3D3D3D;
     width: 0.125rem;
 }
 
-body{
+body {
     background-color: #E8E8E8;
     padding: 0;
     margin: 0;
     overflow-x: hidden;
 }
+
 .center-container {
     display: flex;
     justify-content: center;
@@ -28,7 +30,7 @@ body{
     flex: 1;
 }
 
-.mainContent{
+.mainContent {
     display: flex;
     margin: 0px;
     padding: 0px;
@@ -40,7 +42,7 @@ body{
     flex-direction: column;
 }
 
-.topButtons{
+.topButtons {
     display: flex;
     position: relative;
     margin-top: 2rem;
@@ -48,17 +50,17 @@ body{
     align-items: flex-end
 }
 
-.bossDiv{
+.bossDiv {
     display: flex;
 }
 
-.bossIcon{
+.bossIcon {
     width: 4.01vw;
     margin-right: 0.5rem;
     height: 10.648vh;
 }
 
-.bossHunting{
+.bossHunting {
     font-family: 'Inter';
     font-size: 2.5rem;
     font-weight: 600;
@@ -66,7 +68,7 @@ body{
     color: #3D3D3D;
 }
 
-.totalSelectedDiv{
+.totalSelectedDiv {
     display: flex;
     height: 10.538vh;
     width: 17.292vw;
@@ -77,13 +79,14 @@ body{
     justify-content: space-between;
 }
 
-.crystalIcon{
+.crystalIcon {
     width: 3.385vw;
     height: 8.013vh;
     margin-left: 1rem;
 }
+
 .WeekTextDiv,
-.IncomeTextDiv{
+.IncomeTextDiv {
     display: flex;
     flex-direction: column;
     text-align: end;
@@ -92,20 +95,21 @@ body{
 
 .totalSelectedBosses,
 .TotalIncome,
-.characterTotalIncome{
+.characterTotalIncome {
     font-family: 'Inter';
     font-size: 2rem;
     font-weight: 600;
     color: #3D3D3D;
 }
-.selectedTotal{
+
+.selectedTotal {
     font-family: 'Inter';
     font-size: 1.5rem;
     font-weight: 500;
     color: #3D3D3D;
 }
 
-.totalIncomedDiv{
+.totalIncomedDiv {
     display: flex;
     width: 17.708vw;
     height: 10.538vh;
@@ -115,20 +119,22 @@ body{
     margin-left: 0.5rem;
     justify-content: space-between;
 }
-.stashIcon{
+
+.stashIcon {
     height: 8.562vh;
     width: 4.167vw;
-    margin-left: 1rem;  
+    margin-left: 1rem;
 }
 
 
-.totalIncomeText{
+.totalIncomeText {
     font-family: 'Inter';
     font-size: 1.25rem;
     font-weight: 500;
     color: #3D3D3D;
 }
-.discardButton{
+
+.discardButton {
     width: 14.792vw;
     height: 6.147vh;
     background-color: #C33232;
@@ -143,7 +149,8 @@ body{
     margin-left: 0.5rem;
     cursor: pointer;
 }
-.saveButton{
+
+.saveButton {
     width: 14.792vw;
     height: 6.147vh;
     background-color: #45C332;
@@ -158,18 +165,19 @@ body{
     margin-left: 0.5rem;
     cursor: pointer;
 }
-.characterInfo{
+
+.characterInfo {
     display: flex;
 }
 
-.characterSelector{
+.characterSelector {
     margin-top: 2rem;
     margin-left: 2.813rem;
     height: 12.953vh;
     width: 23.49vw;
 }
 
-.dropdown{
+.dropdown {
     display: block;
     position: relative;
     width: 12.135vw;
@@ -178,7 +186,7 @@ body{
 
 }
 
-.dropdownToggle{
+.dropdownToggle {
     display: block;
     width: 23.698vw;
     max-height: 8.782vh;
@@ -197,8 +205,8 @@ body{
     cursor: pointer;
 }
 
-.dropdownToggle.open{
-    position:absolute;
+.dropdownToggle.open {
+    position: absolute;
     max-height: 400px;
     top: 0;
     left: 0;
@@ -207,27 +215,29 @@ body{
     cursor: pointer;
 }
 
-.dropdownToggle svg{
+.dropdownToggle svg {
     margin-right: 1.5rem;
 }
-.characterContent{
+
+.characterContent {
     max-height: 35.126vh;
     overflow-y: auto;
     overflow-x: hidden;
 }
-.closed{
+
+.closed {
     display: block;
     transition: all 0.3s ease-in-out;
 }
 
-.rotate{
+.rotate {
     transform: rotate(180deg);
     transition: 0.3s ease-in-out;
-  }  
+}
 
 
 .SelectedCharacterButton,
-.characterButton{
+.characterButton {
     width: 23.698vw;
     height: 8.782vh;
     border-radius: 25px;
@@ -245,19 +255,19 @@ body{
     cursor: pointer;
 }
 
-.characterButton:hover{
+.characterButton:hover {
     background-color: #B8B8B8;
     transition: all 0.3s ease-in-out;
 }
 
-.profile{
+.profile {
     position: absolute;
     filter: opacity(25%);
     margin: 0px;
     padding: 0px;
 }
 
-.characterWrapper{
+.characterWrapper {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -265,26 +275,26 @@ body{
 }
 
 
-.characterName{
+.characterName {
     font-family: 'Inter';
     font-weight: 600;
     font-size: 1.75rem;
     color: #3D3D3D;
 }
 
-.characterClass{
+.characterClass {
     font-family: 'Inter';
     font-weight: 400;
     font-size: 1.5rem;
     color: #3D3D3D;
 }
 
-.characterButton{
+.characterButton {
     border-radius: 0px;
     border-top: 0.125rem solid #ADADAD;
 }
 
-.characterIncomeDiv{
+.characterIncomeDiv {
     margin-top: 4.375rem;
     margin-left: 1rem;
     display: flex;
@@ -296,19 +306,19 @@ body{
     justify-content: space-between;
 }
 
-.goldIcon{
+.goldIcon {
     height: 7.684vh;
     width: 3.802vw;
     margin-left: 1rem;
 }
 
-.bossPicture{
+.bossPicture {
     width: 4.125rem;
     height: 4.125rem;
     margin-left: 1.5rem;
 }
 
-.bossGrid{
+.bossGrid {
     margin-top: 2rem;
     display: grid;
     grid-template-columns: repeat(2, 0fr);
@@ -316,15 +326,15 @@ body{
     gap: 0.5rem;
 }
 
-.bossGrid:last-child{
+.bossGrid:last-child {
     margin-bottom: 0.5rem;
 }
 
-.bossSlot{
+.bossSlot {
     width: 37.813vw;
 }
 
-.bossBox{
+.bossBox {
     display: flex;
     align-items: center;
     background-color: #D7D7D7;
@@ -334,12 +344,12 @@ body{
     transition: 0.2s ease-in;
 }
 
-.bossBox.open{
+.bossBox.open {
     width: 37.813vw;
     transition: 0.2s ease-in;
 }
 
-.bossName{
+.bossName {
     display: flex;
     align-items: center;
     font-family: 'Inter';
@@ -350,16 +360,18 @@ body{
     margin-left: 0.5rem;
     white-space: pre-line;
 }
-.buttonDiv{
+
+.buttonDiv {
     display: flex;
     width: 19.115vw;
     gap: 0.5rem;
 }
+
 .easyButton,
 .normalButton,
 .hardButton,
 .chaosButton,
-.extremeButton{
+.extremeButton {
     display: flex;
     align-items: center;
     justify-content: space-evenly;
@@ -372,31 +384,32 @@ body{
     cursor: pointer;
 }
 
-.easyButton{
+.easyButton {
     color: #EDEDED;
     background-color: #9B9B9B;
 }
 
-.normalButton{
+.normalButton {
     color: #3D3D3D;
     background-color: #91C9E3;
 }
 
-.hardButton{
+.hardButton {
     color: #3D3D3D;
     background-color: #E39294;
 }
 
-.chaosButton{
+.chaosButton {
     color: #EDEDED;
     background-color: #3D3D3D;
 }
 
-.extremeButton{
+.extremeButton {
     color: #E39294;
     background-color: #3D3D3D;
 }
-.totalBossIncome{
+
+.totalBossIncome {
     font-family: 'Inter';
     font-weight: 400;
     color: #3D3D3D;
@@ -405,7 +418,7 @@ body{
     margin-right: 0.5rem;
 }
 
-.warningDiv{
+.warningDiv {
     margin-top: 2rem;
     display: flex;
     flex-direction: column;
@@ -414,7 +427,7 @@ body{
     justify-content: center;
 }
 
-.warningText{
+.warningText {
     font-family: 'Inter';
     font-weight: 600;
     font-size: 3.125rem;
@@ -456,7 +469,7 @@ body{
     z-index: 10;
 }
 
-.dropdownWrapper{
+.dropdownWrapper {
     position: relative;
     display: flex;
     width: auto;
@@ -467,6 +480,7 @@ body{
     overflow: hidden;
     align-items: center;
 }
+
 .dailyDropdown {
     position: absolute;
     border: none;
@@ -482,6 +496,6 @@ body{
 }
 
 
-.option{
+.option {
     width: 6.094vw;
 }

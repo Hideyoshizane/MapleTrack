@@ -1,10 +1,11 @@
-body{
+body {
     background-color: #E8E8E8;
     padding: 0;
     margin: 0;
     overflow-x: hidden;
     overflow-y: hidden;
 }
+
 .center-container {
     display: flex;
     justify-content: center;
@@ -12,7 +13,7 @@ body{
     flex: 1;
 }
 
-.mainContent{
+.mainContent {
     display: flex;
     margin: 0px;
     padding: 0px;
@@ -23,11 +24,11 @@ body{
     position: relative;
 }
 
-.portraitImage{
+.portraitImage {
     height: calc(100vh - 116px);
 }
 
-.characterData{
+.characterData {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
@@ -36,17 +37,18 @@ body{
     height: calc(100vh - 116px);
     margin-right: 2rem;
 }
-.buttonWrapper{
+
+.buttonWrapper {
     width: 100%;
     height: 7.903vh;
     display: flex;
     justify-content: flex-end;
     align-items: flex-end;
-    gap:24px;
+    gap: 24px;
 }
 
 .discardButton,
-.saveButton{
+.saveButton {
     font-family: 'Inter';
     font-size: 1.75rem;
     font-weight: 600;
@@ -60,40 +62,42 @@ body{
     cursor: pointer;
 }
 
-.discardButton{
+.discardButton {
     background-color: #C33232;
     color: #FFF;
 }
-.saveButton{
+
+.saveButton {
     background-color: #45C332;
     color: #000;
     transition: 0.3s ease-in;
 }
 
-.saveButton:disabled{
+.saveButton:disabled {
     background-color: #A3A3A3;
     cursor: not-allowed;
 }
 
-.nameLinkLegion{
+.nameLinkLegion {
     display: flex;
     width: 37.708vw;
     flex-direction: column;
     align-items: flex-end;
 }
-.characterIconDiv{
+
+.characterIconDiv {
     display: flex;
     text-align: right;
     align-items: center;
 }
 
-.bossIcon{
+.bossIcon {
     width: 4.01vw;
     margin-right: 1rem;
     height: 10.318vh;
 }
 
-.characterName{
+.characterName {
     border: none;
     padding: 0;
     margin: 0;
@@ -108,20 +112,23 @@ body{
     width: 32.865vw;
     height: fit-content;
 }
-.characterName::placeholder{
+
+.characterName::placeholder {
     color: #666666;
 }
-.characterName:focus{
+
+.characterName:focus {
     outline: none;
 }
 
-.bossArea{
+.bossArea {
     display: flex;
     flex-direction: column;
     align-items: center;
     margin-top: 0.375rem;
 }
-.bossText{
+
+.bossText {
     font-family: 'Montserrat';
     font-size: 1rem;
     font-weight: 600;
@@ -129,7 +136,7 @@ body{
     width: 4.167vw;
 }
 
-.bossSwitch{
+.bossSwitch {
     position: relative;
     display: inline-block;
     width: 2.083vw;
@@ -137,9 +144,9 @@ body{
 }
 
 .bossSwitch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
+    opacity: 0;
+    width: 0;
+    height: 0;
 }
 
 .slider {
@@ -166,24 +173,24 @@ body{
     -webkit-transition: .4s;
     transition: .4s;
     border-radius: 50%;
-  }
+}
 
-  input:checked + .slider {
+input:checked+.slider {
     background-color: #00D7A3;
-  }
+}
 
-  input:focus + .slider {
+input:focus+.slider {
     box-shadow: 0 0 1px #00D7A3;
-  }
+}
 
-  input:checked + .slider:before {
+input:checked+.slider:before {
     -webkit-transform: translateX(0.813rem);
     -ms-transform: translateX(0.813rem);
     transform: translateX(1.25rem);
-  }
+}
 
 
-.linkLegionClassJob{
+.linkLegionClassJob {
     display: flex;
     width: 38.021vw;
     justify-content: space-between;
@@ -191,7 +198,7 @@ body{
 }
 
 .linkSkillBlock,
-.legionBlock{
+.legionBlock {
     margin-top: 0.5rem;
     align-items: center;
     display: flex;
@@ -202,61 +209,64 @@ body{
 }
 
 .linkSkillBlock span,
-.legionBlock span{
+.legionBlock span {
     font-family: 'Montserrat';
     font-size: 1rem;
 }
 
-.linkLegionTitle{
+.linkLegionTitle {
     font-weight: 500;
 }
 
 .linkImg,
-.legionImg{
+.legionImg {
     width: 4rem;
     height: 4rem;
 }
 
-.jobDiv{
+.jobDiv {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
     justify-content: center;
 }
 
-.classType{
+.classType {
     font-size: 2.375rem;
     font-family: 'Inter';
     width: 19.115vw;
     text-align: right;
 }
 
-.jobLevel{
+.jobLevel {
     font-size: 2rem;
     font-family: 'Inter';
 }
 
-.levelDiv{
+.levelDiv {
     display: flex;
     flex-direction: row;
     text-align: end;
     align-items: flex-end;
     gap: 0.5rem;
 }
-.level{
+
+.level {
     font-size: 2rem;
     font-family: 'Inter';
     font-weight: 200;
 }
-.Bar{
+
+.Bar {
     font-family: 'Inter';
     font-weight: 400;
     font-size: 3rem;
     padding: 0px;
     margin: 0px;
 }
+
 .levelNumber,
-.levelTarget{
+.levelTarget {
     border: none;
     padding: 0;
     margin: 0;
@@ -270,46 +280,51 @@ body{
     background-color: transparent;
 
 }
+
 .levelNumber::placeholder,
-.levelTarget::placeholder{
+.levelTarget::placeholder {
     color: #888;
 }
+
 .levelNumber:focus,
-.levelTarget:focus{
-    outline:none;
+.levelTarget:focus {
+    outline: none;
 }
 
 .characterLevelBar,
-.progressBar{
+.progressBar {
     border-radius: 1.563rem;
 }
 
-.characterLevelBar{
+.characterLevelBar {
     display: flex;
     align-items: center;
     background-color: black;
     width: 41.667vw;
     height: 3.513vh;
 }
-.progressBar{
+
+.progressBar {
     margin-left: 0.22vh;
     height: 3.074vh;
 }
 
 .ArcaneForce,
-.SacredForce{
+.SacredForce {
     font-family: 'Inter';
     font-weight: 500;
     font-size: 2.625rem;
 }
+
 .ArcaneForceGrid,
-.SacredForceGrid{
+.SacredForceGrid {
     display: flex;
     width: 41.354vw;
     flex-direction: row;
     flex-wrap: wrap;
     align-content: flex-start;
 }
+
 .ArcaneForceWrapper,
 .SacredForceWrapper {
     display: flex;
@@ -319,35 +334,37 @@ body{
 }
 
 .arcaneForceData,
-.sacredForceData{
+.sacredForceData {
     display: flex;
     flex-direction: column;
 }
 
 .ArcaneForceImage,
-.SacredForceImage{
+.SacredForceImage {
     width: 3.75rem;
     height: 3.75rem;
 }
 
 .ArcaneForceImage.off,
-.SacredForceImage.off{
+.SacredForceImage.off {
     filter: brightness(50%) saturate(0%);
 }
 
 .ArcaneForceLevel,
 .SacredForceLevel,
 .exp,
-.expContent{
+.expContent {
     font-family: 'Inter';
     font-weight: 300;
     font-size: 1.25rem;
 }
-.expContent{
+
+.expContent {
     margin-left: 4px;
 }
+
 .levelInput,
-.expInput{
+.expInput {
     border: none;
     padding: 0;
     margin: 0;
@@ -365,13 +382,13 @@ body{
 
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  appearance: none;
-  margin: 0;
+    -webkit-appearance: none;
+    appearance: none;
+    margin: 0;
 }
 
 
-.forceCheckbox{
+.forceCheckbox {
     font-family: 'Inter';
     font-weight: 500;
     font-size: 0.875rem;
@@ -379,18 +396,18 @@ input[type="number"]::-webkit-outer-spin-button {
     display: flex;
 }
 
-.expInput{
+.expInput {
     width: 2.708vw;
 }
 
-.levelWrapper{
+.levelWrapper {
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
 }
 
 
-.expNumber{
+.expNumber {
     font-family: 'Inter';
     font-weight: 300;
     font-size: 1rem;
@@ -398,20 +415,20 @@ input[type="number"]::-webkit-outer-spin-button {
 
 
 
-.daysToMax{
+.daysToMax {
     font-family: 'Inter';
     font-weight: 300;
     font-size: 1rem;
 }
 
-.unlockText{
+.unlockText {
     font-family: 'Inter';
     font-weight: 700;
     font-size: 1rem;
 }
 
 .dailyButton,
-.weeklyButton{
+.weeklyButton {
     font-family: 'Inter';
     font-size: 0.875rem;
     background-color: #96E4A5;
@@ -426,7 +443,7 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 .dailyButton:disabled,
-.weeklyButton:disabled{
+.weeklyButton:disabled {
     color: #888;
     background-color: #ccc;
 }
@@ -453,34 +470,34 @@ input[type="number"]::-webkit-outer-spin-button {
 
 .infoTooltip:after,
 .linkSkillToolTip:after,
-.LegionImgTooltip:after{
-content: '';
-position: absolute;
-border-style: solid;
-border-width: 0 0.938rem 1.25rem;
-border-color: #424242 transparent;
-display: block;
-width: 0;
-z-index: 1;
-margin-left: -0.938rem;
-top: -1.25rem;
-left: 50%;
+.LegionImgTooltip:after {
+    content: '';
+    position: absolute;
+    border-style: solid;
+    border-width: 0 0.938rem 1.25rem;
+    border-color: #424242 transparent;
+    display: block;
+    width: 0;
+    z-index: 1;
+    margin-left: -0.938rem;
+    top: -1.25rem;
+    left: 50%;
 }
 
 .infoTooltip:before,
 .linkSkillToolTip:before,
-.LegionImgTooltip:before{
-content: '';
-position: absolute;
-border-style: solid;
-border-width: 0 1.125rem 1.438rem;
-border-color: #424242 transparent;
-display: block;
-width: 0;
-z-index: 0;
-margin-left: -1.125rem;
-top: -1.688rem;
-left: 50%;
+.LegionImgTooltip:before {
+    content: '';
+    position: absolute;
+    border-style: solid;
+    border-width: 0 1.125rem 1.438rem;
+    border-color: #424242 transparent;
+    display: block;
+    width: 0;
+    z-index: 0;
+    margin-left: -1.125rem;
+    top: -1.688rem;
+    left: 50%;
 }
 
 
@@ -506,7 +523,7 @@ left: 50%;
     z-index: 10;
 }
 
-.LegionImgTooltip{
+.LegionImgTooltip {
     font-family: 'Inter';
     font-size: 1rem;
     font-weight: 200;

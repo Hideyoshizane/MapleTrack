@@ -1,59 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/signup.css">
     <title>MapleTrack</title>
-    
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="shortcut icon" type="image/x-icon" href="/icon.ico">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800&display=swap" as="font" rel="stylesheet" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800&display=swap"
+        as="font" rel="stylesheet" crossorigin="anonymous">
 </head>
+
 <body>
-    <div class = "logo">
-        <img src="assets/logo/logo.webp"id ='logo'>
+    <div class="logo">
+        <img src="assets/logo/logo.webp" id='logo'>
 
-        <% if (flash && flash.type == 'failed') { %>
+        <% if (flash && flash.type=='failed' ) { %>
             <div class="message <%= flash.type %>">
-              <%= flash.message %>
+                <%= flash.message %>
             </div>
-          <% } %>
+            <% } %>
 
-        <form class="signup" action ="/signup" method="post">
-            <div class="wrap" style="display: flex; align-items: center; ">
-                <input id="email" class="input" type="text" placeholder="Email Address" name = "email">
-                <svg class= "info" width="34" height="34" viewBox="0 0 34 34" fill="#F6F6F6" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M15.584 9.917H18.417V12.75H15.584V9.917ZM15.584 15.583H18.417V24.083H15.584V15.583ZM17 2.833C9.18016 2.833 2.8335 9.18004 2.8335 17C2.8335 24.82 9.18016 31.1667 17 31.1667C24.8202 31.1667 31.1668 24.82 31.1668 17C31.1668 9.18004 24.8202 2.83337 17 2.83337ZM17 28.333C10.7527 28.333 5.66683 23.2475 5.66683 17C5.66683 10.7525 10.7527 5.66671 17 5.66671C23.2477 5.66671 28.3335 10.7525 28.3335 17C28.3335 23.2475 23.2477 28.3334 17 28.3334Z"/>
-                </svg>
-            </div>
-            <div class="wrap" style="display: flex; align-items: center; ">
-                <input id="username" class="input" type="text" placeholder="Username" name = "username" autocomplete="username">
-                <svg class= "info" width="34" height="34" viewBox="0 0 34 34" fill="#F6F6F6" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M15.584 9.917H18.417V12.75H15.584V9.917ZM15.584 15.583H18.417V24.083H15.584V15.583ZM17 2.833C9.18016 2.833 2.8335 9.18004 2.8335 17C2.8335 24.82 9.18016 31.1667 17 31.1667C24.8202 31.1667 31.1668 24.82 31.1668 17C31.1668 9.18004 24.8202 2.83337 17 2.83337ZM17 28.333C10.7527 28.333 5.66683 23.2475 5.66683 17C5.66683 10.7525 10.7527 5.66671 17 5.66671C23.2477 5.66671 28.3335 10.7525 28.3335 17C28.3335 23.2475 23.2477 28.3334 17 28.3334Z"/>
-                </svg>  
-            </div>
-            
-          
-            <div class="wrap" style="display: flex; align-items: center; ">
-                <input id="password" class="input" type="password" placeholder="Password" name="password" autocomplete="password">
-                <svg class= "info" width="34" height="34" viewBox="0 0 34 34" fill="#F6F6F6" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M15.584 9.917H18.417V12.75H15.584V9.917ZM15.584 15.583H18.417V24.083H15.584V15.583ZM17 2.833C9.18016 2.833 2.8335 9.18004 2.8335 17C2.8335 24.82 9.18016 31.1667 17 31.1667C24.8202 31.1667 31.1668 24.82 31.1668 17C31.1668 9.18004 24.8202 2.83337 17 2.83337ZM17 28.333C10.7527 28.333 5.66683 23.2475 5.66683 17C5.66683 10.7525 10.7527 5.66671 17 5.66671C23.2477 5.66671 28.3335 10.7525 28.3335 17C28.3335 23.2475 23.2477 28.3334 17 28.3334Z"/>
-                </svg>  
-            </div>
-            
-            <div class="wrap" style="display: flex; align-items: center; ">
-                <input id="checkPassword" class="input" type="password" placeholder="Confirm Password" name = "checkPassword" autocomplete="checkPassword">
-                <svg class= "info" width="34" height="34" viewBox="0 0 34 34" fill="#F6F6F6" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M15.584 9.917H18.417V12.75H15.584V9.917ZM15.584 15.583H18.417V24.083H15.584V15.583ZM17 2.833C9.18016 2.833 2.8335 9.18004 2.8335 17C2.8335 24.82 9.18016 31.1667 17 31.1667C24.8202 31.1667 31.1668 24.82 31.1668 17C31.1668 9.18004 24.8202 2.83337 17 2.83337ZM17 28.333C10.7527 28.333 5.66683 23.2475 5.66683 17C5.66683 10.7525 10.7527 5.66671 17 5.66671C23.2477 5.66671 28.3335 10.7525 28.3335 17C28.3335 23.2475 23.2477 28.3334 17 28.3334Z"/>
-                </svg>  
-            </div>
-            
-            <input class="submit" type="submit" value="Invalid Inputs" disabled/>
-        </form>
+                <form class="signup" action="/signup" method="post">
+                    <div class="wrap" style="display: flex; align-items: center; ">
+                        <input id="email" class="input" type="text" placeholder="Email Address" name="email">
+                        <svg class="info" width="34" height="34" viewBox="0 0 34 34" fill="#F6F6F6"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M15.584 9.917H18.417V12.75H15.584V9.917ZM15.584 15.583H18.417V24.083H15.584V15.583ZM17 2.833C9.18016 2.833 2.8335 9.18004 2.8335 17C2.8335 24.82 9.18016 31.1667 17 31.1667C24.8202 31.1667 31.1668 24.82 31.1668 17C31.1668 9.18004 24.8202 2.83337 17 2.83337ZM17 28.333C10.7527 28.333 5.66683 23.2475 5.66683 17C5.66683 10.7525 10.7527 5.66671 17 5.66671C23.2477 5.66671 28.3335 10.7525 28.3335 17C28.3335 23.2475 23.2477 28.3334 17 28.3334Z" />
+                        </svg>
+                    </div>
+                    <div class="wrap" style="display: flex; align-items: center; ">
+                        <input id="username" class="input" type="text" placeholder="Username" name="username"
+                            autocomplete="username">
+                        <svg class="info" width="34" height="34" viewBox="0 0 34 34" fill="#F6F6F6"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M15.584 9.917H18.417V12.75H15.584V9.917ZM15.584 15.583H18.417V24.083H15.584V15.583ZM17 2.833C9.18016 2.833 2.8335 9.18004 2.8335 17C2.8335 24.82 9.18016 31.1667 17 31.1667C24.8202 31.1667 31.1668 24.82 31.1668 17C31.1668 9.18004 24.8202 2.83337 17 2.83337ZM17 28.333C10.7527 28.333 5.66683 23.2475 5.66683 17C5.66683 10.7525 10.7527 5.66671 17 5.66671C23.2477 5.66671 28.3335 10.7525 28.3335 17C28.3335 23.2475 23.2477 28.3334 17 28.3334Z" />
+                        </svg>
+                    </div>
+
+
+                    <div class="wrap" style="display: flex; align-items: center; ">
+                        <input id="password" class="input" type="password" placeholder="Password" name="password"
+                            autocomplete="password">
+                        <svg class="info" width="34" height="34" viewBox="0 0 34 34" fill="#F6F6F6"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M15.584 9.917H18.417V12.75H15.584V9.917ZM15.584 15.583H18.417V24.083H15.584V15.583ZM17 2.833C9.18016 2.833 2.8335 9.18004 2.8335 17C2.8335 24.82 9.18016 31.1667 17 31.1667C24.8202 31.1667 31.1668 24.82 31.1668 17C31.1668 9.18004 24.8202 2.83337 17 2.83337ZM17 28.333C10.7527 28.333 5.66683 23.2475 5.66683 17C5.66683 10.7525 10.7527 5.66671 17 5.66671C23.2477 5.66671 28.3335 10.7525 28.3335 17C28.3335 23.2475 23.2477 28.3334 17 28.3334Z" />
+                        </svg>
+                    </div>
+
+                    <div class="wrap" style="display: flex; align-items: center; ">
+                        <input id="checkPassword" class="input" type="password" placeholder="Confirm Password"
+                            name="checkPassword" autocomplete="checkPassword">
+                        <svg class="info" width="34" height="34" viewBox="0 0 34 34" fill="#F6F6F6"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M15.584 9.917H18.417V12.75H15.584V9.917ZM15.584 15.583H18.417V24.083H15.584V15.583ZM17 2.833C9.18016 2.833 2.8335 9.18004 2.8335 17C2.8335 24.82 9.18016 31.1667 17 31.1667C24.8202 31.1667 31.1668 24.82 31.1668 17C31.1668 9.18004 24.8202 2.83337 17 2.83337ZM17 28.333C10.7527 28.333 5.66683 23.2475 5.66683 17C5.66683 10.7525 10.7527 5.66671 17 5.66671C23.2477 5.66671 28.3335 10.7525 28.3335 17C28.3335 23.2475 23.2477 28.3334 17 28.3334Z" />
+                        </svg>
+                    </div>
+
+                    <input class="submit" type="submit" value="Invalid Inputs" disabled />
+                </form>
     </div>
     <script src="/../public/javascript/utils/create.js"></script>
     <script type="text/javascript" src="/../public/javascript/signup/signup.js"></script>
 </body>
+
 </html>

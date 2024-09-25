@@ -8,7 +8,7 @@
   <img src="https://img.shields.io/static/v1?label=npm&message=10.8.1&color=blue&style=for-the-badge&logo=npm"/>
   <img src="https://img.shields.io/static/v1?label=express&message=4.21.0&color=blue&style=for-the-badge&logo=express"/>
   <img src="https://img.shields.io/static/v1?label=node.JS&message=22.9.0&color=blue&style=for-the-badge&logo=nodedotjs"/>
-  <img src="https://img.shields.io/static/v1?label=release&message=1.7.4&color=darkgreen&style=for-the-badge"/>
+  <img src="https://img.shields.io/static/v1?label=release&message=1.7.5&color=darkgreen&style=for-the-badge"/>
 </div>
 <br>
 
@@ -35,7 +35,6 @@
     <a href="https://mapletrack.vercel.app/">Demo site</a>
   <br>
 </a>
-
 
 <a name="features">
   <h2>Features</h1>
@@ -89,7 +88,6 @@
   <br>
 </a>
 
-
 <a name="license">
   <h2>License</h1>
 <p>MIT License
@@ -113,5 +111,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
 </p>
 </a>

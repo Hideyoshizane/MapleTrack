@@ -6,7 +6,7 @@ function setCookie(name, value, days) {
 	const path = name === 'selectedServerContent' ? '/' : '';
 
 	document.cookie = `${name}=${encodeURIComponent(
-		value
+		value,
 	)};expires=${expires.toUTCString()};path=${path}`;
 }
 
@@ -22,28 +22,32 @@ function getCookie(name) {
 }
 
 async function updateSelectedValuesCookie() {
-    sort(selectedValues, true);
-    const selectedValuesString = selectedValues.join(',');
-    setCookie('filterValues', selectedValuesString, 7);
+	sort(selectedValues, true);
+	const selectedValuesString = selectedValues.join(',');
+	setCookie('filterValues', selectedValuesString, 7);
 }
-
 
 function setCookieFlash(name, value, seconds) {
 	const expires = new Date();
 	expires.setTime(expires.getTime() + seconds * 1000);
-  
+
 	// Check if the cookie is 'selectedServerContent'
 	const path = name === 'selectedServerContent' ? '/' : '';
-  
-	document.cookie = `${name}=${encodeURIComponent(value)};expires=${expires.toUTCString()};path=${path}`;
-  }
+
+	document.cookie = `${name}=${encodeURIComponent(
+		value,
+	)};expires=${expires.toUTCString()};path=${path}`;
+}
 
 // Set cache control headers for an HTML element
 function setCacheControlHeaders(element) {
-    const millisecondsInDay = 24 * 60 * 60 * 1000;
-    const maxAge = 7 * millisecondsInDay;
+	const millisecondsInDay = 24 * 60 * 60 * 1000;
+	const maxAge = 7 * millisecondsInDay;
 
-    // Set cache control headers on the provided element
-    element.setAttribute('expires', new Date(Date.now() + maxAge).toUTCString());
-    element.setAttribute('cache-control', `max-age=${maxAge / 1000}`);
+	// Set cache control headers on the provided element
+	element.setAttribute(
+		'expires',
+		new Date(Date.now() + maxAge).toUTCString(),
+	);
+	element.setAttribute('cache-control', `max-age=${maxAge / 1000}`);
 }

@@ -1,703 +1,705 @@
-[{
-  "name": "STR+",
-  "class": "warrior",
-  "ranking": [
-    {
-      "rank": "B",
-      "description": "STR: +10"
-    },
-    {
-      "rank": "A",
-      "description": "STR: +20"
-    },
-    {
-      "rank": "S",
-      "description": "STR: +40"
-    },
-    {
-      "rank": "SS",
-      "description": "STR: +80"
-    },
-    {
-      "rank": "SSS",
-      "description": "STR: +100"
-    }
-  ]
-},
-{
-  "name": "MAXHP%",
-  "class": "warrior",
-  "ranking": [
-    {
-     "rank": "B",
-      "description": "Max HP: +2%"
-    },
-    {
-      "rank": "A",
-      "description": "Max HP: +3%"
-    },
-    {
-      "rank": "S",
-      "description": "Max HP: +4%"
-    },
-    {
-      "rank": "SS",
-      "description": "Max HP: +5%"
-    },
-    {
-      "rank": "SSS",
-      "description": "Max HP: +6%"
-    }
-  ]
-},
-{
-  "name": "MAXHP+",
-  "class": "warrior",
-  "ranking": [
-    {
-      "rank": "B",
-      "description": "Max HP: +250"
-    },
-    {
-      "rank": "A",
-      "description": "Max HP: +500"
-    },
-    {
-      "rank": "S",
-      "description": "Max HP: +1000"
-    },
-    {
-      "rank": "SS",
-      "description": "Max HP: +2000"
-    },
-    {
-      "rank": "SSS",
-      "description": "Max HP: +2500"
-    }
-  ]
-},
-{
-  "name": "RECVRHP+",
-  "class": "warrior",
-  "ranking": [
-    {
-      "rank": "B",
-      "description": "70% chance to recover 2% of Max HP with each attack."
-    },
-    {
-      "rank": "A",
-      "description": "70% chance to recover 4% of Max HP with each attack."
-    },
-    {
-      "rank": "S",
-      "description": "70% chance to recover 6% of Max HP with each attack."
-    },
-    {
-      "rank": "SS",
-      "description": "70% chance to recover 8% of Max HP with each attack."
-    },
-    {
-      "rank": "SSS",
-      "description": "70% chance to recover 10% of Max HP with each attack."
-    }
-  ]
-},
-{
-  "name": "STATRES+",
-  "class": "warrior",
-  "ranking": [
-    {
-      "rank": "B",
-      "description": "Abnormal Status Resistance: +1"
-    },
-    {
-      "rank": "A",
-      "description": "Abnormal Status Resistance: +2"
-    },
-    {
-      "rank": "S",
-      "description": "Abnormal Status Resistance: +3"
-    },
-    {
-      "rank": "SS",
-      "description": "Abnormal Status Resistance: +4"
-    },
-    {
-      "rank": "SSS",
-      "description": "Abnormal Status Resistance: +5"
-    }
-  ]
-},
-{
-  "name": "BOSSDMG+",
-  "class": "warrior",
-  "ranking": [
-    {
-      "rank": "B",
-      "description": "Boss Damage: +1%"
-    },
-    {
-      "rank": "A",
-      "description": "Boss Damage: +2%"
-    },
-    {
-      "rank": "S",
-      "description": "Boss Damage: +3%"
-    },
-    {
-      "rank": "SS",
-      "description": "Boss Damage: +5%"
-    },
-    {
-      "rank": "SSS",
-      "description": "Boss Damage: +6%"
-    }
-  ]
-},
-{
-  "name": "IED+",
-  "class": "warrior",
-  "ranking": [
-    {
-      "rank": "B",
-      "description": "Ignore Enemy Defense: +1%"
-    },
-    {
-      "rank": "A",
-      "description": "Ignore Enemy Defense: +2%"
-    },
-    {
-      "rank": "S",
-      "description": "Ignore Enemy Defense: +3%"
-    },
-    {
-      "rank": "SS",
-      "description": "Ignore Enemy Defense: +5%"
-    },
-    {
-      "rank": "SSS",
-      "description": "Ignore Enemy Defense: +6%"
-    }
-  ]
-},
-{
-  "name": "CRIT",
-  "class": "warrior",
-  "ranking": [
-    {
-      "rank": "B",
-      "description": "Critical Damage: +1%"
-    },
-    {
-      "rank": "A",
-      "description": "Critical Damage: +2%"
-    },
-    {
-      "rank": "S",
-      "description": "Critical Damage: +3%"
-    },
-    {
-      "rank": "SS",
-      "description": "Critical Damage: +5%"
-    },
-    {
-      "rank": "SSS",
-      "description": "Critical Damage: +6%"
-    }
-  ]
-},
-{
-  "name": "EXP",
-  "class": "warrior",
-  "ranking": [
-    {
-      "rank": "B",
-      "description": "EXP Obtained: +4%"
-    },
-    {
-      "rank": "A",
-      "description": "EXP Obtained: +6%"
-    },
-    {
-      "rank": "S",
-      "description": "EXP Obtained: +8%"
-    },
-    {
-      "rank": "SS",
-      "description": "EXP Obtained: +10%"
-    },
-    {
-      "rank": "SSS",
-      "description": "EXP Obtained: +12%"
-    }
-  ]
-},
-{
-  "name": "MAXMP%",
-  "class": "magician",
-  "ranking": [
-    {
-      "rank": "B",
-      "description": "Max MP: +2%"
-    },
-    {
-      "rank": "A",
-      "description": "Max MP: +3%"
-    },
-    {
-      "rank": "S",
-      "description": "Max MP: +4%"
-    },
-    {
-      "rank": "SS",
-      "description": "Max MP: +5%"
-    },
-    {
-      "rank": "SSS",
-      "description": "Max MP: +6%"
-    }
-  ]
-},
-{
-  "name": "INT+",
-  "class": "magician",
-  "ranking": [
-    {
-      "rank": "B",
-      "description": "INT: +10"
-    },
-    {
-      "rank": "A",
-      "description": "INT: +20"
-    },
-    {
-      "rank": "S",
-      "description": "INT: +40"
-    },
-    {
-      "rank": "SS",
-      "description": "INT: +80"
-    },
-    {
-      "rank": "SSS",
-      "description": "INT: +100"
-    }
-  ]
-},
-{
-  "name": "RECVRMP",
-  "class": "magician",
-  "ranking": [
-    {
-      "rank": "B",
-      "description": "70% chance to recover 2% of Max MP with each attack."
-    },
-    {
-      "rank": "A",
-      "description": "70% chance to recover 4% of Max MP with each attack."
-    },
-    {
-      "rank": "S",
-      "description": "70% chance to recover 6% of Max MP with each attack."
-    },
-    {
-      "rank": "SS",
-      "description": "70% chance to recover 8% of Max MP with each attack."
-    },
-    {
-      "rank": "SSS",
-      "description": "70% chance to recover 10% of Max MP with each attack."
-    }
-  ]
-},
-{
-  "name": "BOSSDMGM",
-  "class": "magician",
-  "ranking": [
-    {
-      "rank": "B",
-      "description": "Boss Damage: +1%"
-    },
-    {
-      "rank": "A",
-      "description": "Boss Damage: +2%"
-    },
-    {
-      "rank": "S",
-      "description": "Boss Damage: +3%"
-    },
-    {
-      "rank": "SS",
-      "description": "Boss Damage: +5%"
-    },
-    {
-      "rank": "SSS",
-      "description": "Boss Damage: +6%"
-    }
-  ]
-},
-{
-  "name": "IEDM",
-  "class": "magician",
-  "ranking": [
-    {
-      "rank": "B",
-      "description": "Ignore Enemy Defense: +1%"
-    },
-    {
-      "rank": "A",
-      "description": "Ignore Enemy Defense: +2%"
-    },
-    {
-      "rank": "S",
-      "description": "Ignore Enemy Defense: +3%"
-    },
-    {
-      "rank": "SS",
-      "description": "Ignore Enemy Defense: +5%"
-    },
-    {
-      "rank": "SSS",
-      "description": "Ignore Enemy Defense: +6%"
-    }
-  ]
-},
-{
-  "name": "DEX+",
-  "class": "bowman",
-  "ranking": [
-    {
-      "rank": "B",
-      "description": "DEX: +10"
-    },
-    {
-      "rank": "A",
-      "description": "DEX: +20"
-    },
-    {
-      "rank": "S",
-      "description": "DEX: +40"
-    },
-    {
-      "rank": "SS",
-      "description": "DEX: +80"
-    },
-    {
-      "rank": "SSS",
-      "description": "DEX: +100"
-    }
-  ]
-},
-{
-  "name": "CRITRT",
-  "class": "bowman",
-  "ranking": [
-    {
-      "rank": "B",
-      "description": "Critical Rate: +1%"
-    },
-    {
-      "rank": "A",
-      "description": "Critical Rate: +2%"
-    },
-    {
-      "rank": "S",
-      "description": "Critical Rate: +3%"
-    },
-    {
-      "rank": "SS",
-      "description": "Critical Rate: +4%"
-    },
-    {
-      "rank": "SSS",
-      "description": "Critical Rate: +5%"
-    }
-  ]
-},
-{
-  "name": "SKILLCD",
-  "class": "bowman",
-  "ranking": [
-    {
-      "rank": "B",
-      "description": "Skill Cooldown: -2%"
-    },
-    {
-      "rank": "A",
-      "description": "Skill Cooldown: -3%"
-    },
-    {
-      "rank": "S",
-      "description": "Skill Cooldown: -4%"
-    },
-    {
-      "rank": "SS",
-      "description": "Skill Cooldown: -5%"
-    },
-    {
-      "rank": "SSS",
-      "description": "Skill Cooldown: -6%"
-    }
-  ]
-},
-{
-  "name": "%DMGUP",
-  "class": "bowman",
-  "ranking": [
-    {
-      "rank": "B",
-      "description": "20% chance to deal increased damage when attacking: +4%"
-    },
-    {
-      "rank": "A",
-      "description": "20% chance to deal increased damage when attacking: +8%"
-    },
-    {
-      "rank": "S",
-      "description": "20% chance to deal increased damage when attacking: +12%"
-    },
-    {
-      "rank": "SS",
-      "description": "20% chance to deal increased damage when attacking: +16%"
-    },
-    {
-      "rank": "SSS",
-      "description": "20% chance to deal increased damage when attacking: +20%"
-    }
-  ]
-},
-{
-  "name": "CRITRTT",
-  "class": "thief",
-  "ranking": [
-    {
-      "rank": "B",
-      "description": "Critical Rate: +1%"
-    },
-    {
-      "rank": "A",
-      "description": "Critical Rate: +2%"
-    },
-    {
-      "rank": "S",
-      "description": "Critical Rate: +3%"
-    },
-    {
-      "rank": "SS",
-      "description": "Critical Rate: +4%"
-    },
-    {
-      "rank": "SSS",
-      "description": "Critical Rate: +5%"
-    }
-  ],
-  "__v": 0
-},
-{
-  "name": "LUK+",
-  "class": "thief",
-  "ranking": [
-    {
-      "rank": "B",
-      "description": "LUK: +10"
-    },
-    {
-      "rank": "A",
-      "description": "LUK: +20"
-    },
-    {
-      "rank": "S",
-      "description": "LUK: +40"
-    },
-    {
-      "rank": "SS",
-      "description": "LUK: +80"
-    },
-    {
-      "rank": "SSS",
-      "description": "LUK: +100"
-    }
-  ]
-},
-{
-  "name": "MESO%",
-  "class": "thief",
-  "ranking": [
-    {
-      "rank": "B",
-      "description": "Mesos Obtained: +1%"
-    },
-    {
-      "rank": "A",
-      "description": "Mesos Obtained: +2%"
-    },
-    {
-      "rank": "S",
-      "description": "Mesos Obtained: +3%"
-    },
-    {
-      "rank": "SS",
-      "description": "Mesos Obtained: +4%"
-    },
-    {
-      "rank": "SSS",
-      "description": "Mesos Obtained: +5%"
-    }
-  ]
-},
-{
-  "name": "STR+P",
-  "class": "pirate",
-  "ranking": [
-    {
-      "rank": "B",
-      "description": "STR: +10"
-    },
-    {
-      "rank": "A",
-      "description": "STR: +20"
-    },
-    {
-      "rank": "S",
-      "description": "STR: +40"
-    },
-    {
-      "rank": "SS",
-      "description": "STR: +80"
-    },
-    {
-      "rank": "SSS",
-      "description": "STR: +100"
-    }
-  ]
-},
-{
-  "name": "SUMMND",
-  "class": "pirate",
-  "ranking": [
-    {
-      "rank": "B",
-      "description": "Summon Duration: +4%"
-    },
-    {
-      "rank": "A",
-      "description": "Summon Duration: +6%"
-    },
-    {
-      "rank": "S",
-      "description": "Summon Duration: +8%"
-    },
-    {
-      "rank": "SS",
-      "description": "Summon Duration: +10%"
-    },
-    {
-      "rank": "SSS",
-      "description": "Summon Duration: +12%"
-    }
-  ]
-},
-{
-  "name": "CRTDMG+",
-  "class": "pirate",
-  "ranking": [
-    {
-      "rank": "B",
-      "description": "Critical Damage: +1%"
-    },
-    {
-      "rank": "A",
-      "description": "Critical Damage: +2%"
-    },
-    {
-      "rank": "S",
-      "description": "Critical Damage: +3%"
-    },
-    {
-      "rank": "SS",
-      "description": "Critical Damage: +5%"
-    },
-    {
-      "rank": "SSS",
-      "description": "Critical Damage: +6%"
-    }
-  ]
-},
-{
-  "name": "BUFFDUR",
-  "class": "pirate",
-  "ranking": [
-    {
-      "rank": "B",
-      "description": "Buff Duration: +5%"
-    },
-    {
-      "rank": "A",
-      "description": "Buff Duration: +10%"
-    },
-    {
-      "rank": "S",
-      "description": "Buff Duration: +15%"
-    },
-    {
-      "rank": "SS",
-      "description": "Buff Duration: +20%"
-    },
-    {
-      "rank": "SSS",
-      "description": "Buff Duration: +25%"
-    }
-  ]
-},
-{
-  "name": "DEX+P",
-  "class": "pirate",
-  "ranking": [
-    {
-      "rank": "B",
-      "description": "DEX: +10"
-    },
-    {
-      "rank": "A",
-      "description": "DEX: +20"
-    },
-    {
-      "rank": "S",
-      "description": "DEX: +40"
-    },
-    {
-      "rank": "SS",
-      "description": "DEX: +80"
-    },
-    {
-      "rank": "SSS",
-      "description": "DEX: +100"
-    }
-  ]
-},
-{
-  "name": "STDELU",
-  "class": "xenon",
-  "ranking": [
-    {
-      "rank": "B",
-      "description": "STR, DEX, and LUK: +5"
-    },
-    {
-      "rank": "A",
-      "description": "STR, DEX, and LUK: +10"
-    },
-    {
-      "rank": "S",
-      "description": "STR, DEX, and LUK: +20"
-    },
-    {
-      "rank": "SS",
-      "description": "STR, DEX, and LUK: +40"
-    },
-    {
-      "rank": "SSS",
-      "description": "STR, DEX, and LUK: +50"
-    }
-  ]
-}]
+[
+	{
+		"name": "STR+",
+		"class": "warrior",
+		"ranking": [
+			{
+				"rank": "B",
+				"description": "STR: +10"
+			},
+			{
+				"rank": "A",
+				"description": "STR: +20"
+			},
+			{
+				"rank": "S",
+				"description": "STR: +40"
+			},
+			{
+				"rank": "SS",
+				"description": "STR: +80"
+			},
+			{
+				"rank": "SSS",
+				"description": "STR: +100"
+			}
+		]
+	},
+	{
+		"name": "MAXHP%",
+		"class": "warrior",
+		"ranking": [
+			{
+				"rank": "B",
+				"description": "Max HP: +2%"
+			},
+			{
+				"rank": "A",
+				"description": "Max HP: +3%"
+			},
+			{
+				"rank": "S",
+				"description": "Max HP: +4%"
+			},
+			{
+				"rank": "SS",
+				"description": "Max HP: +5%"
+			},
+			{
+				"rank": "SSS",
+				"description": "Max HP: +6%"
+			}
+		]
+	},
+	{
+		"name": "MAXHP+",
+		"class": "warrior",
+		"ranking": [
+			{
+				"rank": "B",
+				"description": "Max HP: +250"
+			},
+			{
+				"rank": "A",
+				"description": "Max HP: +500"
+			},
+			{
+				"rank": "S",
+				"description": "Max HP: +1000"
+			},
+			{
+				"rank": "SS",
+				"description": "Max HP: +2000"
+			},
+			{
+				"rank": "SSS",
+				"description": "Max HP: +2500"
+			}
+		]
+	},
+	{
+		"name": "RECVRHP+",
+		"class": "warrior",
+		"ranking": [
+			{
+				"rank": "B",
+				"description": "70% chance to recover 2% of Max HP with each attack."
+			},
+			{
+				"rank": "A",
+				"description": "70% chance to recover 4% of Max HP with each attack."
+			},
+			{
+				"rank": "S",
+				"description": "70% chance to recover 6% of Max HP with each attack."
+			},
+			{
+				"rank": "SS",
+				"description": "70% chance to recover 8% of Max HP with each attack."
+			},
+			{
+				"rank": "SSS",
+				"description": "70% chance to recover 10% of Max HP with each attack."
+			}
+		]
+	},
+	{
+		"name": "STATRES+",
+		"class": "warrior",
+		"ranking": [
+			{
+				"rank": "B",
+				"description": "Abnormal Status Resistance: +1"
+			},
+			{
+				"rank": "A",
+				"description": "Abnormal Status Resistance: +2"
+			},
+			{
+				"rank": "S",
+				"description": "Abnormal Status Resistance: +3"
+			},
+			{
+				"rank": "SS",
+				"description": "Abnormal Status Resistance: +4"
+			},
+			{
+				"rank": "SSS",
+				"description": "Abnormal Status Resistance: +5"
+			}
+		]
+	},
+	{
+		"name": "BOSSDMG+",
+		"class": "warrior",
+		"ranking": [
+			{
+				"rank": "B",
+				"description": "Boss Damage: +1%"
+			},
+			{
+				"rank": "A",
+				"description": "Boss Damage: +2%"
+			},
+			{
+				"rank": "S",
+				"description": "Boss Damage: +3%"
+			},
+			{
+				"rank": "SS",
+				"description": "Boss Damage: +5%"
+			},
+			{
+				"rank": "SSS",
+				"description": "Boss Damage: +6%"
+			}
+		]
+	},
+	{
+		"name": "IED+",
+		"class": "warrior",
+		"ranking": [
+			{
+				"rank": "B",
+				"description": "Ignore Enemy Defense: +1%"
+			},
+			{
+				"rank": "A",
+				"description": "Ignore Enemy Defense: +2%"
+			},
+			{
+				"rank": "S",
+				"description": "Ignore Enemy Defense: +3%"
+			},
+			{
+				"rank": "SS",
+				"description": "Ignore Enemy Defense: +5%"
+			},
+			{
+				"rank": "SSS",
+				"description": "Ignore Enemy Defense: +6%"
+			}
+		]
+	},
+	{
+		"name": "CRIT",
+		"class": "warrior",
+		"ranking": [
+			{
+				"rank": "B",
+				"description": "Critical Damage: +1%"
+			},
+			{
+				"rank": "A",
+				"description": "Critical Damage: +2%"
+			},
+			{
+				"rank": "S",
+				"description": "Critical Damage: +3%"
+			},
+			{
+				"rank": "SS",
+				"description": "Critical Damage: +5%"
+			},
+			{
+				"rank": "SSS",
+				"description": "Critical Damage: +6%"
+			}
+		]
+	},
+	{
+		"name": "EXP",
+		"class": "warrior",
+		"ranking": [
+			{
+				"rank": "B",
+				"description": "EXP Obtained: +4%"
+			},
+			{
+				"rank": "A",
+				"description": "EXP Obtained: +6%"
+			},
+			{
+				"rank": "S",
+				"description": "EXP Obtained: +8%"
+			},
+			{
+				"rank": "SS",
+				"description": "EXP Obtained: +10%"
+			},
+			{
+				"rank": "SSS",
+				"description": "EXP Obtained: +12%"
+			}
+		]
+	},
+	{
+		"name": "MAXMP%",
+		"class": "magician",
+		"ranking": [
+			{
+				"rank": "B",
+				"description": "Max MP: +2%"
+			},
+			{
+				"rank": "A",
+				"description": "Max MP: +3%"
+			},
+			{
+				"rank": "S",
+				"description": "Max MP: +4%"
+			},
+			{
+				"rank": "SS",
+				"description": "Max MP: +5%"
+			},
+			{
+				"rank": "SSS",
+				"description": "Max MP: +6%"
+			}
+		]
+	},
+	{
+		"name": "INT+",
+		"class": "magician",
+		"ranking": [
+			{
+				"rank": "B",
+				"description": "INT: +10"
+			},
+			{
+				"rank": "A",
+				"description": "INT: +20"
+			},
+			{
+				"rank": "S",
+				"description": "INT: +40"
+			},
+			{
+				"rank": "SS",
+				"description": "INT: +80"
+			},
+			{
+				"rank": "SSS",
+				"description": "INT: +100"
+			}
+		]
+	},
+	{
+		"name": "RECVRMP",
+		"class": "magician",
+		"ranking": [
+			{
+				"rank": "B",
+				"description": "70% chance to recover 2% of Max MP with each attack."
+			},
+			{
+				"rank": "A",
+				"description": "70% chance to recover 4% of Max MP with each attack."
+			},
+			{
+				"rank": "S",
+				"description": "70% chance to recover 6% of Max MP with each attack."
+			},
+			{
+				"rank": "SS",
+				"description": "70% chance to recover 8% of Max MP with each attack."
+			},
+			{
+				"rank": "SSS",
+				"description": "70% chance to recover 10% of Max MP with each attack."
+			}
+		]
+	},
+	{
+		"name": "BOSSDMGM",
+		"class": "magician",
+		"ranking": [
+			{
+				"rank": "B",
+				"description": "Boss Damage: +1%"
+			},
+			{
+				"rank": "A",
+				"description": "Boss Damage: +2%"
+			},
+			{
+				"rank": "S",
+				"description": "Boss Damage: +3%"
+			},
+			{
+				"rank": "SS",
+				"description": "Boss Damage: +5%"
+			},
+			{
+				"rank": "SSS",
+				"description": "Boss Damage: +6%"
+			}
+		]
+	},
+	{
+		"name": "IEDM",
+		"class": "magician",
+		"ranking": [
+			{
+				"rank": "B",
+				"description": "Ignore Enemy Defense: +1%"
+			},
+			{
+				"rank": "A",
+				"description": "Ignore Enemy Defense: +2%"
+			},
+			{
+				"rank": "S",
+				"description": "Ignore Enemy Defense: +3%"
+			},
+			{
+				"rank": "SS",
+				"description": "Ignore Enemy Defense: +5%"
+			},
+			{
+				"rank": "SSS",
+				"description": "Ignore Enemy Defense: +6%"
+			}
+		]
+	},
+	{
+		"name": "DEX+",
+		"class": "bowman",
+		"ranking": [
+			{
+				"rank": "B",
+				"description": "DEX: +10"
+			},
+			{
+				"rank": "A",
+				"description": "DEX: +20"
+			},
+			{
+				"rank": "S",
+				"description": "DEX: +40"
+			},
+			{
+				"rank": "SS",
+				"description": "DEX: +80"
+			},
+			{
+				"rank": "SSS",
+				"description": "DEX: +100"
+			}
+		]
+	},
+	{
+		"name": "CRITRT",
+		"class": "bowman",
+		"ranking": [
+			{
+				"rank": "B",
+				"description": "Critical Rate: +1%"
+			},
+			{
+				"rank": "A",
+				"description": "Critical Rate: +2%"
+			},
+			{
+				"rank": "S",
+				"description": "Critical Rate: +3%"
+			},
+			{
+				"rank": "SS",
+				"description": "Critical Rate: +4%"
+			},
+			{
+				"rank": "SSS",
+				"description": "Critical Rate: +5%"
+			}
+		]
+	},
+	{
+		"name": "SKILLCD",
+		"class": "bowman",
+		"ranking": [
+			{
+				"rank": "B",
+				"description": "Skill Cooldown: -2%"
+			},
+			{
+				"rank": "A",
+				"description": "Skill Cooldown: -3%"
+			},
+			{
+				"rank": "S",
+				"description": "Skill Cooldown: -4%"
+			},
+			{
+				"rank": "SS",
+				"description": "Skill Cooldown: -5%"
+			},
+			{
+				"rank": "SSS",
+				"description": "Skill Cooldown: -6%"
+			}
+		]
+	},
+	{
+		"name": "%DMGUP",
+		"class": "bowman",
+		"ranking": [
+			{
+				"rank": "B",
+				"description": "20% chance to deal increased damage when attacking: +4%"
+			},
+			{
+				"rank": "A",
+				"description": "20% chance to deal increased damage when attacking: +8%"
+			},
+			{
+				"rank": "S",
+				"description": "20% chance to deal increased damage when attacking: +12%"
+			},
+			{
+				"rank": "SS",
+				"description": "20% chance to deal increased damage when attacking: +16%"
+			},
+			{
+				"rank": "SSS",
+				"description": "20% chance to deal increased damage when attacking: +20%"
+			}
+		]
+	},
+	{
+		"name": "CRITRTT",
+		"class": "thief",
+		"ranking": [
+			{
+				"rank": "B",
+				"description": "Critical Rate: +1%"
+			},
+			{
+				"rank": "A",
+				"description": "Critical Rate: +2%"
+			},
+			{
+				"rank": "S",
+				"description": "Critical Rate: +3%"
+			},
+			{
+				"rank": "SS",
+				"description": "Critical Rate: +4%"
+			},
+			{
+				"rank": "SSS",
+				"description": "Critical Rate: +5%"
+			}
+		],
+		"__v": 0
+	},
+	{
+		"name": "LUK+",
+		"class": "thief",
+		"ranking": [
+			{
+				"rank": "B",
+				"description": "LUK: +10"
+			},
+			{
+				"rank": "A",
+				"description": "LUK: +20"
+			},
+			{
+				"rank": "S",
+				"description": "LUK: +40"
+			},
+			{
+				"rank": "SS",
+				"description": "LUK: +80"
+			},
+			{
+				"rank": "SSS",
+				"description": "LUK: +100"
+			}
+		]
+	},
+	{
+		"name": "MESO%",
+		"class": "thief",
+		"ranking": [
+			{
+				"rank": "B",
+				"description": "Mesos Obtained: +1%"
+			},
+			{
+				"rank": "A",
+				"description": "Mesos Obtained: +2%"
+			},
+			{
+				"rank": "S",
+				"description": "Mesos Obtained: +3%"
+			},
+			{
+				"rank": "SS",
+				"description": "Mesos Obtained: +4%"
+			},
+			{
+				"rank": "SSS",
+				"description": "Mesos Obtained: +5%"
+			}
+		]
+	},
+	{
+		"name": "STR+P",
+		"class": "pirate",
+		"ranking": [
+			{
+				"rank": "B",
+				"description": "STR: +10"
+			},
+			{
+				"rank": "A",
+				"description": "STR: +20"
+			},
+			{
+				"rank": "S",
+				"description": "STR: +40"
+			},
+			{
+				"rank": "SS",
+				"description": "STR: +80"
+			},
+			{
+				"rank": "SSS",
+				"description": "STR: +100"
+			}
+		]
+	},
+	{
+		"name": "SUMMND",
+		"class": "pirate",
+		"ranking": [
+			{
+				"rank": "B",
+				"description": "Summon Duration: +4%"
+			},
+			{
+				"rank": "A",
+				"description": "Summon Duration: +6%"
+			},
+			{
+				"rank": "S",
+				"description": "Summon Duration: +8%"
+			},
+			{
+				"rank": "SS",
+				"description": "Summon Duration: +10%"
+			},
+			{
+				"rank": "SSS",
+				"description": "Summon Duration: +12%"
+			}
+		]
+	},
+	{
+		"name": "CRTDMG+",
+		"class": "pirate",
+		"ranking": [
+			{
+				"rank": "B",
+				"description": "Critical Damage: +1%"
+			},
+			{
+				"rank": "A",
+				"description": "Critical Damage: +2%"
+			},
+			{
+				"rank": "S",
+				"description": "Critical Damage: +3%"
+			},
+			{
+				"rank": "SS",
+				"description": "Critical Damage: +5%"
+			},
+			{
+				"rank": "SSS",
+				"description": "Critical Damage: +6%"
+			}
+		]
+	},
+	{
+		"name": "BUFFDUR",
+		"class": "pirate",
+		"ranking": [
+			{
+				"rank": "B",
+				"description": "Buff Duration: +5%"
+			},
+			{
+				"rank": "A",
+				"description": "Buff Duration: +10%"
+			},
+			{
+				"rank": "S",
+				"description": "Buff Duration: +15%"
+			},
+			{
+				"rank": "SS",
+				"description": "Buff Duration: +20%"
+			},
+			{
+				"rank": "SSS",
+				"description": "Buff Duration: +25%"
+			}
+		]
+	},
+	{
+		"name": "DEX+P",
+		"class": "pirate",
+		"ranking": [
+			{
+				"rank": "B",
+				"description": "DEX: +10"
+			},
+			{
+				"rank": "A",
+				"description": "DEX: +20"
+			},
+			{
+				"rank": "S",
+				"description": "DEX: +40"
+			},
+			{
+				"rank": "SS",
+				"description": "DEX: +80"
+			},
+			{
+				"rank": "SSS",
+				"description": "DEX: +100"
+			}
+		]
+	},
+	{
+		"name": "STDELU",
+		"class": "xenon",
+		"ranking": [
+			{
+				"rank": "B",
+				"description": "STR, DEX, and LUK: +5"
+			},
+			{
+				"rank": "A",
+				"description": "STR, DEX, and LUK: +10"
+			},
+			{
+				"rank": "S",
+				"description": "STR, DEX, and LUK: +20"
+			},
+			{
+				"rank": "SS",
+				"description": "STR, DEX, and LUK: +40"
+			},
+			{
+				"rank": "SSS",
+				"description": "STR, DEX, and LUK: +50"
+			}
+		]
+	}
+]

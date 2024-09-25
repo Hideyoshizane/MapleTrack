@@ -12,43 +12,48 @@ window.legionData;
 document.addEventListener('DOMContentLoaded', async () => {
 	characterData = await fetchCharacterData(username, server, characterCode);
 
-	linkSkillData = await fetch('/../../../public/data/linkskill.json').then((response) => response.json());
-	dailyJson = await fetch('../../../public/data/dailyExp.json').then((response) => response.json());
-	legionData = await fetch('../../../public/data/legionsystems.json').then((response) => response.json());
+	linkSkillData = await fetch('/../../../public/data/linkskill.json').then(
+		(response) => response.json(),
+	);
+	dailyJson = await fetch('../../../public/data/dailyExp.json').then(
+		(response) => response.json(),
+	);
+	legionData = await fetch('../../../public/data/legionsystems.json').then(
+		(response) => response.json(),
+	);
 
 	startLoader();
 	await loadCharacterContent(characterData);
 
 	document.dispatchEvent(new Event('PageLoaded'));
-
 });
 
 async function fetchCharacterData(username, server, characterCode) {
-  const response = await fetch(`/class/${username}/${server}/${codeToClass(characterCode)}`).then(response => response.json());
-  return response;
+	const response = await fetch(
+		`/class/${username}/${server}/${codeToClass(characterCode)}`,
+	).then((response) => response.json());
+	return response;
 }
 
-function startLoader(){
+function startLoader() {
 	const parentDiv = document.querySelector('.characterData');
 	const loader = createDOMElement('span', 'loader');
 	loader.style.marginTop = '35%';
-	loader.style.marginRight = '50%'; 
+	loader.style.marginRight = '50%';
 	parentDiv.appendChild(loader);
 }
 
 async function loadCharacterContent(characterData) {
-	const parentDiv = document.querySelector(".characterData");
+	const parentDiv = document.querySelector('.characterData');
 	const loaderSpan = parentDiv.querySelector('.loader');
-	if(loaderSpan)
-	  parentDiv.removeChild(loaderSpan);
-  
+	if (loaderSpan) parentDiv.removeChild(loaderSpan);
+
 	await Promise.all([
 		await loadCharacterNameDiv(characterData),
 		await loadLevelAndLevelBar(characterData),
 		await loadForce(characterData, true),
-		await loadForce(characterData, false)
+		await loadForce(characterData, false),
 	]);
-
 }
 
 function createCheckboxWithLabel(className, labelText, checked) {
@@ -59,7 +64,7 @@ function createCheckboxWithLabel(className, labelText, checked) {
 	checkboxElement.type = 'checkbox';
 	checkboxElement.checked = checked;
 
-	const textSpan = createDOMElement('span',null, labelText);
+	const textSpan = createDOMElement('span', null, labelText);
 
 	container.appendChild(checkboxElement);
 	container.appendChild(textSpan);
@@ -87,13 +92,19 @@ function createSwitchButton(className, bossing) {
 async function loadCharacterNameDiv(characterData) {
 	const parentDiv = document.querySelector('.characterData');
 
-	const characterInfo = createDOMElement('div','nameLinkLegion');
+	const characterInfo = createDOMElement('div', 'nameLinkLegion');
 
-	const bossIconPath = characterData.bossing ? '/../../../public/assets/icons/menu/boss_slayer.svg' : '/../../../public/assets/icons/menu/boss_slayer_off.svg';
+	const bossIconPath = characterData.bossing
+		? '/../../../public/assets/icons/menu/boss_slayer.svg'
+		: '/../../../public/assets/icons/menu/boss_slayer_off.svg';
 
 	const bossIcon = await loadEditableSVGFile(bossIconPath, 'bossIcon');
 
-	const characterName = createDOMElement('input', 'characterName', characterData.name);
+	const characterName = createDOMElement(
+		'input',
+		'characterName',
+		characterData.name,
+	);
 
 	const characterIconDiv = createDOMElement('div', 'characterIconDiv');
 
@@ -108,14 +119,22 @@ async function loadCharacterNameDiv(characterData) {
 	const legion = await loadLegionDiv(characterData);
 
 	const JobType = createDOMElement('span', 'classType', characterData.class);
-	JobType.style.fontSize = await adjustFontSizeToFit(JobType, 19.115, 3) + 'rem';
+	JobType.style.fontSize =
+		(await adjustFontSizeToFit(JobType, 19.115, 3)) + 'rem';
 
-	const JobLevel = createDOMElement('span', 'jobLevel', getJob(characterData));
+	const JobLevel = createDOMElement(
+		'span',
+		'jobLevel',
+		getJob(characterData),
+	);
 
 	const JobDiv = createDOMElement('div', 'jobDiv');
 
 	const bossText = createDOMElement('span', 'bossText', 'Bossing Character');
-	const switchButton = createSwitchButton('bossSwitch', characterData.bossing);
+	const switchButton = createSwitchButton(
+		'bossSwitch',
+		characterData.bossing,
+	);
 
 	const bossArea = createDOMElement('div', 'bossArea');
 
@@ -136,9 +155,15 @@ async function loadCharacterNameDiv(characterData) {
 async function loadLinkSkillDiv(characterData) {
 	const linkspan = createDOMElement('span', 'linkLegionTitle', 'Link Skill');
 
-	const filteredLink = linkSkillData.find((item) => item.name === characterData.linkSkill);
+	const filteredLink = linkSkillData.find(
+		(item) => item.name === characterData.linkSkill,
+	);
 
-	const linkImg = await createImageElement(filteredLink.image,filteredLink.name,`linkImg`);
+	const linkImg = await createImageElement(
+		filteredLink.image,
+		filteredLink.name,
+		`linkImg`,
+	);
 
 	const linkSkillBlock = createDOMElement('div', 'linkSkillBlock');
 
@@ -149,7 +174,6 @@ async function loadLinkSkillDiv(characterData) {
 }
 
 async function loadLegionDiv(characterData) {
-
 	const legionspan = createDOMElement('span', 'linkLegionTitle', 'Legion');
 
 	const legionRank = getRank(characterData);
@@ -158,7 +182,11 @@ async function loadLegionDiv(characterData) {
 			? '/../../../public/assets/legion/no_rank.webp'
 			: `/../../../public/assets/legion/${characterData.jobType}/rank_${legionRank}.webp`;
 
-	const legionImg = await createImageElement(legionImgSrc,`${characterData.class} legion`,'legionImg');
+	const legionImg = await createImageElement(
+		legionImgSrc,
+		`${characterData.class} legion`,
+		'legionImg',
+	);
 
 	const legionBlock = createDOMElement('div', 'legionBlock');
 
@@ -173,8 +201,18 @@ async function loadLevelAndLevelBar(characterData) {
 
 	const level = createDOMElement('span', 'level', 'Level');
 
-	const levelNumber = createDOMElement('input','levelNumber',`${characterData.level}`,'number');
-	const levelTarget = createDOMElement('input','levelTarget',`${characterData.targetLevel}`,'number');
+	const levelNumber = createDOMElement(
+		'input',
+		'levelNumber',
+		`${characterData.level}`,
+		'number',
+	);
+	const levelTarget = createDOMElement(
+		'input',
+		'levelTarget',
+		`${characterData.targetLevel}`,
+		'number',
+	);
 	const Bar = createDOMElement('span', 'Bar', '/');
 
 	const levelDiv = createDOMElement('div', 'levelDiv');
@@ -183,11 +221,15 @@ async function loadLevelAndLevelBar(characterData) {
 		level: characterData.level,
 		targetLevel: characterData.targetLevel,
 		jobType: characterData.jobType,
-	  }
+	};
 
-	const levelBar = await createLeveLBar(levelBarData, 41.458, 'characterLevelBar');
+	const levelBar = await createLeveLBar(
+		levelBarData,
+		41.458,
+		'characterLevelBar',
+	);
 	levelBar.setAttribute('jobType', characterData.jobType);
-	
+
 	levelDiv.appendChild(level);
 	levelDiv.appendChild(levelNumber);
 	levelDiv.appendChild(Bar);
@@ -203,7 +245,11 @@ async function loadForce(characterData, isArcane) {
 	const forceType = isArcane ? 'ArcaneForce' : 'SacredForce';
 	const forceData = characterData[forceType];
 
-	const Title = createDOMElement('span', forceType, isArcane ? 'Arcane Force' : 'Sacred Force');
+	const Title = createDOMElement(
+		'span',
+		forceType,
+		isArcane ? 'Arcane Force' : 'Sacred Force',
+	);
 
 	const forceDiv = createDOMElement('div', `${forceType}Div`);
 	forceDiv.appendChild(Title);
@@ -216,9 +262,15 @@ async function loadForce(characterData, isArcane) {
 		const areaName = force.name;
 		const areaCode = areaName.replace(/\s+/g, '_').toLowerCase();
 		let forceLevel = force.level;
-		const minLevel = dailyJson.find(json => json.name === force.name).minLevel;
+		const minLevel = dailyJson.find(
+			(json) => json.name === force.name,
+		).minLevel;
 
-		const icon = await createImageElement(`../../../public/assets/${forceType.toLowerCase()}/${areaCode}.webp`,	areaName,`${forceType}Image`);
+		const icon = await createImageElement(
+			`../../../public/assets/${forceType.toLowerCase()}/${areaCode}.webp`,
+			areaName,
+			`${forceType}Image`,
+		);
 
 		if (characterData.level < minLevel) {
 			icon.classList.add('off');
@@ -231,7 +283,11 @@ async function loadForce(characterData, isArcane) {
 		const levelWrapper = createDOMElement('div', 'levelWrapper');
 
 		const level = createDOMElement('span', `${forceType}Level`, `Level:`);
-		const levelInput = createDOMElement('input', 'levelInput', `${force.level}`);
+		const levelInput = createDOMElement(
+			'input',
+			'levelInput',
+			`${force.level}`,
+		);
 
 		levelWrapper.appendChild(level);
 
@@ -240,14 +296,31 @@ async function loadForce(characterData, isArcane) {
 		if (characterData.level >= minLevel) {
 			levelWrapper.appendChild(levelInput);
 			const expContent = createDOMElement('span', 'expContent', 'EXP:');
-			const expInput = createDOMElement('input', 'expInput', `${force.exp}`);
+			const expInput = createDOMElement(
+				'input',
+				'expInput',
+				`${force.exp}`,
+			);
 			levelWrapper.appendChild(expContent);
 			levelWrapper.appendChild(expInput);
 
 			for (forceContent of force.content) {
-				const value = forceContent.contentType == 'Daily Quest' ? dailyJson.find(json => json.name === force.name).value : dailyJson.find(json => json.name === "Weekly").value;
-				const expGain = forceContent.contentType === 'Reverse City' || forceContent.contentType === 'Yum Yum Island' ? '10' : value;
-				const checkbox = createCheckboxWithLabel('forceCheckbox',`${forceContent.contentType}: +${expGain}`,forceContent.checked);
+				const value =
+					forceContent.contentType == 'Daily Quest'
+						? dailyJson.find((json) => json.name === force.name)
+								.value
+						: dailyJson.find((json) => json.name === 'Weekly')
+								.value;
+				const expGain =
+					forceContent.contentType === 'Reverse City' ||
+					forceContent.contentType === 'Yum Yum Island'
+						? '10'
+						: value;
+				const checkbox = createCheckboxWithLabel(
+					'forceCheckbox',
+					`${forceContent.contentType}: +${expGain}`,
+					forceContent.checked,
+				);
 				checkboxContent.appendChild(checkbox);
 			}
 		} else {
@@ -261,7 +334,11 @@ async function loadForce(characterData, isArcane) {
 			forceDataElement.appendChild(checkboxContent);
 		}
 		if (characterData.level < minLevel) {
-			const unlockText = createDOMElement('span','unlockText',`Unlock at Level ${minLevel}`);
+			const unlockText = createDOMElement(
+				'span',
+				'unlockText',
+				`Unlock at Level ${minLevel}`,
+			);
 			forceDataElement.appendChild(unlockText);
 		}
 
@@ -271,5 +348,3 @@ async function loadForce(characterData, isArcane) {
 	forceDiv.appendChild(forceGrid);
 	parentDiv.appendChild(forceDiv);
 }
-
-
