@@ -26,10 +26,11 @@ async function createImageElement(src, alt, className = ''){
 		const cachedResponse = await cache.match(src);
 		
 		if (cachedResponse){
-		  image = new Image();
-		  image.src = src;
-		  image.alt = alt;
-		  image.className = className;
+			image = new Image();
+			const cachedBlob = await cachedResponse.blob();
+			image.src = URL.createObjectURL(cachedBlob);
+			image.alt = alt;
+			image.className = className;
 
 		} 
 		else{
@@ -42,10 +43,11 @@ async function createImageElement(src, alt, className = ''){
   
 		  if(response.ok){
 			image = new Image();
-			image.src = src;
+			const fetchedBlob = await response.blob();
+			image.src = URL.createObjectURL(fetchedBlob);
 			image.alt = alt;
 			image.className = className;
-  
+			
 			await cache.put(src, response.clone());
   
 			await new Promise((resolve, reject) => {
