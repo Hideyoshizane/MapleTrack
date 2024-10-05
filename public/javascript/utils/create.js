@@ -21,12 +21,14 @@ async function createImageElement(src, alt, className = '') {
 			const cachedResponse = await cache.match(src);
 
 			if (cachedResponse) {
+				// Use cached image
 				image = new Image();
 				const cachedBlob = await cachedResponse.blob();
 				image.src = URL.createObjectURL(cachedBlob);
 				image.alt = alt;
 				image.className = className;
 			} else {
+				// Fetch the image if not found in cache
 				const response = await fetch(src, {
 					cache: 'force-cache',
 					headers: {
@@ -35,13 +37,15 @@ async function createImageElement(src, alt, className = '') {
 				});
 
 				if (response.ok) {
+					const responseClone = response.clone();
+
 					image = new Image();
 					const fetchedBlob = await response.blob();
 					image.src = URL.createObjectURL(fetchedBlob);
 					image.alt = alt;
 					image.className = className;
 
-					await cache.put(src, response.clone());
+					await cache.put(src, responseClone);
 
 					await new Promise((resolve, reject) => {
 						image.onload = resolve;
@@ -60,7 +64,6 @@ async function createImageElement(src, alt, className = '') {
 
 	return image;
 }
-
 async function loadEditableSVGFile(filePath, className) {
 	try {
 		const response = await fetch(filePath);

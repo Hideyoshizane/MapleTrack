@@ -400,7 +400,7 @@ function createDailyButton(Force, isArcane = false) {
 	}
 	if (Force.content[0].checked == false) {
 		dailyButton.disabled = true;
-		dailyButton.textContent = 'OFF!';
+		dailyButton.textContent = 'Disabled';
 	}
 
 	dailyButton.setAttribute('name', force.name);

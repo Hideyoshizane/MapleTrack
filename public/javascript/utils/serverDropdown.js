@@ -62,6 +62,23 @@ async function loadServerButtons(data, parentDiv) {
 	} catch (error) {
 		console.error('Error fetching server name:', error);
 	}
+	const serverToCheck = selectedServer
+		.querySelector('span')
+		.textContent.trim();
+
+	const buttons = Array.from(
+		serverSelector.querySelectorAll('.serverButton'),
+	);
+
+	const matchedButtons = buttons.filter((button) => {
+		const span = button.querySelector('span');
+		return span && span.textContent.trim() === serverToCheck;
+	});
+
+	if (matchedButtons.length > 0) {
+		matchedButtons[0].classList.remove('notSelected');
+		matchedButtons[0].classList.add('selected');
+	}
 
 	dropdownToggle.appendChild(selectedServer);
 	dropdownToggle.appendChild(serverSelector);
@@ -167,14 +184,11 @@ function swapContentAndStoreCookie(selectedButton, serverButton) {
 
 function updateToCookie(selectedServer, savedServerContent) {
 	const selectedServerImg = selectedServer.querySelector('img');
-	const currentImgSrc = selectedServerImg.getAttribute('src');
-	const newImgSrc = currentImgSrc.replace(
-		/[^/]*\.webp$/,
-		`${savedServerContent}.webp`,
-	);
+	const newImgSrc = `/../../assets/icons/servers/${savedServerContent}.webp`;
 	selectedServerImg.src = newImgSrc;
 	selectedServerImg.setAttribute('alt', savedServerContent);
 	selectedServer.querySelector('span').textContent =
 		savedServerContent.charAt(0).toUpperCase() +
 		savedServerContent.slice(1);
+	return;
 }
