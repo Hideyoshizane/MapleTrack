@@ -9,10 +9,7 @@ module.exports = {
 
 			const characters = await Character.find({
 				userOrigin: username,
-				$or: [
-					{ name: { $regex: query, $options: 'i' } },
-					{ class: { $regex: query, $options: 'i' } },
-				],
+				$or: [{ name: { $regex: query, $options: 'i' } }, { class: { $regex: query, $options: 'i' } }],
 			}).limit(5);
 
 			res.status(200).json(characters);

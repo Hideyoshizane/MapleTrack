@@ -30,10 +30,7 @@ inputIds.forEach((inputId) => {
 		inputElement.addEventListener('input', function () {
 			if (inputId === 'checkPassword') {
 				validatePassword(inputElement, (value) =>
-					arePasswordsMatching(
-						value,
-						document.getElementById('password').value,
-					),
+					arePasswordsMatching(value, document.getElementById('password').value)
 				);
 			} else {
 				validatePassword(inputElement, isValidPassword);
@@ -67,9 +64,7 @@ wrap.forEach((input) => {
 });
 
 function handleHover(event) {
-	const name = event.currentTarget
-		.querySelector('.input')
-		.getAttribute('name');
+	const name = event.currentTarget.querySelector('.input').getAttribute('name');
 	const targetRect = event.target.getBoundingClientRect();
 	const centerX = targetRect.left + targetRect.width / 2;
 	const centerY = targetRect.top + targetRect.height / 2;
@@ -106,10 +101,7 @@ function updateSubmitButtonState() {
 
 	const oldPasswordValid = oldPassword.value.length > 0;
 	const newPasswordValid = isValidPassword(newPassword.value);
-	const checkPasswordValid = arePasswordsMatching(
-		newPassword.value,
-		checkPassword.value,
-	);
+	const checkPasswordValid = arePasswordsMatching(newPassword.value, checkPassword.value);
 
 	if (oldPasswordValid && newPasswordValid && checkPasswordValid) {
 		submitButton.disabled = false;
@@ -141,9 +133,7 @@ async function updatePassword() {
 		});
 		const result = await response.json();
 
-		const messageText = result
-			? 'Password updated successfully.'
-			: 'Error, password not updated.';
+		const messageText = result ? 'Password updated successfully.' : 'Error, password not updated.';
 
 		const existingMessage = document.querySelector('.message');
 		if (existingMessage) {

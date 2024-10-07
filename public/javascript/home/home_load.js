@@ -6,23 +6,15 @@ window.linkSkillData;
 
 document.addEventListener('DOMContentLoaded', async () => {
 	try {
-		username = document
-			.getElementById('userdata')
-			.getAttribute('data-username');
+		username = document.getElementById('userdata').getAttribute('data-username');
 
-		dailyJson = await fetch('/../../../public/data/dailyExp.json').then(
-			(response) => response.json(),
-		);
+		dailyJson = await fetch('/../../../public/data/dailyExp.json').then((response) => response.json());
 
 		await loadSymbolsImage();
 
-		linkSkillData = await fetch('../../public/data/linkskill.json').then(
-			(response) => response.json(),
-		);
+		linkSkillData = await fetch('../../public/data/linkskill.json').then((response) => response.json());
 
-		const data = await fetch('/userServer').then((response) =>
-			response.json(),
-		);
+		const data = await fetch('/userServer').then((response) => response.json());
 
 		const dropdown = document.querySelector('.dropdown');
 		await loadServerButtons(data, dropdown);
@@ -41,63 +33,27 @@ async function loadSymbolsImage() {
 		vanish_journey: await createImageElement(
 			'../../public/assets/arcaneforce/vanish_journey.webp',
 			'Vanish Journey',
-			'ArcaneImage',
+			'ArcaneImage'
 		),
 		chu_chu_island: await createImageElement(
 			'../../public/assets/arcaneforce/chu_chu_island.webp',
 			'Chu Chu Island',
-			'ArcaneImage',
+			'ArcaneImage'
 		),
-		lachelein: await createImageElement(
-			'../../public/assets/arcaneforce/lachelein.webp',
-			'Lachelein',
-			'ArcaneImage',
-		),
-		arcana: await createImageElement(
-			'../../public/assets/arcaneforce/arcana.webp',
-			'Arcana',
-			'ArcaneImage',
-		),
-		morass: await createImageElement(
-			'../../public/assets/arcaneforce/morass.webp',
-			'Morass',
-			'ArcaneImage',
-		),
-		esfera: await createImageElement(
-			'../../public/assets/arcaneforce/esfera.webp',
-			'Esfera',
-			'ArcaneImage',
-		),
-		cernium: await createImageElement(
-			'../../public/assets/sacredforce/cernium.webp',
-			'Cernium',
-			'SacredImage',
-		),
-		arcus: await createImageElement(
-			'../../public/assets/sacredforce/arcus.webp',
-			'Arcus',
-			'SacredImage',
-		),
-		odium: await createImageElement(
-			'../../public/assets/sacredforce/odium.webp',
-			'Odium',
-			'SacredImage',
-		),
+		lachelein: await createImageElement('../../public/assets/arcaneforce/lachelein.webp', 'Lachelein', 'ArcaneImage'),
+		arcana: await createImageElement('../../public/assets/arcaneforce/arcana.webp', 'Arcana', 'ArcaneImage'),
+		morass: await createImageElement('../../public/assets/arcaneforce/morass.webp', 'Morass', 'ArcaneImage'),
+		esfera: await createImageElement('../../public/assets/arcaneforce/esfera.webp', 'Esfera', 'ArcaneImage'),
+		cernium: await createImageElement('../../public/assets/sacredforce/cernium.webp', 'Cernium', 'SacredImage'),
+		arcus: await createImageElement('../../public/assets/sacredforce/arcus.webp', 'Arcus', 'SacredImage'),
+		odium: await createImageElement('../../public/assets/sacredforce/odium.webp', 'Odium', 'SacredImage'),
 		'shangri-la': await createImageElement(
 			'../../public/assets/sacredforce/shangri-la.webp',
 			'Shangri-la',
-			'SacredImage',
+			'SacredImage'
 		),
-		arteria: await createImageElement(
-			'../../public/assets/sacredforce/arteria.webp',
-			'Arteria',
-			'SacredImage',
-		),
-		carcion: await createImageElement(
-			'../../public/assets/sacredforce/carcion.webp',
-			'Carcion',
-			'SacredImage',
-		),
+		arteria: await createImageElement('../../public/assets/sacredforce/arteria.webp', 'Arteria', 'SacredImage'),
+		carcion: await createImageElement('../../public/assets/sacredforce/carcion.webp', 'Carcion', 'SacredImage'),
 	};
 }
 
@@ -110,13 +66,9 @@ function startLoader() {
 
 async function createCharacterCards() {
 	const parentDiv = document.querySelector('.characterCards');
-	const selectedServer = document
-		.querySelector('.SelectedButton')
-		.querySelector('span').innerText;
+	const selectedServer = document.querySelector('.SelectedButton').querySelector('span').innerText;
 
-	const characters = await fetch(`/${username}/${selectedServer}`).then(
-		(response) => response.json(),
-	);
+	const characters = await fetch(`/${username}/${selectedServer}`).then((response) => response.json());
 	const characterCards = await Promise.all(characters.map(generateCard));
 
 	const characterCardFragment = document.createDocumentFragment();
@@ -137,15 +89,7 @@ async function createCharacterCards() {
 }
 
 async function sort(cards) {
-	const customOrder = [
-		'mage',
-		'thief',
-		'xenon',
-		'warrior',
-		'bowman',
-		'pirate',
-		'bossing',
-	];
+	const customOrder = ['mage', 'thief', 'xenon', 'warrior', 'bowman', 'pirate', 'bossing'];
 
 	cards.sort((a, b) => {
 		const jobTypeA = a.getAttribute('jobtype');
@@ -177,19 +121,12 @@ function filterCharacterCards(selectedValues) {
 		const jobType = element.getAttribute('jobType');
 		const hasBossIcon = element.querySelector('.bossIcon');
 
-		const isThiefOrPirate =
-			selectedValues.includes('thief') ||
-			selectedValues.includes('pirate');
+		const isThiefOrPirate = selectedValues.includes('thief') || selectedValues.includes('pirate');
 
-		if (
-			!selectedValues.includes(jobType) &&
-			!(isThiefOrPirate && jobType === 'xenon')
-		)
-			element.classList.add('off');
+		if (!selectedValues.includes(jobType) && !(isThiefOrPirate && jobType === 'xenon')) element.classList.add('off');
 		else element.classList.remove('off');
 
-		if (selectedValues.includes('bossing') && hasBossIcon)
-			element.classList.remove('off');
+		if (selectedValues.includes('bossing') && hasBossIcon) element.classList.remove('off');
 
 		if (selectedValues.length === 0) element.classList.remove('off');
 	});
@@ -274,28 +211,17 @@ async function generateCard(characterData) {
 
 async function createForce(characterData, forceType) {
 	let outerWrapper = document.createDocumentFragment();
-	const forceData =
-		forceType === 'arcane'
-			? characterData.ArcaneForce
-			: characterData.SacredForce;
+	const forceData = forceType === 'arcane' ? characterData.ArcaneForce : characterData.SacredForce;
 
 	try {
 		for (const forceArea of forceData) {
-			const wrapper = createDOMElement(
-				'div',
-				forceType === 'arcane' ? 'arcaneWrapper' : 'sacredWrapper',
-			);
+			const wrapper = createDOMElement('div', forceType === 'arcane' ? 'arcaneWrapper' : 'sacredWrapper');
 
 			const areaCode = forceArea.name.replace(/\s+/g, '_').toLowerCase();
 
 			const forceImg = SymbolsImages[areaCode].cloneNode(true);
 
-			var level = await setForceLevel(
-				forceArea,
-				characterData,
-				forceImg,
-				forceType,
-			);
+			var level = await setForceLevel(forceArea, characterData, forceImg, forceType);
 
 			const forceLevel = createDOMElement('span', '', level);
 
@@ -304,12 +230,7 @@ async function createForce(characterData, forceType) {
 			outerWrapper.appendChild(wrapper);
 		}
 	} catch (error) {
-		console.error(
-			`Error loading ${
-				forceType === 'arcane' ? 'Arcane' : 'Sacred'
-			} Force:`,
-			error,
-		);
+		console.error(`Error loading ${forceType === 'arcane' ? 'Arcane' : 'Sacred'} Force:`, error);
 		throw error;
 	}
 	return outerWrapper;
@@ -317,16 +238,13 @@ async function createForce(characterData, forceType) {
 
 async function setForceLevel(forceArea, characterData, forceImg, forceType) {
 	let level = forceArea.level;
-	const minLevel = dailyJson.find(
-		(json) => json.name === forceArea.name,
-	).minLevel;
+	const minLevel = dailyJson.find((json) => json.name === forceArea.name).minLevel;
 	if (characterData.level < minLevel) {
 		forceImg.classList.toggle('off');
 		level = 0;
 	}
 
-	level =
-		level === (forceType === 'arcane' ? 20 : 11) ? 'MAX' : `Lv. ${level}`;
+	level = level === (forceType === 'arcane' ? 20 : 11) ? 'MAX' : `Lv. ${level}`;
 
 	return level;
 }
@@ -334,13 +252,11 @@ async function setForceLevel(forceArea, characterData, forceImg, forceType) {
 async function createCharacterPortrait(characterData) {
 	const portrait = await createImageElement(
 		`../../public/assets/cards/${getCode(characterData)}.webp`,
-		characterData.class,
+		characterData.class
 	);
 	portrait.setAttribute(
 		'class',
-		characterData.level === 0 && characterData.name === 'Character Name'
-			? 'cardPortrait off'
-			: 'cardPortrait',
+		characterData.level === 0 && characterData.name === 'Character Name' ? 'cardPortrait off' : 'cardPortrait'
 	);
 
 	return portrait;
@@ -351,17 +267,11 @@ async function createLinkSkillContent(characterData) {
 
 	const linkspan = createDOMElement('span', 'linkLegionTitle', 'Link Skill');
 
-	const filteredLink = linkSkillData.find(
-		(item) => item.name === characterData.linkSkill,
-	);
+	const filteredLink = linkSkillData.find((item) => item.name === characterData.linkSkill);
 
 	const wrapper = createDOMElement('div', 'linkWrapper');
 
-	const linkImg = await createImageElement(
-		filteredLink.image,
-		filteredLink.name,
-		'linkImg',
-	);
+	const linkImg = await createImageElement(filteredLink.image, filteredLink.name, 'linkImg');
 
 	let LinkLevelText;
 
@@ -397,11 +307,7 @@ async function createLegionContent(characterData) {
 			? '../../public/assets/legion/no_rank.webp'
 			: `../../public/assets/legion/${characterData.jobType}/rank_${legionRank}.webp`;
 
-	const legionImg = await createImageElement(
-		legionSrc,
-		`${characterData.class} legion`,
-		'legionImg',
-	);
+	const legionImg = await createImageElement(legionSrc, `${characterData.class} legion`, 'legionImg');
 
 	legionDiv.appendChild(legionspan);
 	legionDiv.appendChild(legionImg);
@@ -421,11 +327,7 @@ async function loadBossIcon() {
 }
 
 async function createBossIconAndName(characterData) {
-	const characterName = createDOMElement(
-		'span',
-		'characterName',
-		characterData.name,
-	);
+	const characterName = createDOMElement('span', 'characterName', characterData.name);
 	const nameAndIcon = createDOMElement('div', 'nameAndIcon');
 
 	if (!bossIcon) {
@@ -449,11 +351,7 @@ async function createLowerPart(characterData) {
 			? characterColors['complete']
 			: characterColors[characterData.jobType];
 
-	const levelSpan = createDOMElement(
-		'span',
-		'level',
-		`${characterData.level}/${characterData.targetLevel}`,
-	);
+	const levelSpan = createDOMElement('span', 'level', `${characterData.level}/${characterData.targetLevel}`);
 	levelSpan.style.color = color;
 
 	const nameAndLevel = createDOMElement('div', 'nameAndLevel');

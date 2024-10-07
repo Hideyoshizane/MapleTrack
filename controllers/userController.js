@@ -30,10 +30,7 @@ module.exports = {
 			});
 
 			await createdUser.save();
-			await searchServersAndCreateMissing(
-				createdUser._id,
-				createdUser.username,
-			);
+			await searchServersAndCreateMissing(createdUser._id, createdUser.username);
 			await createBossList(createdUser.username);
 			await createdUser.save();
 			req.flash('message', 'User created successfully!');
@@ -114,10 +111,7 @@ module.exports = {
 			const characterData = await getHighestLevelCharacter(foundUser._id);
 			if (level == characterData.highestLevel) {
 				const salt = await bcrypt.genSalt(10);
-				const hashedPassword = await bcrypt.hash(
-					characterData.characterName,
-					salt,
-				);
+				const hashedPassword = await bcrypt.hash(characterData.characterName, salt);
 
 				foundUser.password = hashedPassword;
 				await foundUser.save();
@@ -146,10 +140,7 @@ module.exports = {
 		const { oldPassword, newPassword } = req.body;
 
 		const foundUser = await User.findOne({ username });
-		const passwordMatch = await bcrypt.compare(
-			oldPassword,
-			foundUser.password,
-		);
+		const passwordMatch = await bcrypt.compare(oldPassword, foundUser.password);
 		if (passwordMatch) {
 			const salt = await bcrypt.genSalt(10);
 			const newHashedPassword = await bcrypt.hash(newPassword, salt);

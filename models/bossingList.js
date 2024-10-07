@@ -38,8 +38,8 @@ const bossList = mongoose.model(
 				},
 			],
 		},
-		{ strictPopulate: false },
-	),
+		{ strictPopulate: false }
+	)
 );
 
 async function createBossList(username) {
@@ -60,12 +60,8 @@ async function createBossList(username) {
 
 async function insertOnBossList(username, characterData, server) {
 	const bossListDocument = await bossList.findOne({ userOrigin: username });
-	const serverToUpdate = bossListDocument.server.find(
-		(s) => s.name === server,
-	);
-	const characterIndex = serverToUpdate.characters.findIndex(
-		(char) => char.id === characterData.id,
-	);
+	const serverToUpdate = bossListDocument.server.find((s) => s.name === server);
+	const characterIndex = serverToUpdate.characters.findIndex((char) => char.id === characterData.id);
 
 	//if character already exists, update it. Else, insert it on the list.
 	if (characterIndex !== -1) {
@@ -88,13 +84,9 @@ async function insertOnBossList(username, characterData, server) {
 
 async function removeFromBossList(username, characterID, server) {
 	const bossListDocument = await bossList.findOne({ userOrigin: username });
-	const serverToUpdate = bossListDocument.server.find(
-		(s) => s.name === server,
-	);
+	const serverToUpdate = bossListDocument.server.find((s) => s.name === server);
 
-	const characterIndex = serverToUpdate.characters.findIndex(
-		(char) => char.id === characterID,
-	);
+	const characterIndex = serverToUpdate.characters.findIndex((char) => char.id === characterID);
 	if (characterIndex !== -1) {
 		serverToUpdate.characters.splice(characterIndex, 1);
 		await bossListDocument.save();
@@ -109,15 +101,10 @@ async function resetBossList(username) {
 	});
 
 	const nextWednesday = weeklyReset.getWeeklyResetDate(userLastLogin, 4);
-	const nextDay = userLastLogin
-		.plus({ days: 1 })
-		.set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
+	const nextDay = userLastLogin.plus({ days: 1 }).set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
 
 	const dailyCheck = weeklyReset.timeConditionChecker(nextDay, timeNow);
-	const weeklyCheck = weeklyReset.timeConditionChecker(
-		nextWednesday,
-		timeNow,
-	);
+	const weeklyCheck = weeklyReset.timeConditionChecker(nextWednesday, timeNow);
 
 	if (dailyCheck && !weeklyCheck) {
 		//Reset Daily bosses

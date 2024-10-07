@@ -17,11 +17,9 @@ const serverSchema = new mongoose.Schema(
 			required: true,
 		},
 		usernameSource: [{ type: mongoose.Schema.Types.ObjectID, ref: 'User' }],
-		characters: [
-			{ type: mongoose.Schema.Types.ObjectId, ref: 'Character' },
-		],
+		characters: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Character' }],
 	},
-	{ strictPopulate: false },
+	{ strictPopulate: false }
 );
 
 const defaultServers = [
@@ -60,9 +58,7 @@ async function searchServersAndCreateMissing(userID, username) {
 		userStoredServers = userData.servers.map((server) => server.name);
 	}
 
-	const missingServers = defaultServers.filter(
-		(server) => !userStoredServers.includes(server.name),
-	);
+	const missingServers = defaultServers.filter((server) => !userStoredServers.includes(server.name));
 	if (missingServers.length == 0) {
 		console.log('User servers are updated.');
 	}
@@ -73,10 +69,7 @@ async function searchServersAndCreateMissing(userID, username) {
 }
 
 async function createMissingServer(userID, missingServersData, username) {
-	const baseCharacters = await createDefaultCharacters(
-		missingServersData.name,
-		username,
-	);
+	const baseCharacters = await createDefaultCharacters(missingServersData.name, username);
 	const createdServer = new Server({
 		name: missingServersData.name,
 		img: missingServersData.img,
@@ -91,7 +84,7 @@ async function createMissingServer(userID, missingServersData, username) {
 		const updatedUser = await User.findByIdAndUpdate(
 			{ _id: userID },
 			{ $addToSet: { servers: createdServer._id } },
-			{ new: true },
+			{ new: true }
 		);
 
 		if (!updatedUser) {
@@ -113,9 +106,7 @@ async function getServerWithHighestLevel(userID) {
 
 		for (const server of user.servers) {
 			// Populate the characters for the current server
-			const populatedServer = await Server.findById(server._id)
-				.populate('characters')
-				.exec();
+			const populatedServer = await Server.findById(server._id).populate('characters').exec();
 
 			for (const character of populatedServer.characters) {
 				if (character.level > maxLevel) {
@@ -140,9 +131,7 @@ async function getHighestLevelCharacter(userID) {
 
 		for (const server of user.servers) {
 			// Populate the characters for the current server
-			const populatedServer = await Server.findById(server._id)
-				.populate('characters')
-				.exec();
+			const populatedServer = await Server.findById(server._id).populate('characters').exec();
 
 			for (const character of populatedServer.characters) {
 				if (character.level > highestLevel) {

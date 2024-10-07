@@ -1,8 +1,5 @@
 const { Character, updateCharacterWeekly } = require('../models/character');
-const {
-	insertOnBossList,
-	removeFromBossList,
-} = require('../models/bossingList');
+const { insertOnBossList, removeFromBossList } = require('../models/bossingList');
 
 module.exports = {
 	redirectCharacter: async (req, res) => {
@@ -39,16 +36,7 @@ module.exports = {
 	},
 	updateCharacter: async (req, res) => {
 		try {
-			const {
-				_id,
-				name,
-				level,
-				targetLevel,
-				bossing,
-				ArcaneForce,
-				SacredForce,
-				server,
-			} = req.body;
+			const { _id, name, level, targetLevel, bossing, ArcaneForce, SacredForce, server } = req.body;
 			const character = await Character.findById(_id);
 			character.name = name;
 			character.level = level;
@@ -56,31 +44,25 @@ module.exports = {
 			character.bossing = bossing;
 
 			for (const updatedForce of ArcaneForce) {
-				const forceToUpdate = character.ArcaneForce.find(
-					(force) => force.name === updatedForce.name,
-				);
+				const forceToUpdate = character.ArcaneForce.find((force) => force.name === updatedForce.name);
 				if (forceToUpdate) {
 					forceToUpdate.level = updatedForce.level;
 					forceToUpdate.exp = updatedForce.exp;
 
 					for (let i = 0; i < forceToUpdate.content.length; i++) {
-						forceToUpdate.content[i].checked =
-							updatedForce.content[i].checked;
+						forceToUpdate.content[i].checked = updatedForce.content[i].checked;
 					}
 				}
 			}
 
 			for (const updatedForce of SacredForce) {
-				const forceToUpdate = character.SacredForce.find(
-					(force) => force.name === updatedForce.name,
-				);
+				const forceToUpdate = character.SacredForce.find((force) => force.name === updatedForce.name);
 				if (forceToUpdate) {
 					forceToUpdate.level = updatedForce.level;
 					forceToUpdate.exp = updatedForce.exp;
 
 					for (let i = 0; i < forceToUpdate.content.length; i++) {
-						forceToUpdate.content[i].checked =
-							updatedForce.content[i].checked;
+						forceToUpdate.content[i].checked = updatedForce.content[i].checked;
 					}
 				}
 			}
@@ -92,17 +74,9 @@ module.exports = {
 					level: character.level,
 					class: character.class,
 				};
-				await insertOnBossList(
-					character.userOrigin,
-					characterData,
-					server,
-				);
+				await insertOnBossList(character.userOrigin, characterData, server);
 			} else if (bossing == false) {
-				await removeFromBossList(
-					character.userOrigin,
-					character._id.toString(),
-					server,
-				);
+				await removeFromBossList(character.userOrigin, character._id.toString(), server);
 			}
 
 			await character.save();
@@ -147,14 +121,7 @@ module.exports = {
 
 	increaseDaily: async (req, res) => {
 		try {
-			const {
-				forceType,
-				forceName,
-				value,
-				characterData,
-				necessaryExp,
-				date,
-			} = req.body;
+			const { forceType, forceName, value, characterData, necessaryExp, date } = req.body;
 			const foundCharacter = await Character.findById(characterData._id);
 			let AreaData;
 			if (forceType) {
@@ -183,8 +150,7 @@ module.exports = {
 	},
 	increaseWeekly: async (req, res) => {
 		try {
-			const { forceName, value, characterData, necessaryExp, date } =
-				req.body;
+			const { forceName, value, characterData, necessaryExp, date } = req.body;
 			const foundCharacter = await Character.findById(characterData._id);
 			let AreaData = foundCharacter.ArcaneForce;
 			const foundArea = AreaData.find((obj) => obj.name === forceName);

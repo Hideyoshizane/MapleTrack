@@ -3,17 +3,10 @@ document.addEventListener('PageLoaded', function () {
 		const characterCardDiv = document.querySelector('.characterCards');
 		const selectedButton = dropdownToggle.querySelector('.SelectedButton');
 
-		const serverButtons = document
-			.querySelector('.serverSelector')
-			.querySelectorAll('.serverButton');
+		const serverButtons = document.querySelector('.serverSelector').querySelectorAll('.serverButton');
 		for (const serverButton of serverButtons) {
 			serverButton.addEventListener('click', async () => {
-				await handleServerButtonClick(
-					serverButton,
-					serverButtons,
-					selectedButton,
-					characterCardDiv,
-				);
+				await handleServerButtonClick(serverButton, serverButtons, selectedButton, characterCardDiv);
 			});
 		}
 
@@ -25,12 +18,7 @@ document.addEventListener('PageLoaded', function () {
 	}
 });
 
-async function handleServerButtonClick(
-	serverButton,
-	serverButtons,
-	selectedButton,
-	characterCardDiv,
-) {
+async function handleServerButtonClick(serverButton, serverButtons, selectedButton, characterCardDiv) {
 	if (selectedButton.textContent !== serverButton.textContent) {
 		serverButtons.forEach((button) => {
 			button.classList.add('notSelected');
@@ -53,9 +41,7 @@ async function handleServerButtonClick(
 function setupCardClickListeners() {
 	cardBody.forEach((card) => {
 		card.addEventListener('click', async () => {
-			const server = document
-				.querySelector('.SelectedButton')
-				.querySelector('span').innerText;
+			const server = document.querySelector('.SelectedButton').querySelector('span').innerText;
 			const character = card.getAttribute('characterclass');
 			var url = `${username}/${server}/${character}`;
 			window.location.href = url;

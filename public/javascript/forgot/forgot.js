@@ -14,11 +14,7 @@ function isValidUsername(username) {
 	const maxLength = 20;
 	const alphanumericRegex = /^[a-zA-Z0-9]+$/;
 
-	return (
-		username.length >= minLength &&
-		username.length <= maxLength &&
-		alphanumericRegex.test(username)
-	);
+	return username.length >= minLength && username.length <= maxLength && alphanumericRegex.test(username);
 }
 function updateSubmitButtonState() {
 	submitButton.disabled = !isValidUsername(username.value);

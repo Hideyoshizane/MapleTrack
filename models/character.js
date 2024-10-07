@@ -2,10 +2,7 @@ const mongoose = require('mongoose');
 const path = require('path');
 const jsonData = require('../public/data/classes.json');
 const { User } = require('./user');
-const {
-	timeConditionChecker,
-	getWeeklyResetDate,
-} = require('../public/javascript/utils/weeklyReset');
+const { timeConditionChecker, getWeeklyResetDate } = require('../public/javascript/utils/weeklyReset');
 const { codeToClass } = require('../public/javascript/utils/characterData');
 const { DateTime } = require('luxon');
 
@@ -66,8 +63,8 @@ const Character = mongoose.model(
 				},
 			],
 		},
-		{ strictPopulate: false },
-	),
+		{ strictPopulate: false }
+	)
 );
 
 const templateCharacter = {
@@ -279,11 +276,7 @@ var defaultCharacters = [];
 
 async function createDefaultCharacters(serverName, username) {
 	for (const jsonDataIndex of jsonData) {
-		const createdCharacter = await createCharacter(
-			jsonDataIndex,
-			serverName,
-			username,
-		);
+		const createdCharacter = await createCharacter(jsonDataIndex, serverName, username);
 		defaultCharacters.push(createdCharacter);
 	}
 	const exportCharacters = [...defaultCharacters];
@@ -304,24 +297,14 @@ async function createMissingCharacters(userID, username) {
 		.exec();
 
 	for (server of userData.servers) {
-		const serverCharacterCodes = server.characters.map(
-			(character) => character.class,
-		);
-		const serverMissingCharacters = jsonData.filter(
-			(character) => !serverCharacterCodes.includes(character.class),
-		);
+		const serverCharacterCodes = server.characters.map((character) => character.class);
+		const serverMissingCharacters = jsonData.filter((character) => !serverCharacterCodes.includes(character.class));
 		for (missingCharacter of serverMissingCharacters) {
-			const createdCharacter = await createCharacter(
-				missingCharacter,
-				server.name,
-				username,
-			);
+			const createdCharacter = await createCharacter(missingCharacter, server.name, username);
 			server.characters.push(createdCharacter._id);
 			await createdCharacter.save();
 			await server.save();
-			console.log(
-				`${createdCharacter.class} created on ${server.name} server`,
-			);
+			console.log(`${createdCharacter.class} created on ${server.name} server`);
 		}
 	}
 }
@@ -353,16 +336,8 @@ async function updateCharacters(userID) {
 
 	for (const server of userData.servers) {
 		for (const character of server.characters) {
-			await updateForceData(
-				character,
-				'ArcaneForce',
-				templateCharacter.ArcaneForce,
-			);
-			await updateForceData(
-				character,
-				'SacredForce',
-				templateCharacter.SacredForce,
-			);
+			await updateForceData(character, 'ArcaneForce', templateCharacter.ArcaneForce);
+			await updateForceData(character, 'SacredForce', templateCharacter.SacredForce);
 
 			await character.save();
 		}
@@ -405,25 +380,17 @@ async function updateForceData(updatingCharacter, forceType, templateForce) {
 	const updatingForce = updatingCharacter[forceType] || [];
 	//Add missing Areas
 	const missingArea = templateForce.filter(
-		(newArea) =>
-			!updatingForce.some(
-				(existingArea) => existingArea.name === newArea.name,
-			),
+		(newArea) => !updatingForce.some((existingArea) => existingArea.name === newArea.name)
 	);
 	for (area of missingArea) {
 		updatingForce.push(area);
 	}
 	//Remove Areas
 	const areasToDelete = updatingForce.filter(
-		(newArea) =>
-			!templateForce.some(
-				(existingArea) => existingArea.name === newArea.name,
-			),
+		(newArea) => !templateForce.some((existingArea) => existingArea.name === newArea.name)
 	);
 	areasToDelete.forEach((areaToRemove) => {
-		const index = updatingForce.findIndex(
-			(area) => area.name === areaToRemove.name,
-		);
+		const index = updatingForce.findIndex((area) => area.name === areaToRemove.name);
 		if (index !== -1) {
 			updatingForce.splice(index, 1);
 		}
@@ -435,10 +402,7 @@ async function updateForceData(updatingCharacter, forceType, templateForce) {
 		//Add new content
 		const missingContent = template.content.filter(
 			(newContent) =>
-				!character.content.some(
-					(exisstingContent) =>
-						exisstingContent.contentType === newContent.contentType,
-				),
+				!character.content.some((exisstingContent) => exisstingContent.contentType === newContent.contentType)
 		);
 		for (content of missingContent) {
 			character.content.push(content);
@@ -446,16 +410,10 @@ async function updateForceData(updatingCharacter, forceType, templateForce) {
 
 		//Delete content
 		const contentToDelete = character.content.filter(
-			(newArea) =>
-				!template.content.some(
-					(existingArea) =>
-						existingArea.contentType === newArea.contentType,
-				),
+			(newArea) => !template.content.some((existingArea) => existingArea.contentType === newArea.contentType)
 		);
 		contentToDelete.forEach((content) => {
-			const index = character.content.findIndex(
-				(area) => area.contentType === content.contentType,
-			);
+			const index = character.content.findIndex((area) => area.contentType === content.contentType);
 			if (index !== -1) {
 				character.content.splice(index, 1);
 			}

@@ -37,7 +37,7 @@ const userSchema = new mongoose.Schema(
 			},
 		],
 	},
-	{ strictPopulate: false },
+	{ strictPopulate: false }
 );
 
 const User = mongoose.model('User', userSchema);

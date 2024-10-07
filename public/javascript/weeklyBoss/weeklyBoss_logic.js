@@ -65,11 +65,7 @@ async function updateGrid(buttonWrapper, toggle) {
 				}
 
 				// Verifica se o índice está na última linha
-				if (
-					i >= startIndexOfLastRow &&
-					i <= endIndexOfLastRow &&
-					characterDropdown[i].querySelector('.BossButton')
-				) {
+				if (i >= startIndexOfLastRow && i <= endIndexOfLastRow && characterDropdown[i].querySelector('.BossButton')) {
 					const height = numRows * 144 + 288; // Ajuste para a última linha
 					const heightInVh = (height / viewportHeight) * 100;
 					grid.style.minHeight = heightInVh + 'vh';
@@ -112,18 +108,10 @@ function setupBossClickEvents() {
 			isEventProcessing = true;
 			const button = event.target.closest('.BossButton');
 
-			const bossName = button
-				.querySelector('.BossName')
-				.getAttribute('name');
-			const difficult = button
-				.querySelector('.BossName')
-				.getAttribute('difficult');
-			const value = button
-				.querySelector('.BossValue')
-				.getAttribute('value');
-			const characterClass = button
-				.closest('.buttonWrapper')
-				.querySelector('.characterClass').innerText;
+			const bossName = button.querySelector('.BossName').getAttribute('name');
+			const difficult = button.querySelector('.BossName').getAttribute('difficult');
+			const value = button.querySelector('.BossValue').getAttribute('value');
+			const characterClass = button.closest('.buttonWrapper').querySelector('.characterClass').innerText;
 			const date = DateTime.utc().toJSDate();
 			const checkMark = button.querySelector('.checked') ? true : false;
 			const requestContent = {
@@ -147,12 +135,8 @@ function setupBossClickEvents() {
 				console.error('Error:', error);
 			});
 
-			const checkSVG = checkMark
-				? button.querySelector('.checked')
-				: button.querySelector('.unchecked');
-			const newSVG = checkMark
-				? await createUncheckMark()
-				: await createCheckMark();
+			const checkSVG = checkMark ? button.querySelector('.checked') : button.querySelector('.unchecked');
+			const newSVG = checkMark ? await createUncheckMark() : await createCheckMark();
 			checkSVG.replaceWith(newSVG);
 			await updateCharacterButton(button, !checkMark);
 			await updateTopButtons();
@@ -162,8 +146,7 @@ function setupBossClickEvents() {
 }
 
 async function updateCharacterButton(button, checkMark) {
-	const characterButton =
-		button.parentElement.parentElement.querySelector('.characterButton');
+	const characterButton = button.parentElement.parentElement.querySelector('.characterButton');
 	let checks = characterButton.querySelector('.checked');
 	let checked = Number(checks.getAttribute('checked'));
 	const total = checks.getAttribute('total');
@@ -175,11 +158,7 @@ async function updateCharacterButton(button, checkMark) {
 		characterButton.style.backgroundColor = '#9EE493';
 		checks = checkSVG;
 	} else {
-		checkedSpan = createDOMElement(
-			'span',
-			'checked',
-			`${checked}/${total}`,
-		);
+		checkedSpan = createDOMElement('span', 'checked', `${checked}/${total}`);
 		checks.replaceWith(checkedSpan);
 		checks = checkedSpan;
 		characterButton.style.backgroundColor = '#D7D7D7';

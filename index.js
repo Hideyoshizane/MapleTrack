@@ -42,7 +42,7 @@ app.use(
 			mongoOptions,
 			mongooseConnection: mongoose.connection,
 		}),
-	}),
+	})
 );
 
 app.use(bodyParser.urlencoded({ extended: true }));

@@ -37,9 +37,7 @@ function getJob(characterData) {
 }
 
 function codeToClass(code) {
-	const formattedCode = code.replace(/(^\w|_(\w))/g, (match) =>
-		match.toUpperCase(),
-	);
+	const formattedCode = code.replace(/(^\w|_(\w))/g, (match) => match.toUpperCase());
 
 	if (code === 'ice_lightning' || code === 'fire_poison') {
 		return formattedCode.replace(/_/g, ' & ');

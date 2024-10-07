@@ -3,21 +3,14 @@ const { DateTime } = luxon;
 document.addEventListener('DOMContentLoaded', function () {
 	setInterval(updateCountdown, 1000);
 
-	const username = document
-		.getElementById('userdata')
-		.getAttribute('data-username');
+	const username = document.getElementById('userdata').getAttribute('data-username');
 
 	const searchInput = document.getElementById('search');
 	const searchResultsDiv = document.getElementById('searchResults');
 	const searchSectionDiv = document.querySelector('.searchSection');
 
 	searchInput.addEventListener('input', () => {
-		performSearch(
-			searchInput,
-			searchResultsDiv,
-			searchSectionDiv,
-			username,
-		);
+		performSearch(searchInput, searchResultsDiv, searchSectionDiv, username);
 	});
 
 	// Event listener for transition end
@@ -105,12 +98,7 @@ function updateCountdown() {
 	dailyOutput.innerHTML = `Until Daily Reset<br> ${daily}`;
 }
 
-async function performSearch(
-	searchInput,
-	searchResultsDiv,
-	searchSectionDiv,
-	username,
-) {
+async function performSearch(searchInput, searchResultsDiv, searchSectionDiv, username) {
 	// Get the search query
 	const query = searchInput.value.trim();
 
@@ -128,9 +116,7 @@ async function performSearch(
 
 	// Send a request to the server to search for characters
 	try {
-		const characters = await fetch(
-			`/search?query=${query}&username=${username}`,
-		).then((response) => response.json());
+		const characters = await fetch(`/search?query=${query}&username=${username}`).then((response) => response.json());
 		await createSearchResults(characters, searchResultsDiv);
 		searchSectionDiv.classList.add('expanded');
 	} catch (error) {
@@ -140,22 +126,18 @@ async function performSearch(
 
 async function createSearchResults(characters, parentDiv) {
 	if (characters.length == 0) {
-		parentDiv.appendChild(
-			createDOMElement('div', 'result', 'No result found.'),
-		);
+		parentDiv.appendChild(createDOMElement('div', 'result', 'No result found.'));
 	} else {
 		parentDiv.innerHTML = '';
 		for (const characterData of characters) {
 			const resultDiv = createDOMElement('div', 'result');
 			resultDiv.setAttribute('data-server', characterData.server);
 			resultDiv.setAttribute('data-code', getCode(characterData));
-			const img = await createImageElement(
-				`/../../assets/icons/servers/${characterData.server.toLowerCase()}.webp`,
-			);
+			const img = await createImageElement(`/../../assets/icons/servers/${characterData.server.toLowerCase()}.webp`);
 			const detailsSpan = createDOMElement(
 				'span',
 				'',
-				`\u00A0\u00A0${characterData.server}: ${characterData.name} - ${characterData.class} - Level ${characterData.level}`,
+				`\u00A0\u00A0${characterData.server}: ${characterData.name} - ${characterData.class} - Level ${characterData.level}`
 			);
 
 			resultDiv.appendChild(img);

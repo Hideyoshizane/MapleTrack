@@ -19,22 +19,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 async function fetchBossList() {
 	try {
-		username = document
-			.getElementById('userdata')
-			.getAttribute('data-username');
+		username = document.getElementById('userdata').getAttribute('data-username');
 
 		const bossList = await (await fetch(`/bossList/${username}`)).json();
 
-		bossJson = await fetch('../../../public/data/bosses.json').then(
-			(response) => response.json(),
-		);
+		bossJson = await fetch('../../../public/data/bosses.json').then((response) => response.json());
 
 		selectedList = bossList.server;
-		selectedList = selectedList.find(
-			(servers) =>
-				servers.name ===
-				server.charAt(0).toUpperCase() + server.slice(1),
-		);
+		selectedList = selectedList.find((servers) => servers.name === server.charAt(0).toUpperCase() + server.slice(1));
 		serverType = selectedList.type;
 	} catch (error) {
 		console.error('Error fetching character data:', error);
@@ -74,11 +66,7 @@ async function createBossingLogo() {
 }
 
 async function createWeekProgress() {
-	const totalProgress = createDOMElement(
-		'span',
-		'totalProgress',
-		`${selectedList.weeklyBosses}/180`,
-	);
+	const totalProgress = createDOMElement('span', 'totalProgress', `${selectedList.weeklyBosses}/180`);
 	const textDiv = document.querySelector('.WeekTextDiv');
 
 	const levelBarData = {
@@ -86,11 +74,7 @@ async function createWeekProgress() {
 		targetLevel: 180,
 		jobType: 'default',
 	};
-	const progressBar = await createLeveLBar(
-		levelBarData,
-		11.615,
-		'WeeklyProgress',
-	);
+	const progressBar = await createLeveLBar(levelBarData, 11.615, 'WeeklyProgress');
 
 	textDiv.appendChild(totalProgress);
 	textDiv.appendChild(progressBar);
@@ -100,13 +84,8 @@ async function createTotalGain() {
 	const parentDiv = document.querySelector('.GoldTextDiv');
 
 	const GainValue = `${selectedList.totalGains.toLocaleString('en-US')}`;
-	const totalGainValue = createDOMElement(
-		'span',
-		'totalGoldValue',
-		GainValue,
-	);
-	totalGainValue.style.fontSize =
-		(await adjustFontSizeToFit(totalGainValue, 13.802, 2)) + 'rem';
+	const totalGainValue = createDOMElement('span', 'totalGoldValue', GainValue);
+	totalGainValue.style.fontSize = (await adjustFontSizeToFit(totalGainValue, 13.802, 2)) + 'rem';
 
 	parentDiv.appendChild(totalGainValue);
 }
@@ -129,27 +108,12 @@ async function loadCharacterCards() {
 
 		bossDiv = createDOMElement('div', 'bossButtonDiv');
 
-		const imgSource = `../../public/assets/buttom_profile/${getCode(
-			characters,
-		)}.webp`;
-		characterImage = await createImageElement(
-			imgSource,
-			'character Profile',
-			'profile',
-		);
+		const imgSource = `../../public/assets/buttom_profile/${getCode(characters)}.webp`;
+		characterImage = await createImageElement(imgSource, 'character Profile', 'profile');
 
-		characterName = createDOMElement(
-			'span',
-			'characterName',
-			`${characters.name}`,
-		);
-		characterName.style.fontSize =
-			(await adjustFontSizeToFit(characterName, 9.479, 1.75)) + 'rem';
-		characterClass = createDOMElement(
-			'span',
-			'characterClass',
-			`${characters.class}`,
-		);
+		characterName = createDOMElement('span', 'characterName', `${characters.name}`);
+		characterName.style.fontSize = (await adjustFontSizeToFit(characterName, 9.479, 1.75)) + 'rem';
+		characterClass = createDOMElement('span', 'characterClass', `${characters.class}`);
 
 		characterWrapper = createDOMElement('div', 'characterWrapper');
 
@@ -178,11 +142,7 @@ async function loadCharacterCards() {
 			checks = await createCheckMark();
 		} else {
 			buttonWrapper.style.backgroundColor = '#D7D7D7';
-			checks = createDOMElement(
-				'span',
-				'checked',
-				`${totalChecks}/${characters.bosses.length}`,
-			);
+			checks = createDOMElement('span', 'checked', `${totalChecks}/${characters.bosses.length}`);
 		}
 		checks.setAttribute('checked', totalChecks);
 		checks.setAttribute('total', characters.bosses.length);
@@ -210,38 +170,21 @@ async function loadCharacterCards() {
 async function createBossButton(boss) {
 	const bossData = bossJson.find((bossData) => bossData.name == boss.name);
 	const bossImgPath = bossData.img;
-	const bossImage = await createImageElement(
-		bossImgPath,
-		`${boss.name}`,
-		'bossImg',
-	);
+	const bossImage = await createImageElement(bossImgPath, `${boss.name}`, 'bossImg');
 
-	const bossInfo = createDOMElement(
-		'span',
-		'BossName',
-		`${boss.difficulty} ${boss.name.replace(/\n/g, ' ')}`,
-	);
-	bossInfo.style.fontSize =
-		(await adjustFontSizeToFit(bossInfo, 14.896, 2)) + 'rem';
+	const bossInfo = createDOMElement('span', 'BossName', `${boss.difficulty} ${boss.name.replace(/\n/g, ' ')}`);
+	bossInfo.style.fontSize = (await adjustFontSizeToFit(bossInfo, 14.896, 2)) + 'rem';
 	bossInfo.setAttribute('name', boss.name);
 	bossInfo.setAttribute('difficult', boss.difficulty);
 
 	const bossValue = createDOMElement(
 		'span',
 		'BossValue',
-		`${getValueByNameAndDifficulty(
-			boss.name,
-			boss.difficulty,
-		).toLocaleString('en-us')}`,
+		`${getValueByNameAndDifficulty(boss.name, boss.difficulty).toLocaleString('en-us')}`
 	);
-	bossValue.setAttribute(
-		'value',
-		getValueByNameAndDifficulty(boss.name, boss.difficulty),
-	);
+	bossValue.setAttribute('value', getValueByNameAndDifficulty(boss.name, boss.difficulty));
 
-	const checkMark = boss.checked
-		? await createCheckMark()
-		: await createUncheckMark();
+	const checkMark = boss.checked ? await createCheckMark() : await createUncheckMark();
 
 	const bossButton = createDOMElement('button', 'BossButton');
 	const bossText = createDOMElement('div', 'BossText');
@@ -266,19 +209,12 @@ async function updateTopButtons() {
 	const totalProgress = document.querySelector('.totalProgress');
 	totalProgress.textContent = `${selectedList.weeklyBosses}/180`;
 
-	await updateExpBar(
-		document.querySelector('.progressBar'),
-		selectedList.weeklyBosses,
-		180,
-		11.615,
-		'default',
-	);
+	await updateExpBar(document.querySelector('.progressBar'), selectedList.weeklyBosses, 180, 11.615, 'default');
 
 	const totalGoldValue = document.querySelector('.totalGoldValue');
 	newGoldValue = `${selectedList.totalGains.toLocaleString('en-US')}`;
 
-	totalGoldValue.style.fontSize =
-		(await adjustFontSizeToFit(totalGoldValue, 13.802, 2)) + 'rem';
+	totalGoldValue.style.fontSize = (await adjustFontSizeToFit(totalGoldValue, 13.802, 2)) + 'rem';
 	totalGoldValue.textContent = newGoldValue;
 
 	const characters = document.querySelector('.characters');
@@ -307,14 +243,10 @@ function getValueByNameAndDifficulty(bossName, difficultyName) {
 	const boss = bossJson.find((b) => b.name === bossName);
 	if (boss) {
 		// Find the difficulty by name within the selected boss
-		const difficulty = boss.difficulties.find(
-			(d) => d.name === difficultyName,
-		);
+		const difficulty = boss.difficulties.find((d) => d.name === difficultyName);
 		if (difficulty) {
 			// Calculate the value based on the server type without modifying the original value
-			return serverType === 'Reboot'
-				? difficulty.value * 5
-				: difficulty.value;
+			return serverType === 'Reboot' ? difficulty.value * 5 : difficulty.value;
 		}
 	}
 	return null; // Return null if the boss or difficulty is not found

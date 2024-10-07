@@ -2,16 +2,8 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
 const { searchServersAndCreateMissing } = require('../models/servers');
-const {
-	updateCharacters,
-	createMissingCharacters,
-} = require('../models/character');
-const {
-	updateLastLogin,
-	LASTVERSION,
-	updateUserVersion,
-	User,
-} = require('../models/user');
+const { updateCharacters, createMissingCharacters } = require('../models/character');
+const { updateLastLogin, LASTVERSION, updateUserVersion, User } = require('../models/user');
 const { resetBossList } = require('../models/bossingList');
 
 require('dotenv').config();
@@ -43,11 +35,7 @@ module.exports = {
 
 			await updateLastLogin(user._id);
 			await resetBossList(user.username);
-			const token = jwt.sign(
-				{ _id: user._id, username: user.username },
-				process.env.SECRET,
-				{ expiresIn: '7d' },
-			);
+			const token = jwt.sign({ _id: user._id, username: user.username }, process.env.SECRET, { expiresIn: '7d' });
 			res.cookie('token', token, { httpOnly: true, maxAge: 604800000 });
 			res.redirect('/home');
 		} catch (err) {

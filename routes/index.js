@@ -26,72 +26,32 @@ router.get('/forgot', authentication.redirectHome, async (req, res) => {
 });
 
 router.get('/search', searchController.search);
-router.get(
-	'/weeklyBoss',
-	authentication.extractUserInfo,
-	userController.weeklyBoss,
-);
+router.get('/weeklyBoss', authentication.extractUserInfo, userController.weeklyBoss);
 router.get(
 	'/bossList/:username',
 	authentication.extractUserInfo,
 	authentication.ensureAuthentication,
 	bossController.getList,
 );
-router.get(
-	'/editBosses',
-	authentication.extractUserInfo,
-	bossController.editBosses,
-);
+router.get('/editBosses', authentication.extractUserInfo, bossController.editBosses);
 router.get('/signout', authentication.extractUserInfo, userController.signout);
 router.get('/account', authentication.extractUserInfo, userController.account);
 
 router.post('/login', authController.login);
 router.post('/signup', userController.signup);
-router.post(
-	'/increaseDaily',
-	authentication.extractUserInfo,
-	characterController.increaseDaily,
-);
-router.post(
-	'/increaseWeekly',
-	authentication.extractUserInfo,
-	characterController.increaseWeekly,
-);
-router.post(
-	'/updateCharacter',
-	authentication.extractUserInfo,
-	characterController.updateCharacter,
-);
-router.post(
-	'/checkBoss',
-	authentication.extractUserInfo,
-	bossController.increaseBoss,
-);
-router.post(
-	'/saveBossChange',
-	authentication.extractUserInfo,
-	bossController.saveBossChange,
-);
+router.post('/increaseDaily', authentication.extractUserInfo, characterController.increaseDaily);
+router.post('/increaseWeekly', authentication.extractUserInfo, characterController.increaseWeekly);
+router.post('/updateCharacter', authentication.extractUserInfo, characterController.updateCharacter);
+router.post('/checkBoss', authentication.extractUserInfo, bossController.increaseBoss);
+router.post('/saveBossChange', authentication.extractUserInfo, bossController.saveBossChange);
 router.post('/forgotUsername', userController.forgotUsername);
 router.post('/resetEmptyAccount', userController.resetEmptyAccount);
 router.post('/forgotPasswordLevel', userController.forgotPasswordLevel);
-router.post(
-	'/updatePassword',
-	authentication.extractUserInfo,
-	userController.updatePassword,
-);
+router.post('/updatePassword', authentication.extractUserInfo, userController.updatePassword);
 
 router.get('/home', authentication.extractUserInfo, userController.home);
-router.get(
-	'/userServer',
-	authentication.extractUserInfo,
-	searchController.userServer,
-);
-router.get(
-	'/serverName/:serverID',
-	authentication.extractUserInfo,
-	searchController.serverName,
-);
+router.get('/userServer', authentication.extractUserInfo, searchController.userServer);
+router.get('/serverName/:serverID', authentication.extractUserInfo, searchController.serverName);
 router.get(
 	'/:username/:server/:characterClass',
 	authentication.extractUserInfo,

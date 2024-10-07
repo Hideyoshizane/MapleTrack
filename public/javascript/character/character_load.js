@@ -13,21 +13,11 @@ window.linkSkillData;
 window.legionData;
 
 document.addEventListener('DOMContentLoaded', async () => {
-	ArcaneTable = await fetch('../../public/data/arcaneforceexp.json').then(
-		(response) => response.json(),
-	);
-	SacredTable = await fetch('../../public/data/sacredforceexp.json').then(
-		(response) => response.json(),
-	);
-	dailyJson = await fetch('../../../public/data/dailyExp.json').then(
-		(response) => response.json(),
-	);
-	linkSkillData = await fetch('/../../../public/data/linkskill.json').then(
-		(response) => response.json(),
-	);
-	legionData = await fetch('../../../public/data/legionsystems.json').then(
-		(response) => response.json(),
-	);
+	ArcaneTable = await fetch('../../public/data/arcaneforceexp.json').then((response) => response.json());
+	SacredTable = await fetch('../../public/data/sacredforceexp.json').then((response) => response.json());
+	dailyJson = await fetch('../../../public/data/dailyExp.json').then((response) => response.json());
+	linkSkillData = await fetch('/../../../public/data/linkskill.json').then((response) => response.json());
+	legionData = await fetch('../../../public/data/legionsystems.json').then((response) => response.json());
 
 	characterData = await fetchCharacterData(username, server, characterCode);
 
@@ -47,11 +37,7 @@ function startLoader() {
 
 const fetchCharacterData = async (username, server, characterCode) => {
 	try {
-		return await (
-			await fetch(
-				`/class/${username}/${server}/${codeToClass(characterCode)}`,
-			)
-		).json();
+		return await (await fetch(`/class/${username}/${server}/${codeToClass(characterCode)}`)).json();
 	} catch (error) {
 		console.error('Error fetching character data:', error);
 	}
@@ -75,11 +61,7 @@ async function loadCharacterNameDiv() {
 
 	const characterInfo = createDOMElement('div', 'nameLinkLegion');
 
-	const characterName = createDOMElement(
-		'span',
-		'characterName',
-		characterData.name,
-	);
+	const characterName = createDOMElement('span', 'characterName', characterData.name);
 
 	const characterIconDiv = createDOMElement('div', 'characterIconDiv');
 
@@ -99,14 +81,9 @@ async function loadCharacterNameDiv() {
 	const legion = await loadLegionDiv();
 
 	const JobType = createDOMElement('span', 'classType', characterData.class);
-	JobType.style.fontSize =
-		(await adjustFontSizeToFit(JobType, 19.115, 3)) + 'rem';
+	JobType.style.fontSize = (await adjustFontSizeToFit(JobType, 19.115, 3)) + 'rem';
 
-	const JobLevel = createDOMElement(
-		'span',
-		'jobLevel',
-		getJob(characterData),
-	);
+	const JobLevel = createDOMElement('span', 'jobLevel', getJob(characterData));
 
 	const JobDiv = createDOMElement('div', 'jobDiv');
 
@@ -124,18 +101,10 @@ async function loadCharacterNameDiv() {
 async function loadLinkSkillDiv() {
 	const linkspan = createDOMElement('span', 'linkLegionTitle', 'Link Skill');
 
-	const linkSkillData = await fetch('../../public/data/linkskill.json').then(
-		(response) => response.json(),
-	);
-	const filteredLink = linkSkillData.find(
-		(item) => item.name === characterData.linkSkill,
-	);
+	const linkSkillData = await fetch('../../public/data/linkskill.json').then((response) => response.json());
+	const filteredLink = linkSkillData.find((item) => item.name === characterData.linkSkill);
 
-	const linkImg = await createImageElement(
-		filteredLink.image,
-		filteredLink.name,
-		`linkImg`,
-	);
+	const linkImg = await createImageElement(filteredLink.image, filteredLink.name, `linkImg`);
 
 	const linkSkillBlock = createDOMElement('div', 'linkSkillBlock');
 
@@ -154,11 +123,7 @@ async function loadLegionDiv() {
 			? '../../public/assets/legion/no_rank.webp'
 			: `../../public/assets/legion/${characterData.jobType}/rank_${legionRank}.webp`;
 
-	const legionImg = await createImageElement(
-		legionImgSrc,
-		`${characterData.class} legion`,
-		'legionImg',
-	);
+	const legionImg = await createImageElement(legionImgSrc, `${characterData.class} legion`, 'legionImg');
 
 	const legionBlock = createDOMElement('div', 'legionBlock');
 
@@ -173,11 +138,7 @@ async function loadLevelAndLevelBar() {
 
 	const level = createDOMElement('span', 'level', 'Level');
 
-	const levelNumber = createDOMElement(
-		'span',
-		'levelNumber',
-		`${characterData.level}/${characterData.targetLevel}`,
-	);
+	const levelNumber = createDOMElement('span', 'levelNumber', `${characterData.level}/${characterData.targetLevel}`);
 
 	const levelDiv = createDOMElement('div', 'levelDiv');
 
@@ -187,11 +148,7 @@ async function loadLevelAndLevelBar() {
 		jobType: characterData.jobType,
 	};
 
-	const levelBar = await createLeveLBar(
-		levelBarData,
-		41.458,
-		'characterLevelBar',
-	);
+	const levelBar = await createLeveLBar(levelBarData, 41.458, 'characterLevelBar');
 
 	levelDiv.appendChild(level);
 	levelDiv.appendChild(levelNumber);
@@ -206,11 +163,7 @@ async function loadForce(isArcane) {
 	const forceType = isArcane ? 'ArcaneForce' : 'SacredForce';
 	const forceData = characterData[forceType];
 
-	const Title = createDOMElement(
-		'span',
-		forceType,
-		isArcane ? 'Arcane Force' : 'Sacred Force',
-	);
+	const Title = createDOMElement('span', forceType, isArcane ? 'Arcane Force' : 'Sacred Force');
 
 	const forceDiv = createDOMElement('div', `${forceType}Div`);
 	forceDiv.appendChild(Title);
@@ -224,14 +177,12 @@ async function loadForce(isArcane) {
 		const areaCode = areaName.replace(/\s+/g, '_').toLowerCase();
 		let forceLevel = force.level;
 
-		const minLevel = dailyJson.find(
-			(json) => json.name === force.name,
-		).minLevel;
+		const minLevel = dailyJson.find((json) => json.name === force.name).minLevel;
 
 		const icon = await createImageElement(
 			`../../public/assets/${forceType.toLowerCase()}/${areaCode}.webp`,
 			areaName,
-			`${forceType}Image`,
+			`${forceType}Image`
 		);
 		if (characterData.level < minLevel) {
 			icon.classList.add('off');
@@ -244,11 +195,7 @@ async function loadForce(isArcane) {
 
 		const levelWrapper = createDOMElement('div', 'levelWrapper');
 
-		const level = createDOMElement(
-			'span',
-			`${forceType}Level`,
-			`Level: ${forceLevel}`,
-		);
+		const level = createDOMElement('span', `${forceType}Level`, `Level: ${forceLevel}`);
 
 		levelWrapper.appendChild(level);
 
@@ -257,8 +204,7 @@ async function loadForce(isArcane) {
 			levelWrapper.appendChild(expContent);
 		}
 		let expTotal =
-			(isArcane && force.level === 20) ||
-			(!isArcane && force.level === 11)
+			(isArcane && force.level === 20) || (!isArcane && force.level === 11)
 				? force.exp
 				: expTable.level[force.level].EXP;
 
@@ -268,11 +214,7 @@ async function loadForce(isArcane) {
 			jobType: characterData.jobType,
 		};
 
-		const expBar = await createLeveLBar(
-			levelBarData,
-			9.948,
-			'forceLevelBar',
-		);
+		const expBar = await createLeveLBar(levelBarData, 9.948, 'forceLevelBar');
 
 		if (characterData.level < minLevel) {
 			const innerbar = expBar.querySelector('.progressBar');
@@ -303,11 +245,7 @@ async function loadForce(isArcane) {
 				forceDataElement.appendChild(daysToMax);
 				forceDataElement.appendChild(wrap);
 			} else {
-				const unlockText = createDOMElement(
-					'span',
-					'unlockText',
-					`Unlock at Level ${minLevel}`,
-				);
+				const unlockText = createDOMElement('span', 'unlockText', `Unlock at Level ${minLevel}`);
 				forceDataElement.appendChild(unlockText);
 			}
 		}
@@ -328,11 +266,7 @@ function createExpText(Force, expTable, isArcane = false) {
 	if ((isArcane && Force.level < 20) || (!isArcane && Force.level < 11)) {
 		const nextLevelEXP = expTable.level[Force.level].EXP;
 
-		expNumber = createDOMElement(
-			'span',
-			'expNumber',
-			`${Force.exp}/${nextLevelEXP}`,
-		);
+		expNumber = createDOMElement('span', 'expNumber', `${Force.exp}/${nextLevelEXP}`);
 	} else {
 		expNumber = createDOMElement('span', 'expNumber', `MAX`);
 	}
@@ -351,9 +285,7 @@ async function returnDaysToMax(Force, isArcane = false) {
 	const daysToMax = createDOMElement(
 		'span',
 		'daysToMax',
-		isArcane
-			? `Days to Level 20: ${daysToReachTotalExp}`
-			: `Days to Level 11: ${daysToReachTotalExp}`,
+		isArcane ? `Days to Level 20: ${daysToReachTotalExp}` : `Days to Level 11: ${daysToReachTotalExp}`
 	);
 
 	return daysToMax;
@@ -361,11 +293,7 @@ async function returnDaysToMax(Force, isArcane = false) {
 
 function calculateTotalExp(forceLevel, expTable) {
 	let totalExp = 0;
-	for (
-		let level = forceLevel;
-		level <= Object.keys(expTable.level).length;
-		level++
-	) {
+	for (let level = forceLevel; level <= Object.keys(expTable.level).length; level++) {
 		if (expTable.level[level]) {
 			totalExp += expTable.level[level].EXP;
 		}
@@ -377,19 +305,13 @@ function createDailyButton(Force, isArcane = false) {
 	const dailyValue = getDailyValue(Force, isArcane);
 
 	const currentDate = DateTime.utc();
-	const lastDate = Force.content[0].date
-		? DateTime.fromISO(Force.content[0].date, { zone: 'utc' })
-		: null;
+	const lastDate = Force.content[0].date ? DateTime.fromISO(Force.content[0].date, { zone: 'utc' }) : null;
 
 	const nextMidnight = lastDate
-		? lastDate
-				.plus({ days: 1 })
-				.set({ hour: 0, minute: 0, second: 0, millisecond: 0 })
+		? lastDate.plus({ days: 1 }).set({ hour: 0, minute: 0, second: 0, millisecond: 0 })
 		: null;
 
-	const duration = Force.content[0].date
-		? timeConditionChecker(nextMidnight, currentDate)
-		: null;
+	const duration = Force.content[0].date ? timeConditionChecker(nextMidnight, currentDate) : null;
 
 	const dailyButton = createDOMElement('button', 'dailyButton');
 	if (duration || duration == null) {
@@ -410,24 +332,14 @@ function createDailyButton(Force, isArcane = false) {
 }
 
 function getDailyValue(Force, isArcane = false) {
-	const dailyQuest = Number(
-		dailyJson.find((json) => json.name === Force.name).value,
-	);
+	const dailyQuest = Number(dailyJson.find((json) => json.name === Force.name).value);
 	let dailyValue = dailyQuest;
 
 	if (isArcane) {
 		if (Force.content[2] && Force.content[2].checked == true) {
-			secondAreaMinLevel = Number(
-				dailyJson.find(
-					(json) => json.name == Force.content[2].contentType,
-				).minLevel,
-			);
+			secondAreaMinLevel = Number(dailyJson.find((json) => json.name == Force.content[2].contentType).minLevel);
 			if (characterData.level >= secondAreaMinLevel) {
-				const secondArea = Number(
-					dailyJson.find(
-						(json) => json.name == Force.content[2].contentType,
-					).value,
-				);
+				const secondArea = Number(dailyJson.find((json) => json.name == Force.content[2].contentType).value);
 				dailyValue += secondArea;
 			}
 		}

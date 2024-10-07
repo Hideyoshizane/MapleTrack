@@ -27,18 +27,12 @@ async function loadServerButtons(data, parentDiv) {
 
 			if (isFirstButton) {
 				createdSelectedButton = createdButton.cloneNode(true);
-				createdSelectedButton.classList.replace(
-					'serverButton',
-					'SelectedButton',
-				);
+				createdSelectedButton.classList.replace('serverButton', 'SelectedButton');
 
 				const svgElement = createdSelectedButton.querySelector('svg');
 				createdSelectedButton.removeChild(svgElement);
 
-				selectedServer.insertBefore(
-					createdSelectedButton,
-					selectedServer.firstChild,
-				);
+				selectedServer.insertBefore(createdSelectedButton, selectedServer.firstChild);
 				createdSelectedButton.classList.toggle('notSelected');
 
 				if (savedServerContent) {
@@ -49,10 +43,7 @@ async function loadServerButtons(data, parentDiv) {
 				isFirstButton = false;
 			}
 
-			if (
-				createdButton.querySelector('span').textContent ===
-				savedServerContent
-			) {
+			if (createdButton.querySelector('span').textContent === savedServerContent) {
 				createdButton.classList.toggle('notSelected');
 				createdButton.classList.toggle('selected');
 			}
@@ -62,13 +53,9 @@ async function loadServerButtons(data, parentDiv) {
 	} catch (error) {
 		console.error('Error fetching server name:', error);
 	}
-	const serverToCheck = selectedServer
-		.querySelector('span')
-		.textContent.trim();
+	const serverToCheck = selectedServer.querySelector('span').textContent.trim();
 
-	const buttons = Array.from(
-		serverSelector.querySelectorAll('.serverButton'),
-	);
+	const buttons = Array.from(serverSelector.querySelectorAll('.serverButton'));
 
 	const matchedButtons = buttons.filter((button) => {
 		const span = button.querySelector('span');
@@ -88,11 +75,7 @@ async function loadServerButtons(data, parentDiv) {
 async function createServerButton(serverData) {
 	const createdButton = createDOMElement('button', 'serverButton');
 
-	const serverImage = await createImageElement(
-		`${serverData.img}.webp`,
-		serverData.name,
-		'serverIcon',
-	);
+	const serverImage = await createImageElement(`${serverData.img}.webp`, serverData.name, 'serverIcon');
 	const serverNameSpan = createDOMElement('span', '', serverData.name);
 	const checkSVG = createCheckSVG();
 
@@ -106,20 +89,14 @@ async function createServerButton(serverData) {
 }
 
 function createCheckSVG() {
-	const checkSVG = document.createElementNS(
-		'http://www.w3.org/2000/svg',
-		'svg',
-	);
+	const checkSVG = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
 	checkSVG.setAttribute('width', '30');
 	checkSVG.setAttribute('height', '30');
 	checkSVG.setAttribute('viewBox', '0 0 36 27');
 	checkSVG.setAttribute('fill', 'none');
 
 	const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-	path.setAttribute(
-		'd',
-		'M12 21.4L3.59999 13L0.799988 15.8L12 27L36 2.99995L33.2 0.199951L12 21.4Z',
-	);
+	path.setAttribute('d', 'M12 21.4L3.59999 13L0.799988 15.8L12 27L36 2.99995L33.2 0.199951L12 21.4Z');
 	path.setAttribute('fill', '#E3E3E3');
 
 	checkSVG.appendChild(path);
@@ -127,23 +104,17 @@ function createCheckSVG() {
 }
 
 async function createArrowSVG() {
-	const svgElement = document.createElementNS(
-		'http://www.w3.org/2000/svg',
-		'svg',
-	);
+	const svgElement = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
 	svgElement.setAttribute('id', 'icon');
 	svgElement.setAttribute('width', '30px');
 	svgElement.setAttribute('height', '30px');
 	svgElement.setAttribute('viewBox', '0 0 1024 1024');
 	svgElement.setAttribute('class', 'icon');
 
-	const pathElement = document.createElementNS(
-		'http://www.w3.org/2000/svg',
-		'path',
-	);
+	const pathElement = document.createElementNS('http://www.w3.org/2000/svg', 'path');
 	pathElement.setAttribute(
 		'd',
-		'M917.333333 364.8L851.2 298.666667 512 637.866667 172.8 298.666667 106.666667 364.8 512 768z',
+		'M917.333333 364.8L851.2 298.666667 512 637.866667 172.8 298.666667 106.666667 364.8 512 768z'
 	);
 	pathElement.setAttribute('fill', '#F6F6F6');
 	svgElement.appendChild(pathElement);
@@ -175,11 +146,7 @@ function swapContentAndStoreCookie(selectedButton, serverButton) {
 	selectedImage.src = serverImage.src;
 	selectedName.textContent = serverNameSpan.textContent;
 
-	setCookie(
-		'selectedServerContent',
-		serverNameSpan.textContent.toLowerCase(),
-		7,
-	);
+	setCookie('selectedServerContent', serverNameSpan.textContent.toLowerCase(), 7);
 }
 
 function updateToCookie(selectedServer, savedServerContent) {
@@ -188,7 +155,6 @@ function updateToCookie(selectedServer, savedServerContent) {
 	selectedServerImg.src = newImgSrc;
 	selectedServerImg.setAttribute('alt', savedServerContent);
 	selectedServer.querySelector('span').textContent =
-		savedServerContent.charAt(0).toUpperCase() +
-		savedServerContent.slice(1);
+		savedServerContent.charAt(0).toUpperCase() + savedServerContent.slice(1);
 	return;
 }

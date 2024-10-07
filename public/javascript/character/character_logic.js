@@ -84,12 +84,8 @@ function handleMouseOut() {
 }
 
 function handleLinkImgMouseOver(linkImg) {
-	const filteredLink = linkSkillData.find(
-		(item) => item.name === characterData.linkSkill,
-	).levels;
-	const levelNumber = Number(
-		document.querySelector('.levelNumber').textContent.split('/')[0].trim(),
-	);
+	const filteredLink = linkSkillData.find((item) => item.name === characterData.linkSkill).levels;
+	const levelNumber = Number(document.querySelector('.levelNumber').textContent.split('/')[0].trim());
 
 	let text;
 	if (levelNumber < 120) {
@@ -125,18 +121,14 @@ function handleLinkImgMouseOver(linkImg) {
 }
 
 function handleLegionImgMouseOver(legionImg) {
-	const levelNumber = Number(
-		document.querySelector('.levelNumber').textContent.split('/')[0].trim(),
-	);
+	const levelNumber = Number(document.querySelector('.levelNumber').textContent.split('/')[0].trim());
 
 	const characterDataPlaceholder = {
 		class: characterData.class,
 		level: levelNumber,
 	};
 
-	const legionInfo = legionData.find(
-		(item) => item.name === characterData.legion,
-	).ranking;
+	const legionInfo = legionData.find((item) => item.name === characterData.legion).ranking;
 	const characterRank = getRank(characterDataPlaceholder);
 	let text = '';
 
@@ -241,12 +233,8 @@ async function increaseWeekly(event) {
 
 async function getExp(isArcane, forceName) {
 	const object = isArcane
-		? characterData.ArcaneForce.find(
-				(arcaneforce) => arcaneforce.name === forceName,
-		  )
-		: characterData.SacredForce.find(
-				(sacredforce) => sacredforce.name === forceName,
-		  );
+		? characterData.ArcaneForce.find((arcaneforce) => arcaneforce.name === forceName)
+		: characterData.SacredForce.find((sacredforce) => sacredforce.name === forceName);
 
 	const expTable = isArcane ? ArcaneTable : SacredTable;
 
@@ -269,9 +257,7 @@ async function postRequest(postData, URL) {
 
 async function updateArea(forceName, isArcane) {
 	characterData = await fetchCharacterData(username, server, characterCode);
-	const forceArray = isArcane
-		? characterData.ArcaneForce
-		: characterData.SacredForce;
+	const forceArray = isArcane ? characterData.ArcaneForce : characterData.SacredForce;
 	const areaProperty = isArcane ? 'ArcaneForceLevel' : 'SacredForceLevel';
 	const areaData = forceArray.find((force) => force.name === forceName);
 
@@ -284,34 +270,21 @@ async function updateArea(forceName, isArcane) {
 	const nextLevelEXPNumber = await getExp(isArcane, forceName);
 	ForceEXPNumber.textContent = `${areaData.exp}/${nextLevelEXPNumber}`;
 
-	if (
-		(isArcane && areaData.level === 20) ||
-		(!isArcane && areaData.level === 11)
-	) {
+	if ((isArcane && areaData.level === 20) || (!isArcane && areaData.level === 11)) {
 		ForceEXPNumber.textContent = `${nextLevelEXPNumber}`;
 	}
 
 	innerExpBar = targetDiv.querySelector('.progressBar');
 
-	await updateExpBar(
-		innerExpBar,
-		areaData.exp,
-		nextLevelEXPNumber,
-		9.948,
-		characterData.jobType,
-	);
+	await updateExpBar(innerExpBar, areaData.exp, nextLevelEXPNumber, 9.948, characterData.jobType);
 
 	const remainDays = await updateDayToMax(areaData, isArcane);
 
-	const daysToMax = (targetDiv.querySelector('.daysToMax').textContent =
-		isArcane
-			? `Days to Level 20: ${remainDays}`
-			: `Days to Level 11: ${remainDays}`);
+	const daysToMax = (targetDiv.querySelector('.daysToMax').textContent = isArcane
+		? `Days to Level 20: ${remainDays}`
+		: `Days to Level 11: ${remainDays}`);
 
-	if (
-		(isArcane && areaData.level === 20) ||
-		(!isArcane && areaData.level === 11)
-	) {
+	if ((isArcane && areaData.level === 20) || (!isArcane && areaData.level === 11)) {
 		const Buttons = targetDiv.querySelector('.buttons');
 		daysToMax.remove();
 		Buttons.remove();
@@ -321,15 +294,10 @@ async function updateArea(forceName, isArcane) {
 async function updateDayToMax(areaData, isArcane) {
 	const expTable = isArcane ? ArcaneTable : SacredTable;
 
-	const weeklyValue = Number(
-		dailyJson.find((json) => json.name === 'Weekly').value,
-	);
+	const weeklyValue = Number(dailyJson.find((json) => json.name === 'Weekly').value);
 	let totalExp = calculateTotalExp(areaData.level, expTable);
 	let dailyExp = getDailyValue(areaData, isArcane);
-	const weeklyExp =
-		areaData.content[1] && areaData.content[1].checked && isArcane
-			? weeklyValue * 3
-			: 0;
+	const weeklyExp = areaData.content[1] && areaData.content[1].checked && isArcane ? weeklyValue * 3 : 0;
 	totalExp -= areaData.exp;
 	return Math.ceil(totalExp / (dailyExp + weeklyExp / 7));
 }

@@ -24,20 +24,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 async function fetchBossList() {
 	try {
-		username = document
-			.getElementById('userdata')
-			.getAttribute('data-username');
+		username = document.getElementById('userdata').getAttribute('data-username');
 
-		bossList = await fetch(`/bossList/${username}`).then((response) =>
-			response.json(),
-		);
+		bossList = await fetch(`/bossList/${username}`).then((response) => response.json());
 
 		selectedList = bossList.server;
-		selectedList = selectedList.find(
-			(servers) =>
-				servers.name ===
-				server.charAt(0).toUpperCase() + server.slice(1),
-		);
+		selectedList = selectedList.find((servers) => servers.name === server.charAt(0).toUpperCase() + server.slice(1));
 		serverType = selectedList.type;
 	} catch (error) {
 		console.error('Error fetching character data:', error);
@@ -83,11 +75,7 @@ async function createTotalSelected() {
 	const parentDiv = document.querySelector('.totalSelectedDiv');
 
 	const totalBosses = await calculateTotalBosses();
-	const totalSelectedBosses = createDOMElement(
-		'span',
-		'totalSelectedBosses',
-		`${totalBosses}/180`,
-	);
+	const totalSelectedBosses = createDOMElement('span', 'totalSelectedBosses', `${totalBosses}/180`);
 
 	const textDiv = document.querySelector('.WeekTextDiv');
 
@@ -116,13 +104,8 @@ async function createTotalIncome() {
 
 	const totalIncome = Character ? await calculateTotalIncome() : 0;
 
-	const totalIncomeSpan = createDOMElement(
-		'span',
-		'TotalIncome',
-		totalIncome,
-	);
-	totalIncomeSpan.style.fontSize =
-		(await adjustFontSizeToFit(totalIncomeSpan, 11.667, 2)) + 'rem';
+	const totalIncomeSpan = createDOMElement('span', 'TotalIncome', totalIncome);
+	totalIncomeSpan.style.fontSize = (await adjustFontSizeToFit(totalIncomeSpan, 11.667, 2)) + 'rem';
 
 	IncomeTextDiv.appendChild(totalIncomeSpan);
 	parentDiv.appendChild(IncomeTextDiv);
@@ -156,10 +139,7 @@ async function loadCharacterSelector() {
 		if (isFirstButton) {
 			const createdSelectedButton = createdButton.cloneNode(true);
 
-			createdSelectedButton.classList.replace(
-				'characterButton',
-				'SelectedCharacterButton',
-			);
+			createdSelectedButton.classList.replace('characterButton', 'SelectedCharacterButton');
 			createdSelectedButton.appendChild(arrowSVG);
 
 			selectedCharacter.appendChild(createdSelectedButton);
@@ -189,32 +169,21 @@ async function loadCharacterIncome() {
 
 	const totalIncome = Character.totalIncome.toLocaleString('en-US');
 
-	const totalIncomeSpan = createDOMElement(
-		'span',
-		'characterTotalIncome',
-		`${totalIncome}`,
-	);
-	totalIncomeSpan.style.fontSize =
-		(await adjustFontSizeToFit(totalIncomeSpan, 11.667, 2)) + 'rem';
+	const totalIncomeSpan = createDOMElement('span', 'characterTotalIncome', `${totalIncome}`);
+	totalIncomeSpan.style.fontSize = (await adjustFontSizeToFit(totalIncomeSpan, 11.667, 2)) + 'rem';
 
 	IncomeTextDiv.appendChild(totalIncomeSpan);
 }
 
 async function createCheckSVG() {
-	const checkSVG = document.createElementNS(
-		'http://www.w3.org/2000/svg',
-		'svg',
-	);
+	const checkSVG = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
 	checkSVG.setAttribute('width', '40');
 	checkSVG.setAttribute('height', '40');
 	checkSVG.setAttribute('viewBox', '0 0 36 27');
 	checkSVG.setAttribute('fill', 'none');
 
 	const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-	path.setAttribute(
-		'd',
-		'M12 21.4L3.59999 13L0.799988 15.8L12 27L36 2.99995L33.2 0.199951L12 21.4Z',
-	);
+	path.setAttribute('d', 'M12 21.4L3.59999 13L0.799988 15.8L12 27L36 2.99995L33.2 0.199951L12 21.4Z');
 	path.setAttribute('fill', '#3D3D3D');
 
 	checkSVG.appendChild(path);
@@ -223,26 +192,12 @@ async function createCheckSVG() {
 
 async function createCharacterButton(character) {
 	const characterButton = createDOMElement('button', 'characterButton');
-	const imgSource = `../../public/assets/buttom_profile/${getCode(
-		character,
-	)}.webp`;
+	const imgSource = `../../public/assets/buttom_profile/${getCode(character)}.webp`;
 
-	const characterImage = await createImageElement(
-		imgSource,
-		'character Profile',
-		'profile',
-	);
+	const characterImage = await createImageElement(imgSource, 'character Profile', 'profile');
 
-	const characterName = createDOMElement(
-		'span',
-		'characterName',
-		`${character.name}`,
-	);
-	const characterClass = createDOMElement(
-		'span',
-		'characterClass',
-		`${character.class}`,
-	);
+	const characterName = createDOMElement('span', 'characterName', `${character.name}`);
+	const characterClass = createDOMElement('span', 'characterClass', `${character.class}`);
 
 	const characterWrapper = createDOMElement('div', 'characterWrapper');
 
@@ -280,21 +235,14 @@ async function loadBosses() {
 		const morethan4 = boss.difficulties.length > 3;
 
 		let totalIncoming = 0;
-		const checkedBoss = Character.bosses.filter(
-			(obj) => obj.name === boss.name,
-		);
+		const checkedBoss = Character.bosses.filter((obj) => obj.name === boss.name);
 
 		const bossSlot = createDOMElement('div', 'bossSlot');
 		const bossBox = createDOMElement('div', 'bossBox');
 
-		const image = await createImageElement(
-			boss.img,
-			`${boss.name}`,
-			'bossPicture',
-		);
+		const image = await createImageElement(boss.img, `${boss.name}`, 'bossPicture');
 		const name = createDOMElement('span', 'bossName', boss.name);
-		name.style.fontSize =
-			(await adjustFontSizeToFit(name, 6.458, 2)) + 'rem';
+		name.style.fontSize = (await adjustFontSizeToFit(name, 6.458, 2)) + 'rem';
 
 		bossBox.appendChild(image);
 		bossBox.appendChild(name);
@@ -302,24 +250,17 @@ async function loadBosses() {
 		const buttonDiv = createDOMElement('div', 'buttonDiv');
 
 		for (difficult of boss.difficulties) {
-			const difficultyFound = checkedBoss.filter(
-				(obj) => obj.difficulty === difficult.name,
-			);
+			const difficultyFound = checkedBoss.filter((obj) => obj.difficulty === difficult.name);
 
 			const { tag } = classTag[difficult.name];
 
 			const difficultButton = createDOMElement('button', `${tag}`);
-			const difficultButtonText = createDOMElement(
-				'span',
-				'buttonText',
-				`${difficult.name}`,
-			);
+			const difficultButtonText = createDOMElement('span', 'buttonText', `${difficult.name}`);
 			if (morethan4) {
 				difficultButtonText.style.fontSize = '0.813rem';
 			}
 
-			const value =
-				serverType == 'Reboot' ? difficult.value * 5 : difficult.value;
+			const value = serverType == 'Reboot' ? difficult.value * 5 : difficult.value;
 
 			difficultButton.appendChild(difficultButtonText);
 			difficultButton.setAttribute('value', value);
@@ -334,10 +275,7 @@ async function loadBosses() {
 			}
 
 			if (difficult.reset === 'Daily' && LevelRequirmentOK) {
-				const dailyTotal =
-					difficultyFound[0] !== undefined
-						? difficultyFound[0].DailyTotal
-						: 0;
+				const dailyTotal = difficultyFound[0] !== undefined ? difficultyFound[0].DailyTotal : 0;
 				totalIncoming += Number(value) * Number(dailyTotal);
 				await insertDropdownOnButton(difficultButton, dailyTotal);
 			}
@@ -356,11 +294,7 @@ async function loadBosses() {
 		}
 
 		bossBox.append(buttonDiv);
-		const totalBossIncome = createDOMElement(
-			'span',
-			'totalBossIncome',
-			totalIncoming.toLocaleString('en-us'),
-		);
+		const totalBossIncome = createDOMElement('span', 'totalBossIncome', totalIncoming.toLocaleString('en-us'));
 		totalBossIncome.style.display = 'none';
 
 		bossBox.appendChild(totalBossIncome);
@@ -368,8 +302,7 @@ async function loadBosses() {
 
 		if (totalIncoming > 0) {
 			totalBossIncome.style.display = 'block';
-			totalBossIncome.style.fontSize =
-				(await adjustFontSizeToFit(totalBossIncome, 6.146, 1)) + 'rem';
+			totalBossIncome.style.fontSize = (await adjustFontSizeToFit(totalBossIncome, 6.146, 1)) + 'rem';
 			bossBox.classList.add('open');
 		}
 

@@ -1,8 +1,6 @@
 document.addEventListener('PageLoaded', async () => {
 	try {
-		const bossSwitch = document.querySelector(
-			'.bossSwitch input[type="checkbox"]',
-		);
+		const bossSwitch = document.querySelector('.bossSwitch input[type="checkbox"]');
 		bossSwitch.addEventListener('change', () => {
 			changebossIcon(bossSwitch.checked);
 		});
@@ -60,22 +58,12 @@ document.addEventListener('PageLoaded', async () => {
 			await updateForce('Arcane', level);
 			await updateForce('Sacred', level);
 
-			const levelNumberValue =
-				levelNumber.value || levelNumber.placeholder;
-			const levelTargetValue =
-				levelTarget.value || levelTarget.placeholder;
-			const jobType = document
-				.querySelector('.characterLevelBar')
-				.getAttribute('jobType');
+			const levelNumberValue = levelNumber.value || levelNumber.placeholder;
+			const levelTargetValue = levelTarget.value || levelTarget.placeholder;
+			const jobType = document.querySelector('.characterLevelBar').getAttribute('jobType');
 			const progressBar = document.querySelector('.progressBar');
 
-			await updateExpBar(
-				progressBar,
-				levelNumberValue,
-				levelTargetValue,
-				41.458,
-				jobType,
-			);
+			await updateExpBar(progressBar, levelNumberValue, levelTargetValue, 41.458, jobType);
 		});
 
 		levelTarget.addEventListener('input', async () => {
@@ -85,22 +73,12 @@ document.addEventListener('PageLoaded', async () => {
 		});
 
 		levelTarget.addEventListener('blur', async function () {
-			const levelNumberValue =
-				levelNumber.value || levelNumber.placeholder;
-			const levelTargetValue =
-				levelTarget.value || levelTarget.placeholder;
-			const jobType = document
-				.querySelector('.characterLevelBar')
-				.getAttribute('jobType');
+			const levelNumberValue = levelNumber.value || levelNumber.placeholder;
+			const levelTargetValue = levelTarget.value || levelTarget.placeholder;
+			const jobType = document.querySelector('.characterLevelBar').getAttribute('jobType');
 			const progressBar = document.querySelector('.progressBar');
 
-			await updateExpBar(
-				progressBar,
-				levelNumberValue,
-				levelTargetValue,
-				41.458,
-				jobType,
-			);
+			await updateExpBar(progressBar, levelNumberValue, levelTargetValue, 41.458, jobType);
 		});
 
 		const linkImg = document.querySelector('.linkImg');
@@ -135,8 +113,7 @@ async function changebossIcon(checked) {
 
 async function updateClass(levelNumberValue) {
 	const level = { level: Number(levelNumberValue) };
-	targetSpan = document.querySelector('.jobLevel').textContent =
-		getJob(level);
+	targetSpan = document.querySelector('.jobLevel').textContent = getJob(level);
 }
 
 async function updateLegion(levelNumberValue) {
@@ -159,32 +136,20 @@ async function updateForce(type, levelNumberValue) {
 		const areaName = areaDiv.getAttribute('area');
 		const image = force.querySelector(`.${type}ForceImage`);
 
-		const areaData = characterData[`${type}Force`].filter(
-			(force) => force.name === areaName,
-		);
+		const areaData = characterData[`${type}Force`].filter((force) => force.name === areaName);
 
 		const levelWrapper = force.querySelector('.levelWrapper');
 		const wrap = createDOMElement('div', 'levelWrapper');
-		const minLevel = dailyJson.find(
-			(json) => json.name === areaData[0].name,
-		).minLevel;
+		const minLevel = dailyJson.find((json) => json.name === areaData[0].name).minLevel;
 		if (level < minLevel && !force.classList.contains('off')) {
 			image.classList.add('off');
 			force.classList.add('off');
-			const level = createDOMElement(
-				'span',
-				`${type}ForceLevel`,
-				`Level: 0`,
-			);
+			const level = createDOMElement('span', `${type}ForceLevel`, `Level: 0`);
 			wrap.appendChild(level);
 			levelWrapper.replaceWith(wrap);
 
 			const checkboxContent = force.querySelector('.checkboxContent');
-			const unlockText = createDOMElement(
-				'span',
-				'unlockText',
-				`Unlock at Level ${minLevel}`,
-			);
+			const unlockText = createDOMElement('span', 'unlockText', `Unlock at Level ${minLevel}`);
 			checkboxContent.replaceWith(unlockText);
 		}
 
@@ -192,22 +157,10 @@ async function updateForce(type, levelNumberValue) {
 			image.classList.remove('off');
 			force.classList.remove('off');
 
-			const level = createDOMElement(
-				'span',
-				`${type}ForceLevel`,
-				`Level:`,
-			);
-			const levelInput = createDOMElement(
-				'input',
-				'levelInput',
-				`${areaData[0].level}`,
-			);
+			const level = createDOMElement('span', `${type}ForceLevel`, `Level:`);
+			const levelInput = createDOMElement('input', 'levelInput', `${areaData[0].level}`);
 			const expContent = createDOMElement('span', 'expContent', 'EXP:');
-			const expInput = createDOMElement(
-				'input',
-				'expInput',
-				`${areaData[0].exp}`,
-			);
+			const expInput = createDOMElement('input', 'expInput', `${areaData[0].exp}`);
 			wrap.appendChild(level);
 			wrap.appendChild(levelInput);
 			wrap.appendChild(expContent);
@@ -217,30 +170,23 @@ async function updateForce(type, levelNumberValue) {
 			const unlockText = areaDiv.querySelector('.unlockText');
 			let checkboxContent = createDOMElement('div', 'checkboxContent');
 			for (const forceContent of areaData[0].content) {
-				const matchingContent = dailyJson.find(
-					(contentName) =>
-						contentName.name === forceContent.contentType,
-				);
+				const matchingContent = dailyJson.find((contentName) => contentName.name === forceContent.contentType);
 				let contentValue = 0;
 
 				if (matchingContent) {
 					contentValue = matchingContent.value;
 				} else {
-					contentValue = dailyJson.find(
-						(contentName) => contentName.name === 'Weekly',
-					).value;
+					contentValue = dailyJson.find((contentName) => contentName.name === 'Weekly').value;
 				}
 
 				if (forceContent.contentType === 'Daily Quest') {
-					contentValue = dailyJson.find(
-						(contentName) => contentName.name === areaData[0].name,
-					).value;
+					contentValue = dailyJson.find((contentName) => contentName.name === areaData[0].name).value;
 				}
 
 				const checkbox = createCheckboxWithLabel(
 					'forceCheckbox',
 					`${forceContent.contentType}: +${contentValue}`,
-					forceContent.checked,
+					forceContent.checked
 				);
 				checkboxContent.appendChild(checkbox);
 			}
@@ -251,24 +197,16 @@ async function updateForce(type, levelNumberValue) {
 
 async function saveDataAndPost() {
 	const characterName =
-		document.querySelector('.characterName').value ||
-		document.querySelector('.characterName').placeholder;
+		document.querySelector('.characterName').value || document.querySelector('.characterName').placeholder;
 
-	const bossSwitch = document.querySelector(
-		'.bossSwitch input[type="checkbox"]',
-	).checked;
+	const bossSwitch = document.querySelector('.bossSwitch input[type="checkbox"]').checked;
 
 	let level = Number(document.querySelector('.levelNumber').value);
-	level =
-		level <= 0
-			? Number(document.querySelector('.levelNumber').placeholder)
-			: Math.min(level, 300);
+	level = level <= 0 ? Number(document.querySelector('.levelNumber').placeholder) : Math.min(level, 300);
 
 	let targetLevel = Number(document.querySelector('.levelTarget').value);
 	targetLevel =
-		targetLevel <= 0
-			? Number(document.querySelector('.levelTarget').placeholder)
-			: Math.min(targetLevel, 300);
+		targetLevel <= 0 ? Number(document.querySelector('.levelTarget').placeholder) : Math.min(targetLevel, 300);
 
 	const arcaneForceArray = returnForceArray('Arcane');
 	const sacredForceArray = returnForceArray('Sacred');
@@ -296,9 +234,7 @@ async function saveDataAndPost() {
 
 		const success = response.ok;
 		const type = success ? 'success' : 'failed';
-		const message = success
-			? 'Character updated sucessfully'
-			: 'There was an error updating';
+		const message = success ? 'Character updated sucessfully' : 'There was an error updating';
 		setCookieFlash('type', type, 50);
 		setCookieFlash('message', message, 50);
 
@@ -310,42 +246,27 @@ async function saveDataAndPost() {
 }
 
 function returnForceArray(forceType) {
-	const forceWrapperClass =
-		forceType === 'Arcane' ? '.ArcaneForceWrapper' : '.SacredForceWrapper';
+	const forceWrapperClass = forceType === 'Arcane' ? '.ArcaneForceWrapper' : '.SacredForceWrapper';
 	const forceWrappers = document.querySelectorAll(forceWrapperClass);
 
 	const ForceArray = [];
 
 	for (const forceWrapper of forceWrappers) {
 		if (!forceWrapper.classList.contains('off')) {
-			const name = forceWrapper
-				.querySelector(`.${forceType}ForceData`)
-				.getAttribute('area');
+			const name = forceWrapper.querySelector(`.${forceType}ForceData`).getAttribute('area');
 
-			const levelInput = forceWrapper.querySelector(
-				`.${forceType}ForceWrapper .levelInput`,
-			);
-			const level =
-				levelInput.value <= 0
-					? levelInput.placeholder
-					: levelInput.value;
+			const levelInput = forceWrapper.querySelector(`.${forceType}ForceWrapper .levelInput`);
+			const level = levelInput.value <= 0 ? levelInput.placeholder : levelInput.value;
 
-			const expInput = forceWrapper.querySelector(
-				`.${forceType}ForceWrapper .expInput`,
-			);
-			const exp =
-				expInput.value <= 0 ? expInput.placeholder : expInput.value;
+			const expInput = forceWrapper.querySelector(`.${forceType}ForceWrapper .expInput`);
+			const exp = expInput.value <= 0 ? expInput.placeholder : expInput.value;
 
 			const checksArray = [];
-			const checkboxes = forceWrapper.querySelectorAll(
-				`.${forceType}ForceWrapper .forceCheckbox`,
-			);
+			const checkboxes = forceWrapper.querySelectorAll(`.${forceType}ForceWrapper .forceCheckbox`);
 
 			for (const checkbox of checkboxes) {
 				const checkboxName = checkbox.querySelector('span').textContent;
-				const checkboxChecked = checkbox.querySelector(
-					`.${forceType}ForceWrapper input[type="checkbox"]`,
-				).checked;
+				const checkboxChecked = checkbox.querySelector(`.${forceType}ForceWrapper input[type="checkbox"]`).checked;
 
 				const checkObject = {
 					name: checkboxName,
@@ -375,9 +296,7 @@ function isValidCharacterName(characterName) {
 	const alphanumericRegex = /^[a-zA-Z0-9]+$/;
 
 	return (
-		characterName.length >= minLength &&
-		characterName.length <= maxLength &&
-		alphanumericRegex.test(characterName)
+		characterName.length >= minLength && characterName.length <= maxLength && alphanumericRegex.test(characterName)
 	);
 }
 
@@ -411,9 +330,7 @@ function handleMouseOut() {
 }
 
 function handleLinkImgMouseOver(linkImg) {
-	const filteredLink = linkSkillData.find(
-		(item) => item.name === characterData.linkSkill,
-	).levels;
+	const filteredLink = linkSkillData.find((item) => item.name === characterData.linkSkill).levels;
 	const levelNumber = Number(document.querySelector('.levelNumber').value);
 
 	let text;
@@ -458,9 +375,7 @@ function handleLegionImgMouseOver(legionImg) {
 		level: levelNumber,
 	};
 
-	const legionInfo = legionData.find(
-		(item) => item.name === characterData.legion,
-	).ranking;
+	const legionInfo = legionData.find((item) => item.name === characterData.legion).ranking;
 	const characterRank = getRank(characterDataPlaceholder);
 	let text = '';
 

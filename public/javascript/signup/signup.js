@@ -7,11 +7,7 @@ function isValidUsername(username) {
 	const maxLength = 20;
 	const alphanumericRegex = /^[a-zA-Z0-9]+$/;
 
-	return (
-		username.length >= minLength &&
-		username.length <= maxLength &&
-		alphanumericRegex.test(username)
-	);
+	return username.length >= minLength && username.length <= maxLength && alphanumericRegex.test(username);
 }
 
 function isValidPassword(password) {
@@ -72,17 +68,9 @@ inputIds.forEach((inputId) => {
 	if (inputElement) {
 		inputElement.addEventListener('input', function () {
 			if (inputId === 'checkPassword') {
-				handleValidation(
-					inputElement,
-					arePasswordsMatching,
-					iconBackup,
-				);
+				handleValidation(inputElement, arePasswordsMatching, iconBackup);
 			} else {
-				handleValidation(
-					inputElement,
-					() => isValidFunctionMap[inputId](inputElement.value),
-					iconBackup,
-				);
+				handleValidation(inputElement, () => isValidFunctionMap[inputId](inputElement.value), iconBackup);
 			}
 			updateSubmitButtonState();
 		});
@@ -121,9 +109,7 @@ wrap.forEach((info) => {
 });
 
 function handleHover(event) {
-	const name = event.currentTarget
-		.querySelector('.input')
-		.getAttribute('name');
+	const name = event.currentTarget.querySelector('.input').getAttribute('name');
 	const targetRect = event.target.getBoundingClientRect();
 	const centerX = targetRect.left + targetRect.width / 2;
 	const centerY = targetRect.top + targetRect.height / 2;
@@ -165,7 +151,7 @@ function createCheck() {
 	const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
 	path.setAttribute(
 		'd',
-		'M21.5027 8.73837L12.1668 18.0742L7.081 13.0025L5.0835 15L12.1668 22.0834L23.5002 10.75L21.5027 8.73837ZM15.0002 0.833374C7.18016 0.833374 0.833496 7.18004 0.833496 15C0.833496 22.82 7.18016 29.1667 15.0002 29.1667C22.8202 29.1667 29.1668 22.82 29.1668 15C29.1668 7.18004 22.8202 0.833374 15.0002 0.833374ZM15.0002 26.3334C8.7385 26.3334 3.66683 21.2617 3.66683 15C3.66683 8.73837 8.7385 3.66671 15.0002 3.66671C21.2618 3.66671 26.3335 8.73837 26.3335 15C26.3335 21.2617 21.2618 26.3334 15.0002 26.3334Z',
+		'M21.5027 8.73837L12.1668 18.0742L7.081 13.0025L5.0835 15L12.1668 22.0834L23.5002 10.75L21.5027 8.73837ZM15.0002 0.833374C7.18016 0.833374 0.833496 7.18004 0.833496 15C0.833496 22.82 7.18016 29.1667 15.0002 29.1667C22.8202 29.1667 29.1668 22.82 29.1668 15C29.1668 7.18004 22.8202 0.833374 15.0002 0.833374ZM15.0002 26.3334C8.7385 26.3334 3.66683 21.2617 3.66683 15C3.66683 8.73837 8.7385 3.66671 15.0002 3.66671C21.2618 3.66671 26.3335 8.73837 26.3335 15C26.3335 21.2617 21.2618 26.3334 15.0002 26.3334Z'
 	);
 	path.setAttribute('fill', '#7BD96D');
 

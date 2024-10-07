@@ -1,6 +1,5 @@
 function getWeeklyResetDate(currentDate, targetDayOfWeek) {
-	const daysUntilNextDayOfWeek =
-		(targetDayOfWeek - currentDate.weekday + 7) % 7;
+	const daysUntilNextDayOfWeek = (targetDayOfWeek - currentDate.weekday + 7) % 7;
 
 	const nextDayOfWeek = currentDate
 		.set({
@@ -16,18 +15,11 @@ function getWeeklyResetDate(currentDate, targetDayOfWeek) {
 }
 
 function timeConditionChecker(nextDay, timeNow) {
-	if (
-		!timeNow.isValid ||
-		!nextDay.isValid ||
-		timeNow.diff(nextDay, 'days').days >= 1
-	) {
+	if (!timeNow.isValid || !nextDay.isValid || timeNow.diff(nextDay, 'days').days >= 1) {
 		return true;
 	}
 	if (timeNow.hasSame(nextDay, 'day')) {
-		return (
-			timeNow.hour > nextDay.hour ||
-			(timeNow.hour === nextDay.hour && timeNow.minute > nextDay.minute)
-		);
+		return timeNow.hour > nextDay.hour || (timeNow.hour === nextDay.hour && timeNow.minute > nextDay.minute);
 	}
 
 	return false;
