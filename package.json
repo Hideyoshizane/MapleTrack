@@ -1,6 +1,6 @@
 {
 	"name": "mapletrack",
-	"version": "1.7.8",
+	"version": "1.7.9",
 	"main": "index.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
