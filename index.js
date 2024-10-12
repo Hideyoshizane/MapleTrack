@@ -55,15 +55,8 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 app.use((req, res, next) => {
-	const isImageRequest = /\.(webp)$/.test(req.path);
-
 	if (req.headers['x-force-cache'] === 'true') {
-		res.setHeader('Cache-Control', 'public, max-age=604800'); // Cache for one week
-	} else if (!isImageRequest) {
-		// Set no-cache headers for non-image files
-		res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
-		res.setHeader('Pragma', 'no-cache');
-		res.setHeader('Expires', '0');
+		res.setHeader('Cache-Control', 'public, max-age=604800');
 	}
 	next();
 });

@@ -13,57 +13,60 @@ function createDOMElement(tag, className = '', content = '', type = '') {
 }
 
 async function createImageElement(src, alt, className = '') {
-	let image = null;
+	let image = new Image();
 
-	while (!image) {
-		try {
-			const cache = await caches.open('images-cache');
-			const cachedResponse = await cache.match(src);
+	try {
+		// Open the cache
+		const cache = await caches.open('images-cache');
+		const cachedResponse = await cache.match(src);
 
-			if (cachedResponse) {
-				// Use cached image
-				image = new Image();
-				const cachedBlob = await cachedResponse.blob();
-				image.src = URL.createObjectURL(cachedBlob);
+		if (cachedResponse) {
+			// Use cached image
+			const cachedBlob = await cachedResponse.blob();
+			image.src = URL.createObjectURL(cachedBlob);
+			image.alt = alt;
+			image.classList.add(className);
+
+			// Revoke the object URL after the image is loaded
+			image.onload = () => URL.revokeObjectURL(image.src);
+		} else {
+			// Fetch the image if not found in cache
+			const response = await fetch(src);
+
+			if (response.ok) {
+				// Clone the response for caching
+				const responseClone = response.clone();
+
+				// Store the fetched response in cache
+				await cache.put(src, responseClone);
+
+				// Use fetched image
+				const fetchedBlob = await response.blob();
+				image.src = URL.createObjectURL(fetchedBlob);
 				image.alt = alt;
-				image.className = className;
-			} else {
-				// Fetch the image if not found in cache
-				const response = await fetch(src, {
-					cache: 'force-cache',
-					headers: {
-						'x-force-cache': 'true',
-					},
+				image.classList.add(className);
+
+				// Revoke the object URL after the image is loaded
+				image.onload = () => URL.revokeObjectURL(image.src);
+
+				// Wait for the image to load before resolving
+				await new Promise((resolve, reject) => {
+					image.onload = resolve;
+					image.onerror = reject;
 				});
-
-				if (response.ok) {
-					const responseClone = response.clone();
-
-					image = new Image();
-					const fetchedBlob = await response.blob();
-					image.src = URL.createObjectURL(fetchedBlob);
-					image.alt = alt;
-					image.className = className;
-
-					await cache.put(src, responseClone);
-
-					await new Promise((resolve, reject) => {
-						image.onload = resolve;
-						image.onerror = reject;
-					});
-				} else {
-					console.error(`Failed to fetch image from ${src}`);
-					await new Promise((resolve) => setTimeout(resolve, 1000));
-				}
+			} else {
+				console.error(`Failed to fetch image from ${src}:`, response.status);
+				throw new Error('Image fetch failed');
 			}
-		} catch (error) {
-			console.error('Error fetching image:', error);
-			await new Promise((resolve) => setTimeout(resolve, 1000));
 		}
+	} catch (error) {
+		console.error('Error fetching image:', error);
+		return null; // Return null if an error occurs
 	}
 
 	return image;
 }
+
 async function loadEditableSVGFile(filePath, className) {
 	try {
 		const response = await fetch(filePath);
