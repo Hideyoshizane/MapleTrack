@@ -250,10 +250,8 @@ async function setForceLevel(forceArea, characterData, forceImg, forceType) {
 }
 
 async function createCharacterPortrait(characterData) {
-	const portrait = await createImageElement(
-		`../../public/assets/cards/${getCode(characterData)}.webp`,
-		characterData.class
-	);
+	const imgSource = `../../public/assets/cards/${getCode(characterData)}.webp`;
+	const portrait = await createImageElement(imgSource, 'portrait', getCode(characterData));
 	portrait.setAttribute(
 		'class',
 		characterData.level === 0 && characterData.name === 'Character Name' ? 'cardPortrait off' : 'cardPortrait'
