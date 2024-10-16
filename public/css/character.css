@@ -47,8 +47,10 @@ body {
     justify-content: flex-end;
     align-items: flex-end;
     gap: 1.5rem;
+    position: relative;
 }
 
+.eventButton,
 .increaseAllButton,
 .editButton {
     font-family: 'Inter';
@@ -62,6 +64,58 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
+}
+
+.eventButton {
+    left: 0;
+    background-color: #91C9E3;
+    width: 11.458vw;
+    height: 6.147vh;
+    margin-left: 16px;
+    cursor: pointer;
+
+    position: absolute;
+    top: 1.756vh;
+    border: none;
+    overflow: hidden;
+    bottom: auto;
+    z-index: 2;
+}
+
+.eventButton.open {
+    display: block;
+    height: 67.618vh;
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.closed {
+    display: block;
+    transition: all 0.3s ease-in-out;
+}
+
+.firstButton,
+.eventNumber {
+    height: 6.147vh;
+    width: 12.135vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.75rem;
+    color: #3D3D3D;
+    font-weight: 600;
+    border: none;
+    background-color: #91C9E3;
+    padding: 10px;
+    margin: 0px;
+    z-index: 2;
+    cursor: pointer;
+}
+
+.eventNumber:hover {
+    background-color: #4DA7D1;
     cursor: pointer;
 }
 
@@ -88,8 +142,8 @@ body {
 
 .bossIcon {
     width: 4.01vw;
-    margin-right: 1rem;
     height: 10.318vh;
+    margin-right: -1rem;
 }
 
 .characterName {

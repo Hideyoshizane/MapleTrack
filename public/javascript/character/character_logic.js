@@ -41,6 +41,13 @@ async function loadButtonsEvents() {
 		});
 	});
 
+	const eventNumber = document.querySelectorAll('.eventNumber');
+	eventNumber?.forEach((eventNumber) => {
+		eventNumber.addEventListener('click', async (event) => {
+			await updateEventBonus(event);
+		});
+	});
+
 	increaseAllButton = document.querySelector('.increaseAllButton');
 	increaseAllButton.addEventListener('click', async (event) => {
 		await processButtons(dailyButtons);
@@ -319,4 +326,28 @@ async function processButtons(dailyButtons) {
 	}
 
 	await processNextButton(); // Start processing buttons
+}
+
+async function updateEventBonus(event) {
+	const value = event.target.value;
+	setCookie('eventBonus', value, 90);
+	updateEventBonusButton(value);
+	await updateDailyValue(value);
+}
+
+async function updateDailyValue(value) {
+	const buttons = document.querySelectorAll('.dailyButton');
+	buttons.forEach((button) => {
+		const oldValue = button.getAttribute('bonusevent');
+		const dailyValue = button.getAttribute('value');
+
+		const updatedValue = +value - +oldValue;
+
+		const newValue = +dailyValue + +updatedValue;
+
+		button.setAttribute('value', newValue);
+		button.setAttribute('bonusevent', value);
+
+		button.textContent = `Daily: +${newValue}`;
+	});
 }

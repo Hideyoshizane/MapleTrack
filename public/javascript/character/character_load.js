@@ -51,6 +51,7 @@ async function loadCharacterContent() {
 	await Promise.all([
 		await loadCharacterNameDiv(),
 		await loadLevelAndLevelBar(),
+		await loadEventBonus(),
 		await loadForce(true),
 		await loadForce(false),
 	]);
@@ -155,6 +156,51 @@ async function loadLevelAndLevelBar() {
 
 	parentDiv.appendChild(levelDiv);
 	parentDiv.appendChild(levelBar);
+}
+
+async function loadNumberButtons(parentDiv) {
+	const dropdownToggle = createDOMElement('button', 'dropdownToggle');
+	dropdownToggle.id = 'dropdownToggle';
+
+	const numberSelector = createDOMElement('div', 'numberSelector');
+
+	try {
+		const fragment = document.createDocumentFragment();
+
+		for (let i = 0; i <= 10; i++) {
+			const createdButton = createDOMElement('button', 'numberButton');
+			createdButton.textContent = `Bonus ${i}`;
+			fragment.appendChild(createdButton);
+		}
+		numberSelector.appendChild(fragment);
+	} catch (error) {
+		console.error('Error creating number buttons:', error);
+	}
+	dropdownToggle.appendChild(numberSelector);
+	parentDiv.appendChild(dropdownToggle);
+}
+
+async function loadEventBonus() {
+	let eventBonusValue = getCookie('eventBonus');
+	if (eventBonusValue === null) {
+		setCookie('eventBonus', 0, 90);
+		eventBonusValue = 0;
+	}
+	const eventButton = document.querySelector('.eventButton');
+	updateEventBonusButton(eventBonusValue);
+
+	let isOpen = false;
+
+	eventButton.addEventListener('click', function () {
+		isOpen = !isOpen;
+
+		eventButton.classList.toggle('open', isOpen);
+		eventButton.classList.toggle('closed', !isOpen);
+	});
+}
+function updateEventBonusButton(eventBonusValue) {
+	const firstButton = document.querySelector('.firstButton');
+	firstButton.textContent = `Event Bonus ${eventBonusValue}`;
 }
 
 async function loadForce(isArcane) {
@@ -303,7 +349,9 @@ function calculateTotalExp(forceLevel, expTable) {
 
 function createDailyButton(Force, isArcane = false) {
 	const dailyValue = getDailyValue(Force, isArcane);
+	const EventBonusValue = getCookie('eventBonus');
 
+	const totalDailyValue = +dailyValue + +EventBonusValue;
 	const currentDate = DateTime.utc();
 	const lastDate = Force.content[0].date ? DateTime.fromISO(Force.content[0].date, { zone: 'utc' }) : null;
 
@@ -315,7 +363,7 @@ function createDailyButton(Force, isArcane = false) {
 
 	const dailyButton = createDOMElement('button', 'dailyButton');
 	if (duration || duration == null) {
-		dailyButton.textContent = `Daily: + ${dailyValue}`;
+		dailyButton.textContent = `Daily: +${totalDailyValue}`;
 	} else {
 		dailyButton.textContent = 'Daily clear!';
 		dailyButton.disabled = true;
@@ -326,7 +374,8 @@ function createDailyButton(Force, isArcane = false) {
 	}
 
 	dailyButton.setAttribute('name', force.name);
-	dailyButton.setAttribute('value', dailyValue);
+	dailyButton.setAttribute('value', totalDailyValue);
+	dailyButton.setAttribute('bonusEvent', EventBonusValue);
 	dailyButton.setAttribute('Arcane', isArcane);
 	return dailyButton;
 }
