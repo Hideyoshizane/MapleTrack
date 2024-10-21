@@ -98,12 +98,25 @@ async function loadCharacterNameDiv(characterData) {
 
 	const characterIconDiv = createDOMElement('div', 'characterIconDiv');
 
-	characterIconDiv.appendChild(bossIcon);
 	characterIconDiv.appendChild(characterName);
 
 	characterInfo.appendChild(characterIconDiv);
 
 	const linkLegionClassJob = createDOMElement('div', 'linkLegionClassJob');
+
+	linkLegionClassJob.appendChild(bossIcon);
+
+	const bossIconDiv = createDOMElement('div', 'bossIconDiv');
+	const bossArea = createDOMElement('div', 'bossArea');
+
+	const bossText = createDOMElement('span', 'bossText', 'Bossing Character');
+	const switchButton = createSwitchButton('bossSwitch', characterData.bossing);
+
+	bossArea.appendChild(bossText);
+	bossArea.appendChild(switchButton);
+
+	bossIconDiv.appendChild(bossIcon);
+	bossIconDiv.appendChild(bossArea);
 
 	const linkSkill = await loadLinkSkillDiv(characterData);
 	const legion = await loadLegionDiv(characterData);
@@ -115,17 +128,10 @@ async function loadCharacterNameDiv(characterData) {
 
 	const JobDiv = createDOMElement('div', 'jobDiv');
 
-	const bossText = createDOMElement('span', 'bossText', 'Bossing Character');
-	const switchButton = createSwitchButton('bossSwitch', characterData.bossing);
-
-	const bossArea = createDOMElement('div', 'bossArea');
-
 	JobDiv.appendChild(JobType);
 	JobDiv.appendChild(JobLevel);
-	bossArea.appendChild(bossText);
-	bossArea.appendChild(switchButton);
 
-	linkLegionClassJob.appendChild(bossArea);
+	linkLegionClassJob.appendChild(bossIconDiv);
 	linkLegionClassJob.appendChild(linkSkill);
 	linkLegionClassJob.appendChild(legion);
 	linkLegionClassJob.appendChild(JobDiv);

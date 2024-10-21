@@ -68,9 +68,9 @@ body {
 }
 
 .eventButton {
-    left: 0;
+    left: 2.5%;
     background-color: #91C9E3;
-    width: 11.458vw;
+    width: 14.792vw;
     height: 6.147vh;
     margin-left: 16px;
     cursor: pointer;
@@ -99,7 +99,7 @@ body {
 .firstButton,
 .eventNumber {
     height: 6.147vh;
-    width: 12.135vw;
+    width: 14.792vw;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -116,7 +116,6 @@ body {
 
 .eventNumber:hover {
     background-color: #4DA7D1;
-    cursor: pointer;
 }
 
 .increaseAllButton {
@@ -140,12 +139,6 @@ body {
     align-items: center;
 }
 
-.bossIcon {
-    width: 4.01vw;
-    height: 10.318vh;
-    margin-right: -1rem;
-}
-
 .characterName {
     display: inline;
     font-family: 'Inter';
@@ -158,14 +151,19 @@ body {
 
 .linkLegionClassJob {
     display: flex;
-    width: 31.25vw;
+    width: 38.021vw;
     justify-content: space-between;
     align-items: flex-start;
 }
 
+
+.bossIcon {
+    width: 4.01vw;
+    height: 10.318vh;
+}
+
 .linkSkillBlock,
 .legionBlock {
-    margin-top: 0.5rem;
     align-items: center;
     display: flex;
     flex-direction: column;

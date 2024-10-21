@@ -66,18 +66,17 @@ async function loadCharacterNameDiv() {
 
 	const characterIconDiv = createDOMElement('div', 'characterIconDiv');
 
-	if (characterData.bossing == true) {
-		const bossIconpath = '../../public/assets/icons/menu/boss_slayer.svg';
-		const bossIcon = await loadEditableSVGFile(bossIconpath, 'bossIcon');
-		characterIconDiv.appendChild(bossIcon);
-	}
-
 	characterIconDiv.appendChild(characterName);
 
 	characterInfo.appendChild(characterIconDiv);
 
 	const linkLegionClassJob = createDOMElement('div', 'linkLegionClassJob');
 
+	if (characterData.bossing == true) {
+		const bossIconpath = '../../public/assets/icons/menu/boss_slayer.svg';
+		const bossIcon = await loadEditableSVGFile(bossIconpath, 'bossIcon');
+		linkLegionClassJob.appendChild(bossIcon);
+	}
 	const linkSkill = await loadLinkSkillDiv();
 	const legion = await loadLegionDiv();
 

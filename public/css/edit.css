@@ -91,11 +91,6 @@ body {
     align-items: center;
 }
 
-.bossIcon {
-    width: 4.01vw;
-    margin-right: 1rem;
-    height: 10.318vh;
-}
 
 .characterName {
     border: none;
@@ -121,11 +116,22 @@ body {
     outline: none;
 }
 
+.bossIconDiv {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.bossIcon {
+    width: 4.01vw;
+    margin-right: 0.5rem;
+    height: 10.318vh;
+}
+
 .bossArea {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 0.375rem;
 }
 
 .bossText {
@@ -197,14 +203,14 @@ input:checked+.slider:before {
     align-items: flex-start;
 }
 
+
 .linkSkillBlock,
 .legionBlock {
-    margin-top: 0.5rem;
     align-items: center;
     display: flex;
     flex-direction: column;
     width: 4.479vw;
-    height: 0.329vh;
+    height: 1.427vh;
     gap: 0.5rem;
 }
 
