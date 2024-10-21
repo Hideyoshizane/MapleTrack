@@ -268,6 +268,7 @@ async function updateArea(forceName, isArcane) {
 	const areaProperty = isArcane ? 'ArcaneForceLevel' : 'SacredForceLevel';
 	const areaData = forceArray.find((force) => force.name === forceName);
 
+	//console.log(areaData);
 	targetDiv = document.querySelector(`div[area="${forceName}"]`);
 	ForceLevel = targetDiv.querySelector(`.${areaProperty}`);
 	ForceLevel.textContent = `Level: ${areaData.level}`;
@@ -304,9 +305,11 @@ async function updateDayToMax(areaData, isArcane) {
 	const weeklyValue = Number(dailyJson.find((json) => json.name === 'Weekly').value);
 	let totalExp = calculateTotalExp(areaData.level, expTable);
 	let dailyExp = getDailyValue(areaData, isArcane);
+	const EventBonusValue = +getCookie('eventBonus');
+
 	const weeklyExp = areaData.content[1] && areaData.content[1].checked && isArcane ? weeklyValue * 3 : 0;
 	totalExp -= areaData.exp;
-	return Math.ceil(totalExp / (dailyExp + weeklyExp / 7));
+	return Math.ceil(totalExp / (dailyExp + weeklyExp + EventBonusValue / 7));
 }
 
 async function processButtons(dailyButtons) {
@@ -336,18 +339,23 @@ async function updateEventBonus(event) {
 }
 
 async function updateDailyValue(value) {
-	const buttons = document.querySelectorAll('.dailyButton');
-	buttons.forEach((button) => {
+	const buttons = document.querySelectorAll('.dailyButton:not([disabled])');
+
+	for (const button of buttons) {
+		const forceName = button.getAttribute('name');
+		const isArcane = button.getAttribute('arcane') === 'true';
+
 		const oldValue = button.getAttribute('bonusevent');
 		const dailyValue = button.getAttribute('value');
 
 		const updatedValue = +value - +oldValue;
-
 		const newValue = +dailyValue + +updatedValue;
 
 		button.setAttribute('value', newValue);
 		button.setAttribute('bonusevent', value);
 
 		button.textContent = `Daily: +${newValue}`;
-	});
+
+		await updateArea(forceName, isArcane);
+	}
 }

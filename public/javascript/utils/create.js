@@ -36,7 +36,9 @@ async function createImageElement(src, alt, className = '') {
 		}
 
 		image.alt = alt;
-		image.classList.add(className);
+		if (className) {
+			image.classList.add(className);
+		}
 
 		// Keep a reference to the Blob URL
 		const blobUrl = image.src;

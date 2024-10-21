@@ -133,7 +133,10 @@ async function createSearchResults(characters, parentDiv) {
 			const resultDiv = createDOMElement('div', 'result');
 			resultDiv.setAttribute('data-server', characterData.server);
 			resultDiv.setAttribute('data-code', getCode(characterData));
-			const img = await createImageElement(`/../../assets/icons/servers/${characterData.server.toLowerCase()}.webp`);
+			const img = await createImageElement(
+				`/../../assets/icons/servers/${characterData.server.toLowerCase()}.webp`,
+				'server icon'
+			);
 			const detailsSpan = createDOMElement(
 				'span',
 				'',
