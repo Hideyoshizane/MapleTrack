@@ -268,7 +268,6 @@ async function updateArea(forceName, isArcane) {
 	const areaProperty = isArcane ? 'ArcaneForceLevel' : 'SacredForceLevel';
 	const areaData = forceArray.find((force) => force.name === forceName);
 
-	//console.log(areaData);
 	targetDiv = document.querySelector(`div[area="${forceName}"]`);
 	ForceLevel = targetDiv.querySelector(`.${areaProperty}`);
 	ForceLevel.textContent = `Level: ${areaData.level}`;
@@ -286,15 +285,11 @@ async function updateArea(forceName, isArcane) {
 
 	await updateExpBar(innerExpBar, areaData.exp, nextLevelEXPNumber, 9.948, characterData.jobType);
 
-	const remainDays = await updateDayToMax(areaData, isArcane);
-
-	const daysToMax = (targetDiv.querySelector('.daysToMax').textContent = isArcane
-		? `Days to Level 20: ${remainDays}`
-		: `Days to Level 11: ${remainDays}`);
-
 	if ((isArcane && areaData.level === 20) || (!isArcane && areaData.level === 11)) {
 		const Buttons = targetDiv.querySelector('.buttons');
-		daysToMax.remove();
+		const daysToMaxRemove = targetDiv.querySelector('.daysToMax');
+		innerExpBar.style.backgroundColor = '#48AA39';
+		daysToMaxRemove.remove();
 		Buttons.remove();
 	}
 }
@@ -324,11 +319,11 @@ async function processButtons(dailyButtons) {
 			}
 
 			currentIndex++;
-			await processNextButton(); // Process the next button
+			await processNextButton();
 		}
 	}
 
-	await processNextButton(); // Start processing buttons
+	await processNextButton();
 }
 
 async function updateEventBonus(event) {
