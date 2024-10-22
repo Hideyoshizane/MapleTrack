@@ -124,8 +124,8 @@ body {
 
 .bossIcon {
     width: 4.01vw;
-    margin-right: 0.5rem;
     height: 10.318vh;
+    margin-right: 2rem;
 }
 
 .bossArea {
@@ -198,7 +198,7 @@ input:checked+.slider:before {
 
 .linkLegionClassJob {
     display: flex;
-    width: 38.021vw;
+    width: 46.875vw;
     justify-content: space-between;
     align-items: flex-start;
 }
@@ -306,8 +306,9 @@ input:checked+.slider:before {
     display: flex;
     align-items: center;
     background-color: black;
-    width: 41.667vw;
     height: 3.513vh;
+    width: 46.875vw;
+    border-radius: 1.563rem;
 }
 
 .progressBar {
@@ -324,18 +325,18 @@ input:checked+.slider:before {
 
 .ArcaneForceGrid,
 .SacredForceGrid {
-    display: flex;
-    width: 41.354vw;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-content: flex-start;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    justify-items: space-between;
+    row-gap: 8px;
+    column-gap: 98px;
+    width: 46.875vw;
 }
 
 .ArcaneForceWrapper,
 .SacredForceWrapper {
     display: flex;
     height: 9.001vh;
-    width: 13.333vw;
     align-items: center;
 }
 

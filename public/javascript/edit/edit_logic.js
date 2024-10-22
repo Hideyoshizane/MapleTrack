@@ -63,7 +63,7 @@ document.addEventListener('PageLoaded', async () => {
 			const jobType = document.querySelector('.characterLevelBar').getAttribute('jobType');
 			const progressBar = document.querySelector('.progressBar');
 
-			await updateExpBar(progressBar, levelNumberValue, levelTargetValue, 41.458, jobType);
+			await updateExpBar(progressBar, levelNumberValue, levelTargetValue, 46.667, jobType);
 		});
 
 		levelTarget.addEventListener('input', async () => {
@@ -78,7 +78,7 @@ document.addEventListener('PageLoaded', async () => {
 			const jobType = document.querySelector('.characterLevelBar').getAttribute('jobType');
 			const progressBar = document.querySelector('.progressBar');
 
-			await updateExpBar(progressBar, levelNumberValue, levelTargetValue, 41.458, jobType);
+			await updateExpBar(progressBar, levelNumberValue, levelTargetValue, 46.667, jobType);
 		});
 
 		const linkImg = document.querySelector('.linkImg');

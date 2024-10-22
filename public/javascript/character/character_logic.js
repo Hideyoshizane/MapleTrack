@@ -283,7 +283,7 @@ async function updateArea(forceName, isArcane) {
 
 	innerExpBar = targetDiv.querySelector('.progressBar');
 
-	await updateExpBar(innerExpBar, areaData.exp, nextLevelEXPNumber, 9.948, characterData.jobType);
+	await updateExpBar(innerExpBar, areaData.exp, nextLevelEXPNumber, 12.083, characterData.jobType);
 
 	if ((isArcane && areaData.level === 20) || (!isArcane && areaData.level === 11)) {
 		const Buttons = targetDiv.querySelector('.buttons');

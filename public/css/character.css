@@ -151,7 +151,7 @@ body {
 
 .linkLegionClassJob {
     display: flex;
-    width: 38.021vw;
+    width: 46.875vw;
     justify-content: space-between;
     align-items: flex-start;
 }
@@ -160,6 +160,7 @@ body {
 .bossIcon {
     width: 4.01vw;
     height: 10.318vh;
+    margin-left: 3rem;
 }
 
 .linkSkillBlock,
@@ -232,7 +233,7 @@ body {
     align-items: center;
     background-color: black;
     height: 3.513vh;
-    width: 41.667vw;
+    width: 46.875vw;
     border-radius: 1.563rem;
 }
 
@@ -247,7 +248,7 @@ body {
     align-items: center;
     background-color: black;
     height: 0.5rem;
-    width: 10.156vw;
+    width: 12.292vw;
     border-radius: 1.563rem;
 }
 
@@ -266,18 +267,17 @@ body {
 
 .ArcaneForceGrid,
 .SacredForceGrid {
-    display: flex;
-    width: 41.354vw;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-content: flex-start;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    justify-items: space-between;
+    row-gap: 8px;
+    width: 46.875vw;
 }
 
 .ArcaneForceWrapper,
 .SacredForceWrapper {
     display: flex;
     height: 9.001vh;
-    width: 13.333vw;
     align-items: center;
 }
 
@@ -337,7 +337,7 @@ body {
     background-color: #96E4A5;
     border-radius: 1.563rem;
     border: none;
-    width: 4.948vw;
+    width: 5.833vw;
     height: 2.634vh;
     display: flex;
     justify-content: center;

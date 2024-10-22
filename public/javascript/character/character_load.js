@@ -148,7 +148,7 @@ async function loadLevelAndLevelBar() {
 		jobType: characterData.jobType,
 	};
 
-	const levelBar = await createLeveLBar(levelBarData, 41.458, 'characterLevelBar');
+	const levelBar = await createLeveLBar(levelBarData, 46.667, 'characterLevelBar');
 
 	levelDiv.appendChild(level);
 	levelDiv.appendChild(levelNumber);
@@ -259,7 +259,7 @@ async function loadForce(isArcane) {
 			jobType: characterData.jobType,
 		};
 
-		const expBar = await createLeveLBar(levelBarData, 9.948, 'forceLevelBar');
+		const expBar = await createLeveLBar(levelBarData, 12.083, 'forceLevelBar');
 
 		if (characterData.level < minLevel) {
 			const innerbar = expBar.querySelector('.progressBar');

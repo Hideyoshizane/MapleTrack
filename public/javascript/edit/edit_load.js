@@ -191,7 +191,7 @@ async function loadLevelAndLevelBar(characterData) {
 		jobType: characterData.jobType,
 	};
 
-	const levelBar = await createLeveLBar(levelBarData, 41.458, 'characterLevelBar');
+	const levelBar = await createLeveLBar(levelBarData, 46.667, 'characterLevelBar');
 	levelBar.setAttribute('jobType', characterData.jobType);
 
 	levelDiv.appendChild(level);
