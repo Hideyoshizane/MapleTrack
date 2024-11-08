@@ -202,8 +202,8 @@ async function increaseDaily(event) {
 	await postRequest(postData, URL);
 	await updateArea(forceName, isArcane);
 
-	//clickedButton.disabled = true;
-	//clickedButton.textContent = 'Daily done!';
+	clickedButton.disabled = true;
+	clickedButton.textContent = 'Daily done!';
 }
 
 async function increaseWeekly(event) {
