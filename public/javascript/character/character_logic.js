@@ -202,8 +202,8 @@ async function increaseDaily(event) {
 	await postRequest(postData, URL);
 	await updateArea(forceName, isArcane);
 
-	clickedButton.disabled = true;
-	clickedButton.textContent = 'Daily done!';
+	//clickedButton.disabled = true;
+	//clickedButton.textContent = 'Daily done!';
 }
 
 async function increaseWeekly(event) {
@@ -285,6 +285,12 @@ async function updateArea(forceName, isArcane) {
 
 	await updateExpBar(innerExpBar, areaData.exp, nextLevelEXPNumber, 12.083, characterData.jobType);
 
+	const remainDays = await updateDayToMax(areaData, isArcane);
+
+	const daysToMax = (targetDiv.querySelector('.daysToMax').textContent = isArcane
+		? `Days to Level 20: ${remainDays}`
+		: `Days to Level 11: ${remainDays}`);
+
 	if ((isArcane && areaData.level === 20) || (!isArcane && areaData.level === 11)) {
 		const Buttons = targetDiv.querySelector('.buttons');
 		const daysToMaxRemove = targetDiv.querySelector('.daysToMax');
@@ -332,7 +338,7 @@ async function updateEventBonus(event) {
 	updateEventBonusButton(value);
 	await updateDailyValue(value);
 }
-
+async function updateDayToMaxString() {}
 async function updateDailyValue(value) {
 	const buttons = document.querySelectorAll('.dailyButton:not([disabled])');
 
