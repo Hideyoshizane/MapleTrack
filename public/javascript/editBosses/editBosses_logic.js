@@ -59,6 +59,8 @@ async function handleCharacterButtonClick(characterButton, characterButtons) {
 
 		await changeCharacterIncome();
 		await updateBosses();
+		await updateWeeklyBossesCharacter();
+		await updateMonthlyBossesCharacter();
 	}
 }
 
@@ -324,6 +326,8 @@ async function insertBossOnList(boss, data) {
 	await updateCharacterTotalIncome();
 	await updateTotalCharactersIncome();
 	await updateTotalSelected();
+	await updateWeeklyBossesCharacter();
+	await updateMonthlyBossesCharacter();
 }
 
 async function createBossToAdd(name, difficulty, difficultData, newValue) {

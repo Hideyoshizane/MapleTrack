@@ -47,19 +47,33 @@
                             <span class="totalIncomeText">Character Total Income</span>
                         </div>
                     </div>
+                    <div class="characterWeeklyDiv">
+                        <img src="../../public/assets/icons/menu/weekly.webp" alt="Weekly Crystal Icon"
+                            class="crystalIcon">
+                        <div class="characterWeeklyTextDiv">
+                            <span class="bossCounter">Weekly Boss Count</span>
+                        </div>
+
+                    </div>
+                    <div class="characterMonthlyDiv">
+                        <img src="../../public/assets/icons/menu/monthly.webp" alt="Monthly Crystal Icon"
+                            class="crystalIcon">
+                        <div class="characterMonthlyTextDiv">
+                            <span class="bossCounter">Monthly Boss Count</span>
+                        </div>
+                    </div>
                 </div>
                 <div class="bosses"></div>
             </div>
-        </div>
-        <script src="https://cdn.jsdelivr.net/npm/luxon@3.4.3/build/global/luxon.min.js"></script>
-        <script src="/public/javascript/utils/create.js"></script>
-        <script src="/public/javascript/utils/navbar.js"></script>
-        <script src="/public/javascript/utils/cookies.js"></script>
-        <script src="/public/javascript/utils/characterData.js"></script>
-        <script src="/public/javascript/editBosses/editBosses_load.js"></script>
-        <script src="/public/javascript/editBosses/editBosses_logic.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/luxon@3.4.3/build/global/luxon.min.js"></script>
+            <script src="/public/javascript/utils/create.js"></script>
+            <script src="/public/javascript/utils/navbar.js"></script>
+            <script src="/public/javascript/utils/cookies.js"></script>
+            <script src="/public/javascript/utils/characterData.js"></script>
+            <script src="/public/javascript/editBosses/editBosses_load.js"></script>
+            <script src="/public/javascript/editBosses/editBosses_logic.js"></script>
 
-        <script id="userdata" data-username="<%- username %>" data-username-id="<%- _id %>"></script>
+            <script id="userdata" data-username="<%- username %>" data-username-id="<%- _id %>"></script>
 </body>
 
 </html>

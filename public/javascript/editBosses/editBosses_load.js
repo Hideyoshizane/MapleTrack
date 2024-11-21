@@ -42,6 +42,8 @@ async function loadPage() {
 	if (Character) {
 		await loadCharacterSelector();
 		await loadCharacterIncome();
+		await loadWeeklyBossesCharacter();
+		await loadMonthlyBossesCharacter();
 		await loadBosses();
 	} else {
 		await loadMissingCharacter();
@@ -314,4 +316,46 @@ async function loadBosses() {
 	if (loaderSpan) parentDiv.removeChild(loaderSpan);
 
 	parentDiv.appendChild(bossGrid);
+}
+
+async function loadWeeklyBossesCharacter() {
+	const parentDiv = document.querySelector('.characterWeeklyDiv');
+
+	const bossCounterDiv = parentDiv.querySelector('.characterWeeklyTextDiv');
+
+	const weeklyBossesCount = Character.bosses.filter((boss) => boss.reset === 'Weekly').length;
+
+	const totalIncomeSpan = createDOMElement('span', 'characterTotalIncome', `${weeklyBossesCount}/12`);
+	totalIncomeSpan.style.fontSize = (await adjustFontSizeToFit(totalIncomeSpan, 11.667, 2)) + 'rem';
+
+	bossCounterDiv.appendChild(totalIncomeSpan);
+}
+
+async function loadMonthlyBossesCharacter() {
+	const parentDiv = document.querySelector('.characterMonthlyDiv');
+
+	const bossCounterDiv = parentDiv.querySelector('.characterMonthlyTextDiv');
+
+	const weeklyBossesCount = Character.bosses.filter((boss) => boss.reset === 'Monthly').length;
+
+	const totalIncomeSpan = createDOMElement('span', 'characterTotalIncome', `${weeklyBossesCount}/1`);
+	totalIncomeSpan.style.fontSize = (await adjustFontSizeToFit(totalIncomeSpan, 11.667, 2)) + 'rem';
+
+	bossCounterDiv.appendChild(totalIncomeSpan);
+}
+
+async function updateWeeklyBossesCharacter() {
+	const bossCounterDiv = document.querySelector('.characterWeeklyTextDiv');
+	const weeklyBossesCount = Character.bosses.filter((boss) => boss.reset === 'Weekly').length;
+	const totalIncomeSpan = bossCounterDiv.querySelector('.characterTotalIncome');
+
+	totalIncomeSpan.textContent = `${weeklyBossesCount}/12`;
+}
+
+async function updateMonthlyBossesCharacter() {
+	const bossCounterDiv = document.querySelector('.characterMonthlyTextDiv');
+	const weeklyBossesCount = Character.bosses.filter((boss) => boss.reset === 'Monthly').length;
+	const totalIncomeSpan = bossCounterDiv.querySelector('.characterTotalIncome');
+
+	totalIncomeSpan.textContent = `${weeklyBossesCount}/1`;
 }
