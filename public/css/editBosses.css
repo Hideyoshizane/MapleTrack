@@ -86,7 +86,9 @@ body {
 }
 
 .WeekTextDiv,
-.IncomeTextDiv {
+.IncomeTextDiv,
+.characterWeeklyTextDiv,
+.characterMonthlyTextDiv {
     display: flex;
     flex-direction: column;
     text-align: end;
@@ -127,7 +129,8 @@ body {
 }
 
 
-.totalIncomeText {
+.totalIncomeText,
+.bossCounter {
     font-family: 'Inter';
     font-size: 1.25rem;
     font-weight: 500;
@@ -294,7 +297,9 @@ body {
     border-top: 0.125rem solid #ADADAD;
 }
 
-.characterIncomeDiv {
+.characterIncomeDiv,
+.characterWeeklyDiv,
+.characterMonthlyDiv {
     margin-top: 4.375rem;
     margin-left: 1rem;
     display: flex;
@@ -311,6 +316,7 @@ body {
     width: 3.802vw;
     margin-left: 1rem;
 }
+
 
 .bossPicture {
     width: 4.125rem;
