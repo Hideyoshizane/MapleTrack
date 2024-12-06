@@ -325,7 +325,7 @@ async function loadWeeklyBossesCharacter() {
 
 	const weeklyBossesCount = Character.bosses.filter((boss) => boss.reset === 'Weekly').length;
 
-	const totalIncomeSpan = createDOMElement('span', 'characterTotalIncome', `${weeklyBossesCount}/12`);
+	const totalIncomeSpan = createDOMElement('span', 'characterTotalIncome', `${weeklyBossesCount}/14`);
 	totalIncomeSpan.style.fontSize = (await adjustFontSizeToFit(totalIncomeSpan, 11.667, 2)) + 'rem';
 
 	bossCounterDiv.appendChild(totalIncomeSpan);
@@ -349,7 +349,7 @@ async function updateWeeklyBossesCharacter() {
 	const weeklyBossesCount = Character.bosses.filter((boss) => boss.reset === 'Weekly').length;
 	const totalIncomeSpan = bossCounterDiv.querySelector('.characterTotalIncome');
 
-	totalIncomeSpan.textContent = `${weeklyBossesCount}/12`;
+	totalIncomeSpan.textContent = `${weeklyBossesCount}/14`;
 }
 
 async function updateMonthlyBossesCharacter() {

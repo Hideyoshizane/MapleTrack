@@ -46,7 +46,7 @@ body {
     display: flex;
     justify-content: flex-end;
     align-items: flex-end;
-    gap: 1.5rem;
+    gap: 1rem;
     position: relative;
 }
 
@@ -68,7 +68,7 @@ body {
 }
 
 .eventButton {
-    left: 2.5%;
+    left: 1.4%;
     background-color: #91C9E3;
     width: 14.792vw;
     height: 6.147vh;
@@ -398,7 +398,7 @@ body {
     width: 0;
     z-index: 0;
     margin-left: -0.938vw;
-    top: -2.964vh;
+    top: -2.901vh;
     left: 50%;
 }
 

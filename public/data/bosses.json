@@ -305,13 +305,13 @@
 			},
 			{
 				"name": "Hard",
-				"value": 74112500,
+				"value": 88935000,
 				"reset": "Weekly",
 				"minLevel": 190
 			},
 			{
 				"name": "Extreme",
-				"value": 221000000,
+				"value": 279500000,
 				"reset": "Weekly",
 				"minLevel": 190
 			}
@@ -329,7 +329,7 @@
 			},
 			{
 				"name": "Hard",
-				"value": 70312500,
+				"value": 84375000,
 				"reset": "Weekly",
 				"minLevel": 190
 			}
@@ -341,13 +341,13 @@
 		"difficulties": [
 			{
 				"name": "Normal",
-				"value": 34322000,
+				"value": 46334700,
 				"reset": "Weekly",
 				"minLevel": 210
 			},
 			{
 				"name": "Chaos",
-				"value": 95731250,
+				"value": 120115625,
 				"reset": "Weekly",
 				"minLevel": 210
 			}
@@ -359,19 +359,19 @@
 		"difficulties": [
 			{
 				"name": "Easy",
-				"value": 35112500,
+				"value": 47401875,
 				"reset": "Weekly",
 				"minLevel": 220
 			},
 			{
 				"name": "Normal",
-				"value": 40612500,
+				"value": 50765625,
 				"reset": "Weekly",
 				"minLevel": 220
 			},
 			{
 				"name": "Hard",
-				"value": 80000000,
+				"value": 100800000,
 				"reset": "Weekly",
 				"minLevel": 220
 			}
@@ -383,19 +383,19 @@
 		"difficulties": [
 			{
 				"name": "Easy",
-				"value": 38255000,
+				"value": 49348950,
 				"reset": "Weekly",
 				"minLevel": 235
 			},
 			{
 				"name": "Normal",
-				"value": 46512500,
+				"value": 55815000,
 				"reset": "Weekly",
 				"minLevel": 235
 			},
 			{
 				"name": "Hard",
-				"value": 97020000,
+				"value": 124362000,
 				"reset": "Weekly",
 				"minLevel": 235
 			}
@@ -407,13 +407,13 @@
 		"difficulties": [
 			{
 				"name": "Normal",
-				"value": 49612500,
+				"value": 59535000,
 				"reset": "Weekly",
 				"minLevel": 245
 			},
 			{
 				"name": "Chaos",
-				"value": 92450000,
+				"value": 112789000,
 				"reset": "Weekly",
 				"minLevel": 245
 			}
@@ -425,13 +425,13 @@
 		"difficulties": [
 			{
 				"name": "Normal",
-				"value": 93100800,
+				"value": 116376000,
 				"reset": "Weekly",
 				"minLevel": 250
 			},
 			{
 				"name": "Hard",
-				"value": 116138000,
+				"value": 152421000,
 				"reset": "Weekly",
 				"minLevel": 250
 			}
@@ -443,13 +443,13 @@
 		"difficulties": [
 			{
 				"name": "Normal",
-				"value": 52812500,
+				"value": 63375000,
 				"reset": "Weekly",
 				"minLevel": 255
 			},
 			{
 				"name": "Hard",
-				"value": 10164100,
+				"value": 133584000,
 				"reset": "Weekly",
 				"minLevel": 255
 			}
@@ -461,13 +461,13 @@
 		"difficulties": [
 			{
 				"name": "Hard",
-				"value": 750000000,
+				"value": 900000000,
 				"reset": "Monthly",
 				"minLevel": 255
 			},
 			{
 				"name": "Extreme",
-				"value": 3000000000,
+				"value": 3600000000,
 				"reset": "Monthly",
 				"minLevel": 255
 			}
@@ -479,19 +479,19 @@
 		"difficulties": [
 			{
 				"name": "Normal",
-				"value": 138001000,
+				"value": 177804375,
 				"reset": "Weekly",
 				"minLevel": 260
 			},
 			{
 				"name": "Hard",
-				"value": 181500000,
+				"value": 219312000,
 				"reset": "Weekly",
 				"minLevel": 260
 			},
 			{
 				"name": "Extreme",
-				"value": 683650000,
+				"value": 847000000,
 				"reset": "Weekly",
 				"minLevel": 260
 			}
@@ -503,25 +503,25 @@
 		"difficulties": [
 			{
 				"name": "Easy",
-				"value": 154521000,
+				"value": 187500000,
 				"reset": "Weekly",
 				"minLevel": 265
 			},
 			{
 				"name": "Normal",
-				"value": 206335000,
+				"value": 260000000,
 				"reset": "Weekly",
 				"minLevel": 265
 			},
 			{
 				"name": "Chaos",
-				"value": 412530000,
+				"value": 520000000,
 				"reset": "Weekly",
 				"minLevel": 265
 			},
 			{
 				"name": "Extreme",
-				"value": 824749000,
+				"value": 1040000000,
 				"reset": "Weekly",
 				"minLevel": 265
 			}
@@ -533,25 +533,25 @@
 		"difficulties": [
 			{
 				"name": "Easy",
-				"value": 170502000,
+				"value": 206250000,
 				"reset": "Weekly",
 				"minLevel": 275
 			},
 			{
 				"name": "Normal",
-				"value": 237108000,
+				"value": 301300000,
 				"reset": "Weekly",
 				"minLevel": 275
 			},
 			{
 				"name": "Hard",
-				"value": 473886000,
+				"value": 598000000,
 				"reset": "Weekly",
 				"minLevel": 275
 			},
 			{
 				"name": "Extreme",
-				"value": 948461000,
+				"value": 1205200000,
 				"reset": "Weekly",
 				"minLevel": 275
 			}
