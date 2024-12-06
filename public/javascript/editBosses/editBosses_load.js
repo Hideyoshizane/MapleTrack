@@ -119,14 +119,14 @@ async function calculateTotalIncome() {
 
 	selectedList.characters.forEach((character) => {
 		let characterIncome = 0;
-
+		console.log(selectedList);
 		character.bosses.forEach((boss) => {
 			const bossInfo = bossJson.find((b) => b.name === boss.name);
 
 			if (bossInfo) {
 				const difficultyInfo = bossInfo.difficulties.find((d) => d.name === boss.difficulty);
 				if (difficultyInfo) {
-					let income = difficultyInfo.value;
+					let income = selectedList.type == 'Reboot' ? difficultyInfo.value * 5 : difficultyInfo.value;
 
 					if (difficultyInfo.reset === 'Daily' && boss.DailyTotal) {
 						income *= boss.DailyTotal;
@@ -208,7 +208,7 @@ async function calculateTotalIncomeForCharacter() {
 			const difficultyInfo = bossInfo.difficulties.find((d) => d.name === boss.difficulty);
 
 			if (difficultyInfo) {
-				let income = difficultyInfo.value;
+				let income = selectedList.type == 'Reboot' ? difficultyInfo.value * 5 : difficultyInfo.value;
 
 				if (difficultyInfo.reset === 'Daily' && boss.DailyTotal) {
 					income *= boss.DailyTotal;

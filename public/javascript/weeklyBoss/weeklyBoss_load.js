@@ -82,7 +82,6 @@ async function createWeekProgress() {
 
 async function createTotalGain() {
 	const parentDiv = document.querySelector('.GoldTextDiv');
-	console.log(selectedList);
 	const GainValue = `${selectedList.totalGains.toLocaleString('en-US')}`;
 	const totalGainValue = createDOMElement('span', 'totalGoldValue', GainValue);
 	totalGainValue.style.fontSize = (await adjustFontSizeToFit(totalGainValue, 13.802, 2)) + 'rem';

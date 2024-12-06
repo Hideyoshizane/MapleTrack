@@ -139,7 +139,6 @@ async function resetWeeklyBoss(bossingList) {
 
 	filteredServers.forEach((server) => {
 		let totalMonthy = 0;
-		let serverRemainingGains = 0;
 		server.characters.forEach((character) => {
 			character.bosses.forEach((boss) => {
 				if (boss.reset === 'Weekly' || boss.reset === 'Daily') {
