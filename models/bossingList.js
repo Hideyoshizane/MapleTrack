@@ -22,7 +22,6 @@ const bossList = mongoose.model(
 							code: { type: String },
 							class: { type: String },
 							level: { type: Number, required: true },
-							totalIncome: { type: Number },
 							bosses: [
 								{
 									name: { type: String },
@@ -102,16 +101,19 @@ async function resetBossList(username) {
 
 	const nextWednesday = weeklyReset.getWeeklyResetDate(userLastLogin, 4);
 	const nextDay = userLastLogin.plus({ days: 1 }).set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
+	const nextMonth = userLastLogin.plus({ months: 1 }).set({ day: 1, hour: 0, minute: 0, second: 0, millisecond: 0 });
 
 	const dailyCheck = weeklyReset.timeConditionChecker(nextDay, timeNow);
 	const weeklyCheck = weeklyReset.timeConditionChecker(nextWednesday, timeNow);
+	const monthlyCheck = weeklyReset.timeConditionChecker(nextMonth, timeNow);
 
-	if (dailyCheck && !weeklyCheck) {
-		//Reset Daily bosses
+	if (monthlyCheck) {
+		await resetAllBosses(bossingList);
+		console.log('Reset Monthly');
+	} else if (dailyCheck && !weeklyCheck) {
 		await resetDailyBoss(bossingList);
 		console.log('Reset Daily');
 	} else if (dailyCheck && weeklyCheck) {
-		//Reset everything
 		await resetWeeklyBoss(bossingList);
 		console.log('Reset Weekly');
 	}
@@ -133,6 +135,29 @@ async function resetDailyBoss(bossingList) {
 	await bossingList.save();
 }
 async function resetWeeklyBoss(bossingList) {
+	const filteredServers = bossingList.server;
+
+	filteredServers.forEach((server) => {
+		let totalMonthy = 0;
+		let serverRemainingGains = 0;
+		server.characters.forEach((character) => {
+			character.bosses.forEach((boss) => {
+				if (boss.reset === 'Weekly' || boss.reset === 'Daily') {
+					boss.checked = false;
+				}
+				if (boss.reset === 'Monthly' && boss.checked == true) {
+					totalMonthy++;
+				}
+			});
+		});
+		server.weeklyBosses = totalMonthy;
+		server.totalGains = 0;
+	});
+	bossingList.lastUpdate = DateTime.utc().toJSDate();
+	await bossingList.save();
+}
+
+async function resetAllBosses(bossingList) {
 	const filteredServers = bossingList.server;
 
 	filteredServers.forEach((server) => {

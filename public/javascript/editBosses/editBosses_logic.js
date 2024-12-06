@@ -384,7 +384,7 @@ async function changeCharacterIncome() {
 	const characterClass = SelectedCharacterButton.querySelector('.characterClass').innerText;
 
 	Character = selectedList.characters.find((character) => character.class === characterClass);
-	const totalIncomeValue = Character.totalIncome.toLocaleString('en-us');
+	const totalIncomeValue = await calculateTotalIncomeForCharacter();
 	const TotalIncome = document.querySelector('.characterTotalIncome');
 	TotalIncome.textContent = totalIncomeValue;
 	TotalIncome.style.fontSize = (await adjustFontSizeToFit(TotalIncome, 11.615, 2)) + 'rem';

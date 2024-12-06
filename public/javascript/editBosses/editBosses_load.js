@@ -28,6 +28,8 @@ async function fetchBossList() {
 
 		bossList = await fetch(`/bossList/${username}`).then((response) => response.json());
 
+		bossJson = await fetch('../../../public/data/bosses.json').then((response) => response.json());
+
 		selectedList = bossList.server;
 		selectedList = selectedList.find((servers) => servers.name === server.charAt(0).toUpperCase() + server.slice(1));
 		serverType = selectedList.type;
@@ -113,11 +115,31 @@ async function createTotalIncome() {
 	parentDiv.appendChild(IncomeTextDiv);
 }
 async function calculateTotalIncome() {
-	let totalIncome = 0;
-	for (character of selectedList.characters) {
-		totalIncome += character.totalIncome;
-	}
-	return totalIncome.toLocaleString('en-US');
+	let grandTotalIncome = 0;
+
+	selectedList.characters.forEach((character) => {
+		let characterIncome = 0;
+
+		character.bosses.forEach((boss) => {
+			const bossInfo = bossJson.find((b) => b.name === boss.name);
+
+			if (bossInfo) {
+				const difficultyInfo = bossInfo.difficulties.find((d) => d.name === boss.difficulty);
+				if (difficultyInfo) {
+					let income = difficultyInfo.value;
+
+					if (difficultyInfo.reset === 'Daily' && boss.DailyTotal) {
+						income *= boss.DailyTotal;
+					}
+
+					characterIncome += income;
+				}
+			}
+		});
+		grandTotalIncome += characterIncome;
+	});
+
+	return grandTotalIncome.toLocaleString('en-US');
 }
 
 async function loadCharacterSelector() {
@@ -169,12 +191,34 @@ async function loadCharacterIncome() {
 
 	const IncomeTextDiv = parentDiv.querySelector('.IncomeTextDiv');
 
-	const totalIncome = Character.totalIncome.toLocaleString('en-US');
+	const totalIncome = await calculateTotalIncomeForCharacter();
 
 	const totalIncomeSpan = createDOMElement('span', 'characterTotalIncome', `${totalIncome}`);
 	totalIncomeSpan.style.fontSize = (await adjustFontSizeToFit(totalIncomeSpan, 11.667, 2)) + 'rem';
 
 	IncomeTextDiv.appendChild(totalIncomeSpan);
+}
+
+async function calculateTotalIncomeForCharacter() {
+	let characterIncome = 0;
+	//console.log(Character);
+	Character.bosses.forEach((boss) => {
+		const bossInfo = bossJson.find((b) => b.name === boss.name);
+		if (bossInfo) {
+			const difficultyInfo = bossInfo.difficulties.find((d) => d.name === boss.difficulty);
+
+			if (difficultyInfo) {
+				let income = difficultyInfo.value;
+
+				if (difficultyInfo.reset === 'Daily' && boss.DailyTotal) {
+					income *= boss.DailyTotal;
+				}
+
+				characterIncome += income;
+			}
+		}
+	});
+	return characterIncome.toLocaleString('en-US');
 }
 
 async function createCheckSVG() {
