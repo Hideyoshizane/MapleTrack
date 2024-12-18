@@ -558,6 +558,24 @@
 		]
 	},
 	{
+		"name": "Limbo",
+		"img": "../../assets/boss/limbo.webp",
+		"difficulties": [
+			{
+				"name": "Normal",
+				"value": 420000000,
+				"reset": "Weekly",
+				"minLevel": 285
+			},
+			{
+				"name": "Hard",
+				"value": 749000000,
+				"reset": "Weekly",
+				"minLevel": 285
+			}
+		]
+	},
+	{
 		"name": "Princess\nNo",
 		"img": "../../assets/boss/princess_no.webp",
 		"difficulties": [
