@@ -68,7 +68,7 @@ body {
 }
 
 .eventButton {
-    left: 1.4%;
+    left: 4.2%;
     background-color: #91C9E3;
     width: 14.792vw;
     height: 6.147vh;
@@ -85,7 +85,7 @@ body {
 
 .eventButton.open {
     display: block;
-    height: 67.618vh;
+    height: 73.764vh;
     transition: all 0.3s ease-in-out;
     cursor: pointer;
     z-index: 2;

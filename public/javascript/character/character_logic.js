@@ -340,7 +340,7 @@ async function updateEventBonus(event) {
 }
 async function updateDayToMaxString() {}
 async function updateDailyValue(value) {
-	const buttons = document.querySelectorAll('.dailyButton:not([disabled])');
+	const buttons = document.querySelectorAll('.dailyButton');
 
 	for (const button of buttons) {
 		const forceName = button.getAttribute('name');
@@ -351,11 +351,11 @@ async function updateDailyValue(value) {
 
 		const updatedValue = +value - +oldValue;
 		const newValue = +dailyValue + +updatedValue;
-
 		button.setAttribute('value', newValue);
 		button.setAttribute('bonusevent', value);
-
-		button.textContent = `Daily: +${newValue}`;
+		if (button.disabled != true) {
+			button.textContent = `Daily: +${newValue}`;
+		}
 
 		await updateArea(forceName, isArcane);
 	}
