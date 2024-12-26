@@ -13,16 +13,16 @@
 		"bcrypt": "^5.1.1",
 		"body-parser": "^1.20.2",
 		"connect-mongo": "^5.1.0",
-		"cookie-parser": "^1.4.6",
-		"dotenv": "^16.4.5",
+		"cookie-parser": "^1.4.7",
+		"dotenv": "^16.4.7",
 		"ejs": "^3.1.10",
-		"express": "^4.19.2",
+		"express": "^4.21.2",
 		"express-flash": "^0.0.2",
-		"express-session": "^1.18.0",
+		"express-session": "^1.18.1",
 		"jsonwebtoken": "^9.0.2",
 		"luxon": "^3.4.4",
-		"mongoose": "^8.4.3",
-		"node": "^22.3.0"
+		"mongoose": "^8.9.2",
+		"node": "^23.5.0"
 	},
 	"browser": {
 		"async_hooks": false,
