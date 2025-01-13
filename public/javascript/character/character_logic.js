@@ -304,13 +304,21 @@ async function updateDayToMax(areaData, isArcane) {
 	const expTable = isArcane ? ArcaneTable : SacredTable;
 
 	const weeklyValue = Number(dailyJson.find((json) => json.name === 'Weekly').value);
-	let totalExp = calculateTotalExp(areaData.level, expTable);
-	let dailyExp = getDailyValue(areaData, isArcane);
-	const EventBonusValue = +getCookie('eventBonus');
 
-	const weeklyExp = areaData.content[1] && areaData.content[1].checked && isArcane ? weeklyValue * 3 : 0;
-	totalExp -= areaData.exp;
-	return Math.ceil(totalExp / (dailyExp + weeklyExp + EventBonusValue / 7));
+	// Calculate total experience required
+	const totalExpRequired = calculateTotalExp(areaData.level, expTable) - areaData.exp;
+
+	// Get daily experience and event bonus
+	const dailyExp = getDailyValue(areaData, isArcane);
+	const eventBonus = parseFloat(getCookie('eventBonus')) || 0;
+
+	// Calculate weekly experience contribution if applicable
+	const weeklyExp = isArcane && areaData.content[1]?.checked ? weeklyValue * 3 : 0;
+
+	// Calculate the required days
+	const dailyTotalExp = dailyExp + weeklyExp / 7 + eventBonus;
+
+	return Math.ceil(totalExpRequired / dailyTotalExp);
 }
 
 async function processButtons(dailyButtons) {
@@ -338,7 +346,6 @@ async function updateEventBonus(event) {
 	updateEventBonusButton(value);
 	await updateDailyValue(value);
 }
-async function updateDayToMaxString() {}
 async function updateDailyValue(value) {
 	const buttons = document.querySelectorAll('.dailyButton');
 
