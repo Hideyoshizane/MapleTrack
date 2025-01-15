@@ -13,6 +13,8 @@ require('dotenv').config();
 const DB_URL = process.env.DB_URL || 'mongodb://localhost:27017';
 const app = express();
 
+app.locals.globalVariable = '1.10.4';
+
 const mongoOptions = {
 	serverSelectionTimeoutMS: 10000,
 	socketTimeoutMS: 20000,
@@ -54,12 +56,20 @@ app.use(express.static(path.join(__dirname)));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-app.use((req, res, next) => {
-	if (req.headers['x-force-cache'] === 'true') {
-		res.setHeader('Cache-Control', 'public, max-age=604800');
-	}
-	next();
-});
+app.use(
+	'/public',
+	(req, res, next) => {
+		if (req.path.endsWith('.webp')) {
+			// Set Cache-Control for .webp files to 4 weeks
+			res.setHeader('Cache-Control', 'public, max-age=2419200');
+		} else {
+			// Set Cache-Control for all other files to no-cache
+			res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+		}
+		next();
+	},
+	express.static(path.join(__dirname, 'public'))
+);
 
 app.use(express.static(path.join(__dirname, 'public'), { maxAge: 604800000 }));
 
