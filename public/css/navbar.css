@@ -14,6 +14,15 @@
   z-index: 10;
 }
 
+.version {
+  position: fixed;
+  left: 10.2%;
+  top: 7.5%;
+  color: #f6f6f6;
+  font-size: 16px;
+  font-weight: 500;
+}
+
 .logo {
   padding: 0;
   margin: 0;
