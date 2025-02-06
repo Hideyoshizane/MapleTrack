@@ -387,9 +387,15 @@ async function updateEventBonus(event) {
 async function updateDailyValue(value) {
 	const buttons = document.querySelectorAll('.dailyButton');
 
+	const forceTypeMap = {
+		ArcaneForce: characterData.ArcaneForce,
+		SacredForce: characterData.SacredForce,
+		GrandSacredForce: characterData.GrandSacredForce,
+	};
+
 	for (const button of buttons) {
 		const forceName = button.getAttribute('name');
-		const isArcane = button.getAttribute('arcane') === 'true';
+		const isArcane = button.getAttribute('arcane');
 
 		const oldValue = button.getAttribute('bonusevent');
 		const dailyValue = button.getAttribute('value');
