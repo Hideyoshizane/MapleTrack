@@ -62,6 +62,24 @@ const Character = mongoose.model(
 					],
 				},
 			],
+			GrandSacredForce: [
+				{
+					name: { type: String, required: true },
+					level: { type: Number, required: true },
+					exp: { type: Number, required: true },
+					content: [
+						{
+							contentType: {
+								type: String,
+								required: true,
+								editable: false,
+							},
+							checked: { type: Boolean },
+							date: { type: Date },
+						},
+					],
+				},
+			],
 		},
 		{ strictPopulate: false }
 	)
@@ -270,6 +288,20 @@ const templateCharacter = {
 			],
 		},
 	],
+	GrandSacredForce: [
+		{
+			name: 'Tallahart',
+			level: 1,
+			exp: 1,
+			content: [
+				{
+					contentType: 'Daily Quest',
+					checked: true,
+					date: null,
+				},
+			],
+		},
+	],
 };
 
 var defaultCharacters = [];
@@ -329,15 +361,15 @@ async function updateCharacters(userID) {
 			populate: {
 				path: 'characters',
 				model: Character,
-				populate: [{ path: 'ArcaneForce' }, { path: 'SacredForce' }],
+				populate: [{ path: 'ArcaneForce' }, { path: 'SacredForce' }, { path: 'GrandSacredForce' }],
 			},
 		})
 		.exec();
-
 	for (const server of userData.servers) {
 		for (const character of server.characters) {
 			await updateForceData(character, 'ArcaneForce', templateCharacter.ArcaneForce);
 			await updateForceData(character, 'SacredForce', templateCharacter.SacredForce);
+			await updateForceData(character, 'GrandSacredForce', templateCharacter.GrandSacredForce);
 
 			await character.save();
 		}

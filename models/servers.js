@@ -51,16 +51,16 @@ const defaultServers = [
 	},
 ];
 
-async function searchServersAndCreateMissing(userID, username) {
+async function searchServersAndCreateMissing(username, userID) {
 	const userData = await User.findById(userID);
-	var userStoredServers = [];
-	if (userData !== null) {
-		userStoredServers = userData.servers.map((server) => server.name);
-	}
+	let userStoredServers = userData ? userData.servers.map((server) => server.name) : [];
 
+	// Find missing servers that are not in the user's stored servers
 	const missingServers = defaultServers.filter((server) => !userStoredServers.includes(server.name));
-	if (missingServers.length == 0) {
+
+	if (missingServers.length === 0) {
 		console.log('User servers are updated.');
+		return;
 	}
 
 	for (const server of missingServers) {
@@ -69,21 +69,36 @@ async function searchServersAndCreateMissing(userID, username) {
 }
 
 async function createMissingServer(userID, missingServersData, username) {
-	const baseCharacters = await createDefaultCharacters(missingServersData.name, username);
-	const createdServer = new Server({
-		name: missingServersData.name,
-		img: missingServersData.img,
-		type: missingServersData.type,
-		usernameSource: userID,
-		characters: baseCharacters.map((char) => char._id),
-	});
-
-	await Character.insertMany(baseCharacters);
-
 	try {
+		// Check if the server already exists in the database
+		let existingServer = await Server.findOne({ name: missingServersData.name });
+
+		if (!existingServer) {
+			// If not, create a new server
+			const baseCharacters = await createDefaultCharacters(missingServersData.name, username);
+			existingServer = new Server({
+				name: missingServersData.name,
+				img: missingServersData.img,
+				type: missingServersData.type,
+				usernameSource: [userID], // Wrap in an array to match schema
+				characters: baseCharacters.map((char) => char._id),
+			});
+
+			await Character.insertMany(baseCharacters);
+			await existingServer.save();
+			console.log(`${existingServer.name} created.`);
+		} else {
+			// Ensure the user is in the `usernameSource` array if the server already exists
+			if (!existingServer.usernameSource.includes(userID)) {
+				existingServer.usernameSource.push(userID);
+				await existingServer.save();
+			}
+		}
+
+		// Link the server to the user if not already linked
 		const updatedUser = await User.findByIdAndUpdate(
-			{ _id: userID },
-			{ $addToSet: { servers: createdServer._id } },
+			userID,
+			{ $addToSet: { servers: existingServer._id } }, // Prevent duplicate entry
 			{ new: true }
 		);
 
@@ -91,13 +106,11 @@ async function createMissingServer(userID, missingServersData, username) {
 			throw new Error('User not found or update failed');
 		}
 
-		await createdServer.save();
-		console.log(`${createdServer.name} inserted to the user.`);
+		console.log(`${existingServer.name} linked to the user.`);
 	} catch (error) {
-		console.error('User.findOneAndUpdate failed:', error);
+		console.error('Error in createMissingServer:', error);
 	}
 }
-
 async function getServerWithHighestLevel(userID) {
 	try {
 		const user = await User.findById(userID).populate('servers').exec();

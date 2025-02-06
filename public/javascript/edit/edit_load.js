@@ -39,14 +39,17 @@ function startLoader() {
 
 async function loadCharacterContent(characterData) {
 	const parentDiv = document.querySelector('.characterData');
+	const characterForce = createDOMElement('div', 'characterForce');
 	const loaderSpan = parentDiv.querySelector('.loader');
 	if (loaderSpan) parentDiv.removeChild(loaderSpan);
 
 	await Promise.all([
 		await loadCharacterNameDiv(characterData),
 		await loadLevelAndLevelBar(characterData),
-		await loadForce(characterData, true),
-		await loadForce(characterData, false),
+		parentDiv.appendChild(characterForce),
+		await loadForce(characterData, 'ArcaneForce'),
+		await loadForce(characterData, 'SacredForce'),
+		await loadForce(characterData, 'GrandSacredForce'),
 	]);
 }
 
@@ -203,19 +206,23 @@ async function loadLevelAndLevelBar(characterData) {
 	parentDiv.appendChild(levelBar);
 }
 
-async function loadForce(characterData, isArcane) {
-	const parentDiv = document.querySelector('.characterData');
+async function loadForce(characterData, forceType) {
+	const parentDiv = document.querySelector('.characterForce');
 
-	const forceType = isArcane ? 'ArcaneForce' : 'SacredForce';
 	const forceData = characterData[forceType];
 
-	const Title = createDOMElement('span', forceType, isArcane ? 'Arcane Force' : 'Sacred Force');
+	const forceTypeTitle = {
+		ArcaneForce: 'Arcane Force',
+		SacredForce: 'Sacred Force',
+		GrandSacredForce: 'Grand Sacred Force',
+	};
+
+	const Title = createDOMElement('span', `${forceType}`, forceTypeTitle[forceType]);
 
 	const forceDiv = createDOMElement('div', `${forceType}Div`);
 	forceDiv.appendChild(Title);
 
 	const forceGrid = createDOMElement('div', `${forceType}Grid`);
-
 	for (force of forceData) {
 		const forceWrapper = createDOMElement('div', `${forceType}Wrapper`);
 

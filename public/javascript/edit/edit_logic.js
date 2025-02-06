@@ -57,6 +57,7 @@ document.addEventListener('PageLoaded', async () => {
 			const level = levelNumber.value;
 			await updateForce('Arcane', level);
 			await updateForce('Sacred', level);
+			await updateForce('GrandSacred', level);
 
 			const levelNumberValue = levelNumber.value || levelNumber.placeholder;
 			const levelTargetValue = levelTarget.value || levelTarget.placeholder;
@@ -210,7 +211,7 @@ async function saveDataAndPost() {
 
 	const arcaneForceArray = returnForceArray('Arcane');
 	const sacredForceArray = returnForceArray('Sacred');
-
+	const GrandSacredForceArray = returnForceArray('GrandSacred');
 	const characterToUpdate = {
 		_id: characterData._id,
 		name: characterName,
@@ -219,6 +220,7 @@ async function saveDataAndPost() {
 		bossing: bossSwitch,
 		ArcaneForce: arcaneForceArray,
 		SacredForce: sacredForceArray,
+		GrandSacredForce: GrandSacredForceArray,
 		server: server,
 		username: username,
 		characterCode: characterCode,
@@ -246,9 +248,18 @@ async function saveDataAndPost() {
 }
 
 function returnForceArray(forceType) {
-	const forceWrapperClass = forceType === 'Arcane' ? '.ArcaneForceWrapper' : '.SacredForceWrapper';
-	const forceWrappers = document.querySelectorAll(forceWrapperClass);
+	let forceWrapperClass;
 
+	if (forceType === 'Arcane') {
+		forceWrapperClass = '.ArcaneForceWrapper';
+	} else if (forceType === 'Sacred') {
+		forceWrapperClass = '.SacredForceWrapper';
+	} else if (forceType === 'GrandSacred') {
+		forceWrapperClass = '.GrandSacredForceWrapper';
+	} else {
+		console.error('Invalid forceType:', forceType);
+	}
+	const forceWrappers = document.querySelectorAll(forceWrapperClass);
 	const ForceArray = [];
 
 	for (const forceWrapper of forceWrappers) {

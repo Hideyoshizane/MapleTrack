@@ -72,5 +72,10 @@
 		"name": "Carcion",
 		"value": "10",
 		"minLevel": "285"
+	},
+	{
+		"name": "Tallahart",
+		"value": "10",
+		"minLevel": "290"
 	}
 ]

@@ -30,7 +30,7 @@ module.exports = {
 			});
 
 			await createdUser.save();
-			await searchServersAndCreateMissing(createdUser._id, createdUser.username);
+			await searchServersAndCreateMissing(createdUser.username, createdUser._id);
 			await createBossList(createdUser.username);
 			await createdUser.save();
 			req.flash('message', 'User created successfully!');

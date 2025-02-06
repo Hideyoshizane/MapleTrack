@@ -183,15 +183,14 @@ function getCenterPosition(element) {
 async function increaseDaily(event) {
 	const clickedButton = event.target;
 	const dailyValue = clickedButton.getAttribute('value');
-
-	let isArcane = clickedButton.getAttribute('Arcane');
-	isArcane = isArcane.toLowerCase() === 'true';
+	const forceType = clickedButton.getAttribute('Arcane');
 	const forceName = clickedButton.getAttribute('name');
-	const neededExp = await getExp(isArcane, forceName);
+
+	const neededExp = await getExp(forceType, forceName);
 	const currentDate = DateTime.utc();
 
 	const postData = {
-		forceType: isArcane,
+		forceType: forceType,
 		forceName: forceName,
 		value: dailyValue,
 		characterData: characterData,
@@ -200,7 +199,7 @@ async function increaseDaily(event) {
 	};
 	const URL = '/increaseDaily';
 	await postRequest(postData, URL);
-	await updateArea(forceName, isArcane);
+	await updateArea(forceName, forceType);
 
 	clickedButton.disabled = true;
 	clickedButton.textContent = 'Daily done!';
@@ -209,7 +208,7 @@ async function increaseDaily(event) {
 async function increaseWeekly(event) {
 	const clickedButton = event.target;
 	const forceName = clickedButton.getAttribute('area');
-	const neededExp = await getExp(true, forceName);
+	const neededExp = await getExp('ArcaneForce', forceName);
 	let currentDate = DateTime.utc().toJSDate();
 
 	const postData = {
@@ -222,7 +221,7 @@ async function increaseWeekly(event) {
 
 	const URL = '/increaseWeekly';
 	await postRequest(postData, URL);
-	await updateArea(forceName, true);
+	await updateArea(forceName, 'ArcaneForce');
 	let tries = clickedButton.getAttribute('tries');
 	tries = parseInt(tries);
 	tries -= 1;
@@ -238,18 +237,37 @@ async function increaseWeekly(event) {
 	}
 }
 
-async function getExp(isArcane, forceName) {
-	const object = isArcane
-		? characterData.ArcaneForce.find((arcaneforce) => arcaneforce.name === forceName)
-		: characterData.SacredForce.find((sacredforce) => sacredforce.name === forceName);
+async function getExp(forceType, forceName) {
+	const forceTypeMap = {
+		ArcaneForce: characterData.ArcaneForce,
+		SacredForce: characterData.SacredForce,
+		GrandSacredForce: characterData.GrandSacredForce,
+	};
+	const forceTypeTable = {
+		ArcaneForce: ArcaneTable,
+		SacredForce: SacredTable,
+		GrandSacredForce: GrandSacredTable,
+	};
+	const forceTypeLevel = {
+		ArcaneForce: 20,
+		SacredForce: 11,
+		GrandSacredForce: 11,
+	};
 
-	const expTable = isArcane ? ArcaneTable : SacredTable;
+	const forceArray = forceTypeMap[forceType];
+	const expTable = forceTypeTable[forceType];
+	const maxLevel = forceTypeLevel[forceType];
 
-	if (object.level < (isArcane ? 20 : 11)) {
-		return expTable.level[object.level].EXP;
-	} else {
+	// Find the force object
+	let object = forceArray.find((force) => force.name === forceName);
+
+	// Check if the level is below the max level
+	if (object.level >= maxLevel) {
 		return 'MAX';
 	}
+
+	// Return the required EXP
+	return expTable.level[object.level]?.EXP ?? 'EXP data not found';
 }
 
 async function postRequest(postData, URL) {
@@ -262,48 +280,68 @@ async function postRequest(postData, URL) {
 	});
 }
 
-async function updateArea(forceName, isArcane) {
+async function updateArea(forceName, forceType) {
+	// Fetch character data
 	characterData = await fetchCharacterData(username, server, characterCode);
-	const forceArray = isArcane ? characterData.ArcaneForce : characterData.SacredForce;
-	const areaProperty = isArcane ? 'ArcaneForceLevel' : 'SacredForceLevel';
+
+	// Mapping force types to their respective data and properties
+	const forceTypeMap = {
+		ArcaneForce: characterData.ArcaneForce,
+		SacredForce: characterData.SacredForce,
+		GrandSacredForce: characterData.GrandSacredForce,
+	};
+
+	const areaPropertyMap = {
+		ArcaneForce: 'ArcaneForceLevel',
+		SacredForce: 'SacredForceLevel',
+		GrandSacredForce: 'GrandSacredForceLevel',
+	};
+
+	// Get the relevant force array and area property
+	const forceArray = forceTypeMap[forceType];
+	const areaProperty = areaPropertyMap[forceType];
 	const areaData = forceArray.find((force) => force.name === forceName);
 
-	targetDiv = document.querySelector(`div[area="${forceName}"]`);
-	ForceLevel = targetDiv.querySelector(`.${areaProperty}`);
+	// Update the DOM elements
+	const targetDiv = document.querySelector(`div[area="${forceName}"]`);
+	const ForceLevel = targetDiv.querySelector(`.${areaProperty}`);
+	const ForceEXPNumber = targetDiv.querySelector('.expNumber');
+	const innerExpBar = targetDiv.querySelector('.progressBar');
+	const daysToMaxElement = targetDiv.querySelector('.daysToMax');
+	const Buttons = targetDiv.querySelector('.buttons');
+
+	// Update force level
 	ForceLevel.textContent = `Level: ${areaData.level}`;
 
-	ForceEXPNumber = targetDiv.querySelector('.expNumber');
+	// Calculate and update EXP
+	const isArcane = forceType === 'ArcaneForce';
+	const nextLevelEXPNumber = await getExp(forceType, forceName);
 
-	const nextLevelEXPNumber = await getExp(isArcane, forceName);
 	ForceEXPNumber.textContent = `${areaData.exp}/${nextLevelEXPNumber}`;
 
-	if ((isArcane && areaData.level === 20) || (!isArcane && areaData.level === 11)) {
+	// Handle max level case
+	const isMaxLevel = (isArcane && areaData.level === 20) || (!isArcane && areaData.level === 11);
+	if (isMaxLevel) {
 		ForceEXPNumber.textContent = `${nextLevelEXPNumber}`;
-	}
-
-	innerExpBar = targetDiv.querySelector('.progressBar');
-
-	await updateExpBar(innerExpBar, areaData.exp, nextLevelEXPNumber, 12.083, characterData.jobType);
-
-	const remainDays = await updateDayToMax(areaData, isArcane);
-
-	const daysToMax = (targetDiv.querySelector('.daysToMax').textContent = isArcane
-		? `Days to Level 20: ${remainDays}`
-		: `Days to Level 11: ${remainDays}`);
-
-	if ((isArcane && areaData.level === 20) || (!isArcane && areaData.level === 11)) {
-		const Buttons = targetDiv.querySelector('.buttons');
-		const daysToMaxRemove = targetDiv.querySelector('.daysToMax');
 		innerExpBar.style.backgroundColor = '#48AA39';
-		daysToMaxRemove.remove();
-		Buttons.remove();
+		daysToMaxElement?.remove();
+		Buttons?.remove();
+		return; // Exit early if max level is reached
 	}
+
+	// Update progress bar and days to max
+	await updateExpBar(innerExpBar, areaData.exp, nextLevelEXPNumber, 12.083, characterData.jobType);
+	const remainDays = await updateDayToMax(areaData, isArcane);
+	daysToMaxElement.textContent = isArcane ? `Days to Level 20: ${remainDays}` : `Days to Level 11: ${remainDays}`;
 }
-
 async function updateDayToMax(areaData, isArcane) {
-	const expTable = isArcane ? ArcaneTable : SacredTable;
+	let expTable = isArcane ? ArcaneTable : SacredTable;
 
-	const weeklyValue = Number(dailyJson.find((json) => json.name === 'Weekly').value);
+	if (!expTable) {
+		expTable = GrandSacredTable;
+	}
+
+	const weeklyValue = Number(dailyJson.find((json) => json.name === 'Weekly')?.value);
 
 	// Calculate total experience required
 	const totalExpRequired = calculateTotalExp(areaData.level, expTable) - areaData.exp;

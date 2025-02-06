@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const { DateTime } = require('luxon');
 const bcrypt = require('bcrypt');
 
-const LASTVERSION = 0;
+const LASTVERSION = 1;
 
 const userSchema = new mongoose.Schema(
 	{

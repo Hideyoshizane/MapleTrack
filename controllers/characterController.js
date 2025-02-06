@@ -36,7 +36,7 @@ module.exports = {
 	},
 	updateCharacter: async (req, res) => {
 		try {
-			const { _id, name, level, targetLevel, bossing, ArcaneForce, SacredForce, server } = req.body;
+			const { _id, name, level, targetLevel, bossing, ArcaneForce, SacredForce, GrandSacredForce, server } = req.body;
 			const character = await Character.findById(_id);
 			character.name = name;
 			character.level = level;
@@ -57,6 +57,17 @@ module.exports = {
 
 			for (const updatedForce of SacredForce) {
 				const forceToUpdate = character.SacredForce.find((force) => force.name === updatedForce.name);
+				if (forceToUpdate) {
+					forceToUpdate.level = updatedForce.level;
+					forceToUpdate.exp = updatedForce.exp;
+
+					for (let i = 0; i < forceToUpdate.content.length; i++) {
+						forceToUpdate.content[i].checked = updatedForce.content[i].checked;
+					}
+				}
+			}
+			for (const updatedForce of GrandSacredForce) {
+				const forceToUpdate = character.GrandSacredForce.find((force) => force.name === updatedForce.name);
 				if (forceToUpdate) {
 					forceToUpdate.level = updatedForce.level;
 					forceToUpdate.exp = updatedForce.exp;
@@ -123,12 +134,14 @@ module.exports = {
 		try {
 			const { forceType, forceName, value, characterData, necessaryExp, date } = req.body;
 			const foundCharacter = await Character.findById(characterData._id);
-			let AreaData;
-			if (forceType) {
-				AreaData = foundCharacter.ArcaneForce;
-			} else if (!forceType) {
-				AreaData = foundCharacter.SacredForce;
-			}
+
+			const forceTypeMap = {
+				ArcaneForce: foundCharacter.ArcaneForce,
+				SacredForce: foundCharacter.SacredForce,
+				GrandSacredForce: foundCharacter.GrandSacredForce,
+			};
+
+			let AreaData = forceTypeMap[forceType];
 			const foundArea = AreaData.find((obj) => obj.name === forceName);
 
 			if (foundArea) {
@@ -137,10 +150,10 @@ module.exports = {
 					foundArea.exp = Number(foundArea.exp - necessaryExp);
 					foundArea.level += Number(1);
 				}
-
 				const jsDate = new Date(date);
 				foundArea.content[0].date = jsDate;
 				await foundCharacter.save();
+
 				res.status(200).send('Value updated successfully.');
 			}
 		} catch (error) {
