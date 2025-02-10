@@ -323,21 +323,19 @@ async function createMissingCharacters(userID, username) {
 			populate: {
 				path: 'characters',
 				model: Character,
-				select: 'code',
+				select: 'class',
 			},
 		})
 		.exec();
 
 	for (server of userData.servers) {
 		const serverCharacterCodes = server.characters.map((character) => character.class);
-		const serverMissingCharacters = jsonData.filter((character) => serverCharacterCodes.includes(character.class));
-
+		const serverMissingCharacters = jsonData.filter((character) => !serverCharacterCodes.includes(character.className));
 		for (missingCharacter of serverMissingCharacters) {
 			const createdCharacter = await createCharacter(missingCharacter, server.name, username);
 			server.characters.push(createdCharacter._id);
 			await createdCharacter.save();
 			await server.save();
-			console.log(`${createdCharacter.class} created on ${server.name} server`);
 		}
 	}
 }
