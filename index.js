@@ -13,7 +13,7 @@ require('dotenv').config();
 const DB_URL = process.env.DB_URL || 'mongodb://localhost:27017';
 const app = express();
 
-app.locals.globalVariable = '1.11.1';
+app.locals.globalVariable = '1.11.2';
 
 const mongoOptions = {
 	serverSelectionTimeoutMS: 10000,

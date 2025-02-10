@@ -330,7 +330,8 @@ async function createMissingCharacters(userID, username) {
 
 	for (server of userData.servers) {
 		const serverCharacterCodes = server.characters.map((character) => character.class);
-		const serverMissingCharacters = jsonData.filter((character) => !serverCharacterCodes.includes(character.class));
+		const serverMissingCharacters = jsonData.filter((character) => serverCharacterCodes.includes(character.class));
+
 		for (missingCharacter of serverMissingCharacters) {
 			const createdCharacter = await createCharacter(missingCharacter, server.name, username);
 			server.characters.push(createdCharacter._id);

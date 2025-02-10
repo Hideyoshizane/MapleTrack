@@ -5,6 +5,7 @@ const {
 	getServerWithHighestLevel,
 	getHighestLevelCharacter,
 } = require('../models/servers');
+const { createMissingCharacters } = require('../models/character');
 const { createBossList, resetBossList } = require('../models/bossingList');
 
 module.exports = {
@@ -26,7 +27,7 @@ module.exports = {
 				username,
 				email,
 				password: hashedPassword,
-				version: LASTVERSION,
+				version: 0,
 			});
 
 			await createdUser.save();
