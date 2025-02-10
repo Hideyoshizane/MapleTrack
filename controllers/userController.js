@@ -27,7 +27,7 @@ module.exports = {
 				username,
 				email,
 				password: hashedPassword,
-				version: LASTVERSION,
+				version: 0,
 			});
 
 			await createdUser.save();
