@@ -329,14 +329,23 @@ async function createMissingCharacters(userID, username) {
 		.exec();
 
 	for (server of userData.servers) {
-		const serverCharacterCodes = server.characters.map((character) => character.class);
-		const serverMissingCharacters = jsonData.filter((character) => !serverCharacterCodes.includes(character.className));
-		for (missingCharacter of serverMissingCharacters) {
+		const createdCharacters = [];
+
+		const userCharacters = await Character.find({ userOrigin: username, server: server.name });
+
+		const userClassesAlreadyCreated = userCharacters.map((character) => character.class);
+
+		const missingClasses = jsonData.filter((item) => !userClassesAlreadyCreated.includes(item.className));
+
+		// Create missing characters
+		for (missingCharacter of missingClasses) {
 			const createdCharacter = await createCharacter(missingCharacter, server.name, username);
+			createdCharacters.push(createdCharacter);
 			server.characters.push(createdCharacter._id);
-			await createdCharacter.save();
-			await server.save();
 		}
+
+		// Save all created characters and server in parallel
+		await Promise.all([...createdCharacters.map((character) => character.save()), server.save()]);
 	}
 }
 
