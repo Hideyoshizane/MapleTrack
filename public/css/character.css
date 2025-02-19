@@ -93,7 +93,8 @@ body {
 }
 
 .eventButton {
-    left: 4.2%;
+    position: relative;
+    transform: translateX(-211.3%);
     background-color: #91C9E3;
     width: 14.792vw;
     height: 6.147vh;
