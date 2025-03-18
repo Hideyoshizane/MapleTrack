@@ -68,7 +68,10 @@ async function createCharacterCards() {
 	const parentDiv = document.querySelector('.characterCards');
 	const selectedServer = document.querySelector('.SelectedButton').querySelector('span').innerText;
 
-	const characters = await fetch(`/${username}/${selectedServer}`).then((response) => response.json());
+	const sanitizedUsername = DOMPurify.sanitize(username);
+	const sanitizedServer = DOMPurify.sanitize(selectedServer);
+
+	const characters = await fetch(`/${sanitizedUsername}/${sanitizedServer}`).then((response) => response.json());
 	const characterCards = await Promise.all(characters.map(generateCard));
 
 	const characterCardFragment = document.createDocumentFragment();
@@ -188,9 +191,9 @@ async function generateCard(characterData) {
 
 	//Bar level
 	const levelBarData = {
-		level: characterData.level,
-		targetLevel: characterData.targetLevel,
-		jobType: characterData.jobType,
+		level: DOMPurify.sanitize(characterData.level),
+		targetLevel: DOMPurify.sanitize(characterData.targetLevel),
+		jobType: DOMPurify.sanitize(characterData.jobType),
 	};
 	const levelBarWrapper = createDOMElement('div', 'levelBarWrapper');
 	const levelBar = await createLeveLBar(levelBarData, 25, 'levelBar');
@@ -199,7 +202,7 @@ async function generateCard(characterData) {
 
 	const cardBody = createDOMElement('div', 'cardBody');
 
-	cardBody.setAttribute('jobType', characterData.jobType);
+	cardBody.setAttribute('jobType', DOMPurify.sanitize(characterData.jobType));
 	cardBody.setAttribute('characterClass', getCode(characterData));
 
 	cardBody.appendChild(upperPart);
@@ -238,7 +241,7 @@ async function createForce(characterData, forceType) {
 
 async function setForceLevel(forceArea, characterData, forceImg, forceType) {
 	let level = forceArea.level;
-	const minLevel = dailyJson.find((json) => json.name === forceArea.name).minLevel;
+	const minLevel = dailyJson.find((json) => json.name === DOMPurify.sanitize(forceArea.name)).minLevel;
 	if (characterData.level < minLevel) {
 		forceImg.classList.toggle('off');
 		level = 0;
@@ -303,9 +306,13 @@ async function createLegionContent(characterData) {
 	const legionSrc =
 		legionRank === 'no_rank'
 			? '../../public/assets/legion/no_rank.webp'
-			: `../../public/assets/legion/${characterData.jobType}/rank_${legionRank}.webp`;
+			: `../../public/assets/legion/${DOMPurify.sanitize(characterData.jobType)}/rank_${legionRank}.webp`;
 
-	const legionImg = await createImageElement(legionSrc, `${characterData.class} legion`, 'legionImg');
+	const legionImg = await createImageElement(
+		legionSrc,
+		`${DOMPurify.sanitize(characterData.class)} legion`,
+		'legionImg'
+	);
 
 	legionDiv.appendChild(legionspan);
 	legionDiv.appendChild(legionImg);
@@ -325,14 +332,14 @@ async function loadBossIcon() {
 }
 
 async function createBossIconAndName(characterData) {
-	const characterName = createDOMElement('span', 'characterName', characterData.name);
+	const characterName = createDOMElement('span', 'characterName', DOMPurify.sanitize(characterData.name));
 	const nameAndIcon = createDOMElement('div', 'nameAndIcon');
 
 	if (!bossIcon) {
 		await loadBossIcon();
 	}
 
-	if (characterData.bossing) {
+	if (DOMPurify.sanitize(characterData.bossing)) {
 		nameAndIcon.appendChild(bossIcon.cloneNode(true));
 	}
 
@@ -349,7 +356,11 @@ async function createLowerPart(characterData) {
 			? characterColors['complete']
 			: characterColors[characterData.jobType];
 
-	const levelSpan = createDOMElement('span', 'level', `${characterData.level}/${characterData.targetLevel}`);
+	const levelSpan = createDOMElement(
+		'span',
+		'level',
+		`${DOMPurify.sanitize(characterData.level)}/${DOMPurify.sanitize(characterData.targetLevel)}`
+	);
 	levelSpan.style.color = color;
 
 	const nameAndLevel = createDOMElement('div', 'nameAndLevel');

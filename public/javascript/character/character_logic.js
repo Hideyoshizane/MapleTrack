@@ -64,8 +64,12 @@ async function loadFlashMessage() {
 	const type = getCookie('type');
 	if (type) {
 		const center = document.querySelector('.center-container');
+
 		const message = getCookie('message');
-		const div = createDOMElement('div', 'flash', message);
+		const sanitizedMessage = DOMPurify.sanitize(message);
+
+		const div = createDOMElement('div', 'flash', sanitizedMessage);
+
 		div.classList.add(type);
 		div.classList.add('notVisible');
 		center.appendChild(div);
@@ -106,7 +110,9 @@ function handleLinkImgMouseOver(linkImg) {
 	}
 	mainContent = document.querySelector('.mainContent');
 
-	const tempTooltip = createDOMElement('div', 'linkSkillToolTip', text);
+	const sanitizedText = DOMPurify.sanitize(text);
+
+	const tempTooltip = createDOMElement('div', 'linkSkillToolTip', sanitizedText);
 
 	tempTooltip.style.position = 'absolute';
 	tempTooltip.style.visibility = 'hidden';
@@ -118,7 +124,7 @@ function handleLinkImgMouseOver(linkImg) {
 
 	const linkImgCenter = getCenterPosition(linkImg);
 
-	const tooltip = createDOMElement('div', 'linkSkillToolTip', text);
+	const tooltip = createDOMElement('div', 'linkSkillToolTip', sanitizedText);
 
 	const offsetX = linkImgCenter.x - tempTooltipCenter.x;
 
@@ -148,9 +154,10 @@ function handleLegionImgMouseOver(legionImg) {
 	}
 
 	mainContent = document.querySelector('.mainContent');
+	const sanitizedText = DOMPurify.sanitize(text);
 
 	const tempTooltip = createDOMElement('div', 'LegionImgTooltip');
-	tempTooltip.innerHTML = `<div>${text}</div>`;
+	tempTooltip.innerHTML = `<div>${sanitizedText}</div>`;
 
 	tempTooltip.style.position = 'absolute';
 	tempTooltip.style.visibility = 'hidden';
@@ -162,7 +169,7 @@ function handleLegionImgMouseOver(legionImg) {
 	const legionImgCenter = getCenterPosition(legionImg);
 
 	const tooltip = createDOMElement('div', 'LegionImgTooltip');
-	tooltip.innerHTML = `<div>${text}</div>`;
+	tooltip.innerHTML = `<div>${sanitizedText}</div>`;
 
 	const offsetX = legionImgCenter.x - tempTooltipCenter.x;
 
@@ -379,12 +386,13 @@ async function processButtons(dailyButtons) {
 }
 
 async function updateEventBonus(event) {
-	const value = event.target.value;
+	const value = DOMPurify.sanitize(event.target.value);
 	setCookie('eventBonus', value, 90);
 	updateEventBonusButton(value);
 	await updateDailyValue(value);
 }
 async function updateDailyValue(value) {
+	const sanitizedValue = DOMPurify.sanitize(value);
 	const buttons = document.querySelectorAll('.dailyButton');
 
 	const forceTypeMap = {
@@ -400,10 +408,10 @@ async function updateDailyValue(value) {
 		const oldValue = button.getAttribute('bonusevent');
 		const dailyValue = button.getAttribute('value');
 
-		const updatedValue = +value - +oldValue;
+		const updatedValue = +sanitizedValue - +oldValue;
 		const newValue = +dailyValue + +updatedValue;
 		button.setAttribute('value', newValue);
-		button.setAttribute('bonusevent', value);
+		button.setAttribute('bonusevent', sanitizedValue);
 		if (button.disabled != true) {
 			button.textContent = `Daily: +${newValue}`;
 		}

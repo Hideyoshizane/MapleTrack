@@ -1,9 +1,9 @@
 const path = window.location.pathname;
 const segments = path.split('/');
 
-const username = segments[1];
-const server = segments[2];
-const characterCode = segments[3];
+const username = DOMPurify.sanitize(segments[1]);
+const server = DOMPurify.sanitize(segments[2]);
+const characterCode = DOMPurify.sanitize(segments[3]);
 
 window.characterData;
 window.ArcaneTable;
@@ -67,7 +67,7 @@ async function loadCharacterNameDiv() {
 
 	const characterInfo = createDOMElement('div', 'nameLinkLegion');
 
-	const characterName = createDOMElement('span', 'characterName', characterData.name);
+	const characterName = createDOMElement('span', 'characterName', DOMPurify.sanitize(characterData.name));
 
 	const characterIconDiv = createDOMElement('div', 'characterIconDiv');
 
@@ -85,10 +85,10 @@ async function loadCharacterNameDiv() {
 	const linkSkill = await loadLinkSkillDiv();
 	const legion = await loadLegionDiv();
 
-	const JobType = createDOMElement('span', 'classType', characterData.class);
+	const JobType = createDOMElement('span', 'classType', DOMPurify.sanitize(characterData.class));
 	JobType.style.fontSize = (await adjustFontSizeToFit(JobType, 19.115, 3)) + 'rem';
 
-	const JobLevel = createDOMElement('span', 'jobLevel', getJob(characterData));
+	const JobLevel = createDOMElement('span', 'jobLevel', DOMPurify.sanitize(getJob(characterData)));
 
 	const JobDiv = createDOMElement('div', 'jobDiv');
 
@@ -109,7 +109,7 @@ async function loadLinkSkillDiv() {
 	const linkSkillData = await fetch('../../public/data/linkskill.json').then((response) => response.json());
 	const filteredLink = linkSkillData.find((item) => item.name === characterData.linkSkill);
 
-	const linkImg = await createImageElement(filteredLink.image, filteredLink.name, `linkImg`);
+	const linkImg = await createImageElement(filteredLink.image, DOMPurify.sanitize(filteredLink.name), `linkImg`);
 
 	const linkSkillBlock = createDOMElement('div', 'linkSkillBlock');
 
@@ -128,7 +128,11 @@ async function loadLegionDiv() {
 			? '../../public/assets/legion/no_rank.webp'
 			: `../../public/assets/legion/${characterData.jobType}/rank_${legionRank}.webp`;
 
-	const legionImg = await createImageElement(legionImgSrc, `${characterData.class} legion`, 'legionImg');
+	const legionImg = await createImageElement(
+		legionImgSrc,
+		DOMPurify.sanitize(`${characterData.class} legion`),
+		'legionImg'
+	);
 
 	const legionBlock = createDOMElement('div', 'legionBlock');
 
@@ -143,7 +147,11 @@ async function loadLevelAndLevelBar() {
 
 	const level = createDOMElement('span', 'level', 'Level');
 
-	const levelNumber = createDOMElement('span', 'levelNumber', `${characterData.level}/${characterData.targetLevel}`);
+	const levelNumber = createDOMElement(
+		'span',
+		'levelNumber',
+		DOMPurify.sanitize(`${characterData.level}/${characterData.targetLevel}`)
+	);
 
 	const levelDiv = createDOMElement('div', 'levelDiv');
 
@@ -226,7 +234,7 @@ async function loadForce(forceType) {
 	for (force of forceData) {
 		const forceWrapper = createDOMElement('div', `${forceType}Wrapper`);
 
-		const areaName = force.name;
+		const areaName = DOMPurify.sanitize(force.name);
 		const areaCode = areaName.replace(/\s+/g, '_').toLowerCase();
 		let forceLevel = force.level;
 

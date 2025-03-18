@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 async function fetchBossList() {
 	try {
 		username = document.getElementById('userdata').getAttribute('data-username');
+		username = DOMPurify.sanitize(username);
 
 		bossList = await fetch(`/bossList/${username}`).then((response) => response.json());
 
@@ -70,6 +71,7 @@ async function createBossingLogo() {
 	});
 
 	const bossSpan = createDOMElement('span', 'bossHunting', 'Boss Hunting');
+	bossSpan.textContent = DOMPurify.sanitize(bossSpan.textContent);
 
 	parentDiv.appendChild(bossIcon);
 	parentDiv.appendChild(bossSpan);
@@ -221,21 +223,24 @@ async function calculateTotalIncomeForCharacter() {
 	return characterIncome.toLocaleString('en-US');
 }
 
-async function createCheckSVG() {
+function createCheckSVG() {
 	const checkSVG = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-	checkSVG.setAttribute('width', '40');
-	checkSVG.setAttribute('height', '40');
+	checkSVG.setAttribute('width', '30');
+	checkSVG.setAttribute('height', '30');
 	checkSVG.setAttribute('viewBox', '0 0 36 27');
 	checkSVG.setAttribute('fill', 'none');
 
+	// Sanitize the path data
+	const pathData = 'M12 21.4L3.59999 13L0.799988 15.8L12 27L36 2.99995L33.2 0.199951L12 21.4Z';
+	const sanitizedPathData = DOMPurify.sanitize(pathData);
+
 	const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-	path.setAttribute('d', 'M12 21.4L3.59999 13L0.799988 15.8L12 27L36 2.99995L33.2 0.199951L12 21.4Z');
-	path.setAttribute('fill', '#3D3D3D');
+	path.setAttribute('d', sanitizedPathData); // Set sanitized data
+	path.setAttribute('fill', '#E3E3E3');
 
 	checkSVG.appendChild(path);
 	return checkSVG;
 }
-
 async function createCharacterButton(character) {
 	const characterButton = createDOMElement('button', 'characterButton');
 	const imgSource = `../../public/assets/buttom_profile/${getCode(character)}.webp`;
@@ -246,6 +251,10 @@ async function createCharacterButton(character) {
 	const characterClass = createDOMElement('span', 'characterClass', `${character.class}`);
 
 	const characterWrapper = createDOMElement('div', 'characterWrapper');
+
+	// Sanitize character name and class before appending them
+	characterName.textContent = DOMPurify.sanitize(characterName.textContent);
+	characterClass.textContent = DOMPurify.sanitize(characterClass.textContent);
 
 	characterWrapper.appendChild(characterName);
 	characterWrapper.appendChild(characterClass);
@@ -290,6 +299,9 @@ async function loadBosses() {
 		const name = createDOMElement('span', 'bossName', boss.name);
 		name.style.fontSize = (await adjustFontSizeToFit(name, 6.458, 2)) + 'rem';
 
+		// Sanitize boss name before appending it
+		name.textContent = DOMPurify.sanitize(name.textContent);
+
 		bossBox.appendChild(image);
 		bossBox.appendChild(name);
 
@@ -302,6 +314,9 @@ async function loadBosses() {
 
 			const difficultButton = createDOMElement('button', `${tag}`);
 			const difficultButtonText = createDOMElement('span', 'buttonText', `${difficult.name}`);
+
+			difficultButtonText.textContent = DOMPurify.sanitize(difficultButtonText.textContent);
+
 			if (morethan4) {
 				difficultButtonText.style.fontSize = '0.813rem';
 			}

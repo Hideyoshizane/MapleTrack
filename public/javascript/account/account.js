@@ -70,7 +70,8 @@ function handleHover(event) {
 	const centerY = targetRect.top + targetRect.height / 2;
 
 	const text = getText(name);
-	const tooltip = createDOMElement('div', 'infoTooltip', text);
+	const sanitizedText = DOMPurify.sanitize(text); // Sanitize text content before showing tooltip
+	const tooltip = createDOMElement('div', 'infoTooltip', sanitizedText);
 	tooltip.style.top = `${centerY - 24}px`;
 	tooltip.style.left = `${centerX + 160}px`;
 	document.body.appendChild(tooltip);
@@ -134,12 +135,13 @@ async function updatePassword() {
 		const result = await response.json();
 
 		const messageText = result ? 'Password updated successfully.' : 'Error, password not updated.';
+		const sanitizedMessageText = DOMPurify.sanitize(messageText); // Sanitize the message text before appending it
 
 		const existingMessage = document.querySelector('.message');
 		if (existingMessage) {
 			existingMessage.remove();
 		}
-		const message = createDOMElement('span', 'message', messageText);
+		const message = createDOMElement('span', 'message', sanitizedMessageText);
 		submitButton.insertAdjacentElement('afterend', message);
 	} catch (error) {
 		console.error('Error during fetch:', error);

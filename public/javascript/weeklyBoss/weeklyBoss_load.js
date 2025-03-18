@@ -110,7 +110,7 @@ async function loadCharacterCards() {
 		const imgSource = `../../public/assets/buttom_profile/${getCode(characters)}.webp`;
 		characterImage = await createImageElement(imgSource, 'character Profile', 'profile');
 
-		characterName = createDOMElement('span', 'characterName', `${characters.name}`);
+		characterName = createDOMElement('span', 'characterName', DOMPurify.sanitize(`${characters.name}`));
 		characterName.style.fontSize = (await adjustFontSizeToFit(characterName, 9.479, 1.75)) + 'rem';
 		characterClass = createDOMElement('span', 'characterClass', `${characters.class}`);
 
@@ -171,7 +171,11 @@ async function createBossButton(boss) {
 	const bossImgPath = bossData.img;
 	const bossImage = await createImageElement(bossImgPath, `${boss.name}`, 'bossImg');
 
-	const bossInfo = createDOMElement('span', 'BossName', `${boss.difficulty} ${boss.name.replace(/\n/g, ' ')}`);
+	const bossInfo = createDOMElement(
+		'span',
+		'BossName',
+		DOMPurify.sanitize(`${boss.difficulty} ${boss.name.replace(/\n/g, ' ')}`)
+	);
 	bossInfo.style.fontSize = (await adjustFontSizeToFit(bossInfo, 14.896, 2)) + 'rem';
 	bossInfo.setAttribute('name', boss.name);
 	bossInfo.setAttribute('difficult', boss.difficulty);

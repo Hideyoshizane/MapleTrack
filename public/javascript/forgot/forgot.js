@@ -55,11 +55,13 @@ async function usernameInputFunction() {
 
 function wrongUsername() {
 	const errorSpan = createDOMElement('span', 'error', 'Username not found.');
-	username.insertAdjacentElement('afterend', errorSpan);
+	username.insertAdjacentElement('afterend', DOMPurify.sanitize(errorSpan));
 }
 
 function updateTextFields(serverName) {
-	subtitle.textContent = `For safety, please insert the level of your highest character in the ${serverName} server.`;
+	subtitle.textContent = DOMPurify.sanitize(
+		`For safety, please insert the level of your highest character in the ${serverName} server.`
+	);
 	usernameSpan.textContent = 'Level';
 	username.value = '';
 	username.placeholder = 'Character level';
@@ -89,7 +91,9 @@ async function levelInputFunction() {
 }
 
 function updateSuccess() {
-	subtitle.textContent = `Password updated successfully. The new password is the character name of the highest level character on ${server} server.`;
+	subtitle.textContent = DOMPurify.sanitize(
+		`Password updated successfully. The new password is the character name of the highest level character on ${server} server.`
+	);
 	usernameSpan.remove();
 	username.remove();
 	submitButton.textContent = 'Return to login';
@@ -97,7 +101,7 @@ function updateSuccess() {
 }
 
 function updateFailed() {
-	subtitle.textContent = `Password not reseted. Please try again.`;
+	subtitle.textContent = DOMPurify.sanitize(`Password not reseted. Please try again.`);
 	usernameSpan.textContent = 'Username';
 	username.value = '';
 	username.placeholder = 'MapleTrack';
@@ -107,7 +111,9 @@ function updateFailed() {
 }
 
 async function emptyAccount(usernameInput) {
-	subtitle.textContent = `This account is empty, the password has been reset to default: 1234567 Please change password after login.`;
+	subtitle.textContent = DOMPurify.sanitize(
+		`This account is empty, the password has been reset to default: 1234567 Please change password after login.`
+	);
 	usernameSpan.remove();
 	username.remove();
 	await fetch('/resetEmptyAccount', {

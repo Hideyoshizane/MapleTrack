@@ -1,6 +1,7 @@
 const { DateTime } = luxon;
 
 document.addEventListener('DOMContentLoaded', function () {
+	//Update navBar countdown timer
 	setInterval(updateCountdown, 1000);
 
 	const username = document.getElementById('userdata').getAttribute('data-username');
@@ -9,12 +10,12 @@ document.addEventListener('DOMContentLoaded', function () {
 	const searchResultsDiv = document.getElementById('searchResults');
 	const searchSectionDiv = document.querySelector('.searchSection');
 
+	//Event listener for search input is valid
 	searchInput.addEventListener('input', () => {
 		performSearch(searchInput, searchResultsDiv, searchSectionDiv, username);
 	});
 
 	// Event listener for transition end
-
 	searchSectionDiv.addEventListener('transitionend', () => {
 		if (!searchSectionDiv.classList.contains('expanded')) {
 			searchResultsDiv.innerHTML = '';
@@ -30,22 +31,39 @@ document.addEventListener('DOMContentLoaded', function () {
 	});
 
 	var searchResults = document.getElementById('searchResults');
+
 	searchResults.addEventListener('click', function (event) {
 		var resultElement = event.target.closest('.result');
 		if (resultElement) {
 			var characterCode = resultElement.getAttribute('data-code');
 			var server = resultElement.getAttribute('data-server');
 
-			var url = `/${username}/${server}/${characterCode}`;
-			if (server !== null) window.location.href = url;
+			// Sanitize the characterCode and server using DOMPurify
+			var sanitizedCharacterCode = DOMPurify.sanitize(characterCode, { ALLOWED_TAGS: [] });
+			var sanitizedServer = DOMPurify.sanitize(server, { ALLOWED_TAGS: [] });
+
+			// Encode the sanitized values
+			var encodedCharacterCode = encodeURIComponent(sanitizedCharacterCode);
+			var encodedServer = encodeURIComponent(sanitizedServer);
+
+			var url = `/${username}/${encodedServer}/${encodedCharacterCode}`;
+
+			// Navigate to the sanitized URL
+			if (sanitizedServer !== null) {
+				window.location.href = url;
+			}
 		}
 	});
 
-	//Menu buttons event handlers
+	// Menu buttons event handlers
 	const menuButtons = document.querySelectorAll('.menuButton');
 	menuButtons.forEach((button) => {
 		button.addEventListener('click', async (event) => {
-			const redirectUrl = button.getAttribute('data-redirect');
+			// Get the redirect URL and sanitize it
+			let redirectUrl = button.getAttribute('data-redirect');
+
+			// Sanitize the URL using DOMPurify
+			redirectUrl = DOMPurify.sanitize(redirectUrl, { ALLOWED_TAGS: [] }); // Remove any unwanted HTML tags
 
 			try {
 				const response = await fetch(redirectUrl, { method: 'GET' });
@@ -60,124 +78,124 @@ document.addEventListener('DOMContentLoaded', function () {
 			}
 		});
 	});
-});
 
-function updateCountdown() {
-	const dailyOutput = document.getElementById('daily');
-	const weeklyOutput = document.getElementById('weekly');
-
-	const now = DateTime.utc();
-
-	let wednesday = DateTime.utc().set({
-		weekday: 4,
-		hour: 0,
-		minute: 0,
-		second: 0,
-		millisecond: 0,
-	});
-
-	if (now >= wednesday) {
-		wednesday = wednesday.plus({ weeks: 1 });
+	// Optional function to validate URL format
+	function isValidUrl(url) {
+		const regex = /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,6}(\/[^\s]*)?$/;
+		return regex.test(url);
 	}
 
-	const diff = wednesday.diff(now);
+	function updateCountdown() {
+		const dailyOutput = document.getElementById('daily');
+		const weeklyOutput = document.getElementById('weekly');
 
-	let daily = DateTime.utc().set({
-		hour: 0,
-		minute: 0,
-		second: 0,
-		millisecond: 0,
-	});
-	daily = daily.plus({ days: 1 });
-	daily = daily.diff(now);
+		const now = DateTime.utc();
 
-	daily = daily.toFormat('hh:mm:ss');
-	const weekly = diff.toFormat('dd:hh:mm:ss');
+		let wednesday = DateTime.utc().set({
+			weekday: 4,
+			hour: 0,
+			minute: 0,
+			second: 0,
+			millisecond: 0,
+		});
 
-	weeklyOutput.innerHTML = `Until Week Reset<br> ${weekly}`;
-	dailyOutput.innerHTML = `Until Daily Reset<br> ${daily}`;
-}
+		if (now >= wednesday) {
+			wednesday = wednesday.plus({ weeks: 1 });
+		}
 
-async function performSearch(searchInput, searchResultsDiv, searchSectionDiv, username) {
-	// Get the search query
-	const query = searchInput.value.trim();
+		const diff = wednesday.diff(now);
 
-	// If the query is empty, hide the search results div and return
-	if (query === '') {
-		searchResultsDiv.style.display = 'none';
-		searchSectionDiv.classList.remove('expanded');
-		return;
+		let daily = DateTime.utc().set({
+			hour: 0,
+			minute: 0,
+			second: 0,
+			millisecond: 0,
+		});
+		daily = daily.plus({ days: 1 });
+		daily = daily.diff(now);
+
+		daily = daily.toFormat('hh:mm:ss');
+		const weekly = diff.toFormat('dd:hh:mm:ss');
+
+		weeklyOutput.innerHTML = `Until Week Reset<br> ${weekly}`;
+		dailyOutput.innerHTML = `Until Daily Reset<br> ${daily}`;
 	}
 
-	// Clear previous search results
-	searchResultsDiv.innerHTML = '';
-	searchResultsDiv.style.display = 'block';
-	searchSectionDiv.classList.add('expanded');
+	async function performSearch(searchInput, searchResultsDiv, searchSectionDiv, username) {
+		// Get the search query and sanitize it
+		const query = DOMPurify.sanitize(searchInput.value.trim());
 
-	// Send a request to the server to search for characters
-	try {
-		const characters = await fetch(`/search?query=${query}&username=${username}`).then((response) => response.json());
-		await createSearchResults(characters, searchResultsDiv);
+		// If the query is empty, hide the search results div and return
+		if (query === '') {
+			searchResultsDiv.style.display = 'none';
+			searchSectionDiv.classList.remove('expanded');
+			return;
+		}
+
+		// Clear previous search results
+		searchResultsDiv.innerHTML = '';
+		searchResultsDiv.style.display = 'block';
 		searchSectionDiv.classList.add('expanded');
-	} catch (error) {
-		console.error('Error performing search:', error);
-	}
-}
 
-async function createSearchResults(characters, parentDiv) {
-	if (characters.length == 0) {
-		parentDiv.appendChild(createDOMElement('div', 'result', 'No result found.'));
-	} else {
-		parentDiv.innerHTML = '';
-		for (const characterData of characters) {
-			const resultDiv = createDOMElement('div', 'result');
-			resultDiv.setAttribute('data-server', characterData.server);
-			resultDiv.setAttribute('data-code', getCode(characterData));
-			const img = await createImageElement(
-				`/../../assets/icons/servers/${characterData.server.toLowerCase()}.webp`,
-				'server icon'
-			);
-			const detailsSpan = createDOMElement(
-				'span',
-				'',
-				`\u00A0\u00A0${characterData.server}: ${characterData.name} - ${characterData.class} - Level ${characterData.level}`
-			);
-
-			resultDiv.appendChild(img);
-			resultDiv.appendChild(detailsSpan);
-			parentDiv.appendChild(resultDiv);
+		// Send a request to the server to search for characters
+		try {
+			const characters = await fetch(`/search?query=${query}&username=${username}`).then((response) => response.json());
+			await createSearchResults(characters, searchResultsDiv);
+			searchSectionDiv.classList.add('expanded');
+		} catch (error) {
+			console.error('Error performing search:', error);
 		}
 	}
-}
 
-function clearSearch(searchResultsDiv, searchSectionDiv, searchInput) {
-	searchResultsDiv.innerHTML = '';
-	searchResultsDiv.style.display = 'none';
-	searchSectionDiv.classList.remove('expanded');
-	searchInput.value = '';
-}
+	async function createSearchResults(characters, parentDiv) {
+		if (characters.length == 0) {
+			parentDiv.appendChild(createDOMElement('div', 'result', 'No result found.'));
+		} else {
+			parentDiv.innerHTML = '';
+			for (const characterData of characters) {
+				const resultDiv = createDOMElement('div', 'result');
+				resultDiv.setAttribute('data-server', characterData.server);
+				resultDiv.setAttribute('data-code', getCode(characterData));
+				const img = await createImageElement(
+					`/../../assets/icons/servers/${characterData.server.toLowerCase()}.webp`,
+					'server icon'
+				);
+				const detailsSpan = createDOMElement(
+					'span',
+					'',
+					`\u00A0\u00A0${characterData.server}: ${characterData.name} - ${characterData.class} - Level ${characterData.level}`
+				);
 
-//dropdown menu click event
-const usernameBlock = document.getElementById('usernameBlock');
-const dropdownContent = usernameBlock.querySelector('.dropdownContent');
-const svgIcon = usernameBlock.querySelector('#icon');
-let isOpen = false;
-
-usernameBlock.addEventListener('click', function () {
-	if (isOpen) {
-		dropdownContent.classList.remove('open');
-		dropdownContent.classList.add('closed');
-		svgIcon.classList.remove('rotate');
-	} else {
-		dropdownContent.classList.remove('closed');
-		dropdownContent.classList.add('open');
-		svgIcon.classList.add('rotate');
+				resultDiv.appendChild(img);
+				resultDiv.appendChild(detailsSpan);
+				parentDiv.appendChild(resultDiv);
+			}
+		}
 	}
-	isOpen = !isOpen;
-});
 
-const logo = document.querySelector('.logo');
+	function clearSearch(searchResultsDiv, searchSectionDiv, searchInput) {
+		searchResultsDiv.innerHTML = '';
+		searchResultsDiv.style.display = 'none';
+		searchSectionDiv.classList.remove('expanded');
+		searchInput.value = '';
+	}
 
-logo.addEventListener('click', () => {
-	window.location.href = '/home';
+	//dropdown menu click event
+	const usernameBlock = document.getElementById('usernameBlock');
+	const dropdownContent = usernameBlock.querySelector('.dropdownContent');
+	const svgIcon = usernameBlock.querySelector('#icon');
+	let isOpen = false;
+
+	usernameBlock.addEventListener('click', function () {
+		if (isOpen) {
+			dropdownContent.classList.remove('open');
+			dropdownContent.classList.add('closed');
+			svgIcon.classList.remove('rotate');
+		} else {
+			dropdownContent.classList.remove('closed');
+			dropdownContent.classList.add('open');
+			svgIcon.classList.add('rotate');
+		}
+		isOpen = !isOpen;
+	});
 });

@@ -53,20 +53,20 @@ async function updateGrid(buttonWrapper, toggle) {
 				const startIndexOfPenultimateRow = (numRows - 2) * 3;
 				const endIndexOfLastRow = quantity - 1;
 
-				// Verifica se o índice está na penúltima linha
+				// Verifies if the index is in the penultimate row
 				if (
 					i >= startIndexOfPenultimateRow &&
 					i < startIndexOfLastRow &&
 					characterDropdown[i].querySelector('.BossButton')
 				) {
-					const height = numRows * 144 + 144; // Ajuste para a penúltima linha
+					const height = numRows * 144 + 144; // Adjusts for the penultimate row
 					const heightInVh = (height / viewportHeight) * 100;
 					grid.style.minHeight = heightInVh + 'vh';
 				}
 
-				// Verifica se o índice está na última linha
+				// Verifies if the index is in the last row
 				if (i >= startIndexOfLastRow && i <= endIndexOfLastRow && characterDropdown[i].querySelector('.BossButton')) {
-					const height = numRows * 144 + 288; // Ajuste para a última linha
+					const height = numRows * 144 + 288; // Adjusts for the last row
 					const heightInVh = (height / viewportHeight) * 100;
 					grid.style.minHeight = heightInVh + 'vh';
 				}

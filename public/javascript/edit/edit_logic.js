@@ -7,7 +7,11 @@ document.addEventListener('PageLoaded', async () => {
 
 		const discardButton = document.querySelector('.discardButton');
 		discardButton.addEventListener('click', () => {
-			var url = `/${username}/${server}/${characterCode}`;
+			const sanitizedUsername = DOMPurify.sanitize(username);
+			const sanitizedServer = DOMPurify.sanitize(server);
+			const sanitizedCharacterCode = DOMPurify.sanitize(characterCode);
+
+			var url = `/${sanitizedUsername}/${sanitizedServer}/${sanitizedCharacterCode}`;
 			window.location.href = url;
 		});
 
@@ -31,7 +35,7 @@ document.addEventListener('PageLoaded', async () => {
 		const levelTarget = document.querySelector('.levelTarget');
 
 		characterName.addEventListener('input', async () => {
-			const valid = isValidCharacterName(characterName.value);
+			const valid = isValidCharacterName(DOMPurify.sanitize(characterName.value));
 			characterName.style.color = valid ? '#000000' : '#C33232';
 			saveButton.disabled = !valid;
 			if (saveButton.disabled) {
@@ -47,20 +51,20 @@ document.addEventListener('PageLoaded', async () => {
 		});
 
 		levelNumber.addEventListener('input', async () => {
-			const levelNumberValue = levelNumber.value;
+			const levelNumberValue = DOMPurify.sanitize(levelNumber.value);
 
 			await updateClass(levelNumberValue);
 			await updateLegion(levelNumberValue);
 		});
 
 		levelNumber.addEventListener('blur', async function () {
-			const level = levelNumber.value;
+			const level = DOMPurify.sanitize(levelNumber.value);
 			await updateForce('Arcane', level);
 			await updateForce('Sacred', level);
 			await updateForce('GrandSacred', level);
 
-			const levelNumberValue = levelNumber.value || levelNumber.placeholder;
-			const levelTargetValue = levelTarget.value || levelTarget.placeholder;
+			const levelNumberValue = DOMPurify.sanitize(levelNumber.value) || DOMPurify.sanitize(levelNumber.placeholder);
+			const levelTargetValue = DOMPurify.sanitize(levelTarget.value) || DOMPurify.sanitize(levelTarget.placeholder);
 			const jobType = document.querySelector('.characterLevelBar').getAttribute('jobType');
 			const progressBar = document.querySelector('.progressBar');
 
@@ -68,14 +72,14 @@ document.addEventListener('PageLoaded', async () => {
 		});
 
 		levelTarget.addEventListener('input', async () => {
-			const levelNumberValue = levelNumber.value;
+			const levelNumberValue = DOMPurify.sanitize(levelNumber.value);
 
 			await updateClass(levelNumberValue);
 		});
 
 		levelTarget.addEventListener('blur', async function () {
-			const levelNumberValue = levelNumber.value || levelNumber.placeholder;
-			const levelTargetValue = levelTarget.value || levelTarget.placeholder;
+			const levelNumberValue = DOMPurify.sanitize(levelNumber.value) || DOMPurify.sanitize(levelNumber.placeholder);
+			const levelTargetValue = DOMPurify.sanitize(levelTarget.value) || DOMPurify.sanitize(levelTarget.placeholder);
 			const jobType = document.querySelector('.characterLevelBar').getAttribute('jobType');
 			const progressBar = document.querySelector('.progressBar');
 
@@ -175,7 +179,7 @@ async function updateForce(type, levelNumberValue) {
 				let contentValue = 0;
 
 				if (matchingContent) {
-					contentValue = matchingContent.value;
+					contentValue = DOMPurify.sanitize(matchingContent.value);
 				} else {
 					contentValue = dailyJson.find((contentName) => contentName.name === 'Weekly').value;
 				}
@@ -213,17 +217,17 @@ async function saveDataAndPost() {
 	const sacredForceArray = returnForceArray('Sacred');
 	const GrandSacredForceArray = returnForceArray('GrandSacred');
 	const characterToUpdate = {
-		_id: characterData._id,
-		name: characterName,
-		level: level,
-		targetLevel: targetLevel,
-		bossing: bossSwitch,
+		_id: DOMPurify.sanitize(characterData._id),
+		name: DOMPurify.sanitize(characterName),
+		level: DOMPurify.sanitize(level),
+		targetLevel: DOMPurify.sanitize(targetLevel),
+		bossing: DOMPurify.sanitize(bossSwitch),
 		ArcaneForce: arcaneForceArray,
 		SacredForce: sacredForceArray,
 		GrandSacredForce: GrandSacredForceArray,
-		server: server,
-		username: username,
-		characterCode: characterCode,
+		server: DOMPurify.sanitize(server),
+		username: DOMPurify.sanitize(username),
+		characterCode: DOMPurify.sanitize(characterCode),
 	};
 	try {
 		const response = await fetch('/updateCharacter', {
@@ -238,9 +242,13 @@ async function saveDataAndPost() {
 		const type = success ? 'success' : 'failed';
 		const message = success ? 'Character updated sucessfully' : 'There was an error updating';
 		setCookieFlash('type', type, 50);
-		setCookieFlash('message', message, 50);
+		setCookieFlash('message', DOMPurify.sanitize(message), 50);
 
-		var url = `/${username}/${server}/${characterCode}`;
+		const sanitizedUsername = DOMPurify.sanitize(username);
+		const sanitizedServer = DOMPurify.sanitize(server);
+		const sanitizedCharacterCode = DOMPurify.sanitize(characterCode);
+
+		var url = `/${sanitizedUsername}/${sanitizedServer}/${sanitizedCharacterCode}`;
 		window.location.href = url;
 	} catch (error) {
 		console.error('Error:', error);
@@ -288,9 +296,9 @@ function returnForceArray(forceType) {
 			}
 
 			const forceObject = {
-				name: name,
-				level: level,
-				exp: exp,
+				name: DOMPurify.sanitize(name),
+				level: DOMPurify.sanitize(level),
+				exp: DOMPurify.sanitize(exp),
 				content: checksArray,
 			};
 
@@ -316,7 +324,7 @@ function handleHover(saveButton) {
 
 	const text = 'Please set a valid character name.';
 
-	const tempTooltip = createDOMElement('div', 'infoTooltip', text);
+	const tempTooltip = createDOMElement('div', 'infoTooltip', DOMPurify.sanitize(text));
 
 	document.body.appendChild(tempTooltip);
 	const tempTooltipCenter = getCenterPosition(tempTooltip);
@@ -324,7 +332,7 @@ function handleHover(saveButton) {
 
 	const offsetX = saveButtonCenter.x - tempTooltipCenter.x;
 
-	const tooltip = createDOMElement('div', 'infoTooltip', text);
+	const tooltip = createDOMElement('div', 'infoTooltip', DOMPurify.sanitize(text));
 	tooltip.style.top = `${saveButtonCenter.y + 60}px`;
 	tooltip.style.left = `${offsetX}px`;
 	document.body.appendChild(tooltip);
@@ -358,7 +366,7 @@ function handleLinkImgMouseOver(linkImg) {
 
 	mainContent = document.querySelector('.mainContent');
 
-	const tempTooltip = createDOMElement('div', 'linkSkillToolTip', text);
+	const tempTooltip = createDOMElement('div', 'linkSkillToolTip', DOMPurify.sanitize(text));
 
 	tempTooltip.style.position = 'absolute';
 	tempTooltip.style.visibility = 'hidden';
@@ -370,7 +378,7 @@ function handleLinkImgMouseOver(linkImg) {
 
 	const linkImgCenter = getCenterPosition(linkImg);
 
-	const tooltip = createDOMElement('div', 'linkSkillToolTip', text);
+	const tooltip = createDOMElement('div', 'linkSkillToolTip', DOMPurify.sanitize(text));
 
 	const offsetX = linkImgCenter.x - tempTooltipCenter.x;
 

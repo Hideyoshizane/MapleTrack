@@ -43,7 +43,12 @@ function setupCardClickListeners() {
 		card.addEventListener('click', async () => {
 			const server = document.querySelector('.SelectedButton').querySelector('span').innerText;
 			const character = card.getAttribute('characterclass');
-			var url = `${username}/${server}/${character}`;
+
+			const sanitizedUsername = DOMPurify.sanitize(username);
+			const sanitizedServer = DOMPurify.sanitize(server);
+			const sanitizedCharacter = DOMPurify.sanitize(character);
+
+			var url = `${sanitizedUsername}/${sanitizedServer}/${sanitizedCharacter}`;
 			window.location.href = url;
 		});
 	});

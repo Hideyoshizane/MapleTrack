@@ -38,7 +38,7 @@ const isValidFunctionMap = {
 };
 
 function handleValidation(inputElement, isValidFunction, icon) {
-	const inputValue = inputElement.value;
+	const inputValue = DOMPurify.sanitize(inputElement.value);
 	const closestSvg = inputElement.parentElement.querySelector('svg');
 	setSvgStyles(closestSvg, '1', 'pointer');
 
@@ -70,7 +70,11 @@ inputIds.forEach((inputId) => {
 			if (inputId === 'checkPassword') {
 				handleValidation(inputElement, arePasswordsMatching, iconBackup);
 			} else {
-				handleValidation(inputElement, () => isValidFunctionMap[inputId](inputElement.value), iconBackup);
+				handleValidation(
+					inputElement,
+					() => isValidFunctionMap[inputId](DOMPurify.sanitize(inputElement.value)),
+					iconBackup
+				);
 			}
 			updateSubmitButtonState();
 		});
@@ -83,7 +87,7 @@ inputIds.forEach((inputId) => {
 });
 
 function handleBlur(inputElement) {
-	const isValid = isValidFunctionMap[inputElement.id](inputElement.value);
+	const isValid = isValidFunctionMap[inputElement.id](DOMPurify.sanitize(inputElement.value));
 	const svg = inputElement.parentElement.querySelector('svg');
 	if (!isValid) {
 		svg.setAttribute('fill', '#D14D4D');
@@ -164,7 +168,8 @@ const submitButton = document.querySelector('.submit');
 function isFormValid() {
 	for (const inputId of inputIds) {
 		const inputElement = document.getElementById(inputId);
-		if (!isValidFunctionMap[inputId](inputElement.value)) {
+
+		if (!isValidFunctionMap[inputId](DOMPurify.sanitize(inputElement.value))) {
 			return false;
 		}
 	}

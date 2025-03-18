@@ -1,8 +1,8 @@
 const path = window.location.pathname;
 const segments = path.split('/');
-const username = segments[1];
-const server = segments[2];
-const characterCode = segments[3];
+const username = DOMPurify.sanitize(segments[1]);
+const server = DOMPurify.sanitize(segments[2]);
+const characterCode = DOMPurify.sanitize(segments[3]);
 
 window.characterData;
 window.dailyJson;
@@ -23,9 +23,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 async function fetchCharacterData(username, server, characterCode) {
-	const response = await fetch(`/class/${username}/${server}/${codeToClass(characterCode)}`).then((response) =>
-		response.json()
-	);
+	const sanitizedUsername = DOMPurify.sanitize(username);
+	const sanitizedServer = DOMPurify.sanitize(server);
+	const sanitizedCharacterCode = DOMPurify.sanitize(characterCode);
+
+	const response = await fetch(
+		`/class/${sanitizedUsername}/${sanitizedServer}/${codeToClass(sanitizedCharacterCode)}`
+	).then((response) => response.json());
 	return response;
 }
 
@@ -61,7 +65,7 @@ function createCheckboxWithLabel(className, labelText, checked) {
 	checkboxElement.type = 'checkbox';
 	checkboxElement.checked = checked;
 
-	const textSpan = createDOMElement('span', null, labelText);
+	const textSpan = createDOMElement('span', null, DOMPurify.sanitize(labelText));
 
 	container.appendChild(checkboxElement);
 	container.appendChild(textSpan);
@@ -97,7 +101,7 @@ async function loadCharacterNameDiv(characterData) {
 
 	const bossIcon = await loadEditableSVGFile(bossIconPath, 'bossIcon');
 
-	const characterName = createDOMElement('input', 'characterName', characterData.name);
+	const characterName = createDOMElement('input', 'characterName', DOMPurify.sanitize(characterData.name));
 
 	const characterIconDiv = createDOMElement('div', 'characterIconDiv');
 
@@ -124,7 +128,7 @@ async function loadCharacterNameDiv(characterData) {
 	const linkSkill = await loadLinkSkillDiv(characterData);
 	const legion = await loadLegionDiv(characterData);
 
-	const JobType = createDOMElement('span', 'classType', characterData.class);
+	const JobType = createDOMElement('span', 'classType', DOMPurify.sanitize(characterData.class));
 	JobType.style.fontSize = (await adjustFontSizeToFit(JobType, 19.115, 3)) + 'rem';
 
 	const JobLevel = createDOMElement('span', 'jobLevel', getJob(characterData));
@@ -167,7 +171,11 @@ async function loadLegionDiv(characterData) {
 			? '/../../../public/assets/legion/no_rank.webp'
 			: `/../../../public/assets/legion/${characterData.jobType}/rank_${legionRank}.webp`;
 
-	const legionImg = await createImageElement(legionImgSrc, `${characterData.class} legion`, 'legionImg');
+	const legionImg = await createImageElement(
+		legionImgSrc,
+		`${DOMPurify.sanitize(characterData.class)} legion`,
+		'legionImg'
+	);
 
 	const legionBlock = createDOMElement('div', 'legionBlock');
 
@@ -226,7 +234,7 @@ async function loadForce(characterData, forceType) {
 	for (force of forceData) {
 		const forceWrapper = createDOMElement('div', `${forceType}Wrapper`);
 
-		const areaName = force.name;
+		const areaName = DOMPurify.sanitize(force.name);
 		const areaCode = areaName.replace(/\s+/g, '_').toLowerCase();
 		let forceLevel = force.level;
 		const minLevel = dailyJson.find((json) => json.name === force.name).minLevel;

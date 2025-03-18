@@ -95,8 +95,12 @@ function createCheckSVG() {
 	checkSVG.setAttribute('viewBox', '0 0 36 27');
 	checkSVG.setAttribute('fill', 'none');
 
+	// Sanitize the path data
+	const pathData = 'M12 21.4L3.59999 13L0.799988 15.8L12 27L36 2.99995L33.2 0.199951L12 21.4Z';
+	const sanitizedPathData = DOMPurify.sanitize(pathData);
+
 	const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-	path.setAttribute('d', 'M12 21.4L3.59999 13L0.799988 15.8L12 27L36 2.99995L33.2 0.199951L12 21.4Z');
+	path.setAttribute('d', sanitizedPathData); // Set sanitized data
 	path.setAttribute('fill', '#E3E3E3');
 
 	checkSVG.appendChild(path);
@@ -111,12 +115,14 @@ async function createArrowSVG() {
 	svgElement.setAttribute('viewBox', '0 0 1024 1024');
 	svgElement.setAttribute('class', 'icon');
 
+	// Sanitize the path data
+	const pathData = 'M917.333333 364.8L851.2 298.666667 512 637.866667 172.8 298.666667 106.666667 364.8 512 768z';
+	const sanitizedPathData = DOMPurify.sanitize(pathData); // Sanitizing path data
+
 	const pathElement = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-	pathElement.setAttribute(
-		'd',
-		'M917.333333 364.8L851.2 298.666667 512 637.866667 172.8 298.666667 106.666667 364.8 512 768z'
-	);
+	pathElement.setAttribute('d', sanitizedPathData); // Set sanitized data
 	pathElement.setAttribute('fill', '#F6F6F6');
+
 	svgElement.appendChild(pathElement);
 	return svgElement;
 }
