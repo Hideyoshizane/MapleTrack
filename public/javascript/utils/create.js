@@ -89,27 +89,26 @@ async function loadEditableSVGFile(filePath, className) {
 
 async function createCheckMark(color = '#3D3D3D', width = '40') {
 	try {
-		const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-		svg.classList.add('checked');
-		svg.setAttribute('width', width);
-		svg.setAttribute('height', width);
-		svg.setAttribute('viewBox', '0 0 40 40');
-		svg.setAttribute('fill', 'none');
+		const svgElement = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+		svgElement.setAttribute('id', 'checked-icon');
+		svgElement.setAttribute('width', width);
+		svgElement.setAttribute('height', width);
+		svgElement.setAttribute('viewBox', '0 0 40 40');
+		svgElement.setAttribute('class', 'checked');
+		svgElement.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
 
-		const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-		path.setAttribute(
+		const pathElement = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+		pathElement.setAttribute(
 			'd',
 			'M20 0C8.96 0 0 8.96 0 20C0 31.04 8.96 40 20 40C31.04 40 40 31.04 40 20C40 8.96 31.04 0 20 0ZM16 30L6 20L8.82 17.18L16 24.34L31.18 9.16L34 12L16 30Z'
 		);
-		path.setAttribute('fill', color);
+		pathElement.setAttribute('fill', color);
 
-		svg.appendChild(path);
+		svgElement.appendChild(pathElement);
 
-		// Sanitize the SVG element before returning it
-		const sanitizedSvg = DOMPurify.sanitize(svg.outerHTML);
-
-		// Convert sanitized string back to an SVG element
-		const sanitizedSvgElement = new DOMParser().parseFromString(sanitizedSvg, 'image/svg+xml').documentElement;
+		// Ensure the SVG element is properly sanitized
+		const sanitizedSvgString = DOMPurify.sanitize(svgElement.outerHTML);
+		const sanitizedSvgElement = new DOMParser().parseFromString(sanitizedSvgString, 'image/svg+xml').documentElement;
 
 		return sanitizedSvgElement;
 	} catch (error) {
@@ -118,29 +117,28 @@ async function createCheckMark(color = '#3D3D3D', width = '40') {
 	}
 }
 
-async function createUncheckMark() {
+async function createUncheckMark(color = '#3D3D3D', width = '40') {
 	try {
-		const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-		svg.classList.add('unchecked');
-		svg.setAttribute('width', '40');
-		svg.setAttribute('height', '40');
-		svg.setAttribute('viewBox', '0 0 40 40');
-		svg.setAttribute('fill', 'none');
+		const svgElement = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+		svgElement.setAttribute('id', 'unchecked-icon');
+		svgElement.setAttribute('width', width);
+		svgElement.setAttribute('height', width);
+		svgElement.setAttribute('viewBox', '0 0 40 40');
+		svgElement.setAttribute('class', 'unchecked');
+		svgElement.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
 
-		const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-		path.setAttribute(
+		const pathElement = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+		pathElement.setAttribute(
 			'd',
-			'M20 0C8.96 0 0 8.96 0 20C0 31.04 8.96 40 20 40C31.04 40 40 31.04 40 20C40 8.96 31.04 0 20 0ZM20 36C11.16 36 4 28.84 4 20C4 11.16 11.16 4 20 4C28.84 4 36 11.16 36 20C36 28.84 28.84 36 20 36Z'
+			'M20 2C10.06 2 2 10.06 2 20C2 29.94 10.06 38 20 38C29.94 38 38 29.94 38 20C38 10.06 29.94 2 20 2ZM20 34C11.72 34 6 28.28 6 20C6 11.72 11.72 6 20 6C28.28 6 34 11.72 34 20C34 28.28 28.28 34 20 34Z'
 		);
-		path.setAttribute('fill', '#3D3D3D');
+		pathElement.setAttribute('fill', color);
 
-		svg.appendChild(path);
+		svgElement.appendChild(pathElement);
 
-		// Sanitize the SVG element before returning it
-		const sanitizedSvg = DOMPurify.sanitize(svg.outerHTML);
-
-		// Convert sanitized string back to an SVG element
-		const sanitizedSvgElement = new DOMParser().parseFromString(sanitizedSvg, 'image/svg+xml').documentElement;
+		// Ensure the SVG element is properly sanitized
+		const sanitizedSvgString = DOMPurify.sanitize(svgElement.outerHTML);
+		const sanitizedSvgElement = new DOMParser().parseFromString(sanitizedSvgString, 'image/svg+xml').documentElement;
 
 		return sanitizedSvgElement;
 	} catch (error) {

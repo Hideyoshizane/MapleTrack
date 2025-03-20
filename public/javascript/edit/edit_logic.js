@@ -221,7 +221,7 @@ async function saveDataAndPost() {
 		name: DOMPurify.sanitize(characterName),
 		level: DOMPurify.sanitize(level),
 		targetLevel: DOMPurify.sanitize(targetLevel),
-		bossing: DOMPurify.sanitize(bossSwitch),
+		bossing: bossSwitch,
 		ArcaneForce: arcaneForceArray,
 		SacredForce: sacredForceArray,
 		GrandSacredForce: GrandSacredForceArray,
