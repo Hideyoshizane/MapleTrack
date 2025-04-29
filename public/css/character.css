@@ -62,7 +62,7 @@ body {
     display: flex;
     flex-direction: column;
     overflow-y: scroll;
-    height: 440px;
+    height: 481px;
 }
 
 .buttonWrapper {

@@ -506,5 +506,19 @@
 				"description": "Damage: +5%. Upon attacking, Recovery Chance: 100%, Recovery: 2% of Max HP/MP per sec, Duration: 5 sec. Cooldown: 30 sec"
 			}
 		]
+	},
+	{
+		"name": "Qi Cultivation",
+		"image": "/../../public/assets/link_skill/mo_xuan.webp",
+		"levels": [
+			{
+				"level": 1,
+				"description": "When attacking a Boss monster, damage increases by +2%. If the target is a Boss monster, each successful attack additionally increases damage by 2%, stacking up to 6 times. The stack can be triggered once every 2 seconds. Duration: 5 seconds."
+			},
+			{
+				"level": 2,
+				"description": "When attacking a Boss monster, damage increases by +4%. If the target is a Boss monster, each successful attack additionally increases damage by 2%, stacking up to 6 times. The stack can be triggered once every 2 seconds. Duration: 5 seconds."
+			}
+		]
 	}
 ]

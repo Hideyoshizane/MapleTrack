@@ -10,10 +10,11 @@ const MongoStore = require('connect-mongo');
 
 require('dotenv').config();
 
-const DB_URL = process.env.DB_URL || 'mongodb://localhost:27017';
+const DB_URL = 'mongodb://localhost:27017';
+//process.env.DB_URL || ;
 const app = express();
 
-app.locals.globalVariable = '1.11.5';
+app.locals.globalVariable = '1.12.0';
 
 const mongoOptions = {
 	serverSelectionTimeoutMS: 10000,

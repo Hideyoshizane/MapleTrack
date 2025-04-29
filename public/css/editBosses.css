@@ -220,6 +220,7 @@ body {
 
 .dropdownToggle svg {
     margin-right: 1.5rem;
+    transition: transform 0.3s ease-in-out;
 }
 
 .characterContent {
@@ -229,13 +230,11 @@ body {
 }
 
 .closed {
-    display: block;
     transition: all 0.3s ease-in-out;
 }
 
 .rotate {
     transform: rotate(180deg);
-    transition: 0.3s ease-in-out;
 }
 
 

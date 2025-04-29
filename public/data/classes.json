@@ -292,5 +292,11 @@
 		"legionType": "STR+P",
 		"className": "Ark",
 		"jobType": "pirate"
+	},
+	{
+		"linkSkill": "Qi Cultivation",
+		"legionType": "CRTDMG+",
+		"className": "Mo Xuan",
+		"jobType": "pirate"
 	}
 ]

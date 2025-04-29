@@ -236,7 +236,7 @@ function createCheckSVG() {
 
 	const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
 	path.setAttribute('d', sanitizedPathData); // Set sanitized data
-	path.setAttribute('fill', '#E3E3E3');
+	path.setAttribute('fill', '#3D3D3D');
 
 	checkSVG.appendChild(path);
 	return checkSVG;

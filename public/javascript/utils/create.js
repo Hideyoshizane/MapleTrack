@@ -149,60 +149,45 @@ async function createUncheckMark(color = '#3D3D3D', width = '40') {
 
 async function createArrowSVG(color = '#F6F6F6', width = '30px') {
 	try {
-		const svgElement = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-		svgElement.setAttribute('id', 'icon');
-		svgElement.setAttribute('width', width);
-		svgElement.setAttribute('height', width);
-		svgElement.setAttribute('viewBox', '0 0 1024 1024');
-		svgElement.setAttribute('class', 'icon');
+		// Build the SVG as a string
+		const rawSvg = `
+			<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${width}" viewBox="0 0 1024 1024" class="icon">
+				<path d="M917.333333 364.8L851.2 298.666667 512 637.866667 172.8 298.666667 106.666667 364.8 512 768z" fill="${color}" />
+			</svg>
+		`;
 
-		const pathElement = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-		pathElement.setAttribute(
-			'd',
-			'M917.333333 364.8L851.2 298.666667 512 637.866667 172.8 298.666667 106.666667 364.8 512 768z'
-		);
-		pathElement.setAttribute('fill', color);
-		svgElement.appendChild(pathElement);
-
-		// Sanitize the SVG element before returning it
-		const sanitizedSvg = DOMPurify.sanitize(svgElement.outerHTML);
+		// Sanitize the SVG string
+		const sanitizedSvgString = DOMPurify.sanitize(rawSvg, { SAFE_FOR_SVG: true });
 
 		// Convert sanitized string back to an SVG element
-		const sanitizedSvgElement = new DOMParser().parseFromString(sanitizedSvg, 'image/svg+xml').documentElement;
+		const parsedSvg = new DOMParser().parseFromString(sanitizedSvgString, 'image/svg+xml');
+		const sanitizedSvgElement = parsedSvg.documentElement;
 
 		return sanitizedSvgElement;
 	} catch (error) {
-		console.error('Error creating arrow SVG:', error);
+		console.error('Error creating sanitized arrow SVG:', error);
 		return null;
 	}
 }
 
 async function createBlockMark() {
 	try {
-		const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-		svg.setAttribute('width', '20');
-		svg.setAttribute('height', '20');
-		svg.setAttribute('viewBox', '0 0 40 40');
-		svg.setAttribute('fill', 'none');
+		const rawSvg = `
+			<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 40 40" fill="none">
+				<path d="M20 0C8.96 0 0 8.96 0 20C0 31.04 8.96 40 20 40C31.04 40 40 31.04 40 20C40 8.96 31.04 0 20 0ZM4 20C4 11.16 11.16 4 20 4C23.7 4 27.1 5.26 29.8 7.38L7.38 29.8C5.26 27.1 4 23.7 4 20ZM20 36C16.3 36 12.9 34.74 10.2 32.62L32.62 10.2C34.74 12.9 36 16.3 36 20C36 28.84 28.84 36 20 36Z" fill="#C33232"/>
+			</svg>
+		`;
 
-		const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-		path.setAttribute(
-			'd',
-			'M20 0C8.96 0 0 8.96 0 20C0 31.04 8.96 40 20 40C31.04 40 40 31.04 40 20C40 8.96 31.04 0 20 0ZM4 20C4 11.16 11.16 4 20 4C23.7 4 27.1 5.26 29.8 7.38L7.38 29.8C5.26 27.1 4 23.7 4 20ZM20 36C16.3 36 12.9 34.74 10.2 32.62L32.62 10.2C34.74 12.9 36 16.3 36 20C36 28.84 28.84 36 20 36Z'
-		);
-		path.setAttribute('fill', '#C33232');
-
-		svg.appendChild(path);
-
-		// Sanitize the SVG element before returning it
-		const sanitizedSvg = DOMPurify.sanitize(svg.outerHTML);
+		// Sanitize the SVG string
+		const sanitizedSvgString = DOMPurify.sanitize(rawSvg, { SAFE_FOR_SVG: true });
 
 		// Convert sanitized string back to an SVG element
-		const sanitizedSvgElement = new DOMParser().parseFromString(sanitizedSvg, 'image/svg+xml').documentElement;
+		const parsedSvg = new DOMParser().parseFromString(sanitizedSvgString, 'image/svg+xml');
+		const sanitizedSvgElement = parsedSvg.documentElement;
 
 		return sanitizedSvgElement;
 	} catch (error) {
-		console.error('Error creating block mark SVG:', error);
+		console.error('Error creating sanitized block mark SVG:', error);
 		return null;
 	}
 }
