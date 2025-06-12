@@ -207,11 +207,11 @@ async function saveDataAndPost() {
 	const bossSwitch = document.querySelector('.bossSwitch input[type="checkbox"]').checked;
 
 	let level = Number(document.querySelector('.levelNumber').value);
-	level = level <= 0 ? Number(document.querySelector('.levelNumber').placeholder) : Math.min(level, 300);
+	level = level <= 0 ? Number(document.querySelector('.levelNumber').placeholder) : Math.min(level, maxLevel);
 
 	let targetLevel = Number(document.querySelector('.levelTarget').value);
 	targetLevel =
-		targetLevel <= 0 ? Number(document.querySelector('.levelTarget').placeholder) : Math.min(targetLevel, 300);
+		targetLevel <= 0 ? Number(document.querySelector('.levelTarget').placeholder) : Math.min(targetLevel, maxLevel);
 
 	const arcaneForceArray = returnForceArray('Arcane');
 	const sacredForceArray = returnForceArray('Sacred');

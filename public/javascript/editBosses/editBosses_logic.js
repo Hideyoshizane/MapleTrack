@@ -475,7 +475,7 @@ async function updateBosses() {
 async function updateTotalSelected() {
 	const totalBosses = await calculateTotalBosses();
 	const totalSelectedBosses = document.querySelector('.totalSelectedBosses');
-	totalSelectedBosses.innerText = `${totalBosses}/180`;
+	totalSelectedBosses.innerText = `${totalBosses}/${crystalLimit}`;
 }
 
 async function setupTopButtonsEvent() {

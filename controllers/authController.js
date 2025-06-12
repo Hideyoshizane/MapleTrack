@@ -35,8 +35,8 @@ module.exports = {
 
 			await updateLastLogin(user._id);
 			await resetBossList(user.username);
-			const token = jwt.sign({ _id: user._id, username: user.username }, process.env.SECRET, { expiresIn: '7d' });
-			res.cookie('token', token, { httpOnly: true, maxAge: 604800000 });
+			const token = jwt.sign({ _id: user._id, username: user.username }, process.env.SECRET, { expiresIn: '30d' });
+			res.cookie('token', token, { httpOnly: true, maxAge: 30 * 24 * 60 * 60 * 1000, secure: true });
 			res.redirect('/home');
 		} catch (err) {
 			console.error('Error during login:', err);

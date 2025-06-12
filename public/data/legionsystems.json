@@ -364,6 +364,32 @@
 		]
 	},
 	{
+		"name": "ABDAMAGE",
+		"class": "magician",
+		"ranking": [
+			{
+				"rank": "B",
+				"description": "Abnormal Status Damage: +1%"
+			},
+			{
+				"rank": "A",
+				"description": "Abnormal Status Damage: +2%"
+			},
+			{
+				"rank": "S",
+				"description": "Abnormal Status Damage: +3%"
+			},
+			{
+				"rank": "SS",
+				"description": "Abnormal Status Damage: +5%"
+			},
+			{
+				"rank": "SSS",
+				"description": "Abnormal Status Damage: +6%"
+			}
+		]
+	},
+	{
 		"name": "DEX+",
 		"class": "bowman",
 		"ranking": [

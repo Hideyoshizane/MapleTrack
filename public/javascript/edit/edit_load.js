@@ -8,6 +8,7 @@ window.characterData;
 window.dailyJson;
 window.linkSkillData;
 window.legionData;
+window.maxLevel = 300;
 
 document.addEventListener('DOMContentLoaded', async () => {
 	characterData = await fetchCharacterData(username, server, characterCode);

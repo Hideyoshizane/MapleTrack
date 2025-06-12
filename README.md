@@ -5,10 +5,10 @@
 
 <div align="center">
  <img src="https://img.shields.io/static/v1?label=license&message=MIT&color=blue&style=for-the-badge"/>
-  <img src="https://img.shields.io/static/v1?label=npm&message=11.1.0&color=blue&style=for-the-badge&logo=npm"/>
-  <img src="https://img.shields.io/static/v1?label=express&message=4.21.0&color=blue&style=for-the-badge&logo=express"/>
-  <img src="https://img.shields.io/static/v1?label=node.JS&message=22.9.0&color=blue&style=for-the-badge&logo=nodedotjs"/>
-  <img src="https://img.shields.io/static/v1?label=release&message=1.12.2&color=darkgreen&style=for-the-badge"/>
+  <img src="https://img.shields.io/static/v1?label=npm&message=11.4.1&color=blue&style=for-the-badge&logo=npm"/>
+  <img src="https://img.shields.io/static/v1?label=express&message=5.1.0&color=blue&style=for-the-badge&logo=express"/>
+  <img src="https://img.shields.io/static/v1?label=node.JS&message=24.1.0&color=blue&style=for-the-badge&logo=nodedotjs"/>
+  <img src="https://img.shields.io/static/v1?label=release&message=1.13.0&color=darkgreen&style=for-the-badge"/>
 </div>
 <br>
 
@@ -24,7 +24,7 @@
 
 <a name="status">
   <h2>Status</h1>
-  <h3>Updated up to The Mo Xuan update.</h3>
+  <h3>Updated up to Stargazer(NEXT) update.</h3>
 
   <br>
 </a>

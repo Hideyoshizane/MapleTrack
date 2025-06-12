@@ -4,12 +4,13 @@ window.server;
 window.selectedList;
 window.username;
 window.serverType;
+window.crystalLimit = 180;
 
 document.addEventListener('DOMContentLoaded', async () => {
 	server = getCookie('selectedServerContent');
 	if (server == undefined) {
 		server = 'scania';
-		setCookie('selectedServerContent', server, 7);
+		setCookie('selectedServerContent', server, 30);
 	}
 	await fetchBossList();
 	await loadPage();
@@ -66,12 +67,12 @@ async function createBossingLogo() {
 }
 
 async function createWeekProgress() {
-	const totalProgress = createDOMElement('span', 'totalProgress', `${selectedList.weeklyBosses}/180`);
+	const totalProgress = createDOMElement('span', 'totalProgress', `${selectedList.weeklyBosses}/${crystalLimit}`);
 	const textDiv = document.querySelector('.WeekTextDiv');
 
 	const levelBarData = {
 		level: selectedList.weeklyBosses,
-		targetLevel: 180,
+		targetLevel: crystalLimit,
 		jobType: 'default',
 	};
 	const progressBar = await createLeveLBar(levelBarData, 11.615, 'WeeklyProgress');
@@ -210,9 +211,15 @@ async function updateTopButtons() {
 	await fetchBossList();
 
 	const totalProgress = document.querySelector('.totalProgress');
-	totalProgress.textContent = `${selectedList.weeklyBosses}/180`;
+	totalProgress.textContent = `${selectedList.weeklyBosses}/${crystalLimit}`;
 
-	await updateExpBar(document.querySelector('.progressBar'), selectedList.weeklyBosses, 180, 11.615, 'default');
+	await updateExpBar(
+		document.querySelector('.progressBar'),
+		selectedList.weeklyBosses,
+		crystalLimit,
+		11.615,
+		'default'
+	);
 
 	const totalGoldValue = document.querySelector('.totalGoldValue');
 	newGoldValue = `${selectedList.totalGains.toLocaleString('en-US')}`;

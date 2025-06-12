@@ -5,12 +5,13 @@ window.serverType;
 window.selectedList;
 window.Character;
 window.username;
+window.crystalLimit = 180;
 
 document.addEventListener('DOMContentLoaded', async () => {
 	server = getCookie('selectedServerContent');
 	if (server == undefined) {
 		server = 'scania';
-		setCookie('selectedServerContent', server, 7);
+		setCookie('selectedServerContent', server, 30);
 	}
 
 	await fetchBossList();
@@ -81,7 +82,7 @@ async function createTotalSelected() {
 	const parentDiv = document.querySelector('.totalSelectedDiv');
 
 	const totalBosses = await calculateTotalBosses();
-	const totalSelectedBosses = createDOMElement('span', 'totalSelectedBosses', `${totalBosses}/180`);
+	const totalSelectedBosses = createDOMElement('span', 'totalSelectedBosses', `${totalBosses}/${crystalLimit}`);
 
 	const textDiv = document.querySelector('.WeekTextDiv');
 

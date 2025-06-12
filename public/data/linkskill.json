@@ -513,11 +513,29 @@
 		"levels": [
 			{
 				"level": 1,
-				"description": "When attacking a Boss monster, damage increases by +2%. If the target is a Boss monster, each successful attack additionally increases damage by 2%, stacking up to 6 times. The stack can be triggered once every 2 seconds. Duration: 5 seconds."
+				"description": "Boss Damage: +2%. If the target is a boss, up to 1% increase for every successful attack. Max Stacks: 6, stack activates once every 2 sec. Duration: 5 sec."
 			},
 			{
 				"level": 2,
-				"description": "When attacking a Boss monster, damage increases by +4%. If the target is a Boss monster, each successful attack additionally increases damage by 2%, stacking up to 6 times. The stack can be triggered once every 2 seconds. Duration: 5 seconds."
+				"description": "Boss Damage: +4%. If the target is a boss, up to 2% increase for every successful attack. Max Stacks: 6, stack activates once every 2 sec. Duration: 5 sec."
+			}
+		]
+	},
+	{
+		"name": "Tree of Stars",
+		"image": "/../../public/assets/link_skill/sia_astela.webp",
+		"levels": [
+			{
+				"level": 1,
+				"description": "Buff Duration: +4%, Critical Damage: +1%."
+			},
+			{
+				"level": 2,
+				"description": "Buff Duration: +7%, Critical Damage: +2%."
+			},
+			{
+				"level": 3,
+				"description": "Buff Duration: +10%, Critical Damage: +3%."
 			}
 		]
 	}

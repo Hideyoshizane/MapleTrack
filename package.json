@@ -10,20 +10,19 @@
 	"author": "Hideki Yoshizane",
 	"license": "MIT",
 	"dependencies": {
-		"bcrypt": "^5.1.1",
-		"body-parser": "^1.20.2",
+		"bcrypt": "^6.0.0",
+		"body-parser": "^2.2.0",
 		"connect-mongo": "^5.1.0",
 		"cookie-parser": "^1.4.7",
-		"dompurify": "^3.2.4",
-		"dotenv": "^16.4.7",
+		"dompurify": "^3.2.6",
+		"dotenv": "^16.5.0",
 		"ejs": "^3.1.10",
-		"express": "^4.21.2",
+		"express": "^5.1.0",
 		"express-flash": "^0.0.2",
 		"express-session": "^1.18.1",
 		"jsonwebtoken": "^9.0.2",
-		"luxon": "^3.4.4",
-		"mongoose": "^8.9.2",
-		"node": "^23.5.0"
+		"luxon": "^3.6.1",
+		"mongoose": "^8.15.1"
 	},
 	"browser": {
 		"async_hooks": false,

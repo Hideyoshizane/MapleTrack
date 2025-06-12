@@ -72,6 +72,13 @@
 		"jobType": "mage"
 	},
 	{
+		"linkSkill": "Tree of Stars",
+		"legionType": "ABDAMAGE",
+		"className": "Sia Astela",
+		"jobType": "mage"
+	},
+
+	{
 		"linkSkill": "Thief's Cunning",
 		"legionType": "LUK+",
 		"className": "Dual Blade",
