@@ -12,7 +12,7 @@ const router = require('./routes');
 
 const app = express();
 
-app.locals.globalVariable = '1.13.2';
+app.locals.globalVariable = '1.13.3';
 
 const PORT = process.env.PORT || 8080;
 const DB_URL = process.env.DB_URL || 'mongodb://localhost:27017';
