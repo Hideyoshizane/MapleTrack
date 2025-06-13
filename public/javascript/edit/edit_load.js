@@ -13,9 +13,9 @@ window.maxLevel = 300;
 document.addEventListener('DOMContentLoaded', async () => {
 	characterData = await fetchCharacterData(username, server, characterCode);
 
-	linkSkillData = await fetch('/data/linkskill.json').then((response) => response.json());
-	dailyJson = await fetch('/data/dailyExp.json').then((response) => response.json());
-	legionData = await fetch('/data/legionsystems.json').then((response) => response.json());
+	linkSkillData = await fetch('/public/data/linkskill.json').then((response) => response.json());
+	dailyJson = await fetch('/public/data/dailyExp.json').then((response) => response.json());
+	legionData = await fetch('/public/data/legionsystems.json').then((response) => response.json());
 
 	startLoader();
 	await loadCharacterContent(characterData);
@@ -97,8 +97,8 @@ async function loadCharacterNameDiv(characterData) {
 	const characterInfo = createDOMElement('div', 'nameLinkLegion');
 
 	const bossIconPath = characterData.bossing
-		? '/assets/icons/menu/boss_slayer.svg'
-		: '/assets/icons/menu/boss_slayer_off.svg';
+		? '/public/assets/icons/menu/boss_slayer.svg'
+		: '/public/assets/icons/menu/boss_slayer_off.svg';
 
 	const bossIcon = await loadEditableSVGFile(bossIconPath, 'bossIcon');
 
@@ -169,8 +169,8 @@ async function loadLegionDiv(characterData) {
 	const legionRank = getRank(characterData);
 	const legionImgSrc =
 		legionRank === 'no_rank'
-			? '/assets/legion/no_rank.webp'
-			: `/assets/legion/${characterData.jobType}/rank_${legionRank}.webp`;
+			? '/public/assets/legion/no_rank.webp'
+			: `/public/assets/legion/${characterData.jobType}/rank_${legionRank}.webp`;
 
 	const legionImg = await createImageElement(
 		legionImgSrc,
@@ -241,7 +241,7 @@ async function loadForce(characterData, forceType) {
 		const minLevel = dailyJson.find((json) => json.name === force.name).minLevel;
 
 		const icon = await createImageElement(
-			`/assets/${forceType.toLowerCase()}/${areaCode}.webp`,
+			`/public/assets/${forceType.toLowerCase()}/${areaCode}.webp`,
 			areaName,
 			`${forceType}Image`
 		);

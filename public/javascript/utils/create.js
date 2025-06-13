@@ -14,44 +14,34 @@ function createDOMElement(tag, className = '', content = '', type = '') {
 
 async function createImageElement(src, alt, className = '') {
 	const image = new Image();
+	let blob;
 
 	try {
-		const isWebp = src.toLowerCase().endsWith('.webp');
-		let blob;
-
-		if (isWebp) {
-			// Only use Cache API for .webp files
+		if (src.toLowerCase().endsWith('.webp')) {
+			// Use Cache API for .webp files
 			const cache = await caches.open('images-cache');
 			const cachedResponse = await cache.match(src);
 
 			if (cachedResponse) {
 				blob = await cachedResponse.blob();
 			} else {
-				const response = await fetch(src, { cache: 'default' });
+				const response = await fetch(src);
 				if (!response.ok) throw new Error(`Failed to fetch ${src}: ${response.status}`);
 
 				await cache.put(src, response.clone());
 				blob = await response.blob();
 			}
 		} else {
-			// Force re-fetch for non-.webp files (no local caching)
+			// Force re-fetch for non-.webp files
 			const response = await fetch(`${src}?v=${Date.now()}`, { cache: 'reload' });
 			if (!response.ok) throw new Error(`Failed to fetch ${src}: ${response.status}`);
 
 			blob = await response.blob();
 		}
 
-		// Create object URL from blob
 		image.src = URL.createObjectURL(blob);
 		image.alt = alt;
-		if (className) image.classList.add(className);
-
-		// Revoke blob URL after image is fully loaded
-		const blobUrl = image.src;
-		image.onload = () => {
-			console.log(`Image loaded from: ${blobUrl}`);
-			// Optionally revoke after some time: setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
-		};
+		if (className) image.className = className;
 
 		await new Promise((resolve, reject) => {
 			image.onload = resolve;

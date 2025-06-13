@@ -14,12 +14,12 @@ window.linkSkillData;
 window.legionData;
 
 document.addEventListener('DOMContentLoaded', async () => {
-	ArcaneTable = await fetch('/data/arcaneforceexp.json').then((response) => response.json());
-	SacredTable = await fetch('/data/sacredforceexp.json').then((response) => response.json());
-	GrandSacredTable = await fetch('/data/grandsacredforceexp.json').then((response) => response.json());
-	dailyJson = await fetch('/data/dailyExp.json').then((response) => response.json());
-	linkSkillData = await fetch('/data/linkskill.json').then((response) => response.json());
-	legionData = await fetch('/data/legionsystems.json').then((response) => response.json());
+	ArcaneTable = await fetch('/public/data/arcaneforceexp.json').then((response) => response.json());
+	SacredTable = await fetch('/public/data/sacredforceexp.json').then((response) => response.json());
+	GrandSacredTable = await fetch('/public/data/grandsacredforceexp.json').then((response) => response.json());
+	dailyJson = await fetch('/public/data/dailyExp.json').then((response) => response.json());
+	linkSkillData = await fetch('/public/data/linkskill.json').then((response) => response.json());
+	legionData = await fetch('/public/data/legionsystems.json').then((response) => response.json());
 
 	characterData = await fetchCharacterData(username, server, characterCode);
 
@@ -78,7 +78,7 @@ async function loadCharacterNameDiv() {
 	const linkLegionClassJob = createDOMElement('div', 'linkLegionClassJob');
 
 	if (characterData.bossing == true) {
-		const bossIconpath = '/assets/icons/menu/boss_slayer.svg';
+		const bossIconpath = '/public/assets/icons/menu/boss_slayer.svg';
 		const bossIcon = await loadEditableSVGFile(bossIconpath, 'bossIcon');
 		linkLegionClassJob.appendChild(bossIcon);
 	}
@@ -106,7 +106,7 @@ async function loadCharacterNameDiv() {
 async function loadLinkSkillDiv() {
 	const linkspan = createDOMElement('span', 'linkLegionTitle', 'Link Skill');
 
-	const linkSkillData = await fetch('/data/linkskill.json').then((response) => response.json());
+	const linkSkillData = await fetch('/public/data/linkskill.json').then((response) => response.json());
 	const filteredLink = linkSkillData.find((item) => item.name === characterData.linkSkill);
 
 	const linkImg = await createImageElement(filteredLink.image, DOMPurify.sanitize(filteredLink.name), `linkImg`);
@@ -125,8 +125,8 @@ async function loadLegionDiv() {
 	let legionRank = getRank(characterData);
 	const legionImgSrc =
 		legionRank === 'no_rank'
-			? '/assets/legion/no_rank.webp'
-			: `/assets/legion/${characterData.jobType}/rank_${legionRank}.webp`;
+			? '/public/assets/legion/no_rank.webp'
+			: `/public/assets/legion/${characterData.jobType}/rank_${legionRank}.webp`;
 
 	const legionImg = await createImageElement(
 		legionImgSrc,
@@ -241,7 +241,7 @@ async function loadForce(forceType) {
 		const minLevel = dailyJson.find((json) => json.name === force.name).minLevel;
 
 		const icon = await createImageElement(
-			`../../public/assets/${forceType.toLowerCase()}/${areaCode}.webp`,
+			`/public/assets/${forceType.toLowerCase()}/${areaCode}.webp`,
 			areaName,
 			`${forceType}Image`
 		);

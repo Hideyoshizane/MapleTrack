@@ -12,7 +12,7 @@ const router = require('./routes');
 
 const app = express();
 
-app.locals.globalVariable = '1.13.1';
+app.locals.globalVariable = '1.13.2';
 
 const PORT = process.env.PORT || 8080;
 const DB_URL = process.env.DB_URL || 'mongodb://localhost:27017';
@@ -67,27 +67,23 @@ app.use(flash());
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-// Cache control middleware helper
-const cacheControl = (value) => (req, res, next) => {
-	res.setHeader('Cache-Control', value);
+// Cache control
+app.use('/public', (req, res, next) => {
+	const ext = path.extname(req.path).toLowerCase();
+
+	if (ext === '.webp') {
+		// Cache for .webp files for 30 days
+		res.setHeader('Cache-Control', 'public, max-age=2592000, immutable');
+	} else {
+		// No cache
+		res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+	}
 	next();
-};
+});
 
-// Serve static files with cache control
-const serveStaticWithCache = (urlPath, dirPath, cacheValue) => {
-	app.use(urlPath, cacheControl(cacheValue), express.static(path.join(__dirname, dirPath)));
-};
-
-const cacheLong = 'public, max-age=2419200, immutable'; // ~28 days
-const cacheNoStore = 'no-store, no-cache, must-revalidate, proxy-revalidate';
-
-serveStaticWithCache('/assets', 'public/assets', cacheLong);
-serveStaticWithCache('/css', 'public/css', cacheNoStore);
-serveStaticWithCache('/javascript', 'public/javascript', cacheNoStore);
-serveStaticWithCache('/data', 'public/data', cacheNoStore);
-
-app.use('/icon.ico', cacheControl(cacheNoStore), express.static(path.join(__dirname, 'public/icon.ico')));
+app.use('/public', express.static(path.join(__dirname, 'public')));
 
 // Main router
 app.use('/', router);
+
 app.listen(PORT, () => console.log('Listening on port', PORT));
