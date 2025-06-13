@@ -30,7 +30,7 @@ async function fetchBossList() {
 
 		bossList = await fetch(`/bossList/${username}`).then((response) => response.json());
 
-		bossJson = await fetch('../../../public/data/bosses.json').then((response) => response.json());
+		bossJson = await fetch('/data/bosses.json').then((response) => response.json());
 
 		selectedList = bossList.server;
 		selectedList = selectedList.find((servers) => servers.name === server.charAt(0).toUpperCase() + server.slice(1));
@@ -63,7 +63,7 @@ async function loadTopButtons() {
 async function createBossingLogo() {
 	const parentDiv = document.querySelector('.bossDiv');
 
-	const bossIconpath = '../../public/assets/icons/menu/boss_slayer.svg';
+	const bossIconpath = '/assets/icons/menu/boss_slayer.svg';
 	const bossIcon = await loadEditableSVGFile(bossIconpath, 'bossIcon');
 
 	const pathElements = bossIcon.querySelectorAll('path');
@@ -244,7 +244,7 @@ function createCheckSVG() {
 }
 async function createCharacterButton(character) {
 	const characterButton = createDOMElement('button', 'characterButton');
-	const imgSource = `../../public/assets/buttom_profile/${getCode(character)}.webp`;
+	const imgSource = `/assets/buttom_profile/${getCode(character)}.webp`;
 
 	const characterImage = await createImageElement(imgSource, 'character Profile', 'profile');
 
@@ -283,7 +283,7 @@ async function loadBosses() {
 	loader.style.marginBottom = '208px';
 	parentDiv.appendChild(loader);
 
-	const jsonPath = '../../../public/data/bosses.json';
+	const jsonPath = '/data/bosses.json';
 	bossJson = await fetch(jsonPath).then((response) => response.json());
 
 	const bossGrid = createDOMElement('div', 'bossGrid');

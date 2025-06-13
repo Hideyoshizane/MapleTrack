@@ -157,7 +157,7 @@ document.addEventListener('DOMContentLoaded', function () {
 				resultDiv.setAttribute('data-server', characterData.server);
 				resultDiv.setAttribute('data-code', getCode(characterData));
 				const img = await createImageElement(
-					`/../../assets/icons/servers/${characterData.server.toLowerCase()}.webp`,
+					`/assets/icons/servers/${characterData.server.toLowerCase()}.webp`,
 					'server icon'
 				);
 				const detailsSpan = createDOMElement(

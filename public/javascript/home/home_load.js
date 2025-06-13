@@ -8,11 +8,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 	try {
 		username = document.getElementById('userdata').getAttribute('data-username');
 
-		dailyJson = await fetch('/../../../public/data/dailyExp.json').then((response) => response.json());
+		dailyJson = await fetch('/data/dailyExp.json').then((response) => response.json());
 
 		await loadSymbolsImage();
 
-		linkSkillData = await fetch('../../public/data/linkskill.json').then((response) => response.json());
+		linkSkillData = await fetch('/data/linkskill.json').then((response) => response.json());
 
 		const data = await fetch('/userServer').then((response) => response.json());
 
@@ -31,29 +31,25 @@ document.addEventListener('DOMContentLoaded', async () => {
 async function loadSymbolsImage() {
 	SymbolsImages = {
 		vanish_journey: await createImageElement(
-			'../../public/assets/arcaneforce/vanish_journey.webp',
+			'/assets/arcaneforce/vanish_journey.webp',
 			'Vanish Journey',
 			'ArcaneImage'
 		),
 		chu_chu_island: await createImageElement(
-			'../../public/assets/arcaneforce/chu_chu_island.webp',
+			'/assets/arcaneforce/chu_chu_island.webp',
 			'Chu Chu Island',
 			'ArcaneImage'
 		),
-		lachelein: await createImageElement('../../public/assets/arcaneforce/lachelein.webp', 'Lachelein', 'ArcaneImage'),
-		arcana: await createImageElement('../../public/assets/arcaneforce/arcana.webp', 'Arcana', 'ArcaneImage'),
-		morass: await createImageElement('../../public/assets/arcaneforce/morass.webp', 'Morass', 'ArcaneImage'),
-		esfera: await createImageElement('../../public/assets/arcaneforce/esfera.webp', 'Esfera', 'ArcaneImage'),
-		cernium: await createImageElement('../../public/assets/sacredforce/cernium.webp', 'Cernium', 'SacredImage'),
-		arcus: await createImageElement('../../public/assets/sacredforce/arcus.webp', 'Arcus', 'SacredImage'),
-		odium: await createImageElement('../../public/assets/sacredforce/odium.webp', 'Odium', 'SacredImage'),
-		'shangri-la': await createImageElement(
-			'../../public/assets/sacredforce/shangri-la.webp',
-			'Shangri-la',
-			'SacredImage'
-		),
-		arteria: await createImageElement('../../public/assets/sacredforce/arteria.webp', 'Arteria', 'SacredImage'),
-		carcion: await createImageElement('../../public/assets/sacredforce/carcion.webp', 'Carcion', 'SacredImage'),
+		lachelein: await createImageElement('/assets/arcaneforce/lachelein.webp', 'Lachelein', 'ArcaneImage'),
+		arcana: await createImageElement('/assets/arcaneforce/arcana.webp', 'Arcana', 'ArcaneImage'),
+		morass: await createImageElement('/assets/arcaneforce/morass.webp', 'Morass', 'ArcaneImage'),
+		esfera: await createImageElement('/assets/arcaneforce/esfera.webp', 'Esfera', 'ArcaneImage'),
+		cernium: await createImageElement('/assets/sacredforce/cernium.webp', 'Cernium', 'SacredImage'),
+		arcus: await createImageElement('/assets/sacredforce/arcus.webp', 'Arcus', 'SacredImage'),
+		odium: await createImageElement('/assets/sacredforce/odium.webp', 'Odium', 'SacredImage'),
+		'shangri-la': await createImageElement('/assets/sacredforce/shangri-la.webp', 'Shangri-la', 'SacredImage'),
+		arteria: await createImageElement('/assets/sacredforce/arteria.webp', 'Arteria', 'SacredImage'),
+		carcion: await createImageElement('/assets/sacredforce/carcion.webp', 'Carcion', 'SacredImage'),
 	};
 }
 
@@ -253,7 +249,7 @@ async function setForceLevel(forceArea, characterData, forceImg, forceType) {
 }
 
 async function createCharacterPortrait(characterData) {
-	const imgSource = `../../public/assets/cards/${getCode(characterData)}.webp`;
+	const imgSource = `/assets/cards/${getCode(characterData)}.webp`;
 	const portrait = await createImageElement(imgSource, 'portrait', getCode(characterData));
 	portrait.setAttribute(
 		'class',
@@ -305,8 +301,8 @@ async function createLegionContent(characterData) {
 	const legionRank = getRank(characterData);
 	const legionSrc =
 		legionRank === 'no_rank'
-			? '../../public/assets/legion/no_rank.webp'
-			: `../../public/assets/legion/${DOMPurify.sanitize(characterData.jobType)}/rank_${legionRank}.webp`;
+			? '/assets/legion/no_rank.webp'
+			: `/assets/legion/${DOMPurify.sanitize(characterData.jobType)}/rank_${legionRank}.webp`;
 
 	const legionImg = await createImageElement(
 		legionSrc,
@@ -323,7 +319,7 @@ async function createLegionContent(characterData) {
 let bossIcon;
 
 async function loadBossIcon() {
-	const bossIconpath = '../../public/assets/icons/menu/boss_slayer.svg';
+	const bossIconpath = '/assets/icons/menu/boss_slayer.svg';
 	bossIcon = await loadEditableSVGFile(bossIconpath);
 	bossIcon.setAttribute('class', 'bossIcon');
 	const innerSVG = bossIcon.querySelector('svg');

@@ -218,9 +218,12 @@ async function increaseWeekly(event) {
 	const neededExp = await getExp('ArcaneForce', forceName);
 	let currentDate = DateTime.utc().toJSDate();
 
+	const weeklyObj = window.dailyJson.find((item) => item.name === 'Weekly');
+	const weeklyValue = weeklyObj ? Number(weeklyObj.value) : null;
+
 	const postData = {
 		forceName: forceName,
-		value: 15,
+		value: weeklyValue,
 		characterData: characterData,
 		necessaryExp: neededExp,
 		date: currentDate,

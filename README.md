@@ -8,7 +8,7 @@
   <img src="https://img.shields.io/static/v1?label=npm&message=11.4.1&color=blue&style=for-the-badge&logo=npm"/>
   <img src="https://img.shields.io/static/v1?label=express&message=5.1.0&color=blue&style=for-the-badge&logo=express"/>
   <img src="https://img.shields.io/static/v1?label=node.JS&message=24.1.0&color=blue&style=for-the-badge&logo=nodedotjs"/>
-  <img src="https://img.shields.io/static/v1?label=release&message=1.13.0&color=darkgreen&style=for-the-badge"/>
+  <img src="https://img.shields.io/static/v1?label=release&message=1.13.1&color=darkgreen&style=for-the-badge"/>
 </div>
 <br>
 

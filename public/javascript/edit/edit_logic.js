@@ -108,9 +108,7 @@ document.addEventListener('PageLoaded', async () => {
 
 async function changebossIcon(checked) {
 	const bossIcon = document.querySelector('.bossIcon');
-	const bossIconPath = checked
-		? '../../../public/assets/icons/menu/boss_slayer.svg'
-		: '../../../public/assets/icons/menu/boss_slayer_off.svg';
+	const bossIconPath = checked ? '/assets/icons/menu/boss_slayer.svg' : '/assets/icons/menu/boss_slayer_off.svg';
 
 	const bossIconElement = await loadEditableSVGFile(bossIconPath, 'bossIcon');
 	bossIcon.replaceWith(bossIconElement);
@@ -127,9 +125,7 @@ async function updateLegion(levelNumberValue) {
 	const rank = getRank(data);
 	targetImage = document.querySelector('.legionImg');
 	targetImage.src =
-		rank === 'no_rank'
-			? '../../../public/assets/legion/no_rank.webp'
-			: `../../../public/assets/legion/${characterData.jobType}/rank_${rank}.webp`;
+		rank === 'no_rank' ? '/assets/legion/no_rank.webp' : `/assets/legion/${characterData.jobType}/rank_${rank}.webp`;
 }
 
 async function updateForce(type, levelNumberValue) {

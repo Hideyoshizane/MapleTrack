@@ -1,81 +1,93 @@
+require('dotenv').config();
+
 const express = require('express');
-const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-const expressSession = require('express-session');
+const session = require('express-session');
 const flash = require('express-flash');
 const mongoose = require('mongoose');
 const path = require('path');
-const router = require('./routes');
+const compression = require('compression');
 const MongoStore = require('connect-mongo');
+const router = require('./routes');
 
-require('dotenv').config();
-
-const DB_URL = process.env.DB_URL || 'mongodb://localhost:27017';
 const app = express();
 
-app.locals.globalVariable = '1.13.0';
+app.locals.globalVariable = '1.13.1';
 
-const mongoOptions = {
-	serverSelectionTimeoutMS: 10000,
-	socketTimeoutMS: 20000,
-};
+const PORT = process.env.PORT || 8080;
+const DB_URL = process.env.DB_URL || 'mongodb://localhost:27017';
+const SESSION_SECRET = process.env.SECRET || 'random_secret';
 
-// MongoDB connection
+// Connect to MongoDB
 mongoose
-	.connect(DB_URL, mongoOptions)
+	.connect(DB_URL, {
+		serverSelectionTimeoutMS: 10000,
+		socketTimeoutMS: 20000,
+	})
 	.then(() => {
 		console.log('Database connected.');
 	})
 	.catch((err) => {
-		console.error('Error connecting to MongoDB', err);
+		console.error('Error connecting to MongoDB:', err);
 		process.exit(1);
 	});
 
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
+app.use(compression());
 
+// Parsers
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+
+// Session configuration
 app.use(
-	expressSession({
-		secret: process.env.SECRET || 'random',
+	session({
+		secret: SESSION_SECRET,
 		resave: false,
 		saveUninitialized: false,
 		store: MongoStore.create({
 			mongoUrl: DB_URL,
-			mongoOptions,
-			mongooseConnection: mongoose.connection,
+			mongoOptions: {
+				serverSelectionTimeoutMS: 10000,
+				socketTimeoutMS: 20000,
+			},
 		}),
+		cookie: {
+			httpOnly: true,
+			secure: process.env.NODE_ENV === 'production',
+			maxAge: 1000 * 60 * 60 * 24,
+		},
 	})
 );
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cookieParser());
+// Flash messages
 app.use(flash());
-app.use(express.json());
 
-app.use(express.static(path.join(__dirname)));
+// View engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-app.use(
-	'/public',
-	(req, res, next) => {
-		if (req.path.endsWith('.webp')) {
-			// Set Cache-Control for .webp files to 4 weeks
-			res.setHeader('Cache-Control', 'public, max-age=2419200');
-		} else {
-			// Set Cache-Control for all other files to no-cache
-			res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
-		}
-		next();
-	},
-	express.static(path.join(__dirname, 'public'))
-);
+// Cache control middleware helper
+const cacheControl = (value) => (req, res, next) => {
+	res.setHeader('Cache-Control', value);
+	next();
+};
 
-app.use(express.static(path.join(__dirname, 'public'), { maxAge: 604800000 }));
+// Serve static files with cache control
+const serveStaticWithCache = (urlPath, dirPath, cacheValue) => {
+	app.use(urlPath, cacheControl(cacheValue), express.static(path.join(__dirname, dirPath)));
+};
 
+const cacheLong = 'public, max-age=2419200, immutable'; // ~28 days
+const cacheNoStore = 'no-store, no-cache, must-revalidate, proxy-revalidate';
+
+serveStaticWithCache('/assets', 'public/assets', cacheLong);
+serveStaticWithCache('/css', 'public/css', cacheNoStore);
+serveStaticWithCache('/javascript', 'public/javascript', cacheNoStore);
+serveStaticWithCache('/data', 'public/data', cacheNoStore);
+
+app.use('/icon.ico', cacheControl(cacheNoStore), express.static(path.join(__dirname, 'public/icon.ico')));
+
+// Main router
 app.use('/', router);
-
-const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => {
-	console.log(`Server is listening on port ${PORT}.`);
-});
+app.listen(PORT, () => console.log('Listening on port', PORT));

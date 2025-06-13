@@ -13,50 +13,53 @@ function createDOMElement(tag, className = '', content = '', type = '') {
 }
 
 async function createImageElement(src, alt, className = '') {
-	let image = new Image();
+	const image = new Image();
 
 	try {
-		const cache = await caches.open('images-cache');
-		const cachedResponse = await cache.match(src);
+		const isWebp = src.toLowerCase().endsWith('.webp');
+		let blob;
 
-		if (cachedResponse) {
-			const cachedBlob = await cachedResponse.blob();
-			image.src = URL.createObjectURL(cachedBlob);
-		} else {
-			const response = await fetch(src);
-			if (response.ok) {
-				const responseClone = response.clone();
-				await cache.put(src, responseClone);
-				const fetchedBlob = await response.blob();
-				image.src = URL.createObjectURL(fetchedBlob);
+		if (isWebp) {
+			// Only use Cache API for .webp files
+			const cache = await caches.open('images-cache');
+			const cachedResponse = await cache.match(src);
+
+			if (cachedResponse) {
+				blob = await cachedResponse.blob();
 			} else {
-				console.error(`Failed to fetch image from ${src}:`, response.status);
-				throw new Error('Image fetch failed');
+				const response = await fetch(src, { cache: 'default' });
+				if (!response.ok) throw new Error(`Failed to fetch ${src}: ${response.status}`);
+
+				await cache.put(src, response.clone());
+				blob = await response.blob();
 			}
+		} else {
+			// Force re-fetch for non-.webp files (no local caching)
+			const response = await fetch(`${src}?v=${Date.now()}`, { cache: 'reload' });
+			if (!response.ok) throw new Error(`Failed to fetch ${src}: ${response.status}`);
+
+			blob = await response.blob();
 		}
 
+		// Create object URL from blob
+		image.src = URL.createObjectURL(blob);
 		image.alt = alt;
-		if (className) {
-			image.classList.add(className);
-		}
+		if (className) image.classList.add(className);
 
-		// Keep a reference to the Blob URL
+		// Revoke blob URL after image is fully loaded
 		const blobUrl = image.src;
-
-		// Revoke the object URL when you're done with it (e.g., when removing the image)
 		image.onload = () => {
-			// You can choose to revoke this later in your app lifecycle
 			console.log(`Image loaded from: ${blobUrl}`);
+			// Optionally revoke after some time: setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
 		};
 
-		// Wait for the image to load before resolving
 		await new Promise((resolve, reject) => {
 			image.onload = resolve;
 			image.onerror = reject;
 		});
 	} catch (error) {
 		console.error('Error fetching image:', error);
-		return null; // Return null if an error occurs
+		return null;
 	}
 
 	return image;

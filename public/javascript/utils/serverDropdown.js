@@ -157,7 +157,7 @@ function swapContentAndStoreCookie(selectedButton, serverButton) {
 
 function updateToCookie(selectedServer, savedServerContent) {
 	const selectedServerImg = selectedServer.querySelector('img');
-	const newImgSrc = `/../../assets/icons/servers/${savedServerContent}.webp`;
+	const newImgSrc = `/assets/icons/servers/${savedServerContent}.webp`;
 	selectedServerImg.src = newImgSrc;
 	selectedServerImg.setAttribute('alt', savedServerContent);
 	selectedServer.querySelector('span').textContent =
