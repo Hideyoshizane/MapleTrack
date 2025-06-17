@@ -122,7 +122,6 @@ async function calculateTotalIncome() {
 
 	selectedList.characters.forEach((character) => {
 		let characterIncome = 0;
-		console.log(selectedList);
 		character.bosses.forEach((boss) => {
 			const bossInfo = bossJson.find((b) => b.name === boss.name);
 

@@ -25,28 +25,28 @@ const serverSchema = new mongoose.Schema(
 const defaultServers = [
 	{
 		name: 'Scania',
-		img: '/../../assets/icons/servers/scania',
+		img: '/public/assets/icons/servers/scania',
 		type: 'Regular',
 	},
-	{ name: 'Bera', img: '/../../assets/icons/servers/bera', type: 'Regular' },
+	{ name: 'Bera', img: '/public/assets/icons/servers/bera', type: 'Regular' },
 	{
 		name: 'Aurora',
-		img: '/../../assets/icons/servers/aurora',
+		img: '/public/assets/icons/servers/aurora',
 		type: 'Regular',
 	},
 	{
 		name: 'Elysium',
-		img: '/../../assets/icons/servers/elysium',
+		img: '/public/assets/icons/servers/elysium',
 		type: 'Regular',
 	},
 	{
 		name: 'Kronos',
-		img: '/../../assets/icons/servers/kronos',
+		img: '/public/assets/icons/servers/kronos',
 		type: 'Reboot',
 	},
 	{
 		name: 'Hyperion',
-		img: '/../../assets/icons/servers/hyperion',
+		img: '/public/assets/icons/servers/hyperion',
 		type: 'Reboot',
 	},
 ];

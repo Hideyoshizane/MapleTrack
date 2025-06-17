@@ -1,7 +1,7 @@
 [
 	{
 		"name": "Zakum",
-		"img": "../../assets/boss/zakum.webp",
+		"img": "/public/assets/boss/zakum.webp",
 		"difficulties": [
 			{
 				"name": "Easy",
@@ -25,7 +25,7 @@
 	},
 	{
 		"name": "Magnus",
-		"img": "../../assets/boss/magnus.webp",
+		"img": "/public/assets/boss/magnus.webp",
 		"difficulties": [
 			{
 				"name": "Easy",
@@ -49,7 +49,7 @@
 	},
 	{
 		"name": "Hilla",
-		"img": "../../assets/boss/hilla.webp",
+		"img": "/public/assets/boss/hilla.webp",
 		"difficulties": [
 			{
 				"name": "Normal",
@@ -67,7 +67,7 @@
 	},
 	{
 		"name": "OMNI-CLN",
-		"img": "../../assets/boss/omni_cln.webp",
+		"img": "/public/assets/boss/omni_cln.webp",
 		"difficulties": [
 			{
 				"name": "Normal",
@@ -79,7 +79,7 @@
 	},
 	{
 		"name": "Papulatus",
-		"img": "../../assets/boss/papulatus.webp",
+		"img": "/public/assets/boss/papulatus.webp",
 		"difficulties": [
 			{
 				"name": "Easy",
@@ -103,7 +103,7 @@
 	},
 	{
 		"name": "Pierre",
-		"img": "../../assets/boss/pierre.webp",
+		"img": "/public/assets/boss/pierre.webp",
 		"difficulties": [
 			{
 				"name": "Normal",
@@ -121,7 +121,7 @@
 	},
 	{
 		"name": "Von Bon",
-		"img": "../../assets/boss/von_bon.webp",
+		"img": "/public/assets/boss/von_bon.webp",
 		"difficulties": [
 			{
 				"name": "Normal",
@@ -139,7 +139,7 @@
 	},
 	{
 		"name": "Crimsom\nQueen",
-		"img": "../../assets/boss/crimson_queen.webp",
+		"img": "/public/assets/boss/crimson_queen.webp",
 		"difficulties": [
 			{
 				"name": "Normal",
@@ -157,7 +157,7 @@
 	},
 	{
 		"name": "Vellum",
-		"img": "../../assets/boss/vellum.webp",
+		"img": "/public/assets/boss/vellum.webp",
 		"difficulties": [
 			{
 				"name": "Normal",
@@ -175,7 +175,7 @@
 	},
 	{
 		"name": "Von Leon",
-		"img": "../../assets/boss/von_leon.webp",
+		"img": "/public/assets/boss/von_leon.webp",
 		"difficulties": [
 			{
 				"name": "Easy",
@@ -199,7 +199,7 @@
 	},
 	{
 		"name": "Horntail",
-		"img": "../../assets/boss/horntail.webp",
+		"img": "/public/assets/boss/horntail.webp",
 		"difficulties": [
 			{
 				"name": "Easy",
@@ -223,7 +223,7 @@
 	},
 	{
 		"name": "Arkarium",
-		"img": "../../assets/boss/arkarium.webp",
+		"img": "/public/assets/boss/arkarium.webp",
 		"difficulties": [
 			{
 				"name": "Easy",
@@ -241,7 +241,7 @@
 	},
 	{
 		"name": "Pink\nBean",
-		"img": "../../assets/boss/pink_bean.webp",
+		"img": "/public/assets/boss/pink_bean.webp",
 		"difficulties": [
 			{
 				"name": "Normal",
@@ -259,7 +259,7 @@
 	},
 	{
 		"name": "Ranmaru",
-		"img": "../../assets/boss/ranmaru.webp",
+		"img": "/public/assets/boss/ranmaru.webp",
 		"difficulties": [
 			{
 				"name": "Normal",
@@ -277,7 +277,7 @@
 	},
 	{
 		"name": "Cygnus",
-		"img": "../../assets/boss/cygnus.webp",
+		"img": "/public/assets/boss/cygnus.webp",
 		"difficulties": [
 			{
 				"name": "Easy",
@@ -295,7 +295,7 @@
 	},
 	{
 		"name": "Lotus",
-		"img": "../../assets/boss/lotus.webp",
+		"img": "/public/assets/boss/lotus.webp",
 		"difficulties": [
 			{
 				"name": "Normal",
@@ -319,7 +319,7 @@
 	},
 	{
 		"name": "Damien",
-		"img": "../../assets/boss/damien.webp",
+		"img": "/public/assets/boss/damien.webp",
 		"difficulties": [
 			{
 				"name": "Normal",
@@ -337,7 +337,7 @@
 	},
 	{
 		"name": "Guardian\nAngel Slime",
-		"img": "../../assets/boss/angel_smile.webp",
+		"img": "/public/assets/boss/angel_smile.webp",
 		"difficulties": [
 			{
 				"name": "Normal",
@@ -355,7 +355,7 @@
 	},
 	{
 		"name": "Lucid",
-		"img": "../../assets/boss/lucid.webp",
+		"img": "/public/assets/boss/lucid.webp",
 		"difficulties": [
 			{
 				"name": "Easy",
@@ -379,7 +379,7 @@
 	},
 	{
 		"name": "Will",
-		"img": "../../assets/boss/will.webp",
+		"img": "/public/assets/boss/will.webp",
 		"difficulties": [
 			{
 				"name": "Easy",
@@ -403,7 +403,7 @@
 	},
 	{
 		"name": "Gloom",
-		"img": "../../assets/boss/gloom.webp",
+		"img": "/public/assets/boss/gloom.webp",
 		"difficulties": [
 			{
 				"name": "Normal",
@@ -421,7 +421,7 @@
 	},
 	{
 		"name": "Verus Hilla",
-		"img": "../../assets/boss/verus_hilla.webp",
+		"img": "/public/assets/boss/verus_hilla.webp",
 		"difficulties": [
 			{
 				"name": "Normal",
@@ -439,7 +439,7 @@
 	},
 	{
 		"name": "Darknell",
-		"img": "../../assets/boss/darknell.webp",
+		"img": "/public/assets/boss/darknell.webp",
 		"difficulties": [
 			{
 				"name": "Normal",
@@ -457,7 +457,7 @@
 	},
 	{
 		"name": "Black\nMage",
-		"img": "../../assets/boss/black_mage.webp",
+		"img": "/public/assets/boss/black_mage.webp",
 		"difficulties": [
 			{
 				"name": "Hard",
@@ -475,7 +475,7 @@
 	},
 	{
 		"name": "Seren",
-		"img": "../../assets/boss/seren.webp",
+		"img": "/public/assets/boss/seren.webp",
 		"difficulties": [
 			{
 				"name": "Normal",
@@ -499,7 +499,7 @@
 	},
 	{
 		"name": "Kalos",
-		"img": "../../assets/boss/kalos.webp",
+		"img": "/public/assets/boss/kalos.webp",
 		"difficulties": [
 			{
 				"name": "Easy",
@@ -529,7 +529,7 @@
 	},
 	{
 		"name": "Kaling",
-		"img": "../../assets/boss/kaling.webp",
+		"img": "/public/assets/boss/kaling.webp",
 		"difficulties": [
 			{
 				"name": "Easy",
@@ -559,7 +559,7 @@
 	},
 	{
 		"name": "Limbo",
-		"img": "../../assets/boss/limbo.webp",
+		"img": "/public/assets/boss/limbo.webp",
 		"difficulties": [
 			{
 				"name": "Normal",
@@ -577,7 +577,7 @@
 	},
 	{
 		"name": "Princess\nNo",
-		"img": "../../assets/boss/princess_no.webp",
+		"img": "/public/assets/boss/princess_no.webp",
 		"difficulties": [
 			{
 				"name": "Normal",
@@ -589,7 +589,7 @@
 	},
 	{
 		"name": "Akechi",
-		"img": "../../assets/boss/akechi.webp",
+		"img": "/public/assets/boss/akechi.webp",
 		"difficulties": [
 			{
 				"name": "Normal",
